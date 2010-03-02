@@ -1,0 +1,7 @@
+name arduino_test
+import arduino_test.c
+function /firmware_version firmware_version
+function /function/digital_io_write digital_io_write
+function /display/set set_display
+function /display/get get_display
+function /display/clear clear_display

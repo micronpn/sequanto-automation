@@ -1,0 +1,9 @@
+#summary Describes the different versions of the automation protocol.
+
+= Introduction =
+
+Each revision of the automation protocol is uniquely identified by an integer which is incremented for each revision.
+
+So far only one version of the protocol has been defined, but in the future each version will be listed here, along with a document describing the changes.
+
+ProtocolRevision1

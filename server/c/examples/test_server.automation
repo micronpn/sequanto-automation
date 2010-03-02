@@ -1,0 +1,6 @@
+name test_server
+import test_server.c
+property /objects/julemand/test get_julemand set_julemand
+function /function/multiply multiply
+function /function/close close
+function /firmware_version firmware_version

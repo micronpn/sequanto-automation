@@ -1,0 +1,27 @@
+#summary Describes the philosophy behind the design of the automation protocol
+
+The automation protocol is used to expose a tree of callables and
+properties on the automation server.
+
+ * svn_revision
+ * get_name
+ * clock
+   * now
+   * nowtext
+   * weekday
+   * hour
+   * minute
+   * second
+ * temp
+   * current
+   * heater
+   * readtemp
+   * readvoltage
+   * setpoint
+   * day
+     * temp
+     * clock
+   * night
+     * used
+     * temp
+     * clock

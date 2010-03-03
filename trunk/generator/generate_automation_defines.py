@@ -335,9 +335,15 @@ class AutomationFile:
         fp.close()
 
         fp = open ( '%s_automation.h' % self.m_name, 'w' )
+        fp.write ( '#ifdef __cplusplus\n' )
+        fp.write ( 'extern "C" {\n' )
+        fp.write ( '#endif\n' )
         for objectPath, get_function, set_function in self.m_foundProperties:
             objectPath = objectPath[1:].replace('/', '_')
             fp.write ( 'void sq_%s_updated ( SQStream * _stream, %s _value );\n' % (objectPath, get_function.returnType) )
+        fp.write ( '#ifdef __cplusplus\n' )
+        fp.write ( '}\n' )
+        fp.write ( '#endif\n' )
         fp.close()
 
 automationFile = AutomationFile()

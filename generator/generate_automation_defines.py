@@ -37,6 +37,11 @@ class AutomationFile:
         lineNumber = 1
         for line in _input.readlines():
             line = line.strip()
+            if len(line) == 0:
+                continue
+            if line[0] == '#':
+                continue
+            
             command, rest = line.split(' ', 1)
             if command == 'name':
                 name = rest.strip()

@@ -1,4 +1,5 @@
 #summary Describes the philosophy behind the design of the automation protocol
+#labels Featured
 
 The automation protocol is used to expose a tree of callables and
 properties on the automation server. The goal is to create a protocol which is both easy to automate using computers and relatively easy to use for humans.

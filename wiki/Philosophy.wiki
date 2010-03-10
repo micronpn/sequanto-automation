@@ -1,7 +1,7 @@
 #summary Describes the philosophy behind the design of the automation protocol
 
 The automation protocol is used to expose a tree of callables and
-properties on the automation server.
+properties on the automation server. The goal is to create a protocol which is both easy to automate using computers and relatively easy to use for humans.
 
  * svn_revision
  * get_name
@@ -25,3 +25,26 @@ properties on the automation server.
      * used
      * temp
      * clock
+
+The protocol is limited to simple types (integers, doubles, string, etc.) and the protocol format is character based.
+
+The tree above can be used in the following way using the automation protocol:
+
+{{{
+PROTOCOL
++PROTOCOL 1
+LIST /
++ svn_revision get_name clock temp
+LIST /clock
++ now nowtext weekday hour minute second
+GET /clock/hour
++ 6
+SET /clock/hour 7
++
+GET /clock/hour
++ 7
+CALL /svn_revision
++ "r1234"
+}}}
+
+As can be seen the protocol is designed such that requests _always_ gets a response.

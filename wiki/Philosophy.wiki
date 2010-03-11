@@ -4,6 +4,8 @@
 The automation protocol is used to expose a tree of callables and
 properties on the automation server. The goal is to create a protocol which is both easy to automate using computers and relatively easy to use for humans.
 
+Another important point is that the tree can be browsed completely just using the protocol, there is no need for an on-disk representation of the tree you can just use the automation protocol to browse it. This also means that once you have a client who can talk to an automation interface it should be able to talk to all automation interfaces, without modification.
+
  * svn_revision
  * get_name
  * clock

@@ -74,6 +74,18 @@ Compiling should be as easy as calling {{{make}}} on `*`nix or {{{ devenv <proje
 
 = Cross compiling =
 
+Cross compiling using CMake is done using so called "toolchain" files, these files define the compiler, linker, etc. to use, and the arguments for them.
+
+To cross compile you must tell CMake to use a toolchain file when generating the build files. It is also possible that you mustuse the -G argument to tell cmake which generator to use, for example to generate makefiles when cross compiling for Arduino on windows.
+
+Sequanto-automation ships with two toolchain files, one for AVR (Arduino) and one for ARM, an example call for this could be the following:
+
+{{{
+cmake -DCMAKE_TOOLCHAIN_FILE=..\..\cmake\CMakeAvr.cmake -G "Unix Makefiles" ..\..
+}}}
+
+Detailed explanations for compiling for Arduino on windows is described here: CompilingOnWinAvr.
+
 = Compiling using other build systems =
 
 You are probably not using CMake as the build system for your target, so how do you integrate sequanto-automation into your build system?

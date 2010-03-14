@@ -1,0 +1,4 @@
+#summary Overview of the way sequanto-automation integrates with your code.
+#labels Featured,Phase-Design
+
+http://sequanto-automation.googlecode.com/svn/wiki/images/generator-process.png

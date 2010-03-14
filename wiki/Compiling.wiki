@@ -94,4 +94,6 @@ Detailed explanations for compiling for Arduino on windows is described here: Co
 
 You are probably not using CMake as the build system for your target, so how do you integrate sequanto-automation into your build system?
 
-It should actually be as simple as just including the 
+It should actually be as simple as just including the source files in server/c/src into your build system, you also need a config.h file for your target, this is most easily done by just using CMake to generate and appropriate one using the above mentioned method.
+
+If you also wish to use the generator (and you do :) you need to call the python script called generator\generate_automation_defines.py with your .automation file as input, feel free to use one of the example .automation files as a starting point.

@@ -1,5 +1,5 @@
 #summary General information on using CMake to compile sequanto automation.
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 
 = Introduction =
 

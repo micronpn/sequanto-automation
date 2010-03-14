@@ -1,4 +1,5 @@
 #summary Describes how to get the Arduino target to compile on Windows using WinAVR.
+#labels Phase-Implementation
 
 == Prerequisites ==
 

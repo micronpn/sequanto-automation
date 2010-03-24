@@ -34,7 +34,8 @@ typedef enum
 	VALUE_TYPE_STRING,
 	VALUE_TYPE_SQSTRINGOUT = VALUE_TYPE_STRING,
 	VALUE_TYPE_BYTE_ARRAY,
-	VALUE_TYPE_NULL
+	VALUE_TYPE_NULL,
+   VALUE_TYPE_VOID,
 } SQValueType;
 
 typedef struct
@@ -50,8 +51,8 @@ typedef struct
       {
          SQByte * m_byteArrayValue;
          size_t m_byteArrayLength;
-      };
-   };
+      } ArrayValue;
+   } Value;
 } SQValue;
 
 /**

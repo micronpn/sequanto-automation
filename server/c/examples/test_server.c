@@ -2,12 +2,34 @@
 
 static int julemand;
 
-int get_julemand ( void )
+void Ostemad ( short _value )
+{
+}
+
+unsigned int get_julemand ( void )
 {
    return julemand ;
 }
 
-void set_julemand ( int _newJulemand )
+static SQByte firmware[] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF };
+
+SQByteArray * get_firmware ( void )
+{
+   static SQByteArray ret;
+   ret.m_start = &firmware[0];
+   ret.m_end = &firmware[sizeof(firmware) / sizeof(SQByte)];
+   return &ret;
+}
+
+static char configFile[] = "# Config file\n\nval1 = 2\nval2 = 42\nval3 = 0\n";
+
+SQStringOut get_configuration_file ( void )
+{
+   SQStringOut out = sq_external_fixed_length_string ( &configFile, strlen(configFile) );
+   return out;
+}
+
+void set_julemand ( unsigned int _newJulemand )
 {
    julemand = _newJulemand;
 }

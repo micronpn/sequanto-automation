@@ -31,7 +31,7 @@ static const int SQ_PROTOCOL_VERSION = 1;
 SQBool sq_protocol_write_type( SQStream * _stream, SQValueType _type );
 SQBool sq_protocol_write_integer ( SQStream * _stream, int _value );
 SQBool sq_protocol_write_string( SQStream * _stream, const char * const _value );
-SQBool sq_protocol_write_SQStringOut( SQStream * _stream, SQStringOut *pString );
+SQBool sq_protocol_write_string_out( SQStream * _stream, SQStringOut * _value );
 SQBool sq_protocol_write_boolean( SQStream * _stream, SQBool _value );
 SQBool sq_protocol_write_null ( SQStream * _stream );
 SQBool sq_protocol_write_float( SQStream * _stream, float _value );

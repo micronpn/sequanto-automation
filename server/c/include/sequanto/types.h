@@ -33,26 +33,30 @@ typedef struct _SQStringOut SQStringOut;
 
 struct _SQStringOut
 {
-  char (*GetNext)(SQStringOut *pString);  // Callback to get the text char by char.
-  SQBool (*HasMore)(SQStringOut *pString);  // Callback that returns true if there are more chars to get by the GetNext callback.
+  char (*GetNext)(SQStringOut * _string);  // Callback to get the text char by char.
+  SQBool (*HasMore)(SQStringOut * _string);  // Callback that returns true if there are more chars to get by the GetNext callback.
 	union
 	{
-		void *pData;
-		char *pText;
-	};
-	int index;  // Can be used by creator and callbacks to keep track of how many chars that has been returned.
+		void * m_data;
+		char * m_text;
+	} Data; 
+	int m_index;  // Can be used by creator and callbacks to keep track of how many chars that has been returned.
 	union
 	{
-		int length;
-		void *pExtra;
-	};
+		int m_length;
+		void * m_extra;
+	} Extra;
 };
 
-extern char GetNextFixedLength( SQStringOut *pString );
-extern SQBool HasMoreFixedLength( SQStringOut *pString );
-extern SQStringOut FixedLengthString( char *pText, int length );
+extern char sq_external_get_next_fixed_length( SQStringOut *pString );
+extern SQBool sq_external_has_more_fixed_length( SQStringOut *pString );
+extern SQStringOut sq_external_fixed_length_string( char *pText, int length );
 
-
+typedef struct _SQByteArray
+{
+   SQByte * m_start;
+   SQByte * m_end;
+} SQByteArray;
 
 #ifdef SQ_ARDUINO
 #   include <avr/pgmspace.h>

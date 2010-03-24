@@ -29,25 +29,25 @@ void sq_value_init ( SQValue * _value )
 void sq_value_integer ( SQValue * _value, int _initialValue)
 {
    _value->m_type = VALUE_TYPE_INTEGER;
-   _value->m_integerValue = _initialValue;
+   _value->Value.m_integerValue = _initialValue;
 }
 
 void sq_value_float ( SQValue * _value, float _initialValue)
 {
    _value->m_type = VALUE_TYPE_FLOAT;
-   _value->m_floatValue = _initialValue;
+   _value->Value.m_floatValue = _initialValue;
 }
 
 void sq_value_boolean ( SQValue * _value, SQBool _initialValue)
 {
    _value->m_type = VALUE_TYPE_BOOLEAN;
-   _value->m_booleanValue = _initialValue;
+   _value->Value.m_booleanValue = _initialValue;
 }
 
 void sq_value_string ( SQValue * _value, char * _initialValue)
 {
    _value->m_type = VALUE_TYPE_STRING;
-   _value->m_stringValue = _initialValue;
+   _value->Value.m_stringValue = _initialValue;
 }
 
 #ifdef SQ_ARDUINO
@@ -65,17 +65,17 @@ void sq_value_string_copy ( SQValue * _value, const char * const _initialValue)
 {
    _value->m_type = VALUE_TYPE_STRING;
 #ifdef SQ_WIN32
-   _value->m_stringValue = _strdup(_initialValue);
+   _value->Value.m_stringValue = _strdup(_initialValue);
 #else
-   _value->m_stringValue = strdup(_initialValue);
+   _value->Value.m_stringValue = strdup(_initialValue);
 #endif
 }
 
 void sq_value_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength)
 {
    _value->m_type = VALUE_TYPE_BYTE_ARRAY;
-   _value->m_byteArrayValue = _initialValue;
-   _value->m_byteArrayLength = _byteArrayLength;
+   _value->Value.ArrayValue.m_byteArrayValue = _initialValue;
+   _value->Value.ArrayValue.m_byteArrayLength = _byteArrayLength;
 }
 
 void sq_value_null ( SQValue * _value )
@@ -88,19 +88,19 @@ SQBool sq_value_write ( SQValue * _value, SQStream * _stream )
    switch ( _value->m_type )
    {
    case VALUE_TYPE_INTEGER:
-      return sq_protocol_write_integer ( _stream, _value->m_integerValue );
+      return sq_protocol_write_integer ( _stream, _value->Value.m_integerValue );
 
    case VALUE_TYPE_STRING:
-      return sq_protocol_write_string ( _stream, _value->m_stringValue );
+      return sq_protocol_write_string ( _stream, _value->Value.m_stringValue );
 
    case VALUE_TYPE_BOOLEAN:
-      return sq_protocol_write_boolean ( _stream, _value->m_booleanValue );
+      return sq_protocol_write_boolean ( _stream, _value->Value.m_booleanValue );
 
    case VALUE_TYPE_BYTE_ARRAY:
-      return sq_protocol_write_byte_array ( _stream, _value->m_byteArrayValue, _value->m_byteArrayValue + _value->m_byteArrayLength );
+      return sq_protocol_write_byte_array ( _stream, _value->Value.ArrayValue.m_byteArrayValue, _value->Value.ArrayValue.m_byteArrayValue + _value->Value.ArrayValue.m_byteArrayLength );
 
    case VALUE_TYPE_FLOAT:
-      return sq_protocol_write_float ( _stream, _value->m_floatValue );
+      return sq_protocol_write_float ( _stream, _value->Value.m_floatValue );
 
    case VALUE_TYPE_NULL:
       return sq_protocol_write_null ( _stream );
@@ -115,11 +115,11 @@ void sq_value_free ( SQValue * _value )
   switch ( _value->m_type )
   {
   case VALUE_TYPE_STRING:
-    free ( _value->m_stringValue );
+    free ( _value->Value.m_stringValue );
     break;
       
   case VALUE_TYPE_BYTE_ARRAY:
-    free ( _value->m_byteArrayValue );
+    free ( _value->Value.ArrayValue.m_byteArrayValue );
     break;
     
   default:

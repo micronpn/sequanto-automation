@@ -4,3 +4,6 @@ property /objects/julemand/test get_julemand set_julemand
 function /function/multiply multiply
 function /function/close close
 function /firmware_version firmware_version
+function /ostemad Ostemad
+property /system/firmware get_firmware
+property /system/config get_configuration_file

@@ -6,7 +6,7 @@ import tempcontrol.cpp
 
 # DUT data
 function /svn_revision svn_revision
-function /get_name get_name
+#function /get_name get_name
 
 # Clock
 function /clock/now clock_now

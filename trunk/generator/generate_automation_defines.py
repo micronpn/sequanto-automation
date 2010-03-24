@@ -78,16 +78,21 @@ class AutomationFile:
         print '%s (%i) : error: %s' % (self.m_errorReportingFilename, _lineNumber, _text)
         
     def getAutomationType ( self, type ):
-        if type == 'int':
+        if type in ['unsigned int', 'unsigned short', 'int', 'short']:
             return 'integer'
-        elif type in ['char *', 'char * const', 'const char *', 'const char * const']:
+        elif type in ['char *', 'char * const', 'const char *', 'const char * const', 'SQStringOut', 'SQStringOut *']:
             return 'string'
         elif type == 'float':
             return 'float'
         elif type in ['bool', 'SQBool']:
             return 'boolean'
         elif type == 'void':
-            return 'no_value'
+            return 'void'
+        elif type == 'SQByteArray *':
+            return 'byte_array'
+#        elif type in ['unsigned char *', 'unsigned char * const', 'unsigned const char *', 'unsigned const char * const',
+#                      'SQByte *', 'SQByte * const', 'const SQByte *', 'const SQByte * const']:
+#            return 'byte_array'
         else:
             raise Exception('Could not resolve the C-type "%s" to an automation type.' % type)
     
@@ -233,7 +238,14 @@ class AutomationFile:
             fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( UPDATE_START ) );\n' )
             fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(objectPath) )
             fp.write ( '   sq_stream_write_byte ( _stream, \' \' );\n' )
-            fp.write ( '   sq_protocol_write_%s ( _stream, _value );\n' % self.getAutomationType(get_function.returnType) )
+            if self.getAutomationType(get_function.returnType) == 'byte_array':
+                fp.write ( '   sq_protocol_write_%s ( _stream, _value->m_start, _value->m_end );\n' % self.getAutomationType(get_function.returnType) )
+            elif get_function.returnType == 'SQStringOut':
+                fp.write ( '   sq_protocol_write_string_out ( _stream, &_value );\n' )
+            elif get_function.returnType == 'SQStringOut *':
+                fp.write ( '   sq_protocol_write_string_out ( _stream, _value );\n' )
+            else:
+                fp.write ( '   sq_protocol_write_%s ( _stream, _value );\n' % self.getAutomationType(get_function.returnType) )
             fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( NEWLINE ) );\n' )
             fp.write ( '   sq_stream_exit_write ( _stream );\n' )
             fp.write ( '}\n' )
@@ -243,7 +255,14 @@ class AutomationFile:
             fp.write ( 'void sq_generated_%s ( SQStream * _stream )\n' % get_function.name )
             fp.write ( '{\n' )
             fp.write ( '   %s value = %s();\n' % (get_function.returnType, get_function.name) )
-            fp.write ( '   sq_protocol_write_%s ( _stream, value );\n' % self.getAutomationType(get_function.returnType) )
+            if self.getAutomationType(get_function.returnType) == 'byte_array':
+                fp.write ( '   sq_protocol_write_%s ( _stream, value->m_start, value->m_end );\n' % self.getAutomationType(get_function.returnType) )
+            elif get_function.returnType == 'SQStringOut':
+                fp.write ( '   sq_protocol_write_string_out ( _stream, &value );\n' )
+            elif get_function.returnType == 'SQStringOut *':
+                fp.write ( '   sq_protocol_write_string_out ( _stream, value );\n' )
+            else:
+                fp.write ( '   sq_protocol_write_%s ( _stream, value );\n' % self.getAutomationType(get_function.returnType) )
             fp.write ( '}\n' )
             fp.write ( '\n' )
             
@@ -251,7 +270,7 @@ class AutomationFile:
                 fp.write ( 'void %s ( %s %s );\n' % (set_function.name, set_function.parameters[0].type, set_function.parameters[0].name) )
                 fp.write ( 'void sq_generated_%s ( const SQValue * const _value )\n' % set_function.name )
                 fp.write ( '{\n' )
-                fp.write ( '   %s ( _value->m_%sValue );\n' % (set_function.name, self.getAutomationType(get_function.returnType) ) )
+                fp.write ( '   %s ( _value->Value.m_%sValue );\n' % (set_function.name, self.getAutomationType(get_function.returnType) ) )
                 fp.write ( '}\n' )
                 fp.write ( '\n' )
         
@@ -287,7 +306,7 @@ class AutomationFile:
             fp.write ( 'void sq_generated_%s ( SQStream * _stream, const SQValue * _inputValues )\n' % function.name )
             fp.write ( '{\n' )
             for index, parameter in enumerate(function.parameters):
-                fp.write ( '   %s %s_parameter = _inputValues[%i].m_%sValue;\n' % (parameter.type, parameter.name, index, self.getAutomationType(parameter.type)) )
+                fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index, self.getAutomationType(parameter.type)) )
                 index += 1
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )

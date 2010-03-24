@@ -41,6 +41,9 @@ SQBool sq_protocol_write_type( SQStream * _stream, SQValueType _type )
    case VALUE_TYPE_BYTE_ARRAY:
       return sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("ByteArray")) );
 
+   case VALUE_TYPE_VOID:
+      return sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("Void")) );
+
    default:
       return SQ_FALSE;
    }
@@ -111,12 +114,12 @@ SQBool sq_protocol_write_string( SQStream * _stream, const char * const _value )
    return SQ_TRUE;
 }
 
-SQBool sq_protocol_write_SQStringOut( SQStream * _stream, SQStringOut *pString )
+SQBool sq_protocol_write_string_out( SQStream * _stream, SQStringOut * _value )
 {
 	WRITE_BYTE_OR_FAIL( '"' );
-	while (pString->HasMore(pString))
+	while (_value->HasMore(_value))
 	{
-		char ch = pString->GetNext(pString);
+		char ch = _value->GetNext(_value);
 		if ( ch == '\n' )
 		{
 			WRITE_BYTE_OR_FAIL ( '\\' );
@@ -170,8 +173,23 @@ SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte
    
    for ( ; it != _end; it ++ )
    {
-      WRITE_BYTE_OR_FAIL ( '0' + (((*it) >> 4) & 0x0F) );
-      WRITE_BYTE_OR_FAIL ( '0' + ((*it) & 0x0F) );
+      if ( ((*it  >> 4 ) & 0x0F) > 9 )
+      {
+         WRITE_BYTE_OR_FAIL ( 'A' + (((*it) >> 4) & 0x0F) - 10 );
+      }
+      else
+      {
+         WRITE_BYTE_OR_FAIL ( '0' + (((*it) >> 4) & 0x0F) );
+      }
+
+      if ( ((*it) & 0x0F) > 9 )
+      {
+         WRITE_BYTE_OR_FAIL ( 'A' + ((*it) & 0x0F) - 10 );
+      }
+      else
+      {
+         WRITE_BYTE_OR_FAIL ( '0' + ((*it) & 0x0F) );
+      }
    }
    return SQ_TRUE;
 }

@@ -16,24 +16,24 @@
 
 #include <sequanto/types.h>
 
-char GetNextFixedLength( SQStringOut *pString )
+char sq_external_get_next_fixed_length ( SQStringOut * _string )
 {
-	return (pString->pText)[pString->index++];
+	return (_string->Data.m_text)[_string->m_index++];
 }
 
-SQBool HasMoreFixedLength( SQStringOut *pString )
+SQBool sq_external_has_more_fixed_length ( SQStringOut * _string )
 {
-	return ( pString->index < pString->length ) ? SQ_TRUE : SQ_FALSE;
+	return ( _string->m_index < _string->Extra.m_length ) ? SQ_TRUE : SQ_FALSE;
 }
 
-SQStringOut FixedLengthString(char *pText, int length)
+SQStringOut sq_external_fixed_length_string (char * _text, int _length)
 {
 	SQStringOut so;
-	so.GetNext = GetNextFixedLength;
-	so.HasMore = HasMoreFixedLength;
-	so.index = 0;
-	so.pText = pText;
-	so.length = length;
+	so.GetNext = sq_external_get_next_fixed_length;
+	so.HasMore = sq_external_has_more_fixed_length;
+	so.m_index = 0;
+	so.Data.m_text = _text;
+	so.Extra.m_length = _length;
 	return so;
 }
 

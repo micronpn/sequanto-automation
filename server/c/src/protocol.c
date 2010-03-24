@@ -81,10 +81,10 @@ SQBool sq_protocol_write_integer ( SQStream * _stream, int _value )
 SQBool sq_protocol_write_string( SQStream * _stream, const char * const _value )
 {
    size_t i = 0;
+   char ch;
 
    WRITE_BYTE_OR_FAIL( '"' );
 
-   char ch;
    for ( ; (ch = _value[i]) != '\0'; i++ )
    {
       if ( ch == '\n' )

@@ -273,6 +273,7 @@ void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const
    
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+LIST ")) );
    
+   foundIndex ++;
    for ( ; foundIndex < NUMBER_OF_INFO; foundIndex++ )
    {
       if ( SQ_CONSTANT_STRNCMP(_objectPath, SQ_STRING_CONSTANT_FROM_ARRAY(&INFO_LIST[foundIndex].name), objectPathLength ) == 0 )

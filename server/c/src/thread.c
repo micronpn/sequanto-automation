@@ -17,27 +17,7 @@
 #include "sequanto/thread.h"
 #include "config.h"
 
-#ifdef SQ_ARDUINO
-
-typedef struct _SQThread
-{
-} _SQThread;
-
-SQBool sq_thread_is_supported ()
-{
-   return SQ_FALSE;
-}
-
-SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
-{
-   return NULL;
-}
-
-void sq_thread_start ( SQThread * _thread )
-{
-}
-
-#else 
+#ifdef SQ_USE_THREADS
 
 SQBool sq_thread_is_supported ()
 {
@@ -123,5 +103,26 @@ void sq_thread_start ( SQThread * _thread )
 }
 
 #endif
+
+#else
+
+typedef struct _SQThread
+{
+   unsigned char unused_parameter;
+} _SQThread;
+
+SQBool sq_thread_is_supported ()
+{
+   return SQ_FALSE;
+}
+
+SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
+{
+   return NULL;
+}
+
+void sq_thread_start ( SQThread * _thread )
+{
+}
 
 #endif

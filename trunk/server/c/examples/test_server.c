@@ -1,4 +1,5 @@
 #include <sequanto/automation.h>
+#include <string.h>
 
 static int julemand;
 
@@ -25,7 +26,7 @@ static char configFile[] = "# Config file\n\nval1 = 2\nval2 = 42\nval3 = 0\n";
 
 SQStringOut get_configuration_file ( void )
 {
-   SQStringOut out = sq_external_fixed_length_string ( &configFile, strlen(configFile) );
+   SQStringOut out = sq_external_fixed_length_string ( configFile, strlen(configFile) );
    return out;
 }
 

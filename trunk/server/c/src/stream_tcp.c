@@ -22,6 +22,10 @@
 
 #include "config.h"
 
+#ifndef SQ_USE_THREADS
+#error The TCP stream requires threads.
+#endif
+
 #ifdef SQ_USE_WINSOCK
 #  include <winsock2.h>
 #else

@@ -17,30 +17,7 @@
 #include "sequanto/thread.h"
 #include "config.h"
 
-#ifdef SQ_ARDUINO
-
-typedef struct _SQMutex
-{
-} _SQMutex;
-
-SQMutex * sq_mutex_create ()
-{
-    return NULL;
-}
-
-void sq_mutex_enter ( SQMutex * _mutex )
-{
-}
-
-void sq_mutex_leave ( SQMutex * _mutex )
-{
-}
-
-void sq_mutex_destroy ( SQMutex * _mutex )
-{
-}
-
-#else 
+#ifdef SQ_USE_MUTEXES
 
 #ifdef SQ_WIN32
 
@@ -115,5 +92,29 @@ void sq_mutex_destroy ( SQMutex * _mutex )
 }
 
 #endif
+
+#else 
+
+typedef struct _SQMutex
+{
+   unsigned char unused_parameter;
+} _SQMutex;
+
+SQMutex * sq_mutex_create ()
+{
+    return NULL;
+}
+
+void sq_mutex_enter ( SQMutex * _mutex )
+{
+}
+
+void sq_mutex_leave ( SQMutex * _mutex )
+{
+}
+
+void sq_mutex_destroy ( SQMutex * _mutex )
+{
+}
 
 #endif

@@ -32,7 +32,7 @@ SET(HEADERS server/c/include/sequanto/automation.h server/c/include/sequanto/str
             server/c/include/sequanto/value.h server/c/include/sequanto/system.h)
 
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/test_server_automation.c GENERATED)
-ADD_EXECUTABLE(test_server server/c/examples/test_server.c ${CMAKE_BINARY_DIR}/generated/test_server_automation.c)
+ADD_EXECUTABLE(test_server server/c/examples/test_server.c server/c/examples/type_tests.c ${CMAKE_BINARY_DIR}/generated/test_server_automation.c)
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/test_server_automation.c
                    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/server/c/examples/test_server.automation
                    COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_SOURCE_DIR}/server/c/examples/test_server.automation
@@ -47,6 +47,8 @@ SET(SQ_MAX_PARAMETERS    10       CACHE STRING "The maximum number of parameters
 SET(SQ_SOCKET_TIMEOUT    15000    CACHE STRING "The number of milliseconds to wait for client data before closing the connection")
 SET(SQ_LOGGING_ENABLED   ON       CACHE BOOL "Should logging be enabled")
 SET(SQ_ARDUINO           OFF      CACHE BOOL "Build for arduino")
+SET(SQ_USE_MUTEXES       ON       CACHE BOOL "Use mutexes (Win32 or *nix)")
+SET(SQ_USE_THREADS       ON       CACHE BOOL "Use threads (Win32 or *nix)")
 IF(DOXYGEN_FOUND)
     SET(SQ_GENERATE_DOCUMENTATION OFF CACHE BOOL "Should documentation be generated (only if doxygen is found)")
 ENDIF(DOXYGEN_FOUND)
@@ -67,8 +69,9 @@ ADD_SUBDIRECTORY(server/c/applications)
 IF(WIN32)
     SET(SQ_WIN32 ON)
     SET(SQ_USE_BSD_SOCKETS 1)
-    SET(SQ_USE_WINSOCK 1)
-    
+    SET(SQ_USE_WINSOCK ON)
+    SET(SQ_USE_MUTEXES ON)
+    SET(SQ_USE_THREADS ON)
     CHECK_INCLUDE_FILE(winsock2.h HAVE_WINSOCK2_H) 
 
     SET(SRCS ${SRCS} server/c/src/stream_tcp.c)
@@ -77,6 +80,8 @@ ENDIF(WIN32)
 IF(UNIX)
     SET(SQ_UNIX ON)
     SET(SQ_USE_BSD_SOCKETS 1)
+    SET(SQ_USE_MUTEXES ON)
+    SET(SQ_USE_THREADS ON)
     
     CHECK_INCLUDE_FILE(sys/socket.h HAVE_SYS_SOCKET_H) 
     
@@ -85,6 +90,9 @@ ENDIF(UNIX)
 
 IF(SQ_ARDUINO)
     SET(SRCS ${SRCS} server/c/src/stream_arduino.c)
+
+    SET(SQ_USE_MUTEXES OFF)
+    SET(SQ_USE_THREADS OFF)
 
     ADD_CUSTOM_COMMAND(TARGET test_server
                        POST_BUILD

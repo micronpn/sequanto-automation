@@ -10,15 +10,15 @@
 
 #cmakedefine SQ_USE_BSD_SOCKETS
 #cmakedefine SQ_USE_WINSOCK
+#cmakedefine SQ_USE_MUTEXES
+#cmakedefine SQ_USE_THREADS
 
 #cmakedefine HAVE_STDLIB_H
 #cmakedefine HAVE_WINSOCK2_H
 #cmakedefine HAVE_SYS_SOCKET_H
 #cmakedefine SQ_WIN32
 #cmakedefine SQ_UNIX
-#ifndef SQ_ARDUINO
 #cmakedefine SQ_ARDUINO
-#endif
 #cmakedefine SQ_LOGGING_ENABLED
 
 #define SQ_MAX_STRING_LENGTH ${SQ_MAX_STRING_LENGTH}

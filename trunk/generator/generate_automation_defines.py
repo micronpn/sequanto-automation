@@ -78,11 +78,11 @@ class AutomationFile:
         print '%s (%i) : error: %s' % (self.m_errorReportingFilename, _lineNumber, _text)
         
     def getAutomationType ( self, type ):
-        if type in ['unsigned int', 'unsigned short', 'int', 'short']:
+        if type in ['unsigned long', 'long', 'signed long', 'unsigned int', 'int', 'signed int', 'unsigned short', 'short', 'signed short', 'unsigned char', 'char', 'signed char']:
             return 'integer'
         elif type in ['char *', 'char * const', 'const char *', 'const char * const', 'SQStringOut', 'SQStringOut *']:
             return 'string'
-        elif type == 'float':
+        elif type in ['float', 'double']:
             return 'float'
         elif type in ['bool', 'SQBool']:
             return 'boolean'
@@ -90,9 +90,6 @@ class AutomationFile:
             return 'void'
         elif type == 'SQByteArray *':
             return 'byte_array'
-#        elif type in ['unsigned char *', 'unsigned char * const', 'unsigned const char *', 'unsigned const char * const',
-#                      'SQByte *', 'SQByte * const', 'const SQByte *', 'const SQByte * const']:
-#            return 'byte_array'
         else:
             raise Exception('Could not resolve the C-type "%s" to an automation type.' % type)
     

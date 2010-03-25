@@ -56,14 +56,23 @@ SQBool sq_protocol_write_integer ( SQStream * _stream, int _value )
    char buffer[12];
    int i = 0;
 
+   if ( _value < 0 )
+   {
+      // If this is true we have hit the minimum value of the integer, and revert to just returning 0.
+      if ( _value == -_value )
+      {
+         _value = 0;
+      }
+      else
+      {
+         WRITE_BYTE_OR_FAIL ( '-' );
+         _value = -_value;
+      }
+   }
+
    if ( _value == 0 )
    {
       return sq_stream_write_byte ( _stream, '0' );
-   }
-   if ( _value < 0 )
-   {
-      WRITE_BYTE_OR_FAIL ( '-' );
-      _value = -_value;
    }
 
    while ( _value > 0 )
@@ -162,7 +171,52 @@ SQBool sq_protocol_write_null ( SQStream * _stream )
 
 SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 {
-   return SQ_FALSE;
+   char buffer[12];
+   int i = 0, tempValue;
+
+   if ( _value < 0.0f )
+   {
+      WRITE_BYTE_OR_FAIL ( '-' );
+      _value = -_value;
+   }
+
+   tempValue = (int) _value;
+   while ( tempValue != 0 && i < 12 )
+   {
+      buffer[i] = (char) ('0' + (tempValue % 10));
+      i++;
+
+      tempValue = tempValue / 10;
+   }
+   for ( i--; i >= 0; i-- )
+   {
+      WRITE_BYTE_OR_FAIL ( buffer[i] );
+   }
+
+   WRITE_BYTE_OR_FAIL ( '.' );
+
+   _value = _value - ((int)_value);
+   tempValue = _value * 1000000;
+   if ( tempValue == 0 )
+   {
+      WRITE_BYTE_OR_FAIL ( '0' );
+   }
+   else
+   {
+      i = 0;
+      while ( tempValue != 0 && i < 11)
+      {
+         buffer[i] = (char) ('0' + (tempValue % 10));
+         i++;
+
+         tempValue = tempValue / 10;
+      }
+      for ( i--; i >= 0; i-- )
+      {
+         WRITE_BYTE_OR_FAIL ( buffer[i] );
+      }
+   }
+   return SQ_TRUE;
 }
 
 SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte * _end )

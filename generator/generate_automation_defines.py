@@ -252,7 +252,7 @@ class AutomationFile:
             fp.write ( '\n' )
             
             fp.write ( '%s %s ( void );\n' % (get_function.returnType, get_function.name) )
-            fp.write ( 'void sq_generated_%s ( SQStream * _stream )\n' % get_function.name )
+            fp.write ( 'void sq_generated_property_%s ( SQStream * _stream )\n' % get_function.name )
             fp.write ( '{\n' )
             fp.write ( '   %s value = %s();\n' % (get_function.returnType, get_function.name) )
             if self.getAutomationType(get_function.returnType) == 'byte_array':
@@ -268,7 +268,7 @@ class AutomationFile:
             
             if set_function is not None:
                 fp.write ( 'void %s ( %s %s );\n' % (set_function.name, set_function.parameters[0].type, set_function.parameters[0].name) )
-                fp.write ( 'void sq_generated_%s ( const SQValue * const _value )\n' % set_function.name )
+                fp.write ( 'void sq_generated_property_%s ( const SQValue * const _value )\n' % set_function.name )
                 fp.write ( '{\n' )
                 fp.write ( '   %s ( _value->Value.m_%sValue );\n' % (set_function.name, self.getAutomationType(get_function.returnType) ) )
                 fp.write ( '}\n' )
@@ -290,9 +290,9 @@ class AutomationFile:
                     fp.write ( '   ,\n' )
                 
                 if set_function is None:
-                    fp.write ( '   { sq_generated_%s, NULL, VALUE_TYPE_%s }\n' % (get_function.name, self.getAutomationType(get_function.returnType).upper()) )
+                    fp.write ( '   { sq_generated_property_%s, NULL, VALUE_TYPE_%s }\n' % (get_function.name, self.getAutomationType(get_function.returnType).upper()) )
                 else:
-                    fp.write ( '   { sq_generated_%s, sq_generated_%s, VALUE_TYPE_%s }\n' % (get_function.name, set_function.name, self.getAutomationType(get_function.returnType).upper()) )
+                    fp.write ( '   { sq_generated_property_%s, sq_generated_property_%s, VALUE_TYPE_%s }\n' % (get_function.name, set_function.name, self.getAutomationType(get_function.returnType).upper()) )
         
         fp.write ( '};\n' )
         fp.write ( '\n' )
@@ -303,7 +303,7 @@ class AutomationFile:
             else:
                 fp.write ( '%s %s ( %s );\n' % (function.returnType, function.name, ', '.join(['%s %s' % (parm.type, parm.name) for parm in function.parameters])) )
             
-            fp.write ( 'void sq_generated_%s ( SQStream * _stream, const SQValue * _inputValues )\n' % function.name )
+            fp.write ( 'void sq_generated_function_%s ( SQStream * _stream, const SQValue * _inputValues )\n' % function.name )
             fp.write ( '{\n' )
             for index, parameter in enumerate(function.parameters):
                 fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index, self.getAutomationType(parameter.type)) )
@@ -326,7 +326,7 @@ class AutomationFile:
             fp.write ( '   { NULL, VALUE_TYPE_NO_VALUE }\n' )
         else:
             for function in self.m_foundFunctions:
-                fp.write ( '   { sq_generated_%s, VALUE_TYPE_%s' % (function.name, self.getAutomationType(function.returnType).upper()) )
+                fp.write ( '   { sq_generated_function_%s, VALUE_TYPE_%s' % (function.name, self.getAutomationType(function.returnType).upper()) )
                 for parameter in function.parameters:
                     fp.write ( ', VALUE_TYPE_%s' % self.getAutomationType(parameter.type).upper() )
                 fp.write ( ', VALUE_TYPE_NO_VALUE' * (self.m_maxNumberOfParameters - len(function.parameters) ) )

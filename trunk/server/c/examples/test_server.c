@@ -22,6 +22,32 @@ SQByteArray * get_firmware ( void )
    return &ret;
 }
 
+static SQBool digital_outputs[] = {SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE};
+SQBool get_digital_output ( int portNumber )
+{
+   return digital_outputs[portNumber];
+}
+
+void set_digital_output ( int portNumber, SQBool value )
+{
+   digital_outputs[portNumber] = value;
+}
+
+void reset_digital_output ( int portNumber )
+{
+   digital_outputs[portNumber] = SQ_FALSE;
+}
+
+SQBool get_digital_output_test ( int portNumber, int testValue )
+{
+   return digital_outputs[portNumber];
+}
+
+void set_digital_output_test ( int portNumber, int testValue, SQBool value )
+{
+   digital_outputs[portNumber] = value;
+}
+
 static char configFile[] = "# Config file\n\nval1 = 2\nval2 = 42\nval3 = 0\n";
 
 SQStringOut get_configuration_file ( void )

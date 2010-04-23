@@ -71,3 +71,8 @@ property /type_tests/properties/double type_test_double_get type_test_double_set
 function /type_tests/functions/get_bool type_test_bool_get
 function /type_tests/functions/set_bool type_test_bool_set
 property /type_tests/properties/bool type_test_bool_get type_test_bool_set
+
+# Test the new smart property and function
+property /digital_output/(0..7)/value get_digital_output set_digital_output
+property /digital_output/(0..7)/(1001,1002,1003,1004)/value get_digital_output_test set_digital_output_test
+#function /digital_output/(0..7)/reset reset_digital_output

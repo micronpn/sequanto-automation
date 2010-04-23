@@ -196,7 +196,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
    WRITE_BYTE_OR_FAIL ( '.' );
 
    _value = _value - ((int)_value);
-   tempValue = _value * 1000000;
+   tempValue = (int) (_value * 1000000);
    if ( tempValue == 0 )
    {
       WRITE_BYTE_OR_FAIL ( '0' );

@@ -26,8 +26,11 @@ extern "C"
 
 typedef unsigned char SQByte;
 typedef SQByte SQBool;
-static const SQBool SQ_TRUE = 1;
-static const SQBool SQ_FALSE = 0;
+
+enum { SQ_TRUE = 1, SQ_FALSE = 0 };
+
+//#define SQ_TRUE 1
+//#define SQ_FALSE 0
 
 typedef struct _SQStringOut SQStringOut;
 

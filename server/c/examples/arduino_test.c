@@ -53,7 +53,7 @@ SQBool get_display ( int _column, int _row )
    }
 }
 
-void draw_display ()
+void draw_display ( void )
 {
    for ( int row = 0; row < ROWS; row ++ )
    {
@@ -83,12 +83,12 @@ SQBool digital_io_write ( int _pin, SQBool _high )
    return SQ_TRUE;
 }
 
-char * firmware_version ( void )
+const char * firmware_version ( void )
 {
    return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
 }
 
-int main ()
+int main ( void )
 {
    int i;
    for ( i = 2; i <= 13; i ++ )

@@ -20,6 +20,7 @@
 #include <sequanto/types.h>
 #include <sequanto/stream.h>
 #include <sequanto/server.h>
+#include <sequanto/system.h>
 
 #ifdef __cplusplus
 extern "C"

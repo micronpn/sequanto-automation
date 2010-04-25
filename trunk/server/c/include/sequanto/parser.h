@@ -68,6 +68,14 @@ void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char
  * @see sq_parser_info
  */
 void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _value );
+/**
+ * @see sq_parser_info
+ */
+void sq_parser_enable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath );
+/**
+ * @see sq_parser_info
+ */
+void sq_parser_disable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath );
 
 /*@}*/
 

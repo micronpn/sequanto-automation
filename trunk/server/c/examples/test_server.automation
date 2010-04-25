@@ -77,3 +77,6 @@ property /digital_output/(0..7)/value get_digital_output set_digital_output
 property /digital_output/(0..7)/(1001,1002,1003,1004)/value get_digital_output_test set_digital_output_test
 function /digital_output/(0..7)/reset reset_digital_output
 function /digital_output/(0..7)/reset_and_set reset_and_set_digital_output
+
+monitor /digital_output/changes const char *
+monitor /digital_output/(0..7)/values SQBool

@@ -88,6 +88,7 @@ const char * firmware_version ( void )
    return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
 }
 
+
 int main ( void )
 {
    int i;

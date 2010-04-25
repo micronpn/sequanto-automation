@@ -149,6 +149,32 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         
         sq_parser_info ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
         break;
+
+    case 'E': // ENABLE
+        SKIP_TO_WHITESPACE ();
+        SKIP_WHITESPACE ();
+        
+        endOfObjectPath = sq_parser_internal_read_object_path ( _parser, index );
+        
+        _parser->m_inputBuffer[endOfObjectPath] = '\0';
+        
+        SQ_LOG1 ( "ENABLE %s\n", _parser->m_inputBuffer + index );
+        
+        sq_parser_enable ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
+        break;
+        
+    case'D': // DISABLE
+        SKIP_TO_WHITESPACE ();
+        SKIP_WHITESPACE ();
+        
+        endOfObjectPath = sq_parser_internal_read_object_path ( _parser, index );
+        
+        _parser->m_inputBuffer[endOfObjectPath] = '\0';
+        
+        SQ_LOG1 ( "DISABLE %s\n", _parser->m_inputBuffer + index );
+        
+        sq_parser_disable ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
+        break;
         
     default:
        sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );

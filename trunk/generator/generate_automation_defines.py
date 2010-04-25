@@ -16,6 +16,7 @@ if path.isdir ( path.join ( path.dirname(__file__), 'code' ) ):
     code_dir = path.join ( path.dirname(__file__), 'code' )
 
 from sequanto_automation.codeparser import get as get_code_parser
+from sequanto_automation.codeparser import Parameter
 
 class SmartObject ( object ):
     @property
@@ -62,9 +63,51 @@ class SmartObject ( object ):
             return ''
     
     @property
+    def listAdditionalSmartParameters ( self ):
+        ret = []
+        i = 0
+        for value in self.m_smartValues:
+            name = 'parameter%i' % i
+            
+            try:
+                int(value)
+                ret.append ( Parameter ( name, 'int' ) )
+                
+            except TypeError:
+                ret.append ( Parameter ( name, 'const char *' ) )
+            
+            i += 1
+    
+        return ret
+    
+    @property
     def additionalSmartParameters ( self ):
-        return ', '.join ( ['%s %s' % (parameter.type, parameter.name) for parameter in self.getFunction.parameters] )
+        return ', '.join ( ['%s %s' % (parameter.type, parameter.name) for parameter in self.listAdditionalSmartParameters] )
+    
+    @property
+    def writeUpdateFunction ( self ):
+        return not self.smart or self.firstSmartObjectPath
 
+    @property
+    def translatedObjectPath ( self ):
+        if self.smart:
+            return self.normalizedSmartObjectPath[1:].replace('/', '_').replace('_%s', '')
+        else:
+            return self.objectPath[1:].replace('/', '_')
+    
+    @property
+    def updateFunctionName ( self ):
+        if self.m_updateFunctionName is None:
+            base_function_name = 'sq_%s_updated' % self.translatedObjectPath
+            self.m_updateFunctionName = base_function_name
+            i = 2
+            while self.m_updateFunctionName in self.m_automationFile.m_seenUpdateFunctions:
+                self.m_updateFunctionName = '%s%i' % (base_function_name, i)
+                i += 1
+            self.m_automationFile.m_seenUpdateFunctions.add ( self.m_updateFunctionName )
+        
+        return self.m_updateFunctionName
+    
     def __init__ ( self, _automationFile, _index, _objectPath, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
         self.m_automationFile = _automationFile
         self.m_index = _index
@@ -136,28 +179,8 @@ class Property ( SmartObject ):
         return self.m_setFunction
     
     @property
-    def translatedObjectPath ( self ):
-        if self.smart:
-            return self.normalizedSmartObjectPath[1:].replace('/', '_').replace('_%s', '')
-        else:
-            return self.objectPath[1:].replace('/', '_')
-    
-    @property
-    def writeUpdateFunction ( self ):
-        return not self.smart or self.firstSmartObjectPath
-    
-    @property
-    def updateFunctionName ( self ):
-        if self.m_updateFunctionName is None:
-            base_function_name = 'sq_%s_updated' % self.translatedObjectPath
-            self.m_updateFunctionName = base_function_name
-            i = 2
-            while self.m_updateFunctionName in self.m_automationFile.m_seenUpdateFunctions:
-                self.m_updateFunctionName = '%s%i' % (base_function_name, i)
-                i += 1
-            self.m_automationFile.m_seenUpdateFunctions.add ( self.m_updateFunctionName )
-        
-        return self.m_updateFunctionName
+    def listAdditionalSmartParameters ( self ):
+        return self.getFunction.parameters
     
     def __init__ ( self, _automationFile, _index, _objectPath, _getFunction, _setFunction, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
         super ( Property, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
@@ -174,7 +197,7 @@ class Function ( SmartObject ):
     @property
     def parameters ( self ):
         return self.m_function.parameters
-
+    
     @property
     def name ( self ):
         return self.m_function.m_name
@@ -183,6 +206,20 @@ class Function ( SmartObject ):
         super ( Function, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
         
         self.m_function = _function
+
+class Monitor ( SmartObject ):
+    @property
+    def type ( self ):
+        return self.m_type
+    
+    @property
+    def automationType ( self ):
+        return self.m_automationFile.getAutomationType(self.type)
+    
+    def __init__ ( self, _automationFile, _index, _objectPath, _type, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
+        super ( Monitor, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
+        
+        self.m_type = _type
 
 class AutomationFile ( object ):
     def setErrorReportingFilename ( self, _filename ):
@@ -193,6 +230,7 @@ class AutomationFile ( object ):
         self.m_imports = []
         self.m_properties = []
         self.m_functions = []
+        self.m_monitors = []
         self.m_name = None
         
         self.m_errorReportingFilename = '<unknown>'
@@ -200,6 +238,7 @@ class AutomationFile ( object ):
         self.m_objectPaths = []
         self.m_foundProperties = []
         self.m_foundFunctions = []
+        self.m_foundMonitors = []
         self.m_maxNumberOfParameters = 0
         self.m_seenUpdateFunctions = sets.Set()
     
@@ -234,10 +273,14 @@ class AutomationFile ( object ):
                     raise 'property needs two or three parameters, the object path, the get function and optionally a set function'
                 
                 self.m_properties.append ( (lineNumber, objectPath, get_function, set_function) )
-                
+            
             elif command == 'function':
-                objectPath, function = rest.split(' ')
+                objectPath, function = rest.split(' ', 1)
                 self.m_functions.append ( (lineNumber, objectPath, function) )
+            
+            elif command == 'monitor':
+                objectPath, type = rest.split(' ', 1)
+                self.m_monitors.append ( (lineNumber, objectPath, type) )
             
             lineNumber = lineNumber + 1
 
@@ -324,7 +367,6 @@ class AutomationFile ( object ):
                 self.reportError ( lineNumber, 'Could not find get function "%s"' % get_function )
         
         functionIndex = 0
-        
         for lineNumber, objectPath, function in self.m_functions:
             if self.m_parser.hasFunction(function):
                 function = self.m_parser.getFunction(function)
@@ -358,6 +400,29 @@ class AutomationFile ( object ):
             else:
                 self.reportError ( lineNumber, 'Could not find function "%s"' % function )
         
+        monitorIndex = 0
+        for lineNumber, objectPath, type in self.m_monitors:
+            automationType = self.getAutomationType(type)
+            if automationType is not None:
+                monitor = Monitor(self, monitorIndex, objectPath, type)
+                if monitor.smart:
+                    first = True
+                    for smartObjectPath, values in monitor.allSmartObjectPaths:
+                        self.createParents ( smartObjectPath )
+                        self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
+                        self.m_foundMonitors.append ( Monitor(self, monitorIndex, objectPath, type, smartObjectPath, first, values) )
+                        monitorIndex += 1
+                        first = False
+                    
+                else:
+                    self.createParents ( objectPath )
+                    self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
+                    self.m_foundMonitors.append ( monitor )
+                    monitorIndex += 1
+                    
+            else:
+                self.reportError ( lineNumber, 'The monitor type is not recognized (%s)' % (type) )
+        
         self.m_objectPaths.sort()
         
     def findObjectPathIndex ( self, objectPath ):
@@ -366,6 +431,7 @@ class AutomationFile ( object ):
             if objectPath == oPath:
                 return ret
             ret += 1
+        raise Exception('Could not find %s' % objectPath)
     
     def writeValue ( self, type, value ):
         automationType = self.getAutomationType(type)
@@ -396,7 +462,7 @@ class AutomationFile ( object ):
         fp.write ( 'static const char NEWLINE[] SQ_CONST_VARIABLE = "\\r\\n";\n' )
         fp.write ( 'static const char UPDATE_START[] SQ_CONST_VARIABLE = "!UPDATE ";\n' )
         
-        fp.write ( 'typedef enum _SQInfoType { INFO_TYPE_LIST = 0, INFO_TYPE_PROPERTY = 1, INFO_TYPE_CALLABLE = 2 } SQInfoType;\n' )
+        fp.write ( 'typedef enum _SQInfoType { INFO_TYPE_LIST = 0, INFO_TYPE_PROPERTY = 1, INFO_TYPE_CALLABLE = 2, INFO_TYPE_MONITOR = 3 } SQInfoType;\n' )
         
         fp.write ( 'typedef struct _SQInfo { const char * name; SQInfoType type; int index; } SQInfo;\n' )
         fp.write ( '\n' )
@@ -447,7 +513,7 @@ class AutomationFile ( object ):
                             fp.write ( '   sq_stream_write_string ( stream, "%s" );\n' % parts[i] )
                 
                 else:
-                    fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(objectPath) )
+                    fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(property.objectPath) )
                 
                 fp.write ( '   sq_stream_write_byte ( stream, \' \' );\n' )
                 if property.automationType == 'byte_array':
@@ -585,12 +651,73 @@ class AutomationFile ( object ):
         fp.write ( '   }\n' )
         fp.write ( '}\n' )
         fp.write ( '\n' )
+
+        fp.write ( 'static SQBool monitor_state[] = { %s };\n' % ', '.join ( (['SQ_FALSE'] * len(self.m_foundMonitors)) ) )
+        for monitor in self.m_foundMonitors:
+            if monitor.writeUpdateFunction:
+                if monitor.smart:
+                    fp.write ( 'void %s ( %s, %s _value )\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.type) )
+                else:
+                    fp.write ( 'void %s ( %s _value )\n' % (monitor.updateFunctionName, monitor.type) )
+                
+                fp.write ( '{\n' )
+                fp.write ( '   SQStream * stream = NULL;\n' )
+                fp.write ( '   SQServer * server = sq_server_get_instance ();\n' )
+                fp.write ( '   if ( monitor_state[%i] == SQ_TRUE )\n' % monitor.index )
+                fp.write ( '   {\n' )
+                fp.write ( '      stream = server->m_stream;\n' )
+                fp.write ( '      sq_stream_enter_write ( stream );\n' )
+                fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( UPDATE_START ) );\n' )
+                if  monitor.smart:
+                    parts = monitor.normalizedSmartObjectPath.split('/%s')
+                    initialPart = parts[0]
+                    fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(initialPart) )
+                    for i in range(1, len(parts)):
+                        fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string(ROOT) );\n' )
+                        
+                        parameter = monitor.listAdditionalSmartParameters[i - 1]
+                        
+                        if self.getAutomationType(parameter.type) == "integer":
+                            fp.write ( '      sq_protocol_write_integer ( stream, %s );\n' % parameter.name )
+                        else:
+                            fp.write ( '      sq_stream_write_string ( stream, %s );\n' % parameter.name )
+                        if parts[i] != '':
+                            fp.write ( '      sq_stream_write_string ( stream, "%s" );\n' % parts[i] )
+                
+                else:
+                    fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(monitor.objectPath) )
+                
+                fp.write ( '      sq_stream_write_byte ( stream, \' \' );\n' )
+                if monitor.automationType == 'byte_array':
+                    fp.write ( '      sq_protocol_write_%s ( stream, _value->m_start, _value->m_end );\n' % monitor.automationType )
+                elif monitor.type == 'SQStringOut':
+                    fp.write ( '      sq_protocol_write_string_out ( stream, &_value );\n' )
+                elif monitor.type == 'SQStringOut *':
+                    fp.write ( '      sq_protocol_write_string_out ( stream, _value );\n' )
+                else:
+                    fp.write ( '      sq_protocol_write_%s ( stream, _value );\n' % monitor.automationType )
+                fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( NEWLINE ) );\n' )
+                fp.write ( '      sq_stream_exit_write ( stream );\n' )
+                fp.write ( '   }\n' )
+                fp.write ( '}\n' )
+                fp.write ( '\n' )
+        
+        fp.write ( 'typedef struct _SQMonitorInfo { SQValueType type; unsigned char index; } SQMonitorInfo;\n' )
+        fp.write ( 'static const SQMonitorInfo MONITOR_LIST[] SQ_CONST_VARIABLE = {\n' )
+        # Some compilers (e.g. VS2005) does not support empty lists, so add a dummy one.
+        if len(self.m_foundMonitors) == 0:
+            fp.write ( '   { VALUE_TYPE_NO_VALUE, 0xFF }\n' )
+        else:
+            for monitor in self.m_foundMonitors:
+                fp.write ( '   { VALUE_TYPE_%s, %i },\n' % (self.getAutomationType(monitor.type).upper(), monitor.index) )
+        
+        fp.write ( '};\n' )
+        fp.write ( '\n' )
         
         automation_functions_c = open(path.join ( code_dir, 'c', 'automation_functions.c' ), 'r').read()
         fp.write ( automation_functions_c.replace('\r\n', '\n') )
-        
         fp.close()
-
+        
         fp = open ( '%s_automation.h' % self.m_name, 'w' )
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( 'extern "C" {\n' )
@@ -601,6 +728,14 @@ class AutomationFile ( object ):
                     fp.write ( 'void %s ( %s, %s _value );\n' % (property.updateFunctionName, property.additionalSmartParameters, property.type) )
                 else:
                     fp.write ( 'void %s ( %s _value );\n' % (property.updateFunctionName, property.type) )
+
+        for monitor in self.m_foundMonitors:
+            if monitor.writeUpdateFunction:
+                if monitor.smart:
+                    fp.write ( 'void %s ( %s, %s _value );\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.type) )
+                else:
+                    fp.write ( 'void %s ( %s _value );\n' % (monitor.updateFunctionName, monitor.type) )
+        
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( '}\n' )
         fp.write ( '#endif\n' )

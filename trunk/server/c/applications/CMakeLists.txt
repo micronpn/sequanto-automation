@@ -14,7 +14,7 @@ IF(SQ_ARDUINO)
 
   # Add the generated automation .c file
   SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/applications/arduino_demo/arduino_demo_automation.c GENERATED)
-
+  
   # Add the arduino_demo executable, with source files, including the generated one.
   ADD_EXECUTABLE(arduino_demo ${ARDUINO_DEMO_SRCS}
     ${CMAKE_BINARY_DIR}/generated/applications/arduino_demo/arduino_demo_automation.c)

@@ -14,12 +14,10 @@ const int heaterPin = 13;
 
 extern "C"
 {
-
-const char * svn_revision ( void )
-{
-   return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
-}
-
+   const char * svn_revision ( void )
+   {
+      return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
+   }
 }
 
 StateManager statemanager(Idle);

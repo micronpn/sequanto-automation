@@ -34,8 +34,13 @@ SQBool get_digital_output ( int portNumber )
 
 void set_digital_output ( int portNumber, SQBool value )
 {
-   digital_outputs[portNumber] = value;
-   sq_digital_output_value_updated ( portNumber, value );
+   if ( digital_outputs[portNumber] != value )
+   {
+      digital_outputs[portNumber] = value;
+      sq_digital_output_value_updated ( portNumber, value );
+      sq_digital_output_changes_updated ( "Digital output" );
+      sq_digital_output_values_updated ( portNumber, value );
+   }
 }
 
 void reset_digital_output ( int portNumber )

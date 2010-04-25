@@ -5,11 +5,13 @@ static const char COULD_NOT_FIND_GIVEN_OBJECT[] SQ_CONST_VARIABLE = "Could not f
 static const char OBJECT_IS_NOT_A_PROPERTY[] SQ_CONST_VARIABLE = "Object is not a property.";
 static const char OBJECT_IS_NOT_A_LIST[] SQ_CONST_VARIABLE = "Object is not a list.";
 static const char OBJECT_IS_NOT_A_CALLABLE[] SQ_CONST_VARIABLE = "Object is not a callable.";
+static const char OBJECT_IS_NOT_A_MONITOR[] SQ_CONST_VARIABLE = "Object is not a monitor.";
 
 #ifdef SQ_ARDUINO
 static SQInfo bufferedInfo;
 static SQCallableInfo bufferedCallableInfo;
 static SQPropertyInfo bufferedPropertyInfo;
+static SQMonitorInfo bufferedMonitorInfo;
 
 const SQInfo * const sq_get_info ( size_t _index )
 {
@@ -29,6 +31,12 @@ const SQPropertyInfo * const sq_get_property_info ( size_t _index )
    return &bufferedPropertyInfo;
 }
 
+const SQMonitorInfo * const sq_get_monitor_info ( size_t _index )
+{
+   memcpy_P ( &bufferedMonitorInfo, &MONITOR_LIST[_index], sizeof(SQMonitorInfo) );
+   return &bufferedMonitorInfo;
+}
+
 #else
 
 const SQInfo * const sq_get_info ( size_t _index )
@@ -44,6 +52,11 @@ const SQCallableInfo * const sq_get_callable_info ( size_t _index )
 const SQPropertyInfo * const sq_get_property_info ( size_t _index )
 {
    return &PROPERTY_LIST[_index];
+}
+
+const SQMonitorInfo * const sq_get_monitor_info ( size_t _index )
+{
+   return &MONITOR_LIST[_index];
 }
 
 #endif
@@ -111,6 +124,17 @@ void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const 
    }
    sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );
    callableInfo->function ( _stream, _inputValues );
+   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
+}
+
+void sq_automation_monitor_enable ( const SQInfo * const _info, SQStream * _stream, SQBool _enable )
+{
+   const SQMonitorInfo * const monitorInfo = sq_get_monitor_info(_info->index);
+   
+   sq_stream_enter_write ( _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );
+   monitor_state[monitorInfo->index] = _enable;
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
    sq_stream_exit_write ( _stream );
 }
@@ -189,6 +213,7 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
    int i;
    const SQCallableInfo * callableInfo;
    const SQPropertyInfo * propertyInfo;
+   const SQMonitorInfo * monitorInfo;
    const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
    
    sq_stream_enter_write ( _stream );
@@ -234,6 +259,20 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
       {
          sq_stream_write_byte ( _stream, ' ' );
          sq_protocol_write_type ( _stream, sq_automation_get_parameter(callableInfo, i) );
+      }
+      break;
+      
+   case INFO_TYPE_MONITOR:
+      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO Monitor ")) );
+      monitorInfo = sq_get_monitor_info(info->index);
+      sq_protocol_write_type ( _stream, monitorInfo->type );
+      if ( monitor_state[monitorInfo->index] )
+      {
+         sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT(" Enabled")) );
+      }
+      else
+      {
+         sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT(" Disabled")) );
       }
       break;
       
@@ -301,4 +340,38 @@ void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const
    }
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
    sq_stream_exit_write ( _stream );
+}
+
+void sq_parser_enable_internal ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, SQBool _enable )
+{
+   const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
+
+   sq_stream_enter_write ( _stream );
+   if ( info == NULL )
+   {
+      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
+      sq_stream_exit_write ( _stream );
+      return;
+   }
+   
+   if ( info->type != INFO_TYPE_MONITOR )
+   {
+      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_MONITOR) );
+      sq_stream_exit_write ( _stream );
+      return;
+   }
+   
+   sq_automation_monitor_enable ( info, _stream, _enable );
+   
+   sq_stream_exit_write ( _stream );
+}
+
+void sq_parser_enable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+{
+   sq_parser_enable_internal ( _parser, _stream, _objectPath, SQ_TRUE );
+}
+
+void sq_parser_disable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+{
+   sq_parser_enable_internal ( _parser, _stream, _objectPath, SQ_FALSE );
 }

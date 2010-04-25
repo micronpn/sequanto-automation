@@ -118,7 +118,7 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
    SQStream * stream = (SQStream*) _data;
    int ret = 0;
    SQByte buff[100];
-   while ( ret != SOCKET_ERROR )
+   do
    {
       ret = recv ( stream->m_clientSocket, buff, 100, 0 );
       if ( ret > 0 && ret != SOCKET_ERROR )
@@ -126,6 +126,7 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
          stream->m_dataReceivedHandler ( stream, stream->m_dataReceivedHandlerData, buff, ret );
       }
    }
+   while ( ret != SOCKET_ERROR && ret > 0 );
    closesocket ( stream->m_clientSocket );
    stream->m_clientSocket = SOCKET_ERROR;
 }

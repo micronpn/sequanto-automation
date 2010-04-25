@@ -49,7 +49,7 @@ float ReadCurrentTemperature()
 	if (temp10 != current_temperatureInt10)
 	{
 		current_temperatureInt10 = temp10;
-		sq_temp_current_updated( server.m_stream, current_temperatureInt10 );
+		sq_temp_current_updated( current_temperatureInt10 );
 	}
 	return current_temperature;
 }
@@ -64,7 +64,7 @@ void SetHeaterState( SQBool _state )
 	if ( _state != GetHeaterState() )
 	{
 		digitalWrite( heaterPin, (_state == SQ_TRUE) ? HIGH : LOW );
-		sq_temp_heater_updated( server.m_stream, _state );
+		sq_temp_heater_updated( _state );
 	}
 }
 
@@ -106,14 +106,14 @@ void SetCurrentTemperatureSetpoint( float _temp )
 	if ( UsingDayTime(Now()) )
 	{
 		day_temp = _temp;
-		sq_temp_day_temp_updated( server.m_stream, inttemp );
+		sq_temp_day_temp_updated( inttemp );
 	}
 	else
 	{
 		night_temp = _temp;
-		sq_temp_night_temp_updated( server.m_stream, inttemp );
+		sq_temp_night_temp_updated( inttemp );
 	}
-	sq_temp_setpoint_updated( server.m_stream, inttemp );
+	sq_temp_setpoint_updated( inttemp );
 }
 
 
@@ -190,10 +190,10 @@ int get_daytemp ( void )
 void set_daytemp ( int _temp )
 {
 	day_temp = FromInt10(_temp);
-	sq_temp_day_temp_updated( server.m_stream, _temp );
+	sq_temp_day_temp_updated( _temp );
 	if ( UsingDayTime(Now()) == SQ_TRUE)
 	{
-		sq_temp_setpoint_updated( server.m_stream, _temp );
+		sq_temp_setpoint_updated( _temp );
 	}
 }
 
@@ -205,7 +205,7 @@ int get_dayclock ( void )
 void set_dayclock ( int _clock )
 {
 	day_clock = 100L * (unsigned long)_clock;
-	sq_temp_day_clock_updated( server.m_stream, _clock );
+	sq_temp_day_clock_updated( _clock );
 }
 
 SQBool get_nighttempused ( void )
@@ -218,7 +218,7 @@ void set_nighttempused ( SQBool _used )
 	if (_used != night_used)
 	{
 		night_used = _used;
-		sq_temp_night_used_updated( server.m_stream, _used );
+		sq_temp_night_used_updated( _used );
 	}
 }
 
@@ -230,10 +230,10 @@ int get_nighttemp ( void )
 void set_nighttemp ( int _temp )
 {
 	night_temp = FromInt10(_temp);
-	sq_temp_night_temp_updated( server.m_stream, _temp );
+	sq_temp_night_temp_updated( _temp );
 	if ( UsingDayTime(Now()) == SQ_FALSE)
 	{
-		sq_temp_setpoint_updated( server.m_stream, _temp );
+		sq_temp_setpoint_updated( _temp );
 	}
 }
 
@@ -245,7 +245,7 @@ int get_nightclock ( void )
 void set_nightclock ( int _clock )
 {
 	night_clock = 100L * (unsigned long)_clock;
-	sq_temp_night_clock_updated( server.m_stream, _clock );
+	sq_temp_night_clock_updated( _clock );
 }
 
 

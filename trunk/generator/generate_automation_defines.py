@@ -422,39 +422,44 @@ class AutomationFile ( object ):
             
             if property.writeUpdateFunction:
                 if property.smart:
-                    fp.write ( 'void %s ( SQStream * _stream, %s, %s _value )\n' % (property.updateFunctionName, property.additionalSmartParameters, property.type) )
+                    fp.write ( 'void %s ( %s, %s _value )\n' % (property.updateFunctionName, property.additionalSmartParameters, property.type) )
                 else:
-                    fp.write ( 'void %s ( SQStream * _stream, %s _value )\n' % (property.updateFunctionName, property.type) )
+                    fp.write ( 'void %s ( %s _value )\n' % (property.updateFunctionName, property.type) )
                 
                 fp.write ( '{\n' )
-                fp.write ( '   sq_stream_enter_write ( _stream );\n' )
-                fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( UPDATE_START ) );\n' )
+                fp.write ( '   SQStream * stream = NULL;\n' )
+                fp.write ( '   SQServer * server = sq_server_get_instance ();\n' )
+                fp.write ( '   stream = server->m_stream;\n' )
+                fp.write ( '   sq_stream_enter_write ( stream );\n' )
+                fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( UPDATE_START ) );\n' )
                 if property.smart:
                     parts = property.normalizedSmartObjectPath.split('/%s')
                     initialPart = parts[0]
-                    fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(initialPart) )
+                    fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(initialPart) )
                     for i in range(1, len(parts)):
-                        fp.write ( '   sq_protocol_write_string ( _stream, sq_get_constant_string(ROOT) );\n' )
+                        fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string(ROOT) );\n' )
                         parameter = property.getFunction.parameters[i - 1]
-                        fp.write ( '   sq_protocol_write_%s ( _stream, %s );\n'
-                                   % (self.getAutomationType(parameter.type), parameter.name) )
+                        if self.getAutomationType(parameter.type) == "integer":
+                            fp.write ( '   sq_protocol_write_integer ( stream, %s );\n' % parameter.name )
+                        else:
+                            fp.write ( '   sq_stream_write_string ( stream, %s );\n' % parameter.name )
                         if parts[i] != '':
-                            fp.write ( '   sq_protocol_write_string ( _stream, "%s" );\n' % parts[i] )
+                            fp.write ( '   sq_stream_write_string ( stream, "%s" );\n' % parts[i] )
                 
                 else:
-                    fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(objectPath) )
+                    fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(objectPath) )
                 
-                fp.write ( '   sq_stream_write_byte ( _stream, \' \' );\n' )
+                fp.write ( '   sq_stream_write_byte ( stream, \' \' );\n' )
                 if property.automationType == 'byte_array':
-                    fp.write ( '   sq_protocol_write_%s ( _stream, _value->m_start, _value->m_end );\n' % property.automationType )
+                    fp.write ( '   sq_protocol_write_%s ( stream, _value->m_start, _value->m_end );\n' % property.automationType )
                 elif property.type == 'SQStringOut':
-                    fp.write ( '   sq_protocol_write_string_out ( _stream, &_value );\n' )
+                    fp.write ( '   sq_protocol_write_string_out ( stream, &_value );\n' )
                 elif property.type == 'SQStringOut *':
-                    fp.write ( '   sq_protocol_write_string_out ( _stream, _value );\n' )
+                    fp.write ( '   sq_protocol_write_string_out ( stream, _value );\n' )
                 else:
-                    fp.write ( '   sq_protocol_write_%s ( _stream, _value );\n' % property.automationType )
-                fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string( NEWLINE ) );\n' )
-                fp.write ( '   sq_stream_exit_write ( _stream );\n' )
+                    fp.write ( '   sq_protocol_write_%s ( stream, _value );\n' % property.automationType )
+                fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( NEWLINE ) );\n' )
+                fp.write ( '   sq_stream_exit_write ( stream );\n' )
                 fp.write ( '}\n' )
                 fp.write ( '\n' )
             
@@ -591,7 +596,11 @@ class AutomationFile ( object ):
         fp.write ( 'extern "C" {\n' )
         fp.write ( '#endif\n' )
         for property in self.m_foundProperties:
-            fp.write ( 'void %s ( SQStream * _stream, %s _value );\n' % (property.updateFunctionName, property.type) )
+            if property.writeUpdateFunction:
+                if property.smart:
+                    fp.write ( 'void %s ( %s, %s _value );\n' % (property.updateFunctionName, property.additionalSmartParameters, property.type) )
+                else:
+                    fp.write ( 'void %s ( %s _value );\n' % (property.updateFunctionName, property.type) )
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( '}\n' )
         fp.write ( '#endif\n' )

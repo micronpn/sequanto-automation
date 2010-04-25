@@ -1,5 +1,6 @@
 #include <sequanto/automation.h>
 #include <string.h>
+#include "test_server_automation.h"
 
 static int julemand;
 
@@ -22,7 +23,9 @@ SQByteArray * get_firmware ( void )
    return &ret;
 }
 
-static SQBool digital_outputs[] = {SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE};
+#define NUMBER_OF_DIGITAL_OUTPUTS 8
+static SQBool digital_outputs[NUMBER_OF_DIGITAL_OUTPUTS] = {SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE};
+
 SQBool get_digital_output ( int portNumber )
 {
    return digital_outputs[portNumber];
@@ -31,16 +34,19 @@ SQBool get_digital_output ( int portNumber )
 void set_digital_output ( int portNumber, SQBool value )
 {
    digital_outputs[portNumber] = value;
+   sq_digital_output_value_updated ( portNumber, value );
 }
 
 void reset_digital_output ( int portNumber )
 {
    digital_outputs[portNumber] = SQ_FALSE;
+   sq_digital_output_value_updated ( portNumber, SQ_FALSE );
 }
 
 void reset_and_set_digital_output ( int portNumber, SQBool _value )
 {
    digital_outputs[portNumber] = _value;
+   sq_digital_output_value_updated ( portNumber, _value );
 }
 
 SQBool get_digital_output_test ( int portNumber, int testValue )
@@ -51,6 +57,7 @@ SQBool get_digital_output_test ( int portNumber, int testValue )
 void set_digital_output_test ( int portNumber, int testValue, SQBool value )
 {
    digital_outputs[portNumber] = value;
+   sq_digital_output_value_updated2 ( portNumber, testValue, value );
 }
 
 static char configFile[] = "# Config file\n\nval1 = 2\nval2 = 42\nval3 = 0\n";
@@ -91,8 +98,12 @@ int main ( int argc, char * argv[] )
 
    while ( SQ_TRUE )
    {
+      if ( sq_thread_is_supported() )
+      {
+         sq_thread_sleep ( 1000 );
+      }
       sq_server_poll ( &server );
    }
-   
+
    sq_shutdown ();   
 }

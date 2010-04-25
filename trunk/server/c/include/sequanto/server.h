@@ -29,9 +29,9 @@ extern "C"
 
 typedef struct _SQServer
 {
-    SQStream * m_stream;
-    int m_clientsHandled;
-    SQParser m_parser;
+   SQStream * m_stream;
+   int m_clientsHandled;
+   SQParser m_parser;
 } SQServer;
 
 /**
@@ -43,8 +43,16 @@ typedef struct _SQServer
  * be the port number to listen to. On embedded hardware without TCP
  * support it will normally be the number of the serial port to
  * listen on.
+ * 
+ * This also sets the singleton variable, which means that you can
+ * only have one SQServer object at a time.
  */
 void sq_server_init ( SQServer * _server, int _portNumber );
+
+/**
+ * Get the current server singleton instance.
+ */
+SQServer * sq_server_get_instance ( void );
 
 void sq_server_poll ( SQServer * _server );
 

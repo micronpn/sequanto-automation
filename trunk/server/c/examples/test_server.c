@@ -1,4 +1,5 @@
 #include <sequanto/automation.h>
+#include <sequanto/thread.h>
 #include <string.h>
 #include "test_server_automation.h"
 
@@ -100,7 +101,7 @@ int main ( int argc, char * argv[] )
    {
       if ( sq_thread_is_supported() )
       {
-         sq_thread_sleep ( 1000 );
+         sq_system_sleep ( 1000 );
       }
       sq_server_poll ( &server );
    }

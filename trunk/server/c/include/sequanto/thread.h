@@ -36,7 +36,6 @@ SQBool sq_thread_is_supported ( void );
 SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data );
 void sq_thread_start ( SQThread * _thread );
 void sq_thread_destroy ( SQThread * _thread );
-void sq_thread_sleep ( int _milliseconds );
 
 typedef struct _SQMutex SQMutex;
 

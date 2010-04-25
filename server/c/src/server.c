@@ -26,11 +26,20 @@
 
 #include "config.h"
 
+static SQServer * server_instance;
+
 void sq_server_init ( SQServer * _server, int _portNumber )
 {
    _server->m_clientsHandled = 0;
    _server->m_stream = sq_stream_open ( _portNumber );
    sq_stream_set_data_received_handler ( _server->m_stream, sq_server_handle_stream_data_received, _server );
+   
+   server_instance = _server;
+}
+
+SQServer * sq_server_get_instance ( void )
+{
+   return server_instance;
 }
 
 void sq_server_internal_handle_byte ( SQServer * _server, SQByte _byte )

@@ -18,7 +18,7 @@ static SQBool boolValue;
 
 //#include "test_server_automation.h"
 
-void type_test_reset ()
+void type_test_reset ( void )
 {
    signedLongValue = 0;
    longValue = 0;
@@ -38,7 +38,7 @@ void type_test_reset ()
    boolValue = SQ_TRUE;
 }
 
-signed long type_test_signed_long_get ()
+signed long type_test_signed_long_get ( void )
 {
    return signedLongValue;
 }
@@ -48,7 +48,7 @@ void type_test_signed_long_set ( signed long _value )
    signedLongValue = _value;
 }
 
-long type_test_long_get ()
+long type_test_long_get ( void )
 {
    return longValue;
 }
@@ -58,7 +58,7 @@ void type_test_long_set ( long _value )
    longValue = _value;
 }
 
-unsigned long type_test_unsigned_long_get ()
+unsigned long type_test_unsigned_long_get ( void )
 {
    return unsignedLongValue;
 }
@@ -68,7 +68,7 @@ void type_test_unsigned_long_set ( unsigned long _value )
    unsignedLongValue = _value;
 }
 
-signed int type_test_signed_integer_get ()
+signed int type_test_signed_integer_get ( void )
 {
    return signedIntegerValue;
 }
@@ -79,7 +79,7 @@ void type_test_signed_integer_set ( signed int _value )
    //sq_type_tests_properties_integer_updated ( NULL, _value );
 }
 
-int type_test_integer_get ()
+int type_test_integer_get ( void )
 {
    return integerValue;
 }
@@ -90,7 +90,7 @@ void type_test_integer_set ( int _value )
    //sq_type_tests_properties_integer_updated ( NULL, _value );
 }
 
-unsigned int type_test_unsigned_integer_get ()
+unsigned int type_test_unsigned_integer_get ( void )
 {
    return unsignedIntegerValue;
 }
@@ -100,7 +100,7 @@ void type_test_unsigned_integer_set ( unsigned int _value )
    unsignedIntegerValue = _value;
 }
 
-signed short type_test_signed_short_get ()
+signed short type_test_signed_short_get ( void )
 {
    return signedShortValue;
 }
@@ -110,7 +110,7 @@ void type_test_signed_short_set ( signed short _value )
    signedShortValue = _value;
 }
 
-short type_test_short_get ()
+short type_test_short_get ( void )
 {
    return shortValue;
 }
@@ -120,7 +120,7 @@ void type_test_short_set ( short _value )
    shortValue = _value;
 }
 
-unsigned short type_test_unsigned_short_get ()
+unsigned short type_test_unsigned_short_get ( void )
 {
    return unsignedShortValue;
 }
@@ -130,7 +130,7 @@ void type_test_unsigned_short_set ( unsigned short _value )
    unsignedShortValue = _value;
 }
 
-signed char type_test_signed_char_get ()
+signed char type_test_signed_char_get ( void )
 {
    return signedCharValue;
 }
@@ -140,7 +140,7 @@ void type_test_signed_char_set ( signed char _value )
    signedCharValue = _value;
 }
 
-char type_test_char_get ()
+char type_test_char_get ( void )
 {
    return charValue;
 }
@@ -150,7 +150,7 @@ void type_test_char_set ( char _value )
    charValue = _value;
 }
 
-unsigned char type_test_unsigned_char_get ()
+unsigned char type_test_unsigned_char_get ( void )
 {
    return unsignedCharValue;
 }
@@ -160,7 +160,7 @@ void type_test_unsigned_char_set ( unsigned char _value )
    unsignedCharValue = _value;
 }
 
-float type_test_float_get ()
+float type_test_float_get ( void )
 {
    return floatValue;
 }
@@ -170,7 +170,7 @@ void type_test_float_set ( float _value )
    floatValue = _value;
 }
 
-double type_test_double_get ()
+double type_test_double_get ( void )
 {
    return doubleValue;
 }
@@ -180,7 +180,7 @@ void type_test_double_set ( double _value )
    doubleValue = _value;
 }
 
-SQBool type_test_bool_get ()
+SQBool type_test_bool_get ( void )
 {
    return boolValue;
 }

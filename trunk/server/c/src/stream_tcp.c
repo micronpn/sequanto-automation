@@ -40,9 +40,9 @@ static const ssize_t SOCKET_ERROR = -1;
 
 typedef struct _SQStream
 {
-    SQStreamDataReceivedFunction m_handler;
-    void * m_handlerData;
-	int m_listenerSocket;
+    SQStreamDataReceivedFunction m_dataReceivedHandler;
+    void * m_dataReceivedHandlerData;
+    int m_listenerSocket;
     int m_clientSocket;
     size_t m_dataAvailable;
     SQThread * m_pollingThread;
@@ -54,9 +54,9 @@ SQStream * sq_stream_open ( int _portNumber )
    struct sockaddr_in sa;
 
    SQStream * ret = malloc ( sizeof(SQStream) );
-   ret->m_handler = NULL;
-   ret->m_handlerData = NULL;
-   
+   ret->m_dataReceivedHandler = NULL;
+   ret->m_dataReceivedHandlerData = NULL;
+
    ret->m_listenerSocket = SOCKET_ERROR;
    ret->m_clientSocket = SOCKET_ERROR;
    ret->m_pollingThread = NULL;
@@ -123,24 +123,34 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
       ret = recv ( stream->m_clientSocket, buff, 100, 0 );
       if ( ret > 0 && ret != SOCKET_ERROR )
       {
-         stream->m_handler ( stream, stream->m_handlerData, buff, ret );
+         stream->m_dataReceivedHandler ( stream, stream->m_dataReceivedHandlerData, buff, ret );
       }
    }
+   closesocket ( stream->m_clientSocket );
+   stream->m_clientSocket = SOCKET_ERROR;
 }
 
 void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
 {
     SQThread * clientThread;
     SQStream * stream = (SQStream*) _data;
-    
+    int newClient;
     while ( 1 )
     {
-        stream->m_clientSocket = accept(stream->m_listenerSocket, NULL, NULL );
-        if ( stream->m_clientSocket != SOCKET_ERROR )
+        newClient = accept(stream->m_listenerSocket, NULL, NULL );
+        if ( stream->m_clientSocket == SOCKET_ERROR && newClient != SOCKET_ERROR )
         {
+           stream->m_clientSocket = newClient;
             stream->m_dataAvailable = 0;
             clientThread = sq_thread_create ( sq_stream_internal_reader, stream );
             sq_thread_start ( clientThread );
+        }
+        else
+        {
+           if ( newClient != SOCKET_ERROR )
+           {
+              closesocket ( newClient );
+           }
         }
     }
 }
@@ -246,8 +256,8 @@ size_t sq_stream_data_available ( SQStream * _stream )
 
 void sq_stream_set_data_received_handler ( SQStream * _stream, SQStreamDataReceivedFunction _handler, void * _data )
 {
-   _stream->m_handler = _handler;
-   _stream->m_handlerData = _data;
+   _stream->m_dataReceivedHandler = _handler;
+   _stream->m_dataReceivedHandlerData = _data;
 }
 
 void sq_stream_enter_write ( SQStream * _stream )

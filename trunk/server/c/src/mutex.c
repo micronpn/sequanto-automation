@@ -29,7 +29,7 @@ typedef struct _SQMutex
     CRITICAL_SECTION m_criticalSection;
 } _SQMutex;
 
-SQMutex * sq_mutex_create ()
+SQMutex * sq_mutex_create ( void )
 {
     SQMutex * mutex = malloc(sizeof(SQMutex));
     InitializeCriticalSection ( &mutex->m_criticalSection );

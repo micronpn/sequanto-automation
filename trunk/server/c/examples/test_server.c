@@ -38,6 +38,11 @@ void reset_digital_output ( int portNumber )
    digital_outputs[portNumber] = SQ_FALSE;
 }
 
+void reset_and_set_digital_output ( int portNumber, SQBool _value )
+{
+   digital_outputs[portNumber] = _value;
+}
+
 SQBool get_digital_output_test ( int portNumber, int testValue )
 {
    return digital_outputs[portNumber];

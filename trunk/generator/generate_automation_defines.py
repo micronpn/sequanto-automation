@@ -17,7 +17,7 @@ if path.isdir ( path.join ( path.dirname(__file__), 'code' ) ):
 
 from sequanto_automation.codeparser import get as get_code_parser
 
-class Property ( object ):
+class SmartObject ( object ):
     @property
     def index ( self ):
         return self.m_index
@@ -55,46 +55,6 @@ class Property ( object ):
         return self.m_smartValues
     
     @property
-    def type ( self ):
-        return self.getFunction.returnType
-    
-    @property
-    def automationType ( self ):
-        return self.m_automationFile.getAutomationType(self.getFunction.returnType)
-
-    @property
-    def getFunction ( self ):
-        return self.m_getFunction
-    
-    @property
-    def setFunction ( self ):
-        return self.m_setFunction
-    
-    @property
-    def translatedObjectPath ( self ):
-        if self.smart:
-            return self.normalizedSmartObjectPath[1:].replace('/', '_').replace('_%s', '')
-        else:
-            return self.objectPath[1:].replace('/', '_')
-    
-    @property
-    def writeUpdateFunction ( self ):
-        return not self.smart or self.firstSmartObjectPath
-    
-    @property
-    def updateFunctionName ( self ):
-        if self.m_updateFunctionName is None:
-            base_function_name = 'sq_%s_updated' % self.translatedObjectPath
-            self.m_updateFunctionName = base_function_name
-            i = 2
-            while self.m_updateFunctionName in self.m_automationFile.m_seenUpdateFunctions:
-                self.m_updateFunctionName = '%s%i' % (base_function_name, i)
-                i += 1
-            self.m_automationFile.m_seenUpdateFunctions.add ( self.m_updateFunctionName )
-        
-        return self.m_updateFunctionName
-    
-    @property
     def additionalSmartName ( self ):
         if self.m_smartValues:
             return '_' + '_'.join(self.m_smartValues)
@@ -104,18 +64,16 @@ class Property ( object ):
     @property
     def additionalSmartParameters ( self ):
         return ', '.join ( ['%s %s' % (parameter.type, parameter.name) for parameter in self.getFunction.parameters] )
-    
-    def __init__ ( self, _automationFile, _index, _objectPath, _getFunction, _setFunction, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
+
+    def __init__ ( self, _automationFile, _index, _objectPath, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
         self.m_automationFile = _automationFile
         self.m_index = _index
         self.m_objectPath = _objectPath
-        self.m_getFunction = _getFunction
-        self.m_setFunction = _setFunction
         self.m_smartObjectPath = _smartObjectPath
         self.m_firstSmartObjectPath = _firstSmartObjectPath
         self.m_smartValues = _smartValues
         self.m_updateFunctionName = None
-        
+
     def _normalizeSmartObjectPath ( self ):
         ret = ''
         for element in self.objectPath.split ( '/' ):
@@ -159,6 +117,72 @@ class Property ( object ):
                 for start in metaPath[index]:
                     for rest, values in self._generateSmartObjectPaths ( metaPath, index + 1 ):
                         yield  '/' + str(start) + rest, [start] + values[:]
+
+class Property ( SmartObject ):
+    @property
+    def type ( self ):
+        return self.getFunction.returnType
+    
+    @property
+    def automationType ( self ):
+        return self.m_automationFile.getAutomationType(self.getFunction.returnType)
+
+    @property
+    def getFunction ( self ):
+        return self.m_getFunction
+    
+    @property
+    def setFunction ( self ):
+        return self.m_setFunction
+    
+    @property
+    def translatedObjectPath ( self ):
+        if self.smart:
+            return self.normalizedSmartObjectPath[1:].replace('/', '_').replace('_%s', '')
+        else:
+            return self.objectPath[1:].replace('/', '_')
+    
+    @property
+    def writeUpdateFunction ( self ):
+        return not self.smart or self.firstSmartObjectPath
+    
+    @property
+    def updateFunctionName ( self ):
+        if self.m_updateFunctionName is None:
+            base_function_name = 'sq_%s_updated' % self.translatedObjectPath
+            self.m_updateFunctionName = base_function_name
+            i = 2
+            while self.m_updateFunctionName in self.m_automationFile.m_seenUpdateFunctions:
+                self.m_updateFunctionName = '%s%i' % (base_function_name, i)
+                i += 1
+            self.m_automationFile.m_seenUpdateFunctions.add ( self.m_updateFunctionName )
+        
+        return self.m_updateFunctionName
+    
+    def __init__ ( self, _automationFile, _index, _objectPath, _getFunction, _setFunction, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
+        super ( Property, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
+        
+        self.m_getFunction = _getFunction
+        self.m_setFunction = _setFunction
+    
+
+class Function ( SmartObject ):
+    @property
+    def returnType ( self ):
+        return self.m_function.returnType
+    
+    @property
+    def parameters ( self ):
+        return self.m_function.parameters
+
+    @property
+    def name ( self ):
+        return self.m_function.m_name
+    
+    def __init__ ( self, _automationFile, _index, _objectPath, _function, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
+        super ( Function, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
+        
+        self.m_function = _function
 
 class AutomationFile ( object ):
     def setErrorReportingFilename ( self, _filename ):
@@ -313,12 +337,22 @@ class AutomationFile ( object ):
                             allParmsOk = False
                     
                     if allParmsOk:
-                        self.createParents ( objectPath )
-                        self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
-                        self.m_foundFunctions.append ( function )
-                        self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(function.parameters))
-                        functionIndex += 1
-                    
+                        functionObject = Function(self, functionIndex, objectPath, function)
+                        if functionObject.smart:
+                            first = True
+                            for smartObjectPath, values in functionObject.allSmartObjectPaths:
+                                self.createParents ( smartObjectPath )
+                                self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
+                                self.m_foundFunctions.append ( Function(self, functionIndex, objectPath, function, smartObjectPath, first, values) )
+                                functionIndex += 1
+                                first = False
+                            
+                        else:
+                            self.createParents ( objectPath )
+                            self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
+                            self.m_foundFunctions.append ( functionObject )
+                            self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(function.parameters))
+                            functionIndex += 1
                 else:
                     self.reportError ( lineNumber, 'The return type is not recognized (%s)' % (function.returnType) )
             else:
@@ -493,16 +527,20 @@ class AutomationFile ( object ):
         fp.write ( '\n' )
 
         for function in self.m_foundFunctions:
-            if len(function.parameters) == 0:
-                fp.write ( '%s %s ( void );\n' % (function.returnType, function.name) )
-            else:
-                fp.write ( '%s %s ( %s );\n' % (function.returnType, function.name, ', '.join(['%s %s' % (parm.type, parm.name) for parm in function.parameters])) )
+            if not function.smart or function.firstSmartObjectPath:
+                if len(function.parameters) == 0:
+                    fp.write ( '%s %s ( void );\n' % (function.returnType, function.name) )
+                else:
+                    fp.write ( '%s %s ( %s );\n' % (function.returnType, function.name, ', '.join(['%s %s' % (parm.type, parm.name) for parm in function.parameters])) )
             
-            fp.write ( 'void sq_generated_function_%s ( SQStream * _stream, const SQValue * _inputValues )\n' % function.name )
+            fp.write ( 'void sq_generated_function_%s%s ( SQStream * _stream, const SQValue * _inputValues )\n' % (function.name, function.additionalSmartName) )
             fp.write ( '{\n' )
             for index, parameter in enumerate(function.parameters):
-                fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index, self.getAutomationType(parameter.type)) )
-                index += 1
+                if index < function.numSmartParamers:
+                    fp.write ( '   %s %s_parameter = %s;\n' % (parameter.type, parameter.name, function.smartValues[index]) )
+                else:
+                    fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index, self.getAutomationType(parameter.type)) )
+
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
             else:
@@ -521,7 +559,7 @@ class AutomationFile ( object ):
             fp.write ( '   { NULL, VALUE_TYPE_NO_VALUE }\n' )
         else:
             for function in self.m_foundFunctions:
-                fp.write ( '   { sq_generated_function_%s, VALUE_TYPE_%s' % (function.name, self.getAutomationType(function.returnType).upper()) )
+                fp.write ( '   { sq_generated_function_%s%s, VALUE_TYPE_%s' % (function.name, function.additionalSmartName, self.getAutomationType(function.returnType).upper()) )
                 for parameter in function.parameters:
                     fp.write ( ', VALUE_TYPE_%s' % self.getAutomationType(parameter.type).upper() )
                 fp.write ( ', VALUE_TYPE_NO_VALUE' * (self.m_maxNumberOfParameters - len(function.parameters) ) )

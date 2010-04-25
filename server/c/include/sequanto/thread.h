@@ -31,15 +31,16 @@ typedef void (*SQThreadRunFunction) ( SQThread * _thread, void * _data );
 /**
  * Determine on runtime if the current platform supports threading.
  */
-SQBool sq_thread_is_supported ();
+SQBool sq_thread_is_supported ( void );
 
 SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data );
 void sq_thread_start ( SQThread * _thread );
 void sq_thread_destroy ( SQThread * _thread );
+void sq_thread_sleep ( int _milliseconds );
 
 typedef struct _SQMutex SQMutex;
 
-SQMutex * sq_mutex_create ();
+SQMutex * sq_mutex_create ( void );
 void sq_mutex_enter ( SQMutex * _mutex );
 void sq_mutex_leave ( SQMutex * _mutex );
 void sq_mutex_destroy ( SQMutex * _mutex );

@@ -19,7 +19,7 @@
 
 #ifdef SQ_USE_THREADS
 
-SQBool sq_thread_is_supported ()
+SQBool sq_thread_is_supported ( void )
 {
    return SQ_TRUE;
 }
@@ -78,6 +78,11 @@ void sq_thread_destroy ( SQThread * _thread )
    free ( _thread );
 }
 
+void sq_thread_sleep ( int _milliseconds )
+{
+   Sleep ( _milliseconds );
+}
+
 #else
 
 #include <pthread.h>
@@ -102,6 +107,11 @@ void sq_thread_start ( SQThread * _thread )
 {
 }
 
+void sq_thread_sleep ( int _milliseconds )
+{
+   sleep ( _milliseconds );
+}
+
 #endif
 
 #else
@@ -122,6 +132,10 @@ SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
 }
 
 void sq_thread_start ( SQThread * _thread )
+{
+}
+
+void sq_thread_sleep ( int _milliseconds )
 {
 }
 

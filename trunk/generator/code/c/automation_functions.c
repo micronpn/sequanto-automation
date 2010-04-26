@@ -84,10 +84,10 @@ void sq_automation_property_get ( const SQInfo * const _info, SQStream * _stream
    const SQPropertyInfo * const propertyInfo = sq_get_property_info(_info->index);
    
    sq_stream_enter_write ( _stream );
-   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );
-   propertyInfo->get(_stream);
-   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_protocol_write_success ( _stream );
    sq_stream_exit_write ( _stream );
+   
+   propertyInfo->get(_stream);
 }
 
 void sq_automation_property_set ( const SQInfo * const _info, SQStream * _stream, const SQValue * const _value )
@@ -122,21 +122,21 @@ void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const 
          return;
       }
    }
-   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );
-   callableInfo->function ( _stream, _inputValues );
-   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_protocol_write_success ( _stream );   
    sq_stream_exit_write ( _stream );
+   
+   callableInfo->function ( _stream, _inputValues );
 }
 
 void sq_automation_monitor_enable ( const SQInfo * const _info, SQStream * _stream, SQBool _enable )
 {
    const SQMonitorInfo * const monitorInfo = sq_get_monitor_info(_info->index);
-   
+
    sq_stream_enter_write ( _stream );
-   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );
-   monitor_state[monitorInfo->index] = _enable;
-   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_protocol_write_success ( _stream );
    sq_stream_exit_write ( _stream );
+   
+   monitor_state[monitorInfo->index] = _enable;
 }
 
 void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _inputValues, int _numberOfValues )

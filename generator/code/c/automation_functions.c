@@ -1,5 +1,4 @@
 static const char INCORRECT_TYPE_GIVEN[] SQ_CONST_VARIABLE = "Incorrect type given";
-static const char PLUS_SPACE[] SQ_CONST_VARIABLE = "+ ";
 static const char ILLEGAL_PARAMETERS[] SQ_CONST_VARIABLE = "Illegal parameters.";
 static const char COULD_NOT_FIND_GIVEN_OBJECT[] SQ_CONST_VARIABLE = "Could not find given object.";
 static const char OBJECT_IS_NOT_A_PROPERTY[] SQ_CONST_VARIABLE = "Object is not a property.";
@@ -83,10 +82,6 @@ void sq_automation_property_get ( const SQInfo * const _info, SQStream * _stream
 {
    const SQPropertyInfo * const propertyInfo = sq_get_property_info(_info->index);
    
-   sq_stream_enter_write ( _stream );
-   sq_protocol_write_success ( _stream );
-   sq_stream_exit_write ( _stream );
-   
    propertyInfo->get(_stream);
 }
 
@@ -122,8 +117,10 @@ void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const 
          return;
       }
    }
-   sq_protocol_write_success ( _stream );   
+   
    sq_stream_exit_write ( _stream );
+   
+   // The callable will write success and perhaps a return value
    
    callableInfo->function ( _stream, _inputValues );
 }

@@ -44,7 +44,7 @@ class SmartObject ( object ):
         return self.objectPath.find('(') != -1
     
     @property
-    def numSmartParamers ( self ):
+    def numSmartParameters ( self ):
         return len([element for element in self.objectPath.split ( '/' ) if len(element) > 1 and element[0] == '(' and element[-1] == ')'])
 
     @property
@@ -199,6 +199,10 @@ class Function ( SmartObject ):
         return self.m_function.parameters
     
     @property
+    def listAdditionalSmartParameters ( self ):
+        return self.m_function.parameters[:self.numSmartParameters]
+    
+    @property
     def name ( self ):
         return self.m_function.m_name
     
@@ -335,9 +339,9 @@ class AutomationFile ( object ):
                     
                     property = Property(self, propertyIndex, objectPath, get_function, set_function)
                     
-                    if len(get_function.parameters) == property.numSmartParamers:
-                        if set_function is None or len(set_function.parameters) == 1 + property.numSmartParamers:
-                            if set_function is None or get_function.returnType == set_function.parameters[0 + property.numSmartParamers].type:
+                    if len(get_function.parameters) == property.numSmartParameters:
+                        if set_function is None or len(set_function.parameters) == 1 + property.numSmartParameters:
+                            if set_function is None or get_function.returnType == set_function.parameters[0 + property.numSmartParameters].type:
                                 if property.automationType is not None:
                                     if property.smart:
                                         first = True
@@ -386,6 +390,7 @@ class AutomationFile ( object ):
                                 self.createParents ( smartObjectPath )
                                 self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
                                 self.m_foundFunctions.append ( Function(self, functionIndex, objectPath, function, smartObjectPath, first, values) )
+                                self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(functionObject.parameters) - functionObject.numSmartParameters)
                                 functionIndex += 1
                                 first = False
                             
@@ -460,6 +465,7 @@ class AutomationFile ( object ):
         fp.write ( '\n' )
         
         fp.write ( 'static const char NEWLINE[] SQ_CONST_VARIABLE = "\\r\\n";\n' )
+        fp.write ( 'static const char PLUS_SPACE[] SQ_CONST_VARIABLE = "+ ";\n' )
         fp.write ( 'static const char UPDATE_START[] SQ_CONST_VARIABLE = "!UPDATE ";\n' )
         
         fp.write ( 'typedef enum _SQInfoType { INFO_TYPE_LIST = 0, INFO_TYPE_PROPERTY = 1, INFO_TYPE_CALLABLE = 2, INFO_TYPE_MONITOR = 3 } SQInfoType;\n' )
@@ -543,6 +549,8 @@ class AutomationFile ( object ):
             else:
                 fp.write ( '   %s value = %s();\n' % (property.type, property.getFunction.name) )
             
+
+            fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
             if property.automationType == 'byte_array':
                 fp.write ( '   sq_protocol_write_%s ( _stream, value->m_start, value->m_end );\n' % property.automationType )
             elif property.type == 'SQStringOut':
@@ -551,6 +559,7 @@ class AutomationFile ( object ):
                 fp.write ( '   sq_protocol_write_string_out ( _stream, value );\n' )
             else:
                 fp.write ( '   sq_protocol_write_%s ( _stream, value );\n' % property.automationType )
+            fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
             fp.write ( '}\n' )
             fp.write ( '\n' )
             
@@ -607,17 +616,21 @@ class AutomationFile ( object ):
             fp.write ( 'void sq_generated_function_%s%s ( SQStream * _stream, const SQValue * _inputValues )\n' % (function.name, function.additionalSmartName) )
             fp.write ( '{\n' )
             for index, parameter in enumerate(function.parameters):
-                if index < function.numSmartParamers:
+                if index < function.numSmartParameters:
                     fp.write ( '   %s %s_parameter = %s;\n' % (parameter.type, parameter.name, function.smartValues[index]) )
                 else:
-                    fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index, self.getAutomationType(parameter.type)) )
+                    fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index - function.numSmartParameters, self.getAutomationType(parameter.type)) )
 
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
+                fp.write ( '   sq_protocol_write_success ( _stream );\n' )
+                
             else:
                 fp.write ( '   %s ret = %s ( %s );\n' % (function.returnType, function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
+                fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
                 fp.write ( '   sq_protocol_write_%s ( _stream, ret );\n' % self.getAutomationType(function.returnType) )
-            
+                fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
+                
             fp.write ( '}\n' )
             fp.write ( '\n' )
         
@@ -631,7 +644,7 @@ class AutomationFile ( object ):
         else:
             for function in self.m_foundFunctions:
                 fp.write ( '   { sq_generated_function_%s%s, VALUE_TYPE_%s' % (function.name, function.additionalSmartName, self.getAutomationType(function.returnType).upper()) )
-                for parameter in function.parameters:
+                for parameter in function.parameters[function.numSmartParameters:]:
                     fp.write ( ', VALUE_TYPE_%s' % self.getAutomationType(parameter.type).upper() )
                 fp.write ( ', VALUE_TYPE_NO_VALUE' * (self.m_maxNumberOfParameters - len(function.parameters) ) )
                 fp.write ( ' },\n' )
@@ -652,7 +665,12 @@ class AutomationFile ( object ):
         fp.write ( '}\n' )
         fp.write ( '\n' )
 
-        fp.write ( 'static SQBool monitor_state[] = { %s };\n' % ', '.join ( (['SQ_FALSE'] * len(self.m_foundMonitors)) ) )
+        if len(self.m_foundMonitors) > 0:
+            fp.write ( 'static SQBool monitor_state[] = { %s };\n' % ', '.join ( (['SQ_FALSE'] * len(self.m_foundMonitors)) ) )
+        else:
+            fp.write ( '/* This is just a dummy value, actually there were no monitors defined */\n' )
+            fp.write ( 'static SQBool monitor_state[] = { SQ_FALSE };\n' )
+        
         for monitor in self.m_foundMonitors:
             if monitor.writeUpdateFunction:
                 if monitor.smart:

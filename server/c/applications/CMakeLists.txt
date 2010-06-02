@@ -49,3 +49,5 @@ IF(SQ_ARDUINO)
   FILE(APPEND ${CMAKE_BINARY_DIR}/upload_arduino_demo.bat "if x%1 == x ( SET PORT=COM8 )\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/upload_arduino_demo.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D -Uflash:w:applications\\arduino_demo.hex:i\n")
 ENDIF(SQ_ARDUINO)
+
+ADD_SUBDIRECTORY(labview_automation)

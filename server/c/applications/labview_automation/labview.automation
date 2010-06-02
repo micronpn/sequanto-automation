@@ -1,0 +1,4 @@
+name labview
+
+import parameters.c
+function /parameters/set_as_integer set_parameter_as_integer

@@ -14,6 +14,9 @@
 #cmakedefine SQ_USE_THREADS
 
 #cmakedefine HAVE_STDLIB_H
+#cmakedefine HAVE_STDIO_H
+#cmakedefine HAVE_SNPRINTF
+#cmakedefine HAVE_UNDERSCORE_SNPRINTF
 #cmakedefine HAVE_WINSOCK2_H
 #cmakedefine HAVE_SYS_SOCKET_H
 #cmakedefine SQ_WIN32
@@ -25,6 +28,7 @@
 #define SQ_MAX_OBJECT_LENGTH ${SQ_MAX_OBJECT_LENGTH}
 #define SQ_MAX_PARAMETERS ${SQ_MAX_PARAMETERS}
 #define SQ_SOCKET_TIMEOUT ${SQ_SOCKET_TIMEOUT}
+#define SQ_MAX_VALUE_LENGTH ${SQ_MAX_VALUE_LENGTH}
 
 #ifdef SQ_LOGGING_ENABLED
 
@@ -42,6 +46,15 @@
 #define SQ_LOG2(format, arg1, arg2)
 #define SQ_LOG3(format, arg1, arg2, arg3)
 
+#endif
+
+#ifdef HAVE_SNPRINTF
+#define SNPRINTF_FUNCTION snprintf
+#else
+#ifdef HAVE_UNDERSCORE_SNPRINTF
+#define SNPRINTF_FUNCTION _snprintf
+#define HAVE_SNPRINTF
+#endif
 #endif
 
 #endif /* _CONFIG_H_ */

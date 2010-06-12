@@ -21,15 +21,21 @@ FIND_PROGRAM(GENERATE_AUTOMATION_DEFINES generate_automation_defines.py
 
 INCLUDE(CheckIncludeFile)
 CHECK_INCLUDE_FILE(stdlib.h HAVE_STDLIB_H)
+CHECK_INCLUDE_FILE(stdio.h HAVE_STDIO_H)
+
+INCLUDE(CheckFunctionExists)
+CHECK_FUNCTION_EXISTS(snprintf HAVE_SNPRINTF)
+CHECK_FUNCTION_EXISTS(_snprintf HAVE_UNDERSCORE_SNPRINTF)
 
 SET(SRCS server/c/src/automation.c server/c/src/protocol.c server/c/src/server.c
          server/c/src/value.c server/c/src/system.c server/c/src/types.c server/c/src/thread.c
-         server/c/src/mutex.c server/c/src/parser.c
+         server/c/src/mutex.c server/c/src/parser.c server/c/src/log.c
          ${EXTRA_SRCS})
 
 SET(HEADERS server/c/include/sequanto/automation.h server/c/include/sequanto/stream.h
             server/c/include/sequanto/protocol.h server/c/include/sequanto/server.h
-            server/c/include/sequanto/value.h server/c/include/sequanto/system.h)
+            server/c/include/sequanto/value.h server/c/include/sequanto/system.h
+            server/c/include/sequanto/log.h)
 
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/test_server_automation.c GENERATED)
 ADD_EXECUTABLE(test_server server/c/examples/test_server.c server/c/examples/type_tests.c ${CMAKE_BINARY_DIR}/generated/test_server_automation.c)
@@ -49,6 +55,8 @@ SET(SQ_LOGGING_ENABLED   ON       CACHE BOOL "Should logging be enabled")
 SET(SQ_ARDUINO           OFF      CACHE BOOL "Build for arduino")
 SET(SQ_USE_MUTEXES       ON       CACHE BOOL "Use mutexes (Win32 or *nix)")
 SET(SQ_USE_THREADS       ON       CACHE BOOL "Use threads (Win32 or *nix)")
+SET(SQ_MAX_VALUE_LENGTH  12       CACHE INTEGER "Maximum length of the character buffer used to write integer and float values to a stream.")
+
 IF(DOXYGEN_FOUND)
     SET(SQ_GENERATE_DOCUMENTATION OFF CACHE BOOL "Should documentation be generated (only if doxygen is found)")
 ENDIF(DOXYGEN_FOUND)

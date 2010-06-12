@@ -17,6 +17,12 @@
 #include <math.h>
 #include <stddef.h>
 
+#include "config.h"
+
+#ifdef HAVE_STDIO_H
+#include <stdio.h>
+#endif
+
 #include "sequanto/types.h"
 #include "sequanto/protocol.h"
 
@@ -53,7 +59,7 @@ SQBool sq_protocol_write_type( SQStream * _stream, SQValueType _type )
 
 SQBool sq_protocol_write_integer ( SQStream * _stream, int _value )
 {
-   char buffer[12];
+   char buffer[SQ_MAX_VALUE_LENGTH];
    int i = 0;
 
    if ( _value < 0 )
@@ -171,7 +177,17 @@ SQBool sq_protocol_write_null ( SQStream * _stream )
 
 SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 {
-   char buffer[12];
+   char buffer[SQ_MAX_VALUE_LENGTH];
+#ifdef HAVE_SNPRINTF
+   int i;
+   SNPRINTF_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, "%f", _value );
+   for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
+   {
+      WRITE_BYTE_OR_FAIL ( buffer[i] );
+   }
+   return SQ_TRUE;
+
+#else
    int i = 0, tempValue;
 
    if ( _value < 0.0f )
@@ -181,7 +197,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
    }
 
    tempValue = (int) _value;
-   while ( tempValue != 0 && i < 12 )
+   while ( tempValue != 0 && i < SQ_MAX_VALUE_LENGTH )
    {
       buffer[i] = (char) ('0' + (tempValue % 10));
       i++;
@@ -217,6 +233,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
       }
    }
    return SQ_TRUE;
+#endif
 }
 
 SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte * _end )

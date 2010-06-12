@@ -14,25 +14,22 @@
  * permissions and limitations under the License.
  */
 
-#ifndef SEQUANTO_AUTOMATION_H_
-#define SEQUANTO_AUTOMATION_H_
+#ifndef SEQUANTO_LOG_H_
+#define SEQUANTO_LOG_H_
 
-#include <sequanto/types.h>
-#include <sequanto/stream.h>
-#include <sequanto/server.h>
-#include <sequanto/system.h>
 #include <sequanto/log.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-void sq_init ( void );
-void sq_shutdown ( void );
-
+   
+   void sq_log ( const char * _message );
+   void sq_logf ( const char * _format, ... );
+   
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* SEQUANTO_AUTOMATION_H_ */
+#endif

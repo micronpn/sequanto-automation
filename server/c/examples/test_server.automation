@@ -80,3 +80,5 @@ function /digital_output/(0..7)/reset_and_set reset_and_set_digital_output
 
 monitor /digital_output/changes const char *
 monitor /digital_output/(0..7)/values SQBool
+
+monitor /log int, const char *

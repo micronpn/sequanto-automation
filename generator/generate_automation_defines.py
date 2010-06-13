@@ -213,17 +213,21 @@ class Function ( SmartObject ):
 
 class Monitor ( SmartObject ):
     @property
-    def type ( self ):
-        return self.m_type
+    def types ( self ):
+        return self.m_types
     
     @property
-    def automationType ( self ):
-        return self.m_automationFile.getAutomationType(self.type)
+    def automationTypes ( self ):
+        return [self.m_automationFile.getAutomationType(type) for type in self.types]
     
-    def __init__ ( self, _automationFile, _index, _objectPath, _type, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
+    @property
+    def parameterString ( self ):
+        return ', '.join ( ['%s _value%i' % (type, num) for num, type in enumerate(self.types)] )
+    
+    def __init__ ( self, _automationFile, _index, _objectPath, _types, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
         super ( Monitor, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
         
-        self.m_type = _type
+        self.m_types = _types
 
 class AutomationFile ( object ):
     def setErrorReportingFilename ( self, _filename ):
@@ -283,7 +287,8 @@ class AutomationFile ( object ):
             
             elif command == 'monitor':
                 objectPath, type = rest.split(' ', 1)
-                self.m_monitors.append ( (lineNumber, objectPath, type) )
+                types = [t.strip() for t in type.split(',')]
+                self.m_monitors.append ( (lineNumber, objectPath, types) )
             
             else:
                 self.reportError ( lineNumber, 'Unknown command "%s"' % command )
@@ -408,27 +413,30 @@ class AutomationFile ( object ):
                 self.reportError ( lineNumber, 'Could not find function "%s"' % function )
         
         monitorIndex = 0
-        for lineNumber, objectPath, type in self.m_monitors:
-            automationType = self.getAutomationType(type)
-            if automationType is not None:
-                monitor = Monitor(self, monitorIndex, objectPath, type)
+        for lineNumber, objectPath, types in self.m_monitors:
+            allTypesOk = True
+            for type in types:
+                try:
+                    automationType = self.getAutomationType(type)
+                except:
+                    self.reportError ( lineNumber, 'The monitor type is not recognized (%s)' % (type) )
+                    allTypesOk = False
+            if allTypesOk:
+                monitor = Monitor(self, monitorIndex, objectPath, types)
                 if monitor.smart:
                     first = True
                     for smartObjectPath, values in monitor.allSmartObjectPaths:
                         self.createParents ( smartObjectPath )
                         self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
-                        self.m_foundMonitors.append ( Monitor(self, monitorIndex, objectPath, type, smartObjectPath, first, values) )
+                        self.m_foundMonitors.append ( Monitor(self, monitorIndex, objectPath, types, smartObjectPath, first, values) )
                         monitorIndex += 1
                         first = False
-                    
+
                 else:
                     self.createParents ( objectPath )
                     self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
                     self.m_foundMonitors.append ( monitor )
                     monitorIndex += 1
-                    
-            else:
-                self.reportError ( lineNumber, 'The monitor type is not recognized (%s)' % (type) )
         
         self.m_objectPaths.sort()
         
@@ -678,9 +686,9 @@ class AutomationFile ( object ):
         for monitor in self.m_foundMonitors:
             if monitor.writeUpdateFunction:
                 if monitor.smart:
-                    fp.write ( 'void %s ( %s, %s _value )\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.type) )
+                    fp.write ( 'void %s ( %s, %s )\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.parameterString) )
                 else:
-                    fp.write ( 'void %s ( %s _value )\n' % (monitor.updateFunctionName, monitor.type) )
+                    fp.write ( 'void %s ( %s )\n' % (monitor.updateFunctionName, monitor.parameterString) )
                 
                 fp.write ( '{\n' )
                 fp.write ( '   SQStream * stream = NULL;\n' )
@@ -710,30 +718,56 @@ class AutomationFile ( object ):
                     fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( NAME%i ) );\n' % self.findObjectPathIndex(monitor.objectPath) )
                 
                 fp.write ( '      sq_stream_write_byte ( stream, \' \' );\n' )
-                if monitor.automationType == 'byte_array':
-                    fp.write ( '      sq_protocol_write_%s ( stream, _value->m_start, _value->m_end );\n' % monitor.automationType )
-                elif monitor.type == 'SQStringOut':
-                    fp.write ( '      sq_protocol_write_string_out ( stream, &_value );\n' )
-                elif monitor.type == 'SQStringOut *':
-                    fp.write ( '      sq_protocol_write_string_out ( stream, _value );\n' )
-                else:
-                    fp.write ( '      sq_protocol_write_%s ( stream, _value );\n' % monitor.automationType )
+                for num, automationType in enumerate(monitor.automationTypes):
+                    if num != 0:
+                        fp.write ( '      sq_stream_write_byte ( stream, \' \' );\n' )
+                    
+                    if automationType == 'byte_array':
+                        fp.write ( '      sq_protocol_write_%s ( stream, _value%i->m_start, _value%i->m_end );\n' % (automationType, num, num) )
+                    elif monitor.types[num] == 'SQStringOut':
+                        fp.write ( '      sq_protocol_write_string_out ( stream, &_value%i );\n', num )
+                    elif monitor.types[num] == 'SQStringOut *':
+                        fp.write ( '      sq_protocol_write_string_out ( stream, _value%i );\n', num )
+                    else:
+                        fp.write ( '      sq_protocol_write_%s ( stream, _value%i );\n' % (automationType, num) )
                 fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( NEWLINE ) );\n' )
                 fp.write ( '      sq_stream_exit_write ( stream );\n' )
                 fp.write ( '   }\n' )
                 fp.write ( '}\n' )
                 fp.write ( '\n' )
+
+        maxNumberOfValues = 1
+        for monitor in self.m_foundMonitors:
+            maxNumberOfValues = max(maxNumberOfValues, len(monitor.automationTypes))
         
-        fp.write ( 'typedef struct _SQMonitorInfo { SQValueType type; unsigned char index; } SQMonitorInfo;\n' )
+        fp.write ( 'static const int NUMBER_OF_MONITOR_VALUES SQ_CONST_VARIABLE = %i;\n' % maxNumberOfValues )
+        fp.write ( 'typedef struct _SQMonitorInfo { %s; unsigned char index; } SQMonitorInfo;\n' % ('; '.join(['SQValueType value%i' % i for i in xrange(maxNumberOfValues)]) ) )
         fp.write ( 'static const SQMonitorInfo MONITOR_LIST[] SQ_CONST_VARIABLE = {\n' )
         # Some compilers (e.g. VS2005) does not support empty lists, so add a dummy one.
         if len(self.m_foundMonitors) == 0:
             fp.write ( '   { VALUE_TYPE_NO_VALUE, 0xFF }\n' )
         else:
             for monitor in self.m_foundMonitors:
-                fp.write ( '   { VALUE_TYPE_%s, %i },\n' % (self.getAutomationType(monitor.type).upper(), monitor.index) )
+                parameters = ['VALUE_TYPE_%s' % type.upper() for type in monitor.automationTypes]
+                while len(parameters) != maxNumberOfValues:
+                    parameters.append ( 'VALUE_TYPE_NO_VALUE' )
+                
+                fp.write ( '   { %s, %i },\n' % (', '.join(parameters), monitor.index) )
         
         fp.write ( '};\n' )
+        fp.write ( '\n' )
+        
+        fp.write ( 'SQValueType sq_automation_get_monitor_value_type ( const SQMonitorInfo * const _monitorInfo, int _valueIndex )\n' )
+        fp.write ( '{\n' )
+        fp.write ( '   switch ( _valueIndex )\n' )
+        fp.write ( '   {\n' )
+        for i in range(maxNumberOfValues):
+            fp.write ( '   case %i:\n' % i )
+            fp.write ( '      return _monitorInfo->value%i;\n' % i )
+        fp.write ( '   default:\n' )
+        fp.write ( '      return VALUE_TYPE_NO_VALUE;\n' )
+        fp.write ( '   }\n' )
+        fp.write ( '}\n' )
         fp.write ( '\n' )
         
         automation_functions_c = open(path.join ( code_dir, 'c', 'automation_functions.c' ), 'r').read()
@@ -754,9 +788,9 @@ class AutomationFile ( object ):
         for monitor in self.m_foundMonitors:
             if monitor.writeUpdateFunction:
                 if monitor.smart:
-                    fp.write ( 'void %s ( %s, %s _value );\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.type) )
+                    fp.write ( 'void %s ( %s, %s );\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.parameterString) )
                 else:
-                    fp.write ( 'void %s ( %s _value );\n' % (monitor.updateFunctionName, monitor.type) )
+                    fp.write ( 'void %s ( %s );\n' % (monitor.updateFunctionName, monitor.parameterString) )
         
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( '}\n' )

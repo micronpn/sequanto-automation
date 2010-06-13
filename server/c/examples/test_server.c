@@ -37,7 +37,6 @@ void set_digital_output ( int portNumber, SQBool value )
    if ( digital_outputs[portNumber] != value )
    {
       digital_outputs[portNumber] = value;
-      sq_digital_output_value_updated ( portNumber, value );
       sq_digital_output_changes_updated ( "Digital output" );
       sq_digital_output_values_updated ( portNumber, value );
    }
@@ -45,6 +44,10 @@ void set_digital_output ( int portNumber, SQBool value )
 
 void reset_digital_output ( int portNumber )
 {
+   SQServer * server = sq_server_get_instance();
+
+   sq_logf ( "Running on version %s", SVN_REVISION );
+   sq_logf ( "Resetting digital output %i, setting to %b. Server has instance %x.", portNumber, SQ_FALSE, server );
    digital_outputs[portNumber] = SQ_FALSE;
    sq_digital_output_value_updated ( portNumber, SQ_FALSE );
 }

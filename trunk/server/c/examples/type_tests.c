@@ -17,7 +17,7 @@ static float floatValue;
 static double doubleValue;
 static SQBool boolValue;
 
-//#include "test_server_automation.h"
+#include "test_server_automation.h"
 
 void type_test_reset ( void )
 {
@@ -41,6 +41,7 @@ void type_test_reset ( void )
 
 signed long type_test_signed_long_get ( void )
 {
+   sq_log_updated ( signedLongValue, "The value of signed long was queries" );
    sq_logf ( "Returning value of signed long: %i", signedLongValue );
    return signedLongValue;
 }

@@ -260,9 +260,13 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
       break;
       
    case INFO_TYPE_MONITOR:
-      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO Monitor ")) );
+      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO Monitor")) );
       monitorInfo = sq_get_monitor_info(info->index);
-      sq_protocol_write_type ( _stream, monitorInfo->type );
+      for ( i = 0; i < NUMBER_OF_MONITOR_VALUES && sq_automation_get_monitor_value_type(monitorInfo, i) != VALUE_TYPE_NO_VALUE; i++ )
+      {
+         sq_stream_write_byte ( _stream, ' ' );
+         sq_protocol_write_type ( _stream, sq_automation_get_monitor_value_type(monitorInfo, i) );
+      }
       if ( monitor_state[monitorInfo->index] )
       {
          sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT(" Enabled")) );

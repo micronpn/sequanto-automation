@@ -1,0 +1,49 @@
+#summary Revision 2 of the automation protocol
+#labels Phase-Design
+
+Revision 2 extends revision 1 with new commands, including some which makes it backwards incompatible with the old format.
+
+You should read ProtocolRevision1 before reading this document.
+
+== Monitors ==
+
+Monitors are a new object type which is introduced in this revision. Monitors functions much like properties, except that they do not have a "current" value.
+
+Monitors only sends !UPDATE asynchronous messages when a new value arrives, but the current value can not be retrieved using a GET request.
+
+Monitors can be used to model e.g. a log messaging system, a log message is only sent when a new log message is available, but there is no current log message.
+
+Monitors can be enabled and disabled, a disabled monitor does not send !UPDATE when they are updated. This is useful to avoid having the connection to flooded with !UPDATE messages for things which the client is not interested in. For instance if we have a monitor for the value of some analog signal which will fluctuate wildly, the monitor can just be disabled.
+
+Monitors are disabled per default.
+
+== ENABLE and DISABLE requests ==
+
+These two new request have been added to enable/disable a monitor.
+
+{{{
+ENABLE /analog_input/value
++
+}}}
+
+{{{
+DISABLE /analog_input/value
++
+}}}
+
+The server sends an acknowledgement as response to a ENABLE or DISABLE request.
+
+== Changes to the INFO command after the addition of monitors ==
+
+A monitor consists of one or more values, which makes them different from properties, which can only contain one value.
+
+{{{
+INFO /analog_input/value
++INFO Monitor Integer Float Enabled
+}}}
+
+This response tells us that the object in question is a monitor, it consists of an integer and a floating point value (e.g. timestamp and value) and the monitor is enabled. The corresponding response when the monitor is disabled is:
+
+{{{
++INFO Monitor Integer Float Disabled
+}}}

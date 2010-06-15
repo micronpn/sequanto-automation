@@ -1,4 +1,5 @@
 #summary Revision 1 of the automation protocol
+#labels Phase-Design
 
 = Message format =
 

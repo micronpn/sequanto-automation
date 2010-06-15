@@ -49,3 +49,17 @@ This response tells us that the object in question is a monitor, it consists of 
 {{{
 +INFO Monitor Integer Float Disabled
 }}}
+
+== Parts from revision 1 which have been deprecated in revision 2 ==
+
+=== {{{ null }}} removed ===
+
+Revision 1 listed {{{ null }}} as a possible value, this has been removed since it only adds confusion to the specification. It is never mentioned elsewhere in the protocol, so it is not clear where it is allowed.
+
+=== Valid types ===
+
+Null is also removed here, what is the point of having a value which can only be null anyway?
+
+The Any data type has been allowed to survive, even though we prefer the automation interface to be as statically typed as possible while still being usable.
+
+The use of Any is not discouraged, we merely have never used it since our tools prefer strongly types values.

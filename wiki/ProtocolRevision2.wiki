@@ -1,6 +1,8 @@
 #summary Revision 2 of the automation protocol
 #labels Phase-Design
 
+= NOT PUBLISHED YET, WILL CHANGE BEFORE IT IS FINALIZED =
+
 Revision 2 extends revision 1 with new commands, including some which makes it backwards incompatible with the old format.
 
 You should read ProtocolRevision1 before reading this document.

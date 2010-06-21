@@ -62,14 +62,23 @@ IF(DOXYGEN_FOUND)
 ENDIF(DOXYGEN_FOUND)
 
 IF(SQ_GENERATE_DOCUMENTATION)
-  IF(DOXYGEN_FOUND)
-    FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/documentation)
-    ADD_CUSTOM_COMMAND(TARGET test_server
-                       POST_BUILD
-                       COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
-		                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/documentation
-		                 VERBATIM)
-  ENDIF(DOXYGEN_FOUND)
+  SET(DOXY_OUTPUT "${CMAKE_BINARY_DIR}/documentation")
+  
+  CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/Doxyfile.in
+                 ${CMAKE_BINARY_DIR}/Doxyfile
+                 @ONLY )
+  FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/documentation)
+  ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile)
+  
+  FIND_PROGRAM(DOXYGEN2GWIKI_EXECUTABLE doxygen2gwiki
+               DOC "Finding doxygen2gwiki (Doxygen to google code wiki converter")
+
+  FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/documentation/wiki)
+  
+  ADD_CUSTOM_TARGET(gwiki ${PYTHON_EXECUTABLE} ${DOXYGEN2GWIKI_EXECUTABLE} --skip-svn --docs xml --output wiki --prefix API --label C-API --project sequanto-automation --html html
+                          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/documentation)
+  ADD_DEPENDENCIES(gwiki doc)
+  
 ENDIF(SQ_GENERATE_DOCUMENTATION)
 
 ADD_SUBDIRECTORY(server/c/applications)

@@ -20,12 +20,50 @@
 #include <sequanto/log.h>
 #include <stdarg.h>
 
+/**
+ * \file log.h
+ * \brief Write log message to the client.
+ * 
+ * These functions provides a simple way for the server (target) to
+ * send logging statements to any conneted client.
+ * 
+ * These log messages are sent to the client using the !LOG
+ * asynchronous message introduced in revision 2 of the automation
+ * protocol.
+ */
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
    
+   /**
+    * Write a log message to the connected clients (if any).
+    * 
+    * The message will automatically be escaped such that it adheres to the automation protocol.
+    * 
+    * @param _message The message to write.
+    */
    void sq_log ( const char * _message );
+
+   /**
+    * Write a log message to the connected clients (if any) using a
+    * printf-like syntax.
+    * 
+    * Generally you can safely just assume that normal printf
+    * statements work, e.g. %d and %i means integer, %f means float
+    * (double) and %s means string.
+    * 
+    * Currently the accepted statements are:
+    * 
+    *    %d, %i: Write an integer
+    *    %f: Write a double or a float
+    *    %b: Write a SQBool.
+    *    %x, %p: Write an integer as hexadecimal (useful when memory addresses).
+    *    %s: Write a null terminated string.
+    *
+    * @param _format The message to write, including any printf-like statements.
+    */
    void sq_logf ( const char * _format, ... );
    
 #ifdef __cplusplus

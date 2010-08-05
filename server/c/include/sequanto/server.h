@@ -66,7 +66,7 @@ void sq_server_poll ( SQServer * _server );
  */
 void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, SQByte * _buffer, size_t _length );
 /**
- * Pass the input buffer.
+ * Parse the input buffer.
  */
 void sq_server_parse_input_buffer ( SQServer * _server );
 

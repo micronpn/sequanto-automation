@@ -50,6 +50,12 @@ void sq_value_string ( SQValue * _value, char * _initialValue)
    _value->Value.m_stringValue = _initialValue;
 }
 
+void sq_value_const_string ( SQValue * _value, const char * _initialValue)
+{
+   _value->m_type = VALUE_TYPE_CONST_STRING;
+   _value->Value.m_constStringValue = _initialValue;
+}
+
 #ifdef SQ_ARDUINO
 char * strdup ( const char * _value )
 {
@@ -83,7 +89,7 @@ void sq_value_null ( SQValue * _value )
    _value->m_type = VALUE_TYPE_NULL;
 }
 
-SQBool sq_value_write ( SQValue * _value, SQStream * _stream )
+SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream )
 {
    switch ( _value->m_type )
    {
@@ -92,6 +98,9 @@ SQBool sq_value_write ( SQValue * _value, SQStream * _stream )
 
    case VALUE_TYPE_STRING:
       return sq_protocol_write_string ( _stream, _value->Value.m_stringValue );
+
+   case VALUE_TYPE_CONST_STRING:
+      return sq_protocol_write_string ( _stream, _value->Value.m_constStringValue );
 
    case VALUE_TYPE_BOOLEAN:
       return sq_protocol_write_boolean ( _stream, _value->Value.m_booleanValue );
@@ -128,9 +137,9 @@ void sq_value_free ( SQValue * _value )
   _value->m_type = VALUE_TYPE_NO_VALUE;
 }
 
-SQBool sq_values_write ( SQValue * _start, size_t _numberOfValues, SQStream * _stream )
+SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfValues, SQStream * _stream )
 {
-   SQValue * it = _start;
+   const SQValue * it = _start;
    for ( ; it != _start + _numberOfValues; it++ )
    {
       if ( it != _start )

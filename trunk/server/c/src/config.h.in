@@ -17,6 +17,8 @@
 #cmakedefine HAVE_STDIO_H
 #cmakedefine HAVE_SNPRINTF
 #cmakedefine HAVE_UNDERSCORE_SNPRINTF
+#cmakedefine HAVE_SNPRINTF_S
+#cmakedefine HAVE_UNDERSCORE_SNPRINTF_S
 #cmakedefine HAVE_WINSOCK2_H
 #cmakedefine HAVE_SYS_SOCKET_H
 #cmakedefine SQ_WIN32
@@ -54,6 +56,15 @@
 #ifdef HAVE_UNDERSCORE_SNPRINTF
 #define SNPRINTF_FUNCTION _snprintf
 #define HAVE_SNPRINTF
+#endif
+#endif
+
+#ifdef HAVE_SNPRINTF_S
+#define SNPRINTF_S_FUNCTION snprintf_s
+#else
+#ifdef HAVE_UNDERSCORE_SNPRINTF_S
+#define SNPRINTF_S_FUNCTION _snprintf_s
+#define HAVE_SNPRINTF_S
 #endif
 #endif
 

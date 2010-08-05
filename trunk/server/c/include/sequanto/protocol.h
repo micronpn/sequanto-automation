@@ -39,11 +39,12 @@ SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte
 
 void sq_protocol_write_protocol ( SQStream * _stream );
 void sq_protocol_write_success ( SQStream * _stream );
-void sq_protocol_write_success_with_values ( SQStream * _stream, SQValue * _value, size_t _numberOfValues );
+void sq_protocol_write_success_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues );
 void sq_protocol_write_failure ( SQStream * _stream );
 void sq_protocol_write_failure_with_text ( SQStream * _stream, const char * const _text );
-void sq_protocol_write_failure_with_values ( SQStream * _stream, SQValue * _value, size_t _numberOfValues );
-
+void sq_protocol_write_failure_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues );
+void sq_protocol_write_update ( SQStream * _stream, const char * const _fullname );
+void sq_protocol_write_update_with_value ( SQStream * _stream, const char * const _fullname , const SQValue * const _value );
 
 #ifdef __cplusplus
 }

@@ -26,6 +26,20 @@ CHECK_INCLUDE_FILE(stdio.h HAVE_STDIO_H)
 INCLUDE(CheckFunctionExists)
 CHECK_FUNCTION_EXISTS(snprintf HAVE_SNPRINTF)
 CHECK_FUNCTION_EXISTS(_snprintf HAVE_UNDERSCORE_SNPRINTF)
+CHECK_FUNCTION_EXISTS(snprintf_s HAVE_SNPRINTF_S)
+CHECK_FUNCTION_EXISTS(_snprintf_s HAVE_UNDERSCORE_SNPRINTF_S)
+
+INCLUDE(CheckCXXSourceCompiles)
+CHECK_CXX_SOURCE_COMPILES("#include <string>\n int main () { std::string s; };" STL_SUPPORTED)
+
+IF(STL_SUPPORTED)
+  SET(SQ_CXX 1)
+ELSE(STL_SUPPORTED)
+  SET(SQ_CXX 0)
+ENDIF(STL_SUPPORTED)
+
+#INCLUDE(FindQT4)
+#FIND_PACKAGE(Qt4)
 
 SET(SRCS server/c/src/automation.c server/c/src/protocol.c server/c/src/server.c
          server/c/src/value.c server/c/src/system.c server/c/src/types.c server/c/src/thread.c
@@ -82,6 +96,7 @@ IF(SQ_GENERATE_DOCUMENTATION)
 ENDIF(SQ_GENERATE_DOCUMENTATION)
 
 ADD_SUBDIRECTORY(server/c/applications)
+ADD_SUBDIRECTORY(server/cxx/examples)
 
 IF(WIN32)
     SET(SQ_WIN32 ON)
@@ -175,3 +190,47 @@ ENDIF(UNIX)
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/server/c/src/config.h.in ${CMAKE_BINARY_DIR}/generated/config.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include ${CMAKE_BINARY_DIR}/generated/)
+
+IF(SQ_CXX)
+  SET(CXX_SRCS server/cxx/src/tree.cxx
+               server/cxx/src/node.cxx
+               server/cxx/src/nodeinfo.cxx
+               server/cxx/src/methodinfo.cxx
+               server/cxx/src/listnode.cxx
+               server/cxx/src/propertynode.cxx
+               server/cxx/src/readonlypropertynode.cxx
+               server/cxx/src/readwritepropertynode.cxx
+               server/cxx/src/constantnode.cxx)
+
+  SET(CXX_HEADERS server/cxx/include/sequanto/tree.h
+                  server/cxx/include/sequanto/node.h
+                  server/cxx/include/sequanto/nodeinfo.h
+                  server/cxx/include/sequanto/methodinfo.h
+                  server/cxx/include/sequanto/listnode.h
+                  server/cxx/include/sequanto/propertynode.h
+                  server/cxx/include/sequanto/readonlypropertynode.h
+                  server/cxx/include/sequanto/readwritepropertynode.h
+                  server/cxx/include/sequanto/constantnode.h)
+  
+  ADD_LIBRARY(SequantoAutomation_CXX STATIC ${CXX_SRCS} ${CXX_HEADERS})
+  TARGET_LINK_LIBRARIES(SequantoAutomation_CXX SequantoAutomation)
+
+  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
+
+#    IF(QT4_FOUND)
+#      FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+#      INCLUDE(${QT_USE_FILE})
+
+#      QT4_WRAP_CPP(SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtautomationeventfilter.h)
+     
+#      SET(QT_SRCS server/qt/src/qtwrapper.cxx server/qt/src/qtautomationeventfilter.cxx ${SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC})
+#      SET(QT_HEADERS server/qt/include/sequanto/qtwrapper.h server/qt/include/sequanto/qtautomationeventfilter.h)
+    
+#      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
+#      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
+#      TARGET_LINK_LIBRARIES(SequantoAutomation ${QT_LIBRARIES})
+    
+#      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
+#      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/qt/include)
+#    ENDIF(QT4_FOUND)
+ENDIF(SQ_CXX)

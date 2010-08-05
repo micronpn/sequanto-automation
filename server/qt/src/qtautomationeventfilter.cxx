@@ -1,4 +1,5 @@
 #include <sequanto/qtautomationeventfilter.h>
+#include <sequanto/ui.h>
 #include <cassert>
 
 using namespace sequanto::automation;

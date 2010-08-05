@@ -36,6 +36,7 @@ typedef enum
 	VALUE_TYPE_BYTE_ARRAY,
 	VALUE_TYPE_NULL,
    VALUE_TYPE_VOID,
+	VALUE_TYPE_CONST_STRING,
 } SQValueType;
 
 typedef struct
@@ -47,6 +48,7 @@ typedef struct
       float m_floatValue;
       SQBool m_booleanValue;
       char * m_stringValue;
+      const char * m_constStringValue;
       struct
       {
          SQByte * m_byteArrayValue;
@@ -83,6 +85,14 @@ void sq_value_boolean ( SQValue * _value, SQBool _initialValue);
 void sq_value_string ( SQValue * _value, char * _initialValue);
 
 /**
+ * Initialize the SQValue as a const string.
+ *
+ * Please note that the given value will _not_ be copied, the string will have to be valid while this SQValue is valid.
+ * The value is _not_ free'ed when sq_value_free(...) is called.
+ */
+void sq_value_const_string ( SQValue * _value, const char * _initialValue);
+
+/**
  * Initialize the SQValue as a string.
  *
  * Please note that the given value will be copied and the string will be free'ed when sq_value_free(...) is called.
@@ -106,7 +116,7 @@ void sq_value_null ( SQValue * _value );
 /**
  * Write the given value to the given stream.
  */
-SQBool sq_value_write ( SQValue * _value, SQStream * _stream );
+SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream );
 
 /**
  * Free any memory that the given SQValue is consuming (string or byte array) and set the type to "NO VALUE".
@@ -116,7 +126,7 @@ void sq_value_free ( SQValue * _value );
 /**
  * Write values from _start to _start + _numberOfValues separated by space.
  */
-SQBool sq_values_write ( SQValue * _start, size_t _numberOfValues, SQStream * _stream );
+SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfValues, SQStream * _stream );
 
 /**
  * Parse a list of values separated by spaces and terminated by \r\n from _buffer.

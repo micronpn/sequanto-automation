@@ -179,6 +179,18 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 {
    char buffer[SQ_MAX_VALUE_LENGTH];
 #ifdef HAVE_SNPRINTF
+#  ifdef HAVE_SNPRINTF_S
+   
+   int i;
+   SNPRINTF_S_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, SQ_MAX_VALUE_LENGTH, "%f", _value );
+   for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
+   {
+      WRITE_BYTE_OR_FAIL ( buffer[i] );
+   }
+   return SQ_TRUE;
+
+#  else
+
    int i;
    SNPRINTF_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, "%f", _value );
    for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
@@ -187,6 +199,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
    }
    return SQ_TRUE;
 
+#  endif
 #else
    int i = 0, tempValue;
 
@@ -278,7 +291,7 @@ void sq_protocol_write_success ( SQStream * _stream )
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
 }
 
-void sq_protocol_write_success_with_values ( SQStream * _stream, SQValue * _value, size_t _numberOfValues )
+void sq_protocol_write_success_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
 {
    sq_stream_write_byte ( _stream, '+' );
    sq_values_write ( _value, _numberOfValues, _stream );
@@ -298,9 +311,26 @@ void sq_protocol_write_failure_with_text ( SQStream * _stream, const char * cons
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
 }
 
-void sq_protocol_write_failure_with_values ( SQStream * _stream, SQValue * _value, size_t _numberOfValues )
+void sq_protocol_write_failure_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
 {
    sq_stream_write_byte ( _stream, '-' );
    sq_values_write ( _value, _numberOfValues, _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+}
+
+void sq_protocol_write_update( SQStream * _stream, const char * const _fullname )
+{
+   sq_protocol_write_update_with_value ( _stream, _fullname, NULL );
+}
+
+void sq_protocol_write_update_with_value( SQStream * _stream, const char * const _fullname, const SQValue * const _value )
+{
+   sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!UPDATE ")) );
+   sq_stream_write_string ( _stream, _fullname );
+   if ( _value != NULL )
+   {
+      sq_stream_write_byte ( _stream, ' ' );
+      sq_value_write( _value, _stream );
+   }
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
 }

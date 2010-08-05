@@ -331,31 +331,31 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
 {
    if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_BUTTON_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_BUTTON_STRING) );
    }
    else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_WINDOW_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_WINDOW_STRING) );
    }
    else if ( _widget->inherits ( QMenuBar::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_MENU_BAR_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_MENU_BAR_STRING) );
    }
    else if ( _widget->inherits ( QMenu::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_MENU_ITEM_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_MENU_ITEM_STRING) );
    }
    else if ( _widget->inherits ( QLayout::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_CONTAINER_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_CONTAINER_STRING) );
    }
    else if ( _widget->inherits ( QLabel::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_LABEL_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_LABEL_STRING) );
    }
    else
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_WIDGET_STRING) );
+      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_WIDGET_STRING) );
    }
    _root->AddChild ( new ConstantStringNode ( "nativeType", _widget->metaObject()->className() ) );
 

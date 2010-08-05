@@ -31,24 +31,27 @@ extern "C"
 
    typedef enum
    {
-      SQ_WIDGET_UNKNOWN,
-      SQ_WIDGET_WIDGET,
-      SQ_WIDGET_WINDOW,
-      SQ_WIDGET_CONTAINER,
-      SQ_WIDGET_BUTTON,
-      SQ_WIDGET_LABEL,
-      SQ_WIDGET_MENU_BAR,
-      SQ_WIDGET_MENU_ITEM,
+      SQ_WIDGET_TYPE_UNKNOWN = 0,
+      SQ_WIDGET_TYPE_WIDGET,
+      SQ_WIDGET_TYPE_WINDOW,
+      SQ_WIDGET_TYPE_CONTAINER,
+      SQ_WIDGET_TYPE_BUTTON,
+      SQ_WIDGET_TYPE_LABEL,
+      SQ_WIDGET_TYPE_MENU_BAR,
+      SQ_WIDGET_TYPE_MENU_ITEM,
+      SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
    
-   extern const char * const SQ_WIDGET_UNKNOWN_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_WIDGET_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_WINDOW_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_CONTAINER_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_BUTTON_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_LABEL_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_MENU_BAR_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_MENU_ITEM_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_UNKNOWN_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_WIDGET_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_WINDOW_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_CONTAINER_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
+
+   const char * const sq_widget_type_to_string ( SQWidgetType _widgetType );
    
 #ifdef __cplusplus
 }

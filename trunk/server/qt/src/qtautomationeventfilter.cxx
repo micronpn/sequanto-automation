@@ -53,13 +53,13 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
       break;
 
    case QEvent::Move:
-      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild("x") )->SendUpdate();
-      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild("y") )->SendUpdate();
+      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_X) )->SendUpdate();
+      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_Y) )->SendUpdate();
       break;
       
    case QEvent::Resize:
-      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild("width") )->SendUpdate();
-      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild("height") )->SendUpdate();
+      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_WIDTH) )->SendUpdate();
+      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_HEIGHT) )->SendUpdate();
       break;
       
    case QEvent::Destroy:

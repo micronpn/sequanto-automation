@@ -26,6 +26,17 @@ const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE = "Label";
 const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
 const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
 
+const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE = "children";
+const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE = "type";
+const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE = "x";
+const char * const SQ_UI_NODE_Y SQ_CONST_VARIABLE = "y";
+const char * const SQ_UI_NODE_WIDTH SQ_CONST_VARIABLE = "width";
+const char * const SQ_UI_NODE_HEIGHT SQ_CONST_VARIABLE = "height";
+const char * const SQ_UI_NODE_MOVE SQ_CONST_VARIABLE = "move";
+const char * const SQ_UI_NODE_RESIZE SQ_CONST_VARIABLE = "resize";
+const char * const SQ_UI_NODE_NATIVE_TYPE SQ_CONST_VARIABLE = "nativeType";
+const char * const SQ_UI_NODE_UNNAMED_OBJECTS SQ_CONST_VARIABLE = "unnamedObjects";
+
 const char * const sq_widget_type_to_string ( SQWidgetType _type )
 {
    switch ( _type )

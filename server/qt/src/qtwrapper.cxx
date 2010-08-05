@@ -258,7 +258,7 @@ private:
 
 public:
    QtMoveMethod( QWidget * _widget )
-      : Node("move"),
+      : Node(SQ_UI_NODE_MOVE),
         m_widget ( _widget )
    {
    }
@@ -296,7 +296,7 @@ private:
 
 public:
    QtResizeMethod( QWidget * _widget )
-      : Node("resize"),
+      : Node(SQ_UI_NODE_RESIZE),
         m_widget ( _widget )
    {
    }
@@ -331,38 +331,38 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
 {
    if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_BUTTON_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_BUTTON_STRING) );
    }
    else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_WINDOW_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
    }
    else if ( _widget->inherits ( QMenuBar::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_MENU_BAR_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_MENU_BAR_STRING) );
    }
    else if ( _widget->inherits ( QMenu::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_MENU_ITEM_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_MENU_ITEM_STRING) );
    }
    else if ( _widget->inherits ( QLayout::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_CONTAINER_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_CONTAINER_STRING) );
    }
    else if ( _widget->inherits ( QLabel::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_LABEL_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_LABEL_STRING) );
    }
    else
    {
-      _root->AddChild ( new ConstantStringNode("type", SQ_WIDGET_TYPE_WIDGET_STRING) );
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WIDGET_STRING) );
    }
-   _root->AddChild ( new ConstantStringNode ( "nativeType", _widget->metaObject()->className() ) );
+   _root->AddChild ( new ConstantStringNode ( SQ_UI_NODE_NATIVE_TYPE, _widget->metaObject()->className() ) );
 
-   _root->AddChild ( new QtIntProperty( "x", _widget ) );
-   _root->AddChild ( new QtIntProperty( "y", _widget ) );
-   _root->AddChild ( new QtIntProperty( "width", _widget ) );
-   _root->AddChild ( new QtIntProperty( "height", _widget ) );
+   _root->AddChild ( new QtIntProperty( SQ_UI_NODE_X, _widget ) );
+   _root->AddChild ( new QtIntProperty( SQ_UI_NODE_Y, _widget ) );
+   _root->AddChild ( new QtIntProperty( SQ_UI_NODE_WIDTH, _widget ) );
+   _root->AddChild ( new QtIntProperty( SQ_UI_NODE_HEIGHT, _widget ) );
 
    _root->AddChild ( new QtMoveMethod(_widget ) );
    _root->AddChild ( new QtResizeMethod(_widget ) );
@@ -372,7 +372,7 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    QObjectList list ( _widget->children() );
    if ( !list.empty() )
    {
-      ListNode * children = new ListNode ( "children" );
+      ListNode * children = new ListNode ( SQ_UI_NODE_CHILDREN );
 
       int unnamedObjects = 0;
       for ( int i = 0; i < list.count(); i++ )
@@ -396,7 +396,7 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
       }
       if ( unnamedObjects > 0)
       {
-         _root->AddChild ( new ConstantIntegerNode("UnnamedObjects", unnamedObjects) );
+         _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_UNNAMED_OBJECTS, unnamedObjects) );
       }
       _root->AddChild ( children );
    }

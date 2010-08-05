@@ -53,6 +53,17 @@ extern "C"
 
    const char * const sq_widget_type_to_string ( SQWidgetType _widgetType );
    
+   extern const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_Y SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_MOVE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_RESIZE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_NATIVE_TYPE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_UNNAMED_OBJECTS SQ_CONST_VARIABLE;
+
 #ifdef __cplusplus
 }
 #endif

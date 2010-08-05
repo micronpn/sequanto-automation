@@ -1,0 +1,4 @@
+name qt_automation
+import qt_automation.cpp
+branch /ui
+branch /qt

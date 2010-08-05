@@ -5,7 +5,6 @@
 using namespace std;
 using namespace sequanto::automation;
 
-
 class PropertyNodeInfo : public NodeInfo
 {
 public:

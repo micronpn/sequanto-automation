@@ -5,7 +5,6 @@
 using namespace std;
 using namespace sequanto::automation;
 
-
 class ListNodeInfo : public NodeInfo
 {
    Type GetType () const

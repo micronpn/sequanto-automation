@@ -38,18 +38,18 @@ ELSE(STL_SUPPORTED)
   SET(SQ_CXX 0)
 ENDIF(STL_SUPPORTED)
 
-#INCLUDE(FindQT4)
-#FIND_PACKAGE(Qt4)
+INCLUDE(FindQT4)
+FIND_PACKAGE(Qt4)
 
 SET(SRCS server/c/src/automation.c server/c/src/protocol.c server/c/src/server.c
          server/c/src/value.c server/c/src/system.c server/c/src/types.c server/c/src/thread.c
-         server/c/src/mutex.c server/c/src/parser.c server/c/src/log.c
+         server/c/src/mutex.c server/c/src/parser.c server/c/src/log.c server/c/src/ui.c
          ${EXTRA_SRCS})
 
 SET(HEADERS server/c/include/sequanto/automation.h server/c/include/sequanto/stream.h
             server/c/include/sequanto/protocol.h server/c/include/sequanto/server.h
             server/c/include/sequanto/value.h server/c/include/sequanto/system.h
-            server/c/include/sequanto/log.h)
+            server/c/include/sequanto/log.h server/c/include/sequanto/ui.h)
 
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/test_server_automation.c GENERATED)
 ADD_EXECUTABLE(test_server server/c/examples/test_server.c server/c/examples/type_tests.c ${CMAKE_BINARY_DIR}/generated/test_server_automation.c)
@@ -97,6 +97,7 @@ ENDIF(SQ_GENERATE_DOCUMENTATION)
 
 ADD_SUBDIRECTORY(server/c/applications)
 ADD_SUBDIRECTORY(server/cxx/examples)
+ADD_SUBDIRECTORY(server/qt/examples)
 
 IF(WIN32)
     SET(SQ_WIN32 ON)
@@ -217,20 +218,20 @@ IF(SQ_CXX)
 
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
 
-#    IF(QT4_FOUND)
-#      FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-#      INCLUDE(${QT_USE_FILE})
+   IF(QT4_FOUND)
+     FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+     INCLUDE(${QT_USE_FILE})
 
-#      QT4_WRAP_CPP(SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtautomationeventfilter.h)
+     QT4_WRAP_CPP(SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtautomationeventfilter.h)
      
-#      SET(QT_SRCS server/qt/src/qtwrapper.cxx server/qt/src/qtautomationeventfilter.cxx ${SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC})
-#      SET(QT_HEADERS server/qt/include/sequanto/qtwrapper.h server/qt/include/sequanto/qtautomationeventfilter.h)
+     SET(QT_SRCS server/qt/src/qtwrapper.cxx server/qt/src/qtautomationeventfilter.cxx ${SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC})
+     SET(QT_HEADERS server/qt/include/sequanto/qtwrapper.h server/qt/include/sequanto/qtautomationeventfilter.h)
     
-#      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
-#      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
-#      TARGET_LINK_LIBRARIES(SequantoAutomation ${QT_LIBRARIES})
+     ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
+     TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
+     TARGET_LINK_LIBRARIES(SequantoAutomation ${QT_LIBRARIES})
     
-#      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
-#      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/qt/include)
-#    ENDIF(QT4_FOUND)
+     INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
+     INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/qt/include)
+   ENDIF(QT4_FOUND)
 ENDIF(SQ_CXX)

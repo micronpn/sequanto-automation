@@ -17,11 +17,41 @@
 #include <sequanto/ui.h>
 #include "config.h"
 
-const char * const SQ_WIDGET_UNKNOWN_STRING SQ_CONST_VARIABLE = "Unknown";
-const char * const SQ_WIDGET_WIDGET_STRING SQ_CONST_VARIABLE = "Widget";
-const char * const SQ_WIDGET_WINDOW_STRING SQ_CONST_VARIABLE = "Window";
-const char * const SQ_WIDGET_CONTAINER_STRING SQ_CONST_VARIABLE = "Container";
-const char * const SQ_WIDGET_BUTTON_STRING SQ_CONST_VARIABLE = "Button";
-const char * const SQ_WIDGET_LABEL_STRING SQ_CONST_VARIABLE = "Label";
-const char * const SQ_WIDGET_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
-const char * const SQ_WIDGET_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
+const char * const SQ_WIDGET_TYPE_UNKNOWN_STRING SQ_CONST_VARIABLE = "Unknown";
+const char * const SQ_WIDGET_TYPE_WIDGET_STRING SQ_CONST_VARIABLE = "Widget";
+const char * const SQ_WIDGET_TYPE_WINDOW_STRING SQ_CONST_VARIABLE = "Window";
+const char * const SQ_WIDGET_TYPE_CONTAINER_STRING SQ_CONST_VARIABLE = "Container";
+const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE = "Button";
+const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE = "Label";
+const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
+const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
+
+const char * const sq_widget_type_to_string ( SQWidgetType _type )
+{
+   switch ( _type )
+   {
+   case SQ_WIDGET_TYPE_WIDGET:
+      return SQ_WIDGET_TYPE_WIDGET_STRING;
+
+   case SQ_WIDGET_TYPE_WINDOW:
+      return SQ_WIDGET_TYPE_WINDOW_STRING;
+
+   case SQ_WIDGET_TYPE_CONTAINER:
+      return SQ_WIDGET_TYPE_CONTAINER_STRING;
+
+   case SQ_WIDGET_TYPE_BUTTON:
+      return SQ_WIDGET_TYPE_BUTTON_STRING;
+
+   case SQ_WIDGET_TYPE_LABEL:
+      return SQ_WIDGET_TYPE_LABEL_STRING;
+
+   case SQ_WIDGET_TYPE_MENU_BAR:
+      return SQ_WIDGET_TYPE_MENU_BAR_STRING;
+
+   case SQ_WIDGET_TYPE_MENU_ITEM:
+      return SQ_WIDGET_TYPE_MENU_ITEM_STRING;
+
+   default:
+      return SQ_WIDGET_TYPE_UNKNOWN_STRING;
+   }
+}

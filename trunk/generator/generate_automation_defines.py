@@ -229,6 +229,52 @@ class Monitor ( SmartObject ):
         
         self.m_types = _types
 
+class Branch ( object ):
+    @property
+    def index ( self ):
+        return self.m_index
+    
+    @property
+    def generatedName ( self ):
+        return 'BRANCH_NAME%i' % self.index
+    
+    @property
+    def objectPath ( self ):
+        return self.m_objectPath
+    
+    @property
+    def infoHandlerFunction ( self ):
+        return 'sq_handle_branch_info_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+
+    @property
+    def listHandlerFunction ( self ):
+        return 'sq_handle_branch_list_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+    
+    @property
+    def getHandlerFunction ( self ):
+        return 'sq_handle_branch_get_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+
+    @property
+    def setHandlerFunction ( self ):
+        return 'sq_handle_branch_set_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+
+    @property
+    def disableHandlerFunction ( self ):
+        return 'sq_handle_branch_disable_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+
+    @property
+    def enableHandlerFunction ( self ):
+        return 'sq_handle_branch_enable_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+
+    @property
+    def callHandlerFunction ( self ):
+        return 'sq_handle_branch_call_%s' % (self.objectPath[1:].replace ( '/', '_' ))
+
+    
+    def __init__ ( self, _index, _objectPath ):
+        self.m_index = _index
+        self.m_objectPath = _objectPath
+
 class AutomationFile ( object ):
     def setErrorReportingFilename ( self, _filename ):
         self.m_errorReportingFilename = _filename
@@ -239,6 +285,7 @@ class AutomationFile ( object ):
         self.m_properties = []
         self.m_functions = []
         self.m_monitors = []
+        self.m_branches = []
         self.m_name = None
         
         self.m_errorReportingFilename = '<unknown>'
@@ -247,6 +294,7 @@ class AutomationFile ( object ):
         self.m_foundProperties = []
         self.m_foundFunctions = []
         self.m_foundMonitors = []
+        self.m_foundBranches = []
         self.m_maxNumberOfParameters = 0
         self.m_seenUpdateFunctions = sets.Set()
     
@@ -290,6 +338,10 @@ class AutomationFile ( object ):
                 types = [t.strip() for t in type.split(',')]
                 self.m_monitors.append ( (lineNumber, objectPath, types) )
             
+            elif command == 'branch':
+                objectPath = rest
+                self.m_branches.append ( (lineNumber, objectPath) )
+                
             else:
                 self.reportError ( lineNumber, 'Unknown command "%s"' % command )
             
@@ -438,6 +490,12 @@ class AutomationFile ( object ):
                     self.m_foundMonitors.append ( monitor )
                     monitorIndex += 1
         
+        branchIndex = 0
+        for lineNumber, objectPath in self.m_branches:
+            self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_BRANCH', branchIndex) )
+            self.m_foundBranches.append ( Branch(branchIndex, objectPath) )
+            branchIndex += 1
+            
         self.m_objectPaths.sort()
         
     def findObjectPathIndex ( self, objectPath ):
@@ -458,7 +516,7 @@ class AutomationFile ( object ):
             raise 'Unknown type %s' % automationType
     
     def generate ( self ):
-        print 'Writing interface to %s_automation.c' % self.m_name
+        print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
         
         fp = open ( '%s_automation.c' % self.m_name, 'w' )
         fp.write ( '/*\n' )
@@ -475,12 +533,14 @@ class AutomationFile ( object ):
         fp.write ( '#include <sequanto/protocol.h>\n' )
         fp.write ( '#include <sequanto/server.h>\n' )
         fp.write ( '\n' )
+        fp.write ( '#include "%s_automation.h"\n' % (self.m_name) )
+        fp.write ( '\n' )
         
         fp.write ( 'static const char NEWLINE[] SQ_CONST_VARIABLE = "\\r\\n";\n' )
         fp.write ( 'static const char PLUS_SPACE[] SQ_CONST_VARIABLE = "+ ";\n' )
         fp.write ( 'static const char UPDATE_START[] SQ_CONST_VARIABLE = "!UPDATE ";\n' )
         
-        fp.write ( 'typedef enum _SQInfoType { INFO_TYPE_LIST = 0, INFO_TYPE_PROPERTY = 1, INFO_TYPE_CALLABLE = 2, INFO_TYPE_MONITOR = 3 } SQInfoType;\n' )
+        fp.write ( 'typedef enum _SQInfoType { INFO_TYPE_LIST = 0, INFO_TYPE_PROPERTY = 1, INFO_TYPE_CALLABLE = 2, INFO_TYPE_MONITOR = 3, INFO_TYPE_BRANCH = 4 } SQInfoType;\n' )
         
         fp.write ( 'typedef struct _SQInfo { const char * name; SQInfoType type; int index; } SQInfo;\n' )
         fp.write ( '\n' )
@@ -500,6 +560,43 @@ class AutomationFile ( object ):
         fp.write ( '\n' )
         fp.write ( 'static const int NUMBER_OF_INFO  SQ_CONST_VARIABLE = %i;\n' % (len(self.m_objectPaths) + 1) )
         fp.write ( '\n' )
+
+        for branch in self.m_foundBranches:
+            fp.write ( 'static const char %s[] SQ_CONST_VARIABLE = "%s";\n' % (branch.generatedName, branch.objectPath) )
+        fp.write ( '\n' )
+        fp.write ( 'static const int NUMBER_OF_BRANCHES  SQ_CONST_VARIABLE = %i;\n' % (len(self.m_foundBranches)) )
+        fp.write ( '\n' )
+        fp.write ( 'typedef SQBool (*SQBranchInfoHandler) ( SQStream * _stream, const char * _objectPath );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchListHandler) ( SQStream * _stream, const char * _objectPath );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchGetHandler) ( SQStream * _stream, const char * _objectPath );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchSetHandler) ( SQStream * _stream, const char * _objectPath, const SQValue * const _value );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchEnableHandler) ( SQStream * _stream, const char * _objectPath );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchDisableHandler) ( SQStream * _stream, const char * _objectPath );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchCallHandler) ( SQStream * _stream, const char * _objectPath, const SQValue * const _values, int _numberOfValues );\n' )
+        fp.write ( '\n' )
+        fp.write ( 'typedef struct _SQBranch\n' )
+        fp.write ( '{\n' )
+        fp.write ( '    const char * name;\n' )
+        fp.write ( '    size_t length;\n' )
+        fp.write ( '    SQBranchInfoHandler info_handler;\n' )
+        fp.write ( '    SQBranchListHandler list_handler;\n' )
+        fp.write ( '    SQBranchGetHandler get_handler;\n' )
+        fp.write ( '    SQBranchSetHandler set_handler;\n' )
+        fp.write ( '    SQBranchEnableHandler enable_handler;\n' )
+        fp.write ( '    SQBranchDisableHandler disable_handler;\n' )
+        fp.write ( '    SQBranchCallHandler call_handler;\n' )
+        
+        fp.write ( '} SQBranch;\n' )
+        fp.write ( '\n' )
+        fp.write ( 'static const SQBranch BRANCH_LIST[] SQ_CONST_VARIABLE = {\n' )
+        if len(self.m_foundBranches) > 0:
+            for branch in self.m_foundBranches:
+                fp.write ( '    { %s, %i, %s, %s, %s, %s, %s, %s, %s },\n' % (branch.generatedName, len(branch.objectPath), branch.infoHandlerFunction, branch.listHandlerFunction,
+                                                                  branch.getHandlerFunction, branch.setHandlerFunction, branch.enableHandlerFunction, branch.disableHandlerFunction,
+                                                                  branch.callHandlerFunction) )
+        else:
+            fp.write ( '    { NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL },\n' )
+        fp.write ( '};\n' )
         
         for property in self.m_foundProperties:
             translatedObjectPath = property.translatedObjectPath
@@ -791,6 +888,15 @@ class AutomationFile ( object ):
                     fp.write ( 'void %s ( %s, %s );\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.parameterString) )
                 else:
                     fp.write ( 'void %s ( %s );\n' % (monitor.updateFunctionName, monitor.parameterString) )
+        
+        for branch in self.m_foundBranches:
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.listHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.infoHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.getHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath, const SQValue * const _value );\n' % (branch.setHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.disableHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.enableHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath, const SQValue * const _values, int _numberOfValues );\n' % (branch.callHandlerFunction) )
         
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( '}\n' )

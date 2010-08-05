@@ -60,6 +60,136 @@ const SQMonitorInfo * const sq_get_monitor_info ( size_t _index )
 
 #endif
 
+const SQBranch * const sq_automation_find_branch ( const char * const _name )
+{
+   int i;
+   for ( i = 0; i < NUMBER_OF_BRANCHES; i++ )
+   {
+      if ( SQ_CONSTANT_STRNCMP(_name, SQ_STRING_CONSTANT_FROM_ARRAY(&BRANCH_LIST[i].name), BRANCH_LIST[i].length) == 0 )
+      {
+         return &BRANCH_LIST[i];
+      }
+   }
+   return NULL;
+}
+
+const char * sq_automation_branch_name ( const SQBranch * const _branch, const char * const _name )
+{
+   const char * branchName = _name + _branch->length;
+   if ( branchName[0] == '\0' )
+   {
+      return ROOT;
+   }
+   else
+   {
+      return branchName;
+   }
+}
+
+SQBool sq_automation_handle_list_if_branch ( SQStream * _stream, const char * const _name )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->list_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      sq_stream_exit_write ( _stream );
+      return ret;
+   }
+   return SQ_FALSE;
+}
+
+SQBool sq_automation_handle_info_if_branch ( SQStream * _stream, const char * const _name )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->info_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      sq_stream_exit_write ( _stream );
+      return ret;
+
+   }
+   return SQ_FALSE;
+}
+
+SQBool sq_automation_handle_get_if_branch ( SQStream * _stream, const char * const _name )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->get_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      sq_stream_exit_write ( _stream );
+      return ret;
+
+   }
+   return SQ_FALSE;
+}
+
+SQBool sq_automation_handle_set_if_branch ( SQStream * _stream, const char * const _name, const SQValue * const _value )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->set_handler ( _stream, sq_automation_branch_name(branch, _name), _value );
+      sq_stream_exit_write ( _stream );
+      return ret;
+
+   }
+   return SQ_FALSE;
+}
+
+SQBool sq_automation_handle_enable_if_branch ( SQStream * _stream, const char * const _name )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->enable_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      sq_stream_exit_write ( _stream );
+      return ret;
+
+   }
+   return SQ_FALSE;
+}
+
+SQBool sq_automation_handle_disable_if_branch ( SQStream * _stream, const char * const _name )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->enable_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      sq_stream_exit_write ( _stream );
+      return ret;
+
+   }
+   return SQ_FALSE;
+}
+
+SQBool sq_automation_handle_call_if_branch ( SQStream * _stream, const char * const _name, const SQValue * const _values, int _numberOfValues )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      sq_stream_enter_write ( _stream );
+      ret = branch->call_handler ( _stream, sq_automation_branch_name(branch, _name), _values, _numberOfValues );
+      sq_stream_exit_write ( _stream );
+      return ret;
+   }
+   return SQ_FALSE;
+}
+
 const SQInfo* const sq_automation_find_info ( const char * const _name, int * _foundIndex )
 {
    int i;
@@ -138,8 +268,15 @@ void sq_automation_monitor_enable ( const SQInfo * const _info, SQStream * _stre
 
 void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _inputValues, int _numberOfValues )
 {
-   const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
-
+   const SQInfo * info;
+ 
+   if ( sq_automation_handle_call_if_branch(_stream, _objectPath, _inputValues, _numberOfValues) == SQ_TRUE )
+   {
+      return;
+   }
+   
+   info = sq_automation_find_info ( _objectPath, NULL );
+   
    sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
@@ -161,8 +298,15 @@ void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const
 
 void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
-   const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
+   const SQInfo * info;
 
+   if ( sq_automation_handle_get_if_branch ( _stream, _objectPath ) == SQ_TRUE )
+   {
+      return;
+   }
+   
+   info = sq_automation_find_info ( _objectPath, NULL );
+   
    sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
@@ -184,7 +328,14 @@ void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char
 
 void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _value )
 {
-   const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
+   const SQInfo * info;
+
+   if ( sq_automation_handle_set_if_branch ( _stream, _objectPath, _value ) == SQ_TRUE )
+   {
+      return;
+   }
+
+   info = sq_automation_find_info ( _objectPath, NULL );
 
    sq_stream_enter_write ( _stream );
    if ( info == NULL )
@@ -211,8 +362,14 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
    const SQCallableInfo * callableInfo;
    const SQPropertyInfo * propertyInfo;
    const SQMonitorInfo * monitorInfo;
-   const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
+   const SQInfo * info;
    
+   if ( sq_automation_handle_info_if_branch ( _stream, _objectPath ) == SQ_TRUE )
+   {
+      return;
+   }
+   
+   info = sq_automation_find_info ( _objectPath, NULL );
    sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
@@ -293,7 +450,14 @@ void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const
    size_t i;
    char c;
    const SQInfo * info;
-   size_t objectPathLength = strlen(_objectPath);
+   size_t objectPathLength;
+   
+   if ( sq_automation_handle_list_if_branch ( _stream, _objectPath ) == SQ_TRUE )
+   {
+      return;
+   }
+   
+   objectPathLength = strlen(_objectPath);
    
    info = sq_automation_find_info ( _objectPath, &foundIndex );
    sq_stream_enter_write ( _stream );
@@ -369,10 +533,20 @@ void sq_parser_enable_internal ( SQParser * _parser, SQStream * _stream, const c
 
 void sq_parser_enable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
+   if ( sq_automation_handle_enable_if_branch(_stream, _objectPath) == SQ_TRUE )
+   {
+      return;
+   }
+   
    sq_parser_enable_internal ( _parser, _stream, _objectPath, SQ_TRUE );
 }
 
 void sq_parser_disable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
+   if ( sq_automation_handle_disable_if_branch(_stream, _objectPath) == SQ_TRUE )
+   {
+      return;
+   }
+   
    sq_parser_enable_internal ( _parser, _stream, _objectPath, SQ_FALSE );
 }

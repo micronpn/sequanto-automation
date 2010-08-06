@@ -41,9 +41,9 @@ ENDIF(STL_SUPPORTED)
 INCLUDE(FindQT4)
 FIND_PACKAGE(Qt4)
 
-SET(SRCS server/c/src/automation.c server/c/src/protocol.c server/c/src/server.c
-         server/c/src/value.c server/c/src/system.c server/c/src/types.c server/c/src/thread.c
-         server/c/src/mutex.c server/c/src/parser.c server/c/src/log.c server/c/src/ui.c
+SET(SRCS server/c/src/sq_automation.c server/c/src/sq_protocol.c server/c/src/sq_server.c
+         server/c/src/sq_value.c server/c/src/sq_system.c server/c/src/sq_types.c server/c/src/sq_thread.c
+         server/c/src/sq_mutex.c server/c/src/sq_parser.c server/c/src/sq_log.c server/c/src/sq_ui.c
          ${EXTRA_SRCS})
 
 SET(HEADERS server/c/include/sequanto/automation.h server/c/include/sequanto/stream.h
@@ -107,7 +107,7 @@ IF(WIN32)
     SET(SQ_USE_THREADS ON)
     CHECK_INCLUDE_FILE(winsock2.h HAVE_WINSOCK2_H) 
 
-    SET(SRCS ${SRCS} server/c/src/stream_tcp.c)
+    SET(SRCS ${SRCS} server/c/src/sq_stream_tcp.c)
 ENDIF(WIN32)
 
 IF(UNIX)
@@ -118,11 +118,11 @@ IF(UNIX)
     
     CHECK_INCLUDE_FILE(sys/socket.h HAVE_SYS_SOCKET_H) 
     
-    SET(SRCS ${SRCS} src/stream_tcp.c)
+    SET(SRCS ${SRCS} src/sq_stream_tcp.c)
 ENDIF(UNIX)
 
 IF(SQ_ARDUINO)
-    SET(SRCS ${SRCS} server/c/src/stream_arduino.c)
+    SET(SRCS ${SRCS} server/c/src/sq_stream_arduino.c)
 
     SET(SQ_USE_MUTEXES OFF)
     SET(SQ_USE_THREADS OFF)

@@ -74,7 +74,7 @@ void sq_thread_start ( SQThread * _thread )
 void sq_thread_destroy ( SQThread * _thread )
 {
    CloseHandle ( _thread->m_thread );
-   //WaitForSingleObject( _thread->m_thread );
+   /* WaitForSingleObject( _thread->m_thread ); */
    free ( _thread );
 }
 

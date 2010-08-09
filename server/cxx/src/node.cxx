@@ -1,4 +1,6 @@
 #include <sequanto/node.h>
+#include <stdexcept>
+#include <string>
 
 using namespace std;
 using namespace sequanto::automation;
@@ -18,7 +20,7 @@ void Node::SetParent ( Node * _parent )
 {
    if ( m_parent != NULL )
    {
-      throw std::exception ( "SequantoAutomation_CXX: This node already has a parent associated with it." );
+      throw std::runtime_error ( "SequantoAutomation_CXX: This node already has a parent associated with it." );
    }
    m_parent = _parent;
 }

@@ -33,6 +33,7 @@
 #  include <sys/select.h>
 #  include <sys/ioctl.h>
 #  include <netinet/in.h>
+#  include <unistd.h>
 static const ssize_t SOCKET_ERROR = -1;
 #endif
 
@@ -88,16 +89,18 @@ SQStream * sq_stream_open ( int _portNumber )
 
 void sq_stream_internal_close_client ( SQStream * _stream )
 {
+#  ifdef SQ_USE_WINSOCK
    int ret;
    SQByte byte;
+#  endif
 
-    // Closing any currently open client socket
+   /* Closing any currently open client socket */
     if ( _stream->m_clientSocket != SOCKET_ERROR )
     {
 #  ifdef SQ_USE_WINSOCK
-        // According to the Winsock Programmer's FAQ, this is how a socket should be closed.
-        // http://tangentsoft.net/wskfaq/newbie.html#howclose
-
+        /* According to the Winsock Programmer's FAQ, this is how a socket should be closed.
+         * http://tangentsoft.net/wskfaq/newbie.html#howclose
+         */
         shutdown ( _stream->m_listenerSocket, 1 );
         ret = recv(_stream->m_listenerSocket, (char*) &byte, 1, 0 );
         while ( ret != 0 && ret != SOCKET_ERROR )
@@ -127,7 +130,11 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
       }
    }
    while ( ret != SOCKET_ERROR && ret > 0 );
+#ifdef SQ_USE_WINSOCK
    closesocket ( stream->m_clientSocket );
+#else
+   close ( stream->m_clientSocket );
+#endif
    stream->m_clientSocket = SOCKET_ERROR;
 }
 
@@ -150,7 +157,11 @@ void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
         {
            if ( newClient != SOCKET_ERROR )
            {
+#ifdef SQ_USE_WINSOCK
               closesocket ( newClient );
+#else
+              close ( newClient );
+#endif
            }
         }
     }

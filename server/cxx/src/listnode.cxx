@@ -1,6 +1,7 @@
 #include <sequanto/listnode.h>
 #include <sequanto/protocol.h>
 #include <sequanto/server.h>
+#include <stdexcept>
 
 using namespace std;
 using namespace sequanto::automation;
@@ -76,7 +77,7 @@ void ListNode::AddChild ( Node * _child )
 {
    if ( this->HasChild(_child->GetName()) )
    {
-      throw std::exception ( "SequantoAutomation_CXX: This ListNode already contains a child with the same name." );
+      throw std::runtime_error ( "SequantoAutomation_CXX: This ListNode already contains a child with the same name." );
    }
    m_children[_child->GetName()] = _child;
    _child->SetParent ( this );

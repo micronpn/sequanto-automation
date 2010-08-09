@@ -21,7 +21,7 @@
 #include <sequanto/stream.h>
 #include <sequanto/value.h>
 
-//#define SQ_BUFFER_SIZE 1024
+/* #define SQ_BUFFER_SIZE 1024 */
 #define SQ_BUFFER_SIZE 256
 
 #ifdef __cplusplus

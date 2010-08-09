@@ -38,8 +38,11 @@ ELSE(STL_SUPPORTED)
   SET(SQ_CXX 0)
 ENDIF(STL_SUPPORTED)
 
-INCLUDE(FindQT4)
-FIND_PACKAGE(Qt4)
+SET(SQ_QT4   OFF       CACHE BOOL "Build QT4 wrapper functionality")
+IF(SQ_QT4)
+  INCLUDE(FindQT4)
+  FIND_PACKAGE(Qt4)
+ENDIF(SQ_QT4)
 
 SET(SRCS server/c/src/sq_automation.c server/c/src/sq_protocol.c server/c/src/sq_server.c
          server/c/src/sq_value.c server/c/src/sq_system.c server/c/src/sq_types.c server/c/src/sq_thread.c
@@ -118,7 +121,7 @@ IF(UNIX)
     
     CHECK_INCLUDE_FILE(sys/socket.h HAVE_SYS_SOCKET_H) 
     
-    SET(SRCS ${SRCS} src/sq_stream_tcp.c)
+    SET(SRCS ${SRCS} server/c/src/sq_stream_tcp.c)
 ENDIF(UNIX)
 
 IF(SQ_ARDUINO)

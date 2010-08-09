@@ -59,7 +59,7 @@ void sq_server_poll ( SQServer * _server )
       {
          if ( sq_stream_read_byte ( _server->m_stream, &byte ) == SQ_FALSE )
          {
-            //sq_protocol_write_failure_with_text ( _server->m_stream, sq_get_constant_string(SQ_STRING_CONSTANT("sq_server_poll: read_byte returned FALSE\r\n")) );
+             /* sq_protocol_write_failure_with_text ( _server->m_stream, sq_get_constant_string(SQ_STRING_CONSTANT("sq_server_poll: read_byte returned FALSE\r\n")) ); */
             return;
          }
          sq_server_internal_handle_byte ( _server, byte );

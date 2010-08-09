@@ -44,8 +44,9 @@ void sq_system_sleep ( int _milliseconds )
 int sq_system_tickcount ()
 {
   struct timeb tb;
+  int ticks;
   ftime ( &tb );
-  int ticks = tb.time * 1000 + tb.millitm;
+  ticks = tb.time * 1000 + tb.millitm;
   return ticks;
 }
 

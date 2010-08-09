@@ -45,14 +45,14 @@ SQStringOut sq_external_fixed_length_string (char * _text, int _length)
 
 static char buffer[100];
 
-const char * const sq_get_constant_string ( const char * const _constantString )
+const char * sq_get_constant_string ( const char * const _constantString )
 {
    return strcpy_P ( buffer, _constantString );
 }
 
 #else
 
-const char * const sq_get_constant_string ( const char * const _constantString )
+const char * sq_get_constant_string ( const char * const _constantString )
 {
    return _constantString;
 }

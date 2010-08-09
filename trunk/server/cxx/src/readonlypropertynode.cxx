@@ -1,6 +1,7 @@
 #include <sequanto/readonlypropertynode.h>
 #include <sequanto/protocol.h>
 #include <sequanto/server.h>
+#include <stdexcept>
 
 using namespace std;
 using namespace sequanto::automation;
@@ -13,7 +14,7 @@ ReadOnlyPropertyNode::ReadOnlyPropertyNode ( const std::string & _name )
 
 void ReadOnlyPropertyNode::HandleSet ( const SQValue * const _value )
 {
-   throw std::exception ( "Can not set value of a read-only property." );
+   throw std::runtime_error ( "Can not set value of a read-only property." );
 }
 
 ReadOnlyPropertyNode::~ReadOnlyPropertyNode ()

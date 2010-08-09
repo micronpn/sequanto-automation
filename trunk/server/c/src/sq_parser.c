@@ -71,11 +71,11 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
     
     switch ( _parser->m_inputBuffer[0] )
     {
-    case 'P': // PROTOCOL
+    case 'P': /* PROTOCOL */
         sq_protocol_write_protocol(_outputStream);
         break;
         
-    case 'G': // GET
+    case 'G': /* GET */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
         
@@ -88,7 +88,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_property_get ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
         break;
         
-    case 'S': // SET
+    case 'S': /* SET */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
 
@@ -109,7 +109,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_property_set ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index, values );
         break;
         
-    case 'C': // CALL
+    case 'C': /* CALL */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
         
@@ -124,7 +124,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_call ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index, values, i  );
         break;
         
-    case 'L': // LIST
+    case 'L': /* LIST */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
         
@@ -137,7 +137,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_list ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
         break;
         
-    case 'I': // INFO
+    case 'I': /* INFO */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
         
@@ -150,7 +150,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_info ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
         break;
 
-    case 'E': // ENABLE
+    case 'E': /* ENABLE */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
         
@@ -163,7 +163,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_enable ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
         break;
         
-    case'D': // DISABLE
+    case'D': /* DISABLE */
         SKIP_TO_WHITESPACE ();
         SKIP_WHITESPACE ();
         
@@ -188,7 +188,7 @@ void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte
 {
     if ( _parser->m_inputBufferPosition == 0 && (_byte == '\n' || _byte == '\r' ) )
     {
-        // Skip '\n' and '\r' when the message just started.
+        /* Skip '\n' and '\r' when the message just started. */
     }
     else
     {

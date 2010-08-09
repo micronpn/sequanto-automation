@@ -75,13 +75,13 @@ void update_buttons ( SQServer * _server )
     if ( newButton1 != button1 )
     {
         button1 = newButton1;
-        sq_button_1_updated ( _server->m_stream, button1 );
+        sq_button_1_updated ( button1 );
     }
 
     if ( newButton2 != button2 )
     {
         button2 = newButton2;
-        sq_button_2_updated ( _server->m_stream, button2 );
+        sq_button_2_updated ( button2 );
     }
 }
 

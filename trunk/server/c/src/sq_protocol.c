@@ -64,7 +64,7 @@ SQBool sq_protocol_write_integer ( SQStream * _stream, int _value )
 
    if ( _value < 0 )
    {
-      // If this is true we have hit the minimum value of the integer, and revert to just returning 0.
+      /* If this is true we have hit the minimum value of the integer, and revert to just returning 0. */
       if ( _value == -_value )
       {
          _value = 0;

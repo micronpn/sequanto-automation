@@ -29,21 +29,26 @@ typedef SQByte SQBool;
 
 enum { SQ_TRUE = 1, SQ_FALSE = 0 };
 
-//#define SQ_TRUE 1
-//#define SQ_FALSE 0
+/*
+  #define SQ_TRUE 1
+  #define SQ_FALSE 0
+*/
 
 typedef struct _SQStringOut SQStringOut;
 
 struct _SQStringOut
 {
-  char (*GetNext)(SQStringOut * _string);  // Callback to get the text char by char.
-  SQBool (*HasMore)(SQStringOut * _string);  // Callback that returns true if there are more chars to get by the GetNext callback.
+  /* Callback to get the text char by char.*/
+  char (*GetNext)(SQStringOut * _string);  
+  /* Callback that returns true if there are more chars to get by the GetNext callback. */
+  SQBool (*HasMore)(SQStringOut * _string); 
 	union
 	{
 		void * m_data;
 		char * m_text;
 	} Data; 
-	int m_index;  // Can be used by creator and callbacks to keep track of how many chars that has been returned.
+    /* Can be used by creator and callbacks to keep track of how many chars that has been returned. */
+	int m_index;
 	union
 	{
 		int m_length;
@@ -80,7 +85,7 @@ typedef struct _SQByteArray
 #   define SQ_CONSTANT_STRCHR(constStr, c) strchr((constStr),(c))
 #endif
 
-const char * const sq_get_constant_string ( const char * const _constantString );
+const char * sq_get_constant_string ( const char * const _constantString );
 
 #ifdef __cplusplus
 }

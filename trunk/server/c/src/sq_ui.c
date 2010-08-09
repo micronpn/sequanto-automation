@@ -37,7 +37,7 @@ const char * const SQ_UI_NODE_RESIZE SQ_CONST_VARIABLE = "resize";
 const char * const SQ_UI_NODE_NATIVE_TYPE SQ_CONST_VARIABLE = "nativeType";
 const char * const SQ_UI_NODE_UNNAMED_OBJECTS SQ_CONST_VARIABLE = "unnamedObjects";
 
-const char * const sq_widget_type_to_string ( SQWidgetType _type )
+const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
    switch ( _type )
    {

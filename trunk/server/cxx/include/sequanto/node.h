@@ -32,7 +32,7 @@ namespace sequanto
       class Node
       {
       private:
-         friend ListNode;
+         friend class ListNode;
 
          Node * m_parent;
          std::string m_name;

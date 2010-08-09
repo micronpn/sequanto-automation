@@ -3,6 +3,7 @@
 #include <sequanto/automation.h>
 #include <sequanto/thread.h>
 #include <sequanto/tree.h>
+#include <cstdlib>
 
 #include "cxx_example_automation.h"
 
@@ -156,8 +157,11 @@ int main ( int _argc, char * _argv[] )
    for ( int i = 0; i < 100; i++ )
    {
       char nameBuffer[10];
+#ifdef _WIN32
       ::_itoa_s ( i, nameBuffer, 10, 16 );
-
+#else
+      ::itoa ( i, nameBuffer );
+#endif
       ListNode * testObjectContainer = new ListNode ( nameBuffer );
 
       string name ( "My Test Object (" );

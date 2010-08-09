@@ -54,6 +54,8 @@ void sq_mutex_destroy ( SQMutex * _mutex )
 
 #else
 
+/* Defined to get pthread_mutexattr_settype to be defined. */
+#define __USE_UNIX98
 #include <pthread.h>
 
 typedef struct _SQMutex
@@ -64,11 +66,12 @@ typedef struct _SQMutex
 
 SQMutex * sq_mutex_create ()
 {
+    SQMutex * mutex;
     pthread_mutexattr_t attr;
     pthread_mutexattr_init ( &attr );
     pthread_mutexattr_settype ( &attr, PTHREAD_MUTEX_RECURSIVE_NP );
     
-    SQMutex * mutex = malloc(sizeof(SQMutex));
+    mutex = malloc(sizeof(SQMutex));
     pthread_mutex_init ( &mutex->m_mutex, &attr );
 
     pthread_mutexattr_destroy ( &attr );

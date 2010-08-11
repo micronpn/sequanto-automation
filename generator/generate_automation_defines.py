@@ -875,6 +875,20 @@ class AutomationFile ( object ):
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( 'extern "C" {\n' )
         fp.write ( '#endif\n' )
+        fp.write ( '#ifdef SQ_DISABLE_AUTOMATION_INTERFACE\n' )
+        
+        #disabledText = '/* Disabled because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */'
+        disabledText = '{ do {} while(0); }'
+        for property in self.m_foundProperties:
+            if property.writeUpdateFunction:
+                fp.write ( '#define %s(...) %s\n' % (property.updateFunctionName, disabledText) )
+
+        for monitor in self.m_foundMonitors:
+            if monitor.writeUpdateFunction:
+                fp.write ( '#define %s(...) %s\n' % (monitor.updateFunctionName, disabledText) )
+        
+        fp.write ( '#else /* SQ_DISABLE_AUTOMATION_INTERFACE */\n' )
+        
         for property in self.m_foundProperties:
             if property.writeUpdateFunction:
                 if property.smart:
@@ -888,6 +902,8 @@ class AutomationFile ( object ):
                     fp.write ( 'void %s ( %s, %s );\n' % (monitor.updateFunctionName, monitor.additionalSmartParameters, monitor.parameterString) )
                 else:
                     fp.write ( 'void %s ( %s );\n' % (monitor.updateFunctionName, monitor.parameterString) )
+        
+        fp.write ( '#endif /* SQ_DISABLE_AUTOMATION_INTERFACE */\n' )
         
         for branch in self.m_foundBranches:
             fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.listHandlerFunction) )

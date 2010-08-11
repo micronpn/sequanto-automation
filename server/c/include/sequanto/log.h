@@ -36,6 +36,13 @@
 extern "C"
 {
 #endif
+
+#ifdef SQ_DISABLE_AUTOMATION_INTERFACE
+
+#define sq_log(_message) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
+#define sq_logf(_format, ...) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
+
+#else
    
    /**
     * Write a log message to the connected clients (if any).
@@ -65,6 +72,8 @@ extern "C"
     * @param _format The message to write, including any printf-like statements.
     */
    void sq_logf ( const char * _format, ... );
+
+#endif
    
 #ifdef __cplusplus
 }

@@ -98,6 +98,7 @@ IF(SQ_GENERATE_DOCUMENTATION)
   
 ENDIF(SQ_GENERATE_DOCUMENTATION)
 
+ADD_SUBDIRECTORY(server/c/examples)
 ADD_SUBDIRECTORY(server/c/applications)
 ADD_SUBDIRECTORY(server/cxx/examples)
 ADD_SUBDIRECTORY(server/qt/examples)

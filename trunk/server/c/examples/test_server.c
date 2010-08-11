@@ -44,7 +44,11 @@ void set_digital_output ( int portNumber, SQBool value )
 
 void reset_digital_output ( int portNumber )
 {
-   SQServer * server = sq_server_get_instance();
+   SQServer * server = NULL;
+
+#ifndef SQ_DISABLE_AUTOMATION_INTERFACE
+   sq_server_get_instance();
+#endif
 
    sq_logf ( "Running on version %s", SVN_REVISION );
    sq_logf ( "Resetting digital output %i, setting to %b. Server has instance %x.", portNumber, SQ_FALSE, server );
@@ -73,7 +77,10 @@ static char configFile[] = "# Config file\n\nval1 = 2\nval2 = 42\nval3 = 0\n";
 
 SQStringOut get_configuration_file ( void )
 {
-   SQStringOut out = sq_external_fixed_length_string ( configFile, strlen(configFile) );
+   SQStringOut out;
+#ifndef SQ_DISABLE_AUTOMATION_INTERFACE
+   out = sq_external_fixed_length_string ( configFile, strlen(configFile) );
+#endif
    return out;
 }
 
@@ -94,11 +101,16 @@ void close ( void )
 
 const char * const firmware_version ( void )
 {
+#ifdef SQ_DISABLE_AUTOMATION_INTERFACE
+   return NULL;
+#else
    return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
+#endif
 }
 
 int main ( int argc, char * argv[] )
 {
+#ifndef SQ_DISABLE_AUTOMATION_INTERFACE
    static SQServer server;
     
    sq_init ();   
@@ -115,4 +127,5 @@ int main ( int argc, char * argv[] )
    }
 
    sq_shutdown ();   
+#endif
 }

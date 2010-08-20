@@ -1,100 +1,132 @@
 #include <sequanto/automation.h>
 
+#include "arduino_test_automation.h"
+
 #include "wiring.h"
 
-static const int COLUMNS = 7;
-static const int ROWS = 5;
+#define NUMBER_OF_PINS 12
 
-static uint8_t display[] = { 0, 0, 0, 0, 0 };
-
-SQBool clear_display ( SQBool _on )
-{
-   for ( int row = 0; row < ROWS; row ++ )
-   {
-      if ( _on == SQ_TRUE )
-      {
-         display[row] = 0xFF;
-      }
-      else
-      {
-         display[row] = 0x00;
-      }
-   }
-   return SQ_TRUE;
-}
-
-SQBool set_display ( int _column, int _row, SQBool _on )
-{
-   if ( _column < 0 || _column >= COLUMNS || _row < 0 || _row >= ROWS )
-   {
-      return SQ_FALSE;
-   }
-   
-   if ( _on == SQ_TRUE )
-   {
-      display[_row] = display[_row] | (1 << _column);
-   }
-   else
-   {
-      display[_row] = display[_row] & ~(1 << _column);
-   }
-   return SQ_TRUE;
-}
-
-SQBool get_display ( int _column, int _row )
-{
-   if ( (display[_row] & (1 << _column)) > 0 )
-   {
-      return SQ_TRUE;
-   }
-   else
-   {
-      return SQ_FALSE;
-   }
-}
-
-void draw_display ( void )
-{
-   for ( int row = 0; row < ROWS; row ++ )
-   {
-      digitalWrite ( row + 2, LOW );
-      for ( int column = 0; column < COLUMNS; column++ )
-      {
-         if ( get_display(column, row) == SQ_TRUE )
-         {
-            digitalWrite ( column + 7, HIGH );
-         }
-         else
-         {
-            digitalWrite ( column + 7, LOW );
-         }
-      }
-      digitalWrite ( row + 2, HIGH );
-      for ( int column = 0; column < COLUMNS; column++ )
-      {
-         digitalWrite ( column + 7, LOW );
-      }
-   }
-}
-
-SQBool digital_io_write ( int _pin, SQBool _high )
-{
-   digitalWrite ( _pin, _high == SQ_TRUE ? HIGH : LOW );
-   return SQ_TRUE;
-}
-
-const char * firmware_version ( void )
+const char * sequanto_automation_version ( void )
 {
    return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
 }
 
+typedef struct _DigitalPin
+{
+   enum {
+      DIGITAL_PIN_INPUT,
+      DIGITAL_PIN_OUTPUT,
+      DIGITAL_PIN_TIMER,
+   } m_type;
+   
+   int m_counter;
+   SQBool m_pin;
+} DigitalPin;
+
+static DigitalPin s_pins[NUMBER_OF_PINS];
+
+static const char DIGITAL_PIN_INPUT_TEXT[] SQ_CONST_VARIABLE = "Input";
+static const char DIGITAL_PIN_OUTPUT_TEXT[] SQ_CONST_VARIABLE = "Output";
+static const char DIGITAL_PIN_TIMER_TEXT[] SQ_CONST_VARIABLE = "Timer";
+static const char DIGITAL_PIN_UNKNOWN_TEXT[] SQ_CONST_VARIABLE = "Unknown";
+
+const char * digital_mode_get ( int _pin )
+{
+   switch ( s_pins[_pin].m_type )
+   {
+   case DIGITAL_PIN_INPUT:
+      return sq_get_constant_string(DIGITAL_PIN_INPUT_TEXT);
+
+   case DIGITAL_PIN_OUTPUT:
+      return sq_get_constant_string(DIGITAL_PIN_OUTPUT_TEXT);
+      
+   case DIGITAL_PIN_TIMER:
+      return sq_get_constant_string(DIGITAL_PIN_TIMER_TEXT);
+      
+   default:
+      return sq_get_constant_string(DIGITAL_PIN_UNKNOWN_TEXT);
+   }
+}
+
+void digital_mode_set ( int _pin, const char * _mode )
+{
+   if ( SQ_CONSTANT_STRCMP ( _mode, DIGITAL_PIN_INPUT_TEXT ) == 0 )
+   {
+      s_pins[_pin].m_type = DIGITAL_PIN_INPUT;
+   }
+   else if ( SQ_CONSTANT_STRCMP ( _mode, DIGITAL_PIN_OUTPUT_TEXT ) == 0 )
+   {
+      s_pins[_pin].m_type = DIGITAL_PIN_OUTPUT;
+   }
+   else if ( SQ_CONSTANT_STRCMP ( _mode, DIGITAL_PIN_TIMER_TEXT ) == 0 )
+   {
+      s_pins[_pin].m_type = DIGITAL_PIN_TIMER;
+   }
+   else
+   {
+      sq_logf ( "Trying to set illegal mode: %s", _mode );
+      s_pins[_pin].m_type = DIGITAL_PIN_OUTPUT;
+      sq_digital_mode_updated ( _pin, digital_mode_get(_pin) );
+   }
+   
+   switch ( s_pins[_pin].m_type )
+   {
+   case DIGITAL_PIN_INPUT:
+      pinMode ( _pin, INPUT );
+      s_pins[_pin].m_pin = digitalRead ( _pin ) == HIGH;
+      sq_digital_pin_updated ( _pin, s_pins[_pin].m_pin );
+      break;
+
+   case DIGITAL_PIN_OUTPUT:
+      pinMode ( _pin, OUTPUT );
+      digitalWrite ( _pin, LOW );
+      break;
+      
+   case DIGITAL_PIN_TIMER:
+      pinMode ( _pin, INPUT );
+      s_pins[_pin].m_counter = 0;
+      s_pins[_pin].m_pin = digitalRead ( _pin ) == HIGH;
+      sq_digital_counter_updated ( _pin, 0 );
+      break;
+   }
+}
+
+int digital_counter_get ( int _pin )
+{
+   return s_pins[_pin].m_counter;
+}
+
+void digital_counter_set ( int _pin, int _counter )
+{
+   s_pins[_pin].m_counter = _counter;
+}
+
+SQBool digital_pin_get ( int _pin )
+{
+   return s_pins[_pin].m_pin;
+}
+
+void digital_pin_set ( int _pin, SQBool _value )
+{
+   if ( s_pins[_pin].m_type == DIGITAL_PIN_OUTPUT )
+   {
+      digitalWrite ( _pin, _value == SQ_TRUE ? HIGH : LOW );
+   }
+   else
+   {
+      sq_logf ( "Trying to set pin %i, which is not an output pin.", _pin );
+   }
+}
 
 int main ( void )
 {
+   SQBool newValue;
    int i;
-   for ( i = 2; i <= 13; i ++ )
+   for ( i = 0; i < NUMBER_OF_PINS; i ++ )
    {
       pinMode ( i, OUTPUT );
+      s_pins[i].m_type = DIGITAL_PIN_OUTPUT;
+      s_pins[i].m_counter = 0;
    }
    
    static SQServer server;
@@ -106,7 +138,39 @@ int main ( void )
    while ( SQ_TRUE )
    {
       sq_server_poll ( &server );
-      draw_display();
+
+      for ( i = 0; i < NUMBER_OF_PINS; i ++ )
+      {
+         switch ( s_pins[i].m_type )
+         {
+         case DIGITAL_PIN_TIMER:
+            newValue = digitalRead ( i ) == HIGH;
+            if ( s_pins[i].m_pin != newValue )
+            {
+               s_pins[i].m_pin = newValue;
+               
+               // If we go from high to low, the change should be counted
+               if ( s_pins[i].m_pin == SQ_FALSE )
+               {
+                  s_pins[i].m_counter += 1;
+               }
+            }
+            break;
+            
+         case DIGITAL_PIN_INPUT:
+            newValue = digitalRead ( i ) == HIGH;
+            if ( s_pins[i].m_pin != newValue )
+            {
+               s_pins[i].m_pin = newValue;
+               
+               sq_digital_pin_updated ( i, newValue );
+            }
+            break;
+            
+         default:
+            break;
+         }
+      }
    }
    
    sq_shutdown ();   

@@ -4,8 +4,10 @@
 #include <sequanto/thread.h>
 #include <sequanto/tree.h>
 #include <cstdlib>
+#include <cstdio>
 
 #include "cxx_example_automation.h"
+#include "config.h"
 
 using namespace std;
 using namespace sequanto::automation;
@@ -160,7 +162,7 @@ int main ( int _argc, char * _argv[] )
 #ifdef _WIN32
       ::_itoa_s ( i, nameBuffer, 10, 16 );
 #else
-      ::itoa ( i, nameBuffer );
+      SNPRINTF_FUNCTION ( nameBuffer, 10, "%i", i );
 #endif
       ListNode * testObjectContainer = new ListNode ( nameBuffer );
 

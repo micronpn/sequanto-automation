@@ -1,6 +1,6 @@
 #include <vector>
 
-#include <QTGui>
+#include <QtGui>
 
 #include <sequanto/automation.h>
 #include <sequanto/thread.h>

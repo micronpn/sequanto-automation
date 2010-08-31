@@ -11,7 +11,7 @@ IF(SQ_CXX)
     QT4_WRAP_CPP(qt_automation_MAINWIN_MOC qt_automation/mainwin.h)
     QT4_WRAP_UI(qt_automation_UIS_H qt_automation/mainwin.ui)
     
-    ADD_EXECUTABLE(qt_automation ${qt_automation_UIS_H} ${qt_automation_MAINWIN_MOC} qt_automation/mainwin.cpp qt_automation/qt_automation.cpp ${CMAKE_BINARY_DIR}/generated/qt_example/qt_automation_automation.c)
+    ADD_EXECUTABLE(qt_automation_example ${qt_automation_UIS_H} ${qt_automation_MAINWIN_MOC} qt_automation/mainwin.cpp qt_automation/qt_automation.cpp ${CMAKE_BINARY_DIR}/generated/qt_example/qt_automation_automation.c)
     
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/qt_example/qt_automation_automation.c
                        MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/server/qt/examples/qt_automation/qt_automation.automation
@@ -25,8 +25,8 @@ IF(SQ_CXX)
     INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated/qt_example)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
     
-    TARGET_LINK_LIBRARIES(qt_automation SequantoAutomation_CXX)
-    TARGET_LINK_LIBRARIES(qt_automation SequantoAutomation_QT)
-    TARGET_LINK_LIBRARIES(qt_automation ${QT_LIBRARIES})
+    TARGET_LINK_LIBRARIES(qt_automation_example SequantoAutomation_CXX)
+    TARGET_LINK_LIBRARIES(qt_automation_example SequantoAutomation_QT)
+    TARGET_LINK_LIBRARIES(qt_automation_example ${QT_LIBRARIES})
   ENDIF(QT4_FOUND)
 ENDIF(SQ_CXX)

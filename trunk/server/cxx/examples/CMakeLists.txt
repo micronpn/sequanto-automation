@@ -15,6 +15,7 @@ IF(SQ_CXX)
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include)
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
   INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated/cxx_example)
+  INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated)
     
   TARGET_LINK_LIBRARIES(cxx_example SequantoAutomation_CXX)
 ENDIF(SQ_CXX)

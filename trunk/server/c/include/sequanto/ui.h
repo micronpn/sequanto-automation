@@ -52,7 +52,9 @@ extern "C"
    extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
 
    const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
-   
+
+   extern const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE;

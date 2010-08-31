@@ -26,6 +26,8 @@ const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE = "Label";
 const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
 const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
 
+const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
+const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
 const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE = "children";
 const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE = "type";
 const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE = "x";

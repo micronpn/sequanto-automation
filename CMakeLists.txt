@@ -40,7 +40,7 @@ ENDIF(STL_SUPPORTED)
 
 SET(SQ_QT4   OFF       CACHE BOOL "Build QT4 wrapper functionality")
 IF(SQ_QT4)
-  INCLUDE(FindQT4)
+  INCLUDE(FindQt4)
   FIND_PACKAGE(Qt4)
 ENDIF(SQ_QT4)
 

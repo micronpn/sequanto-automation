@@ -40,7 +40,7 @@ extern "C"
 #ifdef SQ_DISABLE_AUTOMATION_INTERFACE
 
 #define sq_log(_message) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
-#define sq_logf(_format, ...) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
+#define sq_logf(...) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
 
 #else
    

@@ -86,6 +86,7 @@ typedef struct _SQByteArray
 #endif
 
 const char * sq_get_constant_string ( const char * const _constantString );
+void sq_get_constant_string_copy ( const char * const _constantString, char * _outputBuffer );
 
 #ifdef __cplusplus
 }

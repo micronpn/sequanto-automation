@@ -4,11 +4,16 @@
 
 #include "wiring.h"
 
-#define NUMBER_OF_PINS 12
+/* Skip the first two pins, they are used by the USB port for communication. */
+#define PIN_OFFSET 2
+#define NUMBER_OF_PINS 14
+
+static char buff[10];
 
 const char * sequanto_automation_version ( void )
 {
-   return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
+   sq_get_constant_string_copy ( SQ_STRING_CONSTANT(SVN_REVISION), buff );
+   return buff;
 }
 
 typedef struct _DigitalPin
@@ -23,7 +28,7 @@ typedef struct _DigitalPin
    SQBool m_pin;
 } DigitalPin;
 
-static DigitalPin s_pins[NUMBER_OF_PINS];
+static DigitalPin s_pins[NUMBER_OF_PINS - PIN_OFFSET];
 
 static const char DIGITAL_PIN_INPUT_TEXT[] SQ_CONST_VARIABLE = "Input";
 static const char DIGITAL_PIN_OUTPUT_TEXT[] SQ_CONST_VARIABLE = "Output";
@@ -32,48 +37,55 @@ static const char DIGITAL_PIN_UNKNOWN_TEXT[] SQ_CONST_VARIABLE = "Unknown";
 
 const char * digital_mode_get ( int _pin )
 {
-   switch ( s_pins[_pin].m_type )
+   switch ( s_pins[_pin - PIN_OFFSET].m_type )
    {
    case DIGITAL_PIN_INPUT:
-      return sq_get_constant_string(DIGITAL_PIN_INPUT_TEXT);
-
+      sq_get_constant_string_copy(DIGITAL_PIN_INPUT_TEXT, buff);
+      break;
+      
    case DIGITAL_PIN_OUTPUT:
-      return sq_get_constant_string(DIGITAL_PIN_OUTPUT_TEXT);
+      sq_get_constant_string_copy(DIGITAL_PIN_OUTPUT_TEXT, buff);
+      break;
       
    case DIGITAL_PIN_TIMER:
-      return sq_get_constant_string(DIGITAL_PIN_TIMER_TEXT);
+      sq_get_constant_string_copy(DIGITAL_PIN_TIMER_TEXT, buff);
+      break;
       
    default:
-      return sq_get_constant_string(DIGITAL_PIN_UNKNOWN_TEXT);
+      sq_get_constant_string_copy(DIGITAL_PIN_UNKNOWN_TEXT, buff);
+      break;
    }
+   return buff;
 }
 
 void digital_mode_set ( int _pin, const char * _mode )
 {
    if ( SQ_CONSTANT_STRCMP ( _mode, DIGITAL_PIN_INPUT_TEXT ) == 0 )
    {
-      s_pins[_pin].m_type = DIGITAL_PIN_INPUT;
+      s_pins[_pin - PIN_OFFSET].m_type = DIGITAL_PIN_INPUT;
    }
    else if ( SQ_CONSTANT_STRCMP ( _mode, DIGITAL_PIN_OUTPUT_TEXT ) == 0 )
    {
-      s_pins[_pin].m_type = DIGITAL_PIN_OUTPUT;
+      s_pins[_pin - PIN_OFFSET].m_type = DIGITAL_PIN_OUTPUT;
    }
    else if ( SQ_CONSTANT_STRCMP ( _mode, DIGITAL_PIN_TIMER_TEXT ) == 0 )
    {
-      s_pins[_pin].m_type = DIGITAL_PIN_TIMER;
+      s_pins[_pin - PIN_OFFSET].m_type = DIGITAL_PIN_TIMER;
    }
    else
    {
       sq_logf ( "Trying to set illegal mode: %s", _mode );
-      s_pins[_pin].m_type = DIGITAL_PIN_OUTPUT;
+      s_pins[_pin - PIN_OFFSET].m_type = DIGITAL_PIN_OUTPUT;
       sq_digital_mode_updated ( _pin, digital_mode_get(_pin) );
    }
    
-   switch ( s_pins[_pin].m_type )
+   switch ( s_pins[_pin - PIN_OFFSET].m_type )
    {
    case DIGITAL_PIN_INPUT:
       pinMode ( _pin, INPUT );
-      s_pins[_pin].m_pin = digitalRead ( _pin ) == HIGH;
+      /* Set pull-up resistor. */
+      digitalWrite ( _pin, HIGH );
+      s_pins[_pin - PIN_OFFSET].m_pin = digitalRead ( _pin ) == HIGH;
       sq_digital_pin_updated ( _pin, s_pins[_pin].m_pin );
       break;
 
@@ -84,8 +96,10 @@ void digital_mode_set ( int _pin, const char * _mode )
       
    case DIGITAL_PIN_TIMER:
       pinMode ( _pin, INPUT );
-      s_pins[_pin].m_counter = 0;
-      s_pins[_pin].m_pin = digitalRead ( _pin ) == HIGH;
+      /* Set pull-up resistor. */
+      digitalWrite ( _pin, HIGH );
+      s_pins[_pin - PIN_OFFSET].m_counter = 0;
+      s_pins[_pin - PIN_OFFSET].m_pin = digitalRead ( _pin ) == HIGH;
       sq_digital_counter_updated ( _pin, 0 );
       break;
    }
@@ -93,22 +107,22 @@ void digital_mode_set ( int _pin, const char * _mode )
 
 int digital_counter_get ( int _pin )
 {
-   return s_pins[_pin].m_counter;
+   return s_pins[_pin - PIN_OFFSET].m_counter;
 }
 
 void digital_counter_set ( int _pin, int _counter )
 {
-   s_pins[_pin].m_counter = _counter;
+   s_pins[_pin - PIN_OFFSET].m_counter = _counter;
 }
 
 SQBool digital_pin_get ( int _pin )
 {
-   return s_pins[_pin].m_pin;
+   return s_pins[_pin - PIN_OFFSET].m_pin;
 }
 
 void digital_pin_set ( int _pin, SQBool _value )
 {
-   if ( s_pins[_pin].m_type == DIGITAL_PIN_OUTPUT )
+   if ( s_pins[_pin - PIN_OFFSET].m_type == DIGITAL_PIN_OUTPUT )
    {
       digitalWrite ( _pin, _value == SQ_TRUE ? HIGH : LOW );
    }
@@ -122,11 +136,11 @@ int main ( void )
 {
    SQBool newValue;
    int i;
-   for ( i = 0; i < NUMBER_OF_PINS; i ++ )
+   for ( i = PIN_OFFSET; i < NUMBER_OF_PINS; i ++ )
    {
       pinMode ( i, OUTPUT );
-      s_pins[i].m_type = DIGITAL_PIN_OUTPUT;
-      s_pins[i].m_counter = 0;
+      s_pins[i - PIN_OFFSET].m_type = DIGITAL_PIN_OUTPUT;
+      s_pins[i - PIN_OFFSET].m_counter = 0;
    }
    
    static SQServer server;
@@ -139,29 +153,29 @@ int main ( void )
    {
       sq_server_poll ( &server );
 
-      for ( i = 0; i < NUMBER_OF_PINS; i ++ )
+      for ( i = PIN_OFFSET; i < NUMBER_OF_PINS; i ++ )
       {
-         switch ( s_pins[i].m_type )
+         switch ( s_pins[i - PIN_OFFSET].m_type )
          {
          case DIGITAL_PIN_TIMER:
             newValue = digitalRead ( i ) == HIGH;
-            if ( s_pins[i].m_pin != newValue )
+            if ( s_pins[i - PIN_OFFSET].m_pin != newValue )
             {
-               s_pins[i].m_pin = newValue;
+               s_pins[i - PIN_OFFSET].m_pin = newValue;
                
-               // If we go from high to low, the change should be counted
-               if ( s_pins[i].m_pin == SQ_FALSE )
+               /* If we go from high to low, the change should be counted. */
+               if ( s_pins[i - PIN_OFFSET].m_pin == SQ_FALSE )
                {
-                  s_pins[i].m_counter += 1;
+                  s_pins[i - PIN_OFFSET].m_counter += 1;
                }
             }
             break;
             
          case DIGITAL_PIN_INPUT:
             newValue = digitalRead ( i ) == HIGH;
-            if ( s_pins[i].m_pin != newValue )
+            if ( s_pins[i - PIN_OFFSET].m_pin != newValue )
             {
-               s_pins[i].m_pin = newValue;
+               s_pins[i - PIN_OFFSET].m_pin = newValue;
                
                sq_digital_pin_updated ( i, newValue );
             }

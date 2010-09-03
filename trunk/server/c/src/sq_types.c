@@ -50,6 +50,11 @@ const char * sq_get_constant_string ( const char * const _constantString )
    return strcpy_P ( buffer, _constantString );
 }
 
+void sq_get_constant_string_copy ( const char * const _constantString, char * _output )
+{
+   return strcpy_P ( _output, _constantString );
+}
+
 #else
 
 const char * sq_get_constant_string ( const char * const _constantString )

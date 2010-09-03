@@ -1,0 +1,10 @@
+name arduino_io
+import main.c
+property /sequanto_automation_version sequanto_automation_version
+property /digital/(2..13)/mode digital_mode_get digital_mode_set
+property /digital/(2..13)/counter digital_counter_get digital_counter_set
+property /digital/(2..13)/pin digital_pin_get digital_pin_set
+
+# property /digital/(0..14)/mode digital_mode_get digital_mode_set
+# property /digital/(0..14)/counter digital_counter_get digital_counter_set
+# property /digital/(0..14)/pin digital_pin_get digital_pin_set

@@ -51,3 +51,4 @@ IF(SQ_ARDUINO)
 ENDIF(SQ_ARDUINO)
 
 ADD_SUBDIRECTORY(labview_automation)
+ADD_SUBDIRECTORY(arduino_io)

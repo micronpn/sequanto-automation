@@ -9,6 +9,17 @@ Node::Node ( const std::string & _name )
    : m_parent ( NULL ),
      m_name ( _name )
 {
+   if ( _name.empty() )
+   {
+      throw runtime_error ( "SequantoAutomation_CXX: Node name can not be empty." );
+   }
+   for ( string::const_iterator it = _name.begin(); it != _name.end(); it++ )
+   {
+      if ( !::isalnum(*it) && *it != '_' && *it != '-' )
+      {
+         throw runtime_error ( "SequantoAutomation_CXX: Node name contains illegal characters, only alpha-numeric, dash and underscore are valid characters." );
+      }
+   }
 }
 
 Node * Node::GetParent () const

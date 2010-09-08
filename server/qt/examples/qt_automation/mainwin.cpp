@@ -1,6 +1,7 @@
 #include "mainwin.h"
 
 #include <iostream>
+#include <QtGui>
 
 MainWin::MainWin ( QWidget * _parent )
    : QMainWindow ( _parent )
@@ -11,6 +12,16 @@ MainWin::MainWin ( QWidget * _parent )
 void MainWin::on_exitButton_clicked()
 {
    this->close();
+}
+
+void MainWin::on_m_loadFileButton_clicked()
+{
+   QMessageBox * messageBox = new QMessageBox( QMessageBox::Icon::Information, "About to open file", "I am not going to ask you which file to open", QMessageBox::StandardButton::Ok );
+   messageBox->setModal ( true );
+   messageBox->show();
+   messageBox->deleteLater();
+
+   QString filename = QFileDialog::getOpenFileName( this, "Open a file..." );
 }
 
 void MainWin::on_actionExit_activated()

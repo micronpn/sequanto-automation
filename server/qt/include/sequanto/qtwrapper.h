@@ -34,9 +34,27 @@ namespace sequanto
          QtWrapper ();
          virtual ~QtWrapper ();
          
+         friend class QtApplicationAutomationEventFilter;
+
+         static void UpdateWindows ( ListNode * _windows );
+         
       public:
          static void Wrap ( ListNode * _root, QObject * _object );
+         /**
+          * Wrap the QWidget and all its children, normally you should
+          * use WrapApplication instead.
+          * 
+          * @see WrapApplication
+          */
          static void WrapUi ( ListNode * _root, QWidget * _widget );
+         /**
+          * Wrap the QApplication instance in this application. This
+          * is the preferred way of wrapping a QT application.
+          * 
+          * Only one QApplication exists in a single application, 
+          */
+         static void WrapApplication ( ListNode * _root );
+         
          static std::string ToString ( const QString & _value );
       };
    }

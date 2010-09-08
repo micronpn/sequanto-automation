@@ -2,6 +2,8 @@
 #include <sequanto/ui.h>
 #include <cassert>
 
+#include <sequanto/qtwrapper.h>
+
 using namespace sequanto::automation;
 
 const int QtAutomationMoveEvent::ID = QEvent::registerEventType();
@@ -11,7 +13,7 @@ QtAutomationMoveEvent::QtAutomationMoveEvent ( int _x, int _y )
      m_position(_x, _y)
 {
 }
-
+ 
 const QPoint & QtAutomationMoveEvent::position()
 {
    return m_position;
@@ -37,6 +39,7 @@ const QSize & QtAutomationResizeEvent::size()
 QtAutomationResizeEvent::~QtAutomationResizeEvent()
 {
 }
+
 
 QtAutomationEventFilter::QtAutomationEventFilter ( ListNode * _node, QObject * _parent )
       : QObject(_parent),
@@ -86,5 +89,57 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
 }
 
 QtAutomationEventFilter::~QtAutomationEventFilter ()
+{
+}
+
+QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, PropertyNode * _activeWindowNode, QObject * _parent )
+      : QObject(_parent),
+        m_windowsNode ( _windowsNode ),
+        m_activeWindowNode ( _activeWindowNode )
+{
+}
+
+bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
+{
+   switch ( _event->type() )
+   {
+   case QEvent::WindowActivate:
+      {
+         SQValue value;
+         sq_value_init ( &value );
+         m_activeWindowNode->HandleGet ( value );
+         m_activeWindowNode->SendUpdate ( value );
+         sq_value_free ( &value );
+      }
+      break;
+
+   case QEvent::Create:
+      if ( _object->isWidgetType() )
+      {
+         QWidget * widget = qobject_cast<QWidget*> ( _object );
+         if ( widget->isWindow() )
+         {
+            QtWrapper::UpdateWindows ( m_windowsNode );
+            m_windowsNode->SendUpdate();
+         }
+      }
+      break;
+
+   case QEvent::Destroy:
+      if ( _object->isWidgetType() )
+      {
+         QWidget * widget = qobject_cast<QWidget*> ( _object );
+         if ( widget->isWindow() )
+         {
+            QtWrapper::UpdateWindows ( m_windowsNode );
+            m_windowsNode->SendUpdate();
+         }
+      }
+      break;
+   }
+   return QObject::eventFilter(_object, _event );
+}
+
+QtApplicationAutomationEventFilter::~QtApplicationAutomationEventFilter ()
 {
 }

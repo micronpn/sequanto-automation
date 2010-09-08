@@ -88,6 +88,11 @@ extern "C"
    {
       return qt_tree.HandleCall ( _stream, _objectPath, _values, _numberOfValues );
    }
+
+   const char * firmware_version ()
+   {
+      return SVN_REVISION;
+   }
 }
 
 int main ( int _argc, char * _argv[] )
@@ -105,11 +110,12 @@ int main ( int _argc, char * _argv[] )
 
    ListNode qt_root ( "qt" );
    qt_tree.SetRoot ( &qt_root );
+
+   QtWrapper::WrapApplication ( &ui_root );
    
    MainWin mainWin;
    mainWin.show();
 
-   QtWrapper::WrapUi ( &ui_root, &mainWin );
    QtWrapper::Wrap ( &qt_root, &mainWin );
    
    //mainWin.findChild<QPushButton*>("exitButton")->connect ( );

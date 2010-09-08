@@ -2,3 +2,5 @@ name qt_automation
 import qt_automation.cpp
 branch /ui
 branch /qt
+function /firmware_version firmware_version
+property /firmware_version_property firmware_version

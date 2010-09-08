@@ -402,6 +402,94 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    }
 }
 
+class QtActiveWindowProperty : public PropertyNode
+{
+public:
+   QtActiveWindowProperty ()
+      : PropertyNode ( SQ_UI_NODE_ACTIVE_WINDOW )
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      return this->GetReadOnlyStringNodeInfo();
+   }
+
+   virtual void HandleGet ( SQValue & _outputValue )
+   {
+      static std::string NO_ACTIVE_WINDOW ( "" );
+
+      QWidget * activeWindow = QApplication::activeWindow();
+      if ( activeWindow == NULL )
+      {
+         sq_value_string_copy ( &_outputValue, NO_ACTIVE_WINDOW.c_str() );
+      }
+      else
+      {
+         std::string value ( QtWrapper::ToString(activeWindow->objectName()) );
+         sq_value_string_copy ( &_outputValue, value.c_str() );
+      }
+   }
+
+   virtual void HandleSet ( const SQValue * const _value )
+   {
+      throw std::exception ( "Can not set the active window" );
+   }
+
+};
+
+void QtWrapper::WrapApplication ( ListNode * _root )
+{
+   ListNode * windows = new ListNode ( SQ_UI_NODE_WINDOWS );
+   _root->AddChild ( windows );
+   QtActiveWindowProperty * activeWindow = new QtActiveWindowProperty();
+   _root->AddChild ( activeWindow );
+
+   UpdateWindows ( windows );
+
+   QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
+}
+
+void QtWrapper::UpdateWindows( ListNode * _windows )
+{
+   foreach ( QWidget * widget, QApplication::topLevelWidgets() )
+   {
+      if ( !widget->objectName().isEmpty() )
+      {
+         if ( !_windows->HasChild ( ToString(widget->objectName()) ))
+         {
+            ListNode * newWindow = new ListNode ( ToString(widget->objectName()) );
+            WrapUi ( newWindow, widget );
+            _windows->AddChild ( newWindow );
+         }
+      }
+   }
+   
+   ListNode::Iterator * it = _windows->ListChildren();
+   std::vector<std::string> toBeRemoved;
+   for ( ; it->HasNext(); it->Next() )
+   {
+      bool found = false;
+      foreach ( QWidget * widget, QApplication::topLevelWidgets() )
+      {
+         if ( ToString(widget->objectName()) == it->GetCurrent()->GetName() )
+         {
+            found = true;
+            break;
+         }
+      }
+      if ( !found )
+      {
+         toBeRemoved.push_back ( it->GetCurrent()->GetName() );
+      }
+   }
+   delete it;
+   for ( std::vector<std::string>::const_iterator removeIt = toBeRemoved.begin(); removeIt != toBeRemoved.end(); removeIt++ )
+   {
+      _windows->RemoveChild ( *removeIt );
+   }
+}
+
 QtWrapper::~QtWrapper()
 {
 }

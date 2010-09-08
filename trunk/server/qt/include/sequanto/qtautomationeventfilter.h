@@ -72,6 +72,23 @@ namespace sequanto
          
          virtual ~QtAutomationEventFilter ();
       };
+
+      class QtApplicationAutomationEventFilter : public QObject
+      {
+         Q_OBJECT;
+
+      private:
+         ListNode * m_windowsNode;
+         PropertyNode * m_activeWindowNode;
+
+      public:
+         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, PropertyNode * _activeWindowNode, QObject * _parent );
+
+         virtual bool eventFilter ( QObject * _object, QEvent * _event );
+         
+         virtual ~QtApplicationAutomationEventFilter ();
+      };
+
    }
 }
 

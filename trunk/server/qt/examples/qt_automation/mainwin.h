@@ -16,6 +16,7 @@ public:
 
 private slots:
    void on_exitButton_clicked();
+   void on_m_loadFileButton_clicked();
    void on_actionExit_activated();
    void on_actionAdd_some_items_activated();
    void on_listView_currentItemChanged(  QListWidgetItem * _current, QListWidgetItem * _previous );

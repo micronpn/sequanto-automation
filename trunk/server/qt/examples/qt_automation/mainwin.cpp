@@ -16,7 +16,7 @@ void MainWin::on_exitButton_clicked()
 
 void MainWin::on_m_loadFileButton_clicked()
 {
-   QMessageBox * messageBox = new QMessageBox( QMessageBox::Icon::Information, "About to open file", "I am not going to ask you which file to open", QMessageBox::StandardButton::Ok );
+   QMessageBox * messageBox = new QMessageBox( QMessageBox::Information, "About to open file", "I am not going to ask you which file to open", QMessageBox::Ok );
    messageBox->setModal ( true );
    messageBox->show();
    messageBox->deleteLater();

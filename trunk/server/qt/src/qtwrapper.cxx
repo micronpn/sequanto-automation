@@ -3,6 +3,7 @@
 #include <sequanto/qtautomationeventfilter.h>
 #include <cassert>
 #include <vector>
+#include <stdexcept>
 
 using namespace sequanto::automation;
 
@@ -433,7 +434,7 @@ public:
 
    virtual void HandleSet ( const SQValue * const _value )
    {
-      throw std::exception ( "Can not set the active window" );
+      throw std::runtime_error ( "Can not set the active window" );
    }
 
 };

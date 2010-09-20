@@ -59,6 +59,11 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
    case QEvent::Move:
       dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_X) )->SendUpdate();
       dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_Y) )->SendUpdate();
+      if ( qobject_cast<QMainWindow*>(_object) != NULL || qobject_cast<QDialog*>(_object) != NULL )
+      {
+	dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WINDOW_SCREEN_X) )->SendUpdate();
+	dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y) )->SendUpdate();
+      }
       break;
       
    case QEvent::Resize:

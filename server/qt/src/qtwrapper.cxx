@@ -169,6 +169,75 @@ public:
    }
 };
 
+
+class QtScreenXProperty : public IntegerPropertyNode
+{
+private:
+   QWidget * m_object;
+
+public:
+   QtScreenXProperty ( QWidget * _object )
+      : IntegerPropertyNode ( SQ_UI_WINDOW_SCREEN_X ),
+        m_object ( _object )
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      return this->GetReadOnlyIntegerNodeInfo();
+   }
+
+   virtual int GetValue ()
+   {
+      QPoint pos ( 0, 0 ); //= m_object->pos();
+      QPoint screenPosition = m_object->mapToGlobal(pos);
+      return screenPosition.x();
+   }
+
+   virtual void SetValue ( int _newValue )
+   {
+      throw std::runtime_error ( "Can not set the screenX value." );
+   }
+
+   virtual ~QtScreenXProperty()
+   {
+   }
+};
+
+class QtScreenYProperty : public IntegerPropertyNode
+{
+private:
+   QWidget * m_object;
+
+public:
+   QtScreenYProperty ( QWidget * _object )
+      : IntegerPropertyNode ( SQ_UI_WINDOW_SCREEN_Y ),
+        m_object ( _object )
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      return this->GetReadOnlyIntegerNodeInfo();
+   }
+
+   virtual int GetValue ()
+   {
+      QPoint pos ( 0, 0 ); //= m_object->pos();
+      QPoint screenPosition = m_object->mapToGlobal(pos);
+      return screenPosition.y();
+   }
+
+   virtual void SetValue ( int _newValue )
+   {
+      throw std::runtime_error ( "Can not set the screenY value." );
+   }
+
+   virtual ~QtScreenYProperty()
+   {
+   }
+};
+
 std::string QtWrapper::ToString ( const QString & _string )
 {
    QByteArray value ( _string.toUtf8() );
@@ -337,6 +406,8 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
+      _root->AddChild ( new QtScreenXProperty( _widget ) );
+      _root->AddChild ( new QtScreenYProperty( _widget ) );
    }
    else if ( _widget->inherits ( QMenuBar::staticMetaObject.className() ) )
    {
@@ -436,7 +507,6 @@ public:
    {
       throw std::runtime_error ( "Can not set the active window" );
    }
-
 };
 
 void QtWrapper::WrapApplication ( ListNode * _root )

@@ -2,6 +2,8 @@ name test_server
 import test_server.c
 import type_tests.c
 
+typedef signed short bool_t boolean
+
 property /objects/julemand/test get_julemand set_julemand
 function /function/multiply multiply
 function /function/close close
@@ -52,6 +54,10 @@ function /type_tests/functions/get_signed_char type_test_signed_char_get
 function /type_tests/functions/set_signed_char type_test_signed_char_set
 property /type_tests/properties/signed_char type_test_signed_char_get type_test_signed_char_set
 
+# function /type_tests/functions/get_int64_t type_test_int64_t_get
+# function /type_tests/functions/set_int64_t type_test_int64_t_set
+# property /type_tests/properties/int64_t type_test_int64_t_get type_test_int64_t_set
+
 function /type_tests/functions/get_char type_test_char_get
 function /type_tests/functions/set_char type_test_char_set
 property /type_tests/properties/char type_test_char_get type_test_char_set
@@ -71,6 +77,10 @@ property /type_tests/properties/double type_test_double_get type_test_double_set
 function /type_tests/functions/get_bool type_test_bool_get
 function /type_tests/functions/set_bool type_test_bool_set
 property /type_tests/properties/bool type_test_bool_get type_test_bool_set
+
+function /type_tests/functions/get_bool_t type_test_bool_t_get
+function /type_tests/functions/set_bool_t type_test_bool_t_set
+property /type_tests/properties/bool_t type_test_bool_t_get type_test_bool_t_set
 
 # Test the new smart property and function
 property /digital_output/(0..7)/value get_digital_output set_digital_output

@@ -276,6 +276,8 @@ class Branch ( object ):
         self.m_objectPath = _objectPath
 
 class AutomationFile ( object ):
+    AUTOMATION_TYPES = ['boolean', 'integer', 'float', 'string']
+    
     def setErrorReportingFilename ( self, _filename ):
         self.m_errorReportingFilename = _filename
     
@@ -287,6 +289,8 @@ class AutomationFile ( object ):
         self.m_monitors = []
         self.m_branches = []
         self.m_name = None
+        self.m_typedefs = {}
+        self.m_typedefs_c_name = {}
         
         self.m_errorReportingFilename = '<unknown>'
         
@@ -342,6 +346,15 @@ class AutomationFile ( object ):
                 objectPath = rest
                 self.m_branches.append ( (lineNumber, objectPath) )
                 
+            elif command == 'typedef':
+                c_type, c_name, automation_type = rest.rsplit(' ', 2)
+                
+                if automation_type in self.AUTOMATION_TYPES:
+                    self.m_typedefs_c_name[c_type] = c_name
+                    self.m_typedefs[c_name] = automation_type
+                else:
+                    self.reportError ( lineNumber, '%s is not a valid automation type (should be one of %s)' % (automation_type, ', '.join(self.AUTOMATION_TYPES)) )
+                
             else:
                 self.reportError ( lineNumber, 'Unknown command "%s"' % command )
             
@@ -367,6 +380,8 @@ class AutomationFile ( object ):
             return 'void'
         elif type == 'SQByteArray *':
             return 'byte_array'
+        elif type in self.m_typedefs:
+            return self.m_typedefs[type]
         else:
             raise Exception('Could not resolve the C-type "%s" to an automation type.' % type)
     
@@ -879,6 +894,9 @@ class AutomationFile ( object ):
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( 'extern "C" {\n' )
         fp.write ( '#endif\n' )
+        for c_type, c_name in self.m_typedefs_c_name.items():
+            fp.write ( 'typedef %s %s;\n' % (c_type, c_name) )
+        
         fp.write ( '#ifdef SQ_DISABLE_AUTOMATION_INTERFACE\n' )
         
         #disabledText = '/* Disabled because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */'

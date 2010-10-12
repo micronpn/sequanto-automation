@@ -1,5 +1,8 @@
 #include <sequanto/types.h>
 #include <sequanto/log.h>
+#include "config.h"
+
+typedef signed short bool_t;
 
 static signed long signedLongValue;
 static long longValue;
@@ -13,9 +16,13 @@ static unsigned short unsignedShortValue;
 static signed char signedCharValue;
 static char charValue;
 static unsigned char unsignedCharValue;
+#ifdef HAVE_STDINT_H
+static int64_t int64_tValue;
+#endif
 static float floatValue;
 static double doubleValue;
 static SQBool boolValue;
+static bool_t bool_tValue;
 
 #include "test_server_automation.h"
 
@@ -36,7 +43,8 @@ void type_test_reset ( void )
    floatValue = 0;
    doubleValue = 0;
    boolValue = SQ_FALSE;
-
+   bool_tValue = 0;
+   
    sq_type_tests_properties_signed_long_updated ( signedLongValue );
    sq_type_tests_properties_long_updated ( longValue );
    sq_type_tests_properties_unsigned_long_updated ( unsignedLongValue );
@@ -52,6 +60,7 @@ void type_test_reset ( void )
    sq_type_tests_properties_float_updated ( floatValue );
    sq_type_tests_properties_double_updated ( doubleValue );
    sq_type_tests_properties_bool_updated ( boolValue );
+   sq_type_tests_properties_bool_t_updated ( bool_tValue );
 }
 
 signed long type_test_signed_long_get ( void )
@@ -212,6 +221,22 @@ void type_test_unsigned_char_set ( unsigned char _value )
    sq_type_tests_properties_unsigned_char_updated ( unsignedCharValue );
 }
 
+#ifdef HAVE_STDINT_H
+int64_t type_test_int64_t_get ( void )
+{
+   sq_log_updated ( int64_tValue, "The value of int64_t was queries" );
+   sq_logf ( "Returning value of signed long: %i", int64_tValue );
+   return int64_tValue;
+}
+
+void type_test_int64_t_set ( int64_t _value )
+{
+   sq_logf ( "Setting value of int64_t value to %i (was %i)", _value, int64_tValue );
+   int64_tValue = _value;
+   //sq_type_tests_properties_int64_t_updated ( int64_tValue );
+}
+#endif
+
 float type_test_float_get ( void )
 {
    sq_logf ( "Returning value of float: %f", floatValue );
@@ -249,4 +274,17 @@ void type_test_bool_set ( SQBool _value )
    sq_logf ( "Setting value of bool value to %b (was %b)", _value, boolValue );
    boolValue = _value;
    sq_type_tests_properties_bool_updated ( boolValue );
+}
+
+bool_t type_test_bool_t_get ( void )
+{
+   sq_logf ( "Returning value of bool_t: %b", bool_tValue );
+   return bool_tValue;
+}
+
+void type_test_bool_t_set ( bool_t _value )
+{
+   sq_logf ( "Setting value of bool_t value to %b (was %b)", _value, bool_tValue );
+   bool_tValue = _value;
+   sq_type_tests_properties_bool_updated ( bool_tValue );
 }

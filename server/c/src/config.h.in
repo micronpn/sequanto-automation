@@ -15,6 +15,7 @@
 
 #cmakedefine HAVE_STDLIB_H
 #cmakedefine HAVE_STDIO_H
+#cmakedefine HAVE_STDINT_H
 #cmakedefine HAVE_SNPRINTF
 #cmakedefine HAVE_UNDERSCORE_SNPRINTF
 #cmakedefine HAVE_SNPRINTF_S

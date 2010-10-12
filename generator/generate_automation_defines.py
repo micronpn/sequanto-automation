@@ -354,7 +354,8 @@ class AutomationFile ( object ):
         print '%s (%i) : error: %s' % (self.m_errorReportingFilename, _lineNumber, _text)
         
     def getAutomationType ( self, type ):
-        if type in ['unsigned long', 'long', 'signed long', 'unsigned int', 'int', 'signed int', 'unsigned short', 'short', 'signed short', 'unsigned char', 'char', 'signed char']:
+        if type in ['unsigned long', 'long', 'signed long', 'unsigned int', 'int', 'signed int', 'unsigned short', 'short', 'signed short', 'unsigned char', 'char', 'signed char',
+                    'int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int32_t', 'uint32_t', 'int64_t', 'uint64_t']:
             return 'integer'
         elif type in ['char *', 'char * const', 'const char *', 'const char * const', 'SQStringOut', 'SQStringOut *']:
             return 'string'
@@ -527,6 +528,9 @@ class AutomationFile ( object ):
         fp.write ( ' */\n' )
         fp.write ( '\n' )
         fp.write ( '#include <string.h>\n' )
+        fp.write ( '#ifdef HAVE_STDINT_H\n' )
+        fp.write ( '#include <stdint.h>\n' )
+        fp.write ( '#endif\n' )
         fp.write ( '#include <sequanto/types.h>\n' )
         fp.write ( '#include <sequanto/stream.h>\n' )
         fp.write ( '#include <sequanto/value.h>\n' )

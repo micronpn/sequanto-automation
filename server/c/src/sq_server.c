@@ -35,6 +35,8 @@ void sq_server_init ( SQServer * _server, int _portNumber )
    sq_stream_set_data_received_handler ( _server->m_stream, sq_server_handle_stream_data_received, _server );
    
    server_instance = _server;
+   
+   sq_parser_init ( &_server->m_parser );
 }
 
 SQServer * sq_server_get_instance ( void )
@@ -94,4 +96,3 @@ SQStream * client;
    }
 }
 */
-

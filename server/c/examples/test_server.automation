@@ -2,7 +2,7 @@ name test_server
 import test_server.c
 import type_tests.c
 
-typedef signed short bool_t boolean
+typedef signed short bool_t
 
 property /objects/julemand/test get_julemand set_julemand
 function /function/multiply multiply

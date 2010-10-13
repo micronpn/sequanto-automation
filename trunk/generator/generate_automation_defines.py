@@ -222,7 +222,7 @@ class Monitor ( SmartObject ):
     
     @property
     def parameterString ( self ):
-        return ', '.join ( ['%s _value%i' % (type, num) for num, type in enumerate(self.types)] )
+        return ', '.join ( ['%s _value%i' % (self.m_automationFile.getRecognizedCType(type), num) for num, type in enumerate(self.types)] )
     
     def __init__ ( self, _automationFile, _index, _objectPath, _types, _smartObjectPath = None, _firstSmartObjectPath = False, _smartValues = None ):
         super ( Monitor, self ).__init__ ( _automationFile, _index, _objectPath, _smartObjectPath, _firstSmartObjectPath, _smartValues )
@@ -347,13 +347,13 @@ class AutomationFile ( object ):
                 self.m_branches.append ( (lineNumber, objectPath) )
                 
             elif command == 'typedef':
-                c_type, c_name, automation_type = rest.rsplit(' ', 2)
+                c_type, c_name = rest.rsplit(' ', 1)
                 
-                if automation_type in self.AUTOMATION_TYPES:
-                    self.m_typedefs_c_name[c_type] = c_name
-                    self.m_typedefs[c_name] = automation_type
-                else:
-                    self.reportError ( lineNumber, '%s is not a valid automation type (should be one of %s)' % (automation_type, ', '.join(self.AUTOMATION_TYPES)) )
+                try:
+                    self.m_typedefs[c_name] = self.getAutomationType(c_type)
+                    self.m_typedefs_c_name[c_name] = c_type
+                except:
+                    self.reportError ( lineNumber, '%s is not a recognized C-type' % (c_type) )
                 
             else:
                 self.reportError ( lineNumber, 'Unknown command "%s"' % command )
@@ -366,6 +366,20 @@ class AutomationFile ( object ):
     def reportError ( self, _lineNumber, _text ):
         print '%s (%i) : error: %s' % (self.m_errorReportingFilename, _lineNumber, _text)
         
+    def getRecognizedCType ( self, type ):
+        if type in ['unsigned long', 'long', 'signed long', 'unsigned int', 'int', 'signed int', 'unsigned short', 'short', 'signed short', 'unsigned char', 'char', 'signed char',
+                    'int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int32_t', 'uint32_t', 'int64_t', 'uint64_t',
+                    'char *', 'char * const', 'const char *', 'const char * const', 'SQStringOut', 'SQStringOut *',
+                    'float', 'double',
+                    'bool', 'SQBool',
+                    'void',
+                    'SQByteArray *']:
+            return type
+        elif type in self.m_typedefs_c_name:
+            return self.getRecognizedCType(self.m_typedefs_c_name[type])
+        else:
+            raise Exception('Could not resolve the C-type "%s" to a recognized C type.' % type)
+    
     def getAutomationType ( self, type ):
         if type in ['unsigned long', 'long', 'signed long', 'unsigned int', 'int', 'signed int', 'unsigned short', 'short', 'signed short', 'unsigned char', 'char', 'signed char',
                     'int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int32_t', 'uint32_t', 'int64_t', 'uint64_t']:
@@ -622,9 +636,9 @@ class AutomationFile ( object ):
             
             if property.writeUpdateFunction:
                 if property.smart:
-                    fp.write ( 'void %s ( %s, %s _value )\n' % (property.updateFunctionName, property.additionalSmartParameters, property.type) )
+                    fp.write ( 'void %s ( %s, %s _value )\n' % (property.updateFunctionName, property.additionalSmartParameters, self.getRecognizedCType(property.type)) )
                 else:
-                    fp.write ( 'void %s ( %s _value )\n' % (property.updateFunctionName, property.type) )
+                    fp.write ( 'void %s ( %s _value )\n' % (property.updateFunctionName, self.getRecognizedCType(property.type)) )
                 
                 fp.write ( '{\n' )
                 fp.write ( '   SQStream * stream = NULL;\n' )
@@ -665,17 +679,17 @@ class AutomationFile ( object ):
             
             if property.smart:
                 if property.firstSmartObjectPath:
-                    fp.write ( '%s %s ( %s );\n' % (property.type, property.getFunction.name, property.additionalSmartParameters) )
+                    fp.write ( '%s %s ( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, property.additionalSmartParameters) )
             else:
-                fp.write ( '%s %s ( void );\n' % (property.type, property.getFunction.name) )
+                fp.write ( '%s %s ( void );\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
             
             fp.write ( 'void sq_generated_property_%s%s ( SQStream * _stream )\n' % (property.getFunction.name, property.additionalSmartName) )
             fp.write ( '{\n' )
             if property.smart:
-                fp.write ( '   %s value = %s( %s );\n' % (property.type, property.getFunction.name, ', '.join(property.smartValues)) )
+                fp.write ( '   %s value = %s( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, ', '.join(property.smartValues)) )
                 
             else:
-                fp.write ( '   %s value = %s();\n' % (property.type, property.getFunction.name) )
+                fp.write ( '   %s value = %s();\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
             
 
             fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
@@ -692,7 +706,7 @@ class AutomationFile ( object ):
             fp.write ( '\n' )
             
             if property.setFunction is not None:
-                fp.write ( 'void %s ( %s );\n' % (property.setFunction.name, ', '.join(['%s %s' % (parameter.type, parameter.name) for parameter in property.setFunction.parameters])) )
+                fp.write ( 'void %s ( %s );\n' % (property.setFunction.name, ', '.join(['%s %s' % (self.getRecognizedCType(parameter.type), parameter.name) for parameter in property.setFunction.parameters])) )
                 fp.write ( 'void sq_generated_property_%s%s ( const SQValue * const _value )\n' % (property.setFunction.name, property.additionalSmartName) )
                 fp.write ( '{\n' )
                 if property.smart:
@@ -737,24 +751,25 @@ class AutomationFile ( object ):
         for function in self.m_foundFunctions:
             if not function.smart or function.firstSmartObjectPath:
                 if len(function.parameters) == 0:
-                    fp.write ( '%s %s ( void );\n' % (function.returnType, function.name) )
+                    fp.write ( '%s %s ( void );\n' % (self.getRecognizedCType(function.returnType), function.name) )
                 else:
-                    fp.write ( '%s %s ( %s );\n' % (function.returnType, function.name, ', '.join(['%s %s' % (parm.type, parm.name) for parm in function.parameters])) )
+                    parms = ', '.join(['%s %s' % (self.getRecognizedCType(parm.type), parm.name) for parm in function.parameters])
+                    fp.write ( '%s %s ( %s );\n' % (self.getRecognizedCType(function.returnType), function.name, parms) )
             
             fp.write ( 'void sq_generated_function_%s%s ( SQStream * _stream, const SQValue * _inputValues )\n' % (function.name, function.additionalSmartName) )
             fp.write ( '{\n' )
             for index, parameter in enumerate(function.parameters):
                 if index < function.numSmartParameters:
-                    fp.write ( '   %s %s_parameter = %s;\n' % (parameter.type, parameter.name, function.smartValues[index]) )
+                    fp.write ( '   %s %s_parameter = %s;\n' % (self.getRecognizedCType(parameter.type), parameter.name, function.smartValues[index]) )
                 else:
-                    fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (parameter.type, parameter.name, index - function.numSmartParameters, self.getAutomationType(parameter.type)) )
+                    fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (self.getRecognizedCType(parameter.type), parameter.name, index - function.numSmartParameters, self.getAutomationType(parameter.type)) )
 
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
                 fp.write ( '   sq_protocol_write_success ( _stream );\n' )
                 
             else:
-                fp.write ( '   %s ret = %s ( %s );\n' % (function.returnType, function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
+                fp.write ( '   %s ret = %s ( %s );\n' % (self.getRecognizedCType(function.returnType), function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
                 fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
                 fp.write ( '   sq_protocol_write_%s ( _stream, ret );\n' % self.getAutomationType(function.returnType) )
                 fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
@@ -894,8 +909,6 @@ class AutomationFile ( object ):
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( 'extern "C" {\n' )
         fp.write ( '#endif\n' )
-        for c_type, c_name in self.m_typedefs_c_name.items():
-            fp.write ( 'typedef %s %s;\n' % (c_type, c_name) )
         
         fp.write ( '#ifdef SQ_DISABLE_AUTOMATION_INTERFACE\n' )
         
@@ -914,9 +927,9 @@ class AutomationFile ( object ):
         for property in self.m_foundProperties:
             if property.writeUpdateFunction:
                 if property.smart:
-                    fp.write ( 'void %s ( %s, %s _value );\n' % (property.updateFunctionName, property.additionalSmartParameters, property.type) )
+                    fp.write ( 'void %s ( %s, %s _value );\n' % (property.updateFunctionName, property.additionalSmartParameters, self.getRecognizedCType(property.type)) )
                 else:
-                    fp.write ( 'void %s ( %s _value );\n' % (property.updateFunctionName, property.type) )
+                    fp.write ( 'void %s ( %s _value );\n' % (property.updateFunctionName, self.getRecognizedCType(property.type)) )
 
         for monitor in self.m_foundMonitors:
             if monitor.writeUpdateFunction:

@@ -91,10 +91,20 @@ SET(EXTRA_SRCS ${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
                ${CMAKE_SOURCE_DIR}/arduino/utility/twi.c
                ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp)
 
-FILE(WRITE ${CMAKE_BINARY_DIR}/upload_test_server.bat "SET PORT=%1\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/upload_test_server.bat "if x%1 == x ( SET PORT=COM8 )\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/upload_test_server.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D -Uflash:w:test_server.hex:i\n")
-
-FILE(WRITE ${CMAKE_BINARY_DIR}/upload_arduino_test.bat "SET PORT=%1\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/upload_arduino_test.bat "if x%1 == x ( SET PORT=COM8 )\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/upload_arduino_test.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D -Uflash:w:arduino_test.hex:i\n")
+IF(WIN32)
+  FILE(WRITE ${CMAKE_BINARY_DIR}/upload_test_server.bat "SET PORT=%1\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/upload_test_server.bat "if x%1 == x ( SET PORT=COM8 )\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/upload_test_server.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D -Uflash:w:test_server.hex:i\n")
+  
+  FILE(WRITE ${CMAKE_BINARY_DIR}/upload_arduino_test.bat "SET PORT=%1\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/upload_arduino_test.bat "if x%1 == x ( SET PORT=COM8 )\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/upload_arduino_test.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D -Uflash:w:arduino_test.hex:i\n")
+ELSE(WIN32)
+  FILE(WRITE ${CMAKE_BINARY_DIR}/generated/upload_test_server.sh "PORT=$1\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/generated/upload_test_server.sh "if [ x$1 == x ]; then PORT=/dev/ttyUSB0; fi\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/generated/upload_test_server.sh "avrdude -v -cstk500v1 -pm328p -b57600 -P$PORT -D -Uflash:w:test_server.hex:i\n")
+  FILE(COPY ${CMAKE_BINARY_DIR}/generated/upload_test_server.sh
+            DESTINATION ${CMAKE_BINARY_DIR}
+            FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+  FILE(REMOVE ${CMAKE_BINARY_DIR}/generated/upload_test_server.sh)
+ENDIF(WIN32)

@@ -192,7 +192,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 #  else
 
    int i;
-   SNPRINTF_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, "%f", _value );
+   SNPRINTF_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, "%f", (double) _value );
    for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
    {
       WRITE_BYTE_OR_FAIL ( buffer[i] );

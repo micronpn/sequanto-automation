@@ -17,10 +17,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sequanto/system.h>
-#include <sequanto/stream.h>
-
 #include "config.h"
+
+#include "sequanto/system.h"
+#include "sequanto/stream.h"
 
 #include "arduino_serial.h"
 

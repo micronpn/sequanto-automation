@@ -17,8 +17,9 @@
 #include <string.h>
 
 #include "config.h"
-#include <sequanto/parser.h>
-#include <sequanto/protocol.h>
+
+#include "sequanto/parser.h"
+#include "sequanto/protocol.h"
 
 void sq_parser_init ( SQParser * _parser )
 {

@@ -14,9 +14,10 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/automation.h>
-#include <sequanto/protocol.h>
 #include "config.h"
+
+#include "sequanto/automation.h"
+#include "sequanto/protocol.h"
 
 static const char BANG_LOG[] SQ_CONST_VARIABLE = "!LOG ";
 static const char ESCAPED_QUOTE[] SQ_CONST_VARIABLE = "\\\"";

@@ -20,6 +20,7 @@
 
 #include "sequanto/parser.h"
 #include "sequanto/protocol.h"
+#include "sequanto/log.h"
 
 void sq_parser_init ( SQParser * _parser )
 {
@@ -98,7 +99,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         i = sq_values_parse ( values, SQ_MAX_PARAMETERS, _parser->m_inputBuffer + endOfObjectPath );
         if ( i != 1 )
         {
-           sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("SET request must be called with one value")) );
+            sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("SET request must be called with one value")) );
             sq_parser_internal_free_values ( values );
             return;
         }
@@ -178,7 +179,8 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         break;
         
     default:
-       sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );
+        sq_logf ( "Bad command '%s'", _parser->m_inputBuffer );
+        sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );
         break;
     }
     

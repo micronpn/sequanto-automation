@@ -48,6 +48,7 @@ void sq_init ()
     digitalWrite(13, LOW);
     arduino_serial_open ( 57600 );
     digitalWrite(13, HIGH);
+    digitalWrite(13, LOW);
 }
 
 void sq_shutdown ()

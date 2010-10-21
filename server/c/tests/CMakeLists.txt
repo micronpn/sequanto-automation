@@ -1,0 +1,11 @@
+INCLUDE(FindPkgConfig)
+PKG_CHECK_MODULES(LIB_CHECK check)
+
+IF(LIB_CHECK_FOUND)
+  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include ${LIB_CHECK_INCLUDE_DIRS})
+  
+  ADD_EXECUTABLE(unit_test main.c test_value.c test_parser.c)
+
+  TARGET_LINK_LIBRARIES(unit_test SequantoAutomation)
+  TARGET_LINK_LIBRARIES(unit_test ${LIB_CHECK_LIBRARIES})
+ENDIF(LIB_CHECK_FOUND)

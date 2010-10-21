@@ -24,6 +24,7 @@ SQByteArray * get_firmware ( void )
    return &ret;
 }
 
+/*
 #define NUMBER_OF_DIGITAL_OUTPUTS 8
 static SQBool digital_outputs[NUMBER_OF_DIGITAL_OUTPUTS] = {SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE, SQ_FALSE};
 
@@ -72,6 +73,7 @@ void set_digital_output_test ( int portNumber, int testValue, SQBool value )
    digital_outputs[portNumber] = value;
    sq_digital_output_value_updated2 ( portNumber, testValue, value );
 }
+*/
 
 static char configFile[] = "# Config file\n\nval1 = 2\nval2 = 42\nval3 = 0\n";
 
@@ -112,7 +114,7 @@ int main ( int argc, char * argv[] )
 {
 #ifndef SQ_DISABLE_AUTOMATION_INTERFACE
    static SQServer server;
-    
+
    sq_init ();   
     
    sq_server_init ( &server, 4321 );

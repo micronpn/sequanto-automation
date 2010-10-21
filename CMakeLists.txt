@@ -130,7 +130,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(SQ_ARDUINO)
-    SET(SRCS ${SRCS} server/c/src/sq_stream_arduino.c)
+    SET(SRCS ${SRCS} server/c/src/sq_stream_embedded_serial.c)
 
     SET(SQ_USE_MUTEXES OFF)
     SET(SQ_USE_THREADS OFF)

@@ -91,4 +91,4 @@ property /type_tests/properties/bool_t type_test_bool_t_get type_test_bool_t_set
 #monitor /digital_output/changes const char *
 #monitor /digital_output/(0..7)/values SQBool
 
-#monitor /log int, const char *
+monitor /log int, const char *

@@ -14,9 +14,10 @@
  * permissions and limitations under the License.
  */
 
+#include "config.h"
+
 #include "sequanto/value.h"
 #include "sequanto/protocol.h"
-#include "config.h"
 
 #include <string.h>
 #include <stdlib.h>

@@ -1,5 +1,7 @@
 #include <sequanto/automation.h>
 
+#include "config.h"
+
 #include "arduino_test_automation.h"
 
 #include "wiring.h"

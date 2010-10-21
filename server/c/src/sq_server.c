@@ -14,17 +14,17 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/server.h>
-#include <sequanto/stream.h>
-#include <sequanto/protocol.h>
-#include <sequanto/value.h>
-#include <sequanto/types.h>
-#include <sequanto/thread.h>
+#include "config.h"
+
+#include "sequanto/server.h"
+#include "sequanto/stream.h"
+#include "sequanto/protocol.h"
+#include "sequanto/value.h"
+#include "sequanto/types.h"
+#include "sequanto/thread.h"
 
 #include <string.h>
 #include <stdio.h>
-
-#include "config.h"
 
 static SQServer * server_instance;
 

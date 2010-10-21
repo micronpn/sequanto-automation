@@ -14,9 +14,9 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/system.h>
-
 #include "config.h"
+
+#include "sequanto/system.h"
 
 #ifdef SQ_WIN32
 

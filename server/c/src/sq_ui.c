@@ -14,8 +14,9 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/ui.h>
 #include "config.h"
+
+#include "sequanto/ui.h"
 
 const char * const SQ_WIDGET_TYPE_UNKNOWN_STRING SQ_CONST_VARIABLE = "Unknown";
 const char * const SQ_WIDGET_TYPE_WIDGET_STRING SQ_CONST_VARIABLE = "Widget";

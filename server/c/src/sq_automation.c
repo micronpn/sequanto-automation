@@ -14,9 +14,10 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/automation.h>
-#include <sequanto/types.h>
 #include "config.h"
+
+#include "sequanto/automation.h"
+#include "sequanto/types.h"
 
 #ifdef SQ_USE_WINSOCK
 

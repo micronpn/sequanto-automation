@@ -14,8 +14,9 @@
  * permissions and limitations under the License.
  */
 
-#include "sequanto/thread.h"
 #include "config.h"
+
+#include "sequanto/thread.h"
 
 #ifdef SQ_USE_MUTEXES
 

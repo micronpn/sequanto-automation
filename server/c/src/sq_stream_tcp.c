@@ -17,10 +17,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sequanto/system.h>
-#include <sequanto/thread.h>
-
 #include "config.h"
+
+#include "sequanto/system.h"
+#include "sequanto/thread.h"
 
 #ifndef SQ_USE_THREADS
 #error The TCP stream requires threads.

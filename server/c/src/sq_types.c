@@ -14,7 +14,9 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/types.h>
+#include "config.h"
+
+#include "sequanto/types.h"
 
 char sq_external_get_next_fixed_length ( SQStringOut * _string )
 {
@@ -52,7 +54,7 @@ const char * sq_get_constant_string ( const char * const _constantString )
 
 void sq_get_constant_string_copy ( const char * const _constantString, char * _output )
 {
-   return strcpy_P ( _output, _constantString );
+    strcpy_P ( _output, _constantString );
 }
 
 #else

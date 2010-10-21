@@ -3,7 +3,8 @@
 import sys
 import re
 import types
-import sets
+if sys.version_info[1] < 6:
+    from sets import Set as set
 from os import path
 import datetime
 from StringIO import StringIO
@@ -300,7 +301,7 @@ class AutomationFile ( object ):
         self.m_foundMonitors = []
         self.m_foundBranches = []
         self.m_maxNumberOfParameters = 0
-        self.m_seenUpdateFunctions = sets.Set()
+        self.m_seenUpdateFunctions = set()
     
     def parse ( self, _input, _searchDirectory ):
         lineNumber = 1

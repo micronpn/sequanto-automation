@@ -3,7 +3,7 @@
 import sys
 import re
 import types
-if sys.version_info[1] < 6:
+if sys.version_info[0] == 2 and sys.version_info[1] < 6:
     from sets import Set as set
 from os import path
 import datetime

@@ -22,6 +22,7 @@
 #cmakedefine HAVE_UNDERSCORE_SNPRINTF_S
 #cmakedefine HAVE_WINSOCK2_H
 #cmakedefine HAVE_SYS_SOCKET_H
+#cmakedefine HAVE_INT64_T
 #cmakedefine SQ_WIN32
 #cmakedefine SQ_UNIX
 #cmakedefine SQ_ARDUINO

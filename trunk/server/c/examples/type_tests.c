@@ -16,7 +16,7 @@ static unsigned short unsignedShortValue;
 static signed char signedCharValue;
 static char charValue;
 static unsigned char unsignedCharValue;
-#ifdef HAVE_STDINT_H
+#ifdef HAVE_INT64_T
 static int64_t int64_tValue;
 #endif
 static float floatValue;
@@ -221,7 +221,7 @@ void type_test_unsigned_char_set ( unsigned char _value )
    sq_type_tests_properties_unsigned_char_updated ( unsignedCharValue );
 }
 
-#ifdef HAVE_STDINT_H
+#ifdef HAVE_INT64_T
 int64_t type_test_int64_t_get ( void )
 {
    sq_log_updated ( int64_tValue, "The value of int64_t was queries" );

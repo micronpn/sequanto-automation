@@ -126,10 +126,17 @@ void sq_value_free ( SQValue * _value )
   {
   case VALUE_TYPE_STRING:
     free ( _value->Value.m_stringValue );
+    _value->Value.m_stringValue = NULL;
+    break;
+    
+  case VALUE_TYPE_CONST_STRING:
+    _value->Value.m_stringValue = NULL;
     break;
       
   case VALUE_TYPE_BYTE_ARRAY:
     free ( _value->Value.ArrayValue.m_byteArrayValue );
+    _value->Value.ArrayValue.m_byteArrayValue = NULL;
+    _value->Value.ArrayValue.m_byteArrayLength = 0;
     break;
     
   default:

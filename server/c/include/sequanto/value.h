@@ -102,7 +102,7 @@ void sq_value_string_copy ( SQValue * _value, const char * const _initialValue);
 /**
  * Initialize the SQValue as a byte array.
  *
- * The initial value is _not_ copied.
+ * The initial value is _not_ copied, and will be freed when the sq_value_free is called.
  *
  * @see sq_value_string
  */

@@ -186,6 +186,58 @@ SQByte * sq_parse_identifier ( SQValue * _value, SQByte * _buffer )
    return _buffer;
 }
 
+static inline SQByte sq_parse_decode_hex_character ( SQByte _character )
+{
+    SQByte ret = _character - '0';
+    if ( ret > 9 )
+    {
+        ret = 10 + (_character - 'A');
+        if ( ret > 15 )
+        {
+            ret = 10 + (_character - 'A');
+        }
+    }
+    return ret & 0x0F;
+}
+
+static inline SQByte sq_parse_decode_two_hex_characters ( SQByte * _start )
+{
+    SQByte leftHand = sq_parse_decode_hex_character ( *_start );
+    SQByte rightHand = sq_parse_decode_hex_character ( *(_start + 1) );
+    return ((leftHand << 4) & 0xF0) | (rightHand & 0x0F);
+}
+
+SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
+{
+    int i = 0;
+    int numBytes = 0;
+    SQByte * start = _buffer;
+    while ( *_buffer != ' ' && *_buffer != '\0' && *_buffer != '\r' && *_buffer != '\n' )
+    {
+        numBytes ++;
+        _buffer ++;
+    }
+    
+    // If numBytes is even then have received only "half" of the last byte.
+    if ( (numBytes & 1) != 0 )
+    {
+        SQ_LOG0("Received an un-even number of hexadecimal characters when parsing byte array.");
+        return NULL;
+    }
+    
+    numBytes = numBytes / 2;
+    
+    SQByte * bytes = malloc ( numBytes );
+    for ( ; start != _buffer; start += 2 )
+    {
+        bytes[i] = sq_parse_decode_two_hex_characters ( start );
+        i++;
+    }
+    sq_value_byte_array ( _value, bytes, numBytes );
+    
+    return _buffer;
+}
+
 SQByte * sq_parse_integer_or_float ( SQValue * _value, SQByte * _buffer )
 {
    SQBool negate = SQ_FALSE;
@@ -310,12 +362,24 @@ size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buff
       }
       else if ( (*_buffer >= '0' && *_buffer <= '9') || *_buffer == '-' )
       {
-         _buffer = sq_parse_integer_or_float ( _start + valuesRead, _buffer );
-         if ( _buffer == NULL )
-         {
-            return valuesRead;
-         }
-         valuesRead ++;
+          if ( *(_buffer + 1) == 'x' )
+          {
+              _buffer = sq_parse_byte_array ( _start + valuesRead, _buffer + 2 );
+              if ( _buffer == NULL )
+              {
+                  return valuesRead;
+              }
+              valuesRead ++;
+          }
+          else
+          {
+              _buffer = sq_parse_integer_or_float ( _start + valuesRead, _buffer );
+              if ( _buffer == NULL )
+              {
+                  return valuesRead;
+              }
+              valuesRead ++;
+          }
       }
       else if ( *_buffer >= 'a' && *_buffer <= 'z' )
       {

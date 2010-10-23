@@ -93,6 +93,8 @@ START_TEST(test_value_string_copy)
     
     fail_unless ( value.m_type == VALUE_TYPE_NO_VALUE );
     fail_unless ( value.Value.m_stringValue == NULL );
+    
+    free(name);
 }
 END_TEST
 

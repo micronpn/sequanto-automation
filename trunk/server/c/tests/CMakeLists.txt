@@ -4,7 +4,7 @@ PKG_CHECK_MODULES(LIB_CHECK check)
 IF(LIB_CHECK_FOUND)
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include ${LIB_CHECK_INCLUDE_DIRS})
   
-  SET(UNIT_TEST_SRCS main.c test_value.c test_parser.c)
+  SET(UNIT_TEST_SRCS main.c test_value.c test_parser.c test_values_parse.c)
   
   ADD_EXECUTABLE(unit_test ${UNIT_TEST_SRCS})
 

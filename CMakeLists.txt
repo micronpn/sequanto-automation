@@ -51,12 +51,14 @@ ENDIF(SQ_QT4)
 SET(SRCS server/c/src/sq_automation.c server/c/src/sq_protocol.c server/c/src/sq_server.c
          server/c/src/sq_value.c server/c/src/sq_system.c server/c/src/sq_types.c server/c/src/sq_thread.c
          server/c/src/sq_mutex.c server/c/src/sq_parser.c server/c/src/sq_log.c server/c/src/sq_ui.c
+         server/c/src/sq_circularbuffer.c
          ${EXTRA_SRCS})
 
 SET(HEADERS server/c/include/sequanto/automation.h server/c/include/sequanto/stream.h
             server/c/include/sequanto/protocol.h server/c/include/sequanto/server.h
             server/c/include/sequanto/value.h server/c/include/sequanto/system.h
-            server/c/include/sequanto/log.h server/c/include/sequanto/ui.h)
+            server/c/include/sequanto/log.h server/c/include/sequanto/ui.h
+            server/c/include/sequanto/circularbuffer.h)
 
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/test_server_automation.c GENERATED)
 ADD_EXECUTABLE(test_server server/c/examples/test_server.c server/c/examples/type_tests.c ${CMAKE_BINARY_DIR}/generated/test_server_automation.c)
@@ -107,6 +109,8 @@ ADD_SUBDIRECTORY(server/c/examples)
 ADD_SUBDIRECTORY(server/c/applications)
 ADD_SUBDIRECTORY(server/cxx/examples)
 ADD_SUBDIRECTORY(server/qt/examples)
+
+SET(SRCS_UNIT_TEST ${SRCS} server/c/src/sq_stream_unit_test.c)
 
 IF(WIN32)
     SET(SQ_WIN32 ON)
@@ -174,12 +178,15 @@ IF(SQ_ARDUINO)
 ENDIF(SQ_ARDUINO)
 
 ADD_LIBRARY(SequantoAutomation STATIC ${SRCS} ${HEADERS})
+ADD_LIBRARY(SequantoAutomation_UnitTest STATIC ${SRCS_UNIT_TEST} ${HEADERS})
 IF(WIN32)
     TARGET_LINK_LIBRARIES(SequantoAutomation WS2_32)
+    TARGET_LINK_LIBRARIES(SequantoAutomation_UnitTest WS2_32)
 ENDIF(WIN32)
 
 IF(UNIX)
     TARGET_LINK_LIBRARIES(SequantoAutomation pthread)
+    TARGET_LINK_LIBRARIES(SequantoAutomation_UnitTest pthread)
 ENDIF(UNIX)
 
 TARGET_LINK_LIBRARIES(test_server SequantoAutomation)

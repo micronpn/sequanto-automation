@@ -49,6 +49,8 @@ typedef struct _SQServer
  */
 void sq_server_init ( SQServer * _server, int _portNumber );
 
+void sq_server_destroy ( SQServer * _server );
+
 /**
  * Get the current server singleton instance.
  */

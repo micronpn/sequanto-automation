@@ -20,3 +20,4 @@
 #define ck_assert_float_ne(X, Y) _ck_assert_float(X, !=, Y) 
 
 void sq_stream_unit_test_push_read ( SQStream * _stream, SQByte _value );
+SQByte * sq_stream_unit_test_pop_write ( SQStream * _stream );

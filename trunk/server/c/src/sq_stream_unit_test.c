@@ -136,10 +136,11 @@ SQByte * sq_stream_unit_test_pop_write ( SQStream * _stream )
     
     int i;
     int available = SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_out);
-    SQByte * ret = malloc ( available );
+    SQByte * ret = malloc ( available + 1 );
     for  ( i = 0; i < available; i++ )
     {
         ret[i] = SQ_CIRCULAR_BUFFER_POP(_stream->m_out);
     }
+    ret[available] = 0;
     return ret;
 }

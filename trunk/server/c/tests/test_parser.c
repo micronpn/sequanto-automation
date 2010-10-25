@@ -48,9 +48,14 @@ START_TEST(test_parser_input_byte)
 
     ck_assert_int_eq ( parser.m_inputBufferPosition, 0 );
  
-    sq_parser_destroy ( &parser );
+    char * output = sq_stream_unit_test_pop_write ( test_stream );
     
-    //ck_assert_str_eq ( 
+    ck_assert_str_eq ( output, "+PROTOCOL 1\r\n" );
+    
+    free ( output );
+    
+    sq_stream_close ( test_stream );
+    sq_parser_destroy ( &parser );
 }
 END_TEST
 

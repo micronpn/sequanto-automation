@@ -35,6 +35,8 @@ START_TEST(test_server_init)
     SQServer server;
     
     sq_server_init ( &server, -1 );
+
+    sq_server_destroy ( &server );
 }
 END_TEST
 

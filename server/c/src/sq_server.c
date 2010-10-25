@@ -42,6 +42,16 @@ void sq_server_init ( SQServer * _server, int _portNumber )
     sq_parser_init ( &_server->m_parser );
 }
 
+void sq_server_destroy ( SQServer * _server )
+{
+    assert ( _server != NULL );
+
+    sq_stream_close ( _server->m_stream );
+    _server->m_stream = NULL;
+    
+    server_instance = NULL;
+}
+
 SQServer * sq_server_get_instance ( void )
 {
    return server_instance;

@@ -1,6 +1,8 @@
 #include <check.h>
 #include <math.h>
 
+#include <sequanto/stream.h>
+
 /*
   TCase *tc_core = tcase_create ("test_value_init");
   tcase_add_test (tc_core, test_value_init);
@@ -16,3 +18,5 @@
 #define _ck_assert_float(X, O, Y) _ck_assert_float_with_epsilon(X, O, Y, 0.0001)
 #define ck_assert_float_eq(X, Y) _ck_assert_float(X, ==, Y) 
 #define ck_assert_float_ne(X, Y) _ck_assert_float(X, !=, Y) 
+
+void sq_stream_unit_test_push_read ( SQStream * _stream, SQByte _value );

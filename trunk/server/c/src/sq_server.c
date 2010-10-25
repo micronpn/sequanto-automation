@@ -25,18 +25,21 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 static SQServer * server_instance;
 
 void sq_server_init ( SQServer * _server, int _portNumber )
 {
-   _server->m_clientsHandled = 0;
-   _server->m_stream = sq_stream_open ( _portNumber );
-   sq_stream_set_data_received_handler ( _server->m_stream, sq_server_handle_stream_data_received, _server );
-   
-   server_instance = _server;
-   
-   sq_parser_init ( &_server->m_parser );
+    assert ( _server != NULL );
+    
+    _server->m_clientsHandled = 0;
+    _server->m_stream = sq_stream_open ( _portNumber );
+    sq_stream_set_data_received_handler ( _server->m_stream, sq_server_handle_stream_data_received, _server );
+    
+    server_instance = _server;
+    
+    sq_parser_init ( &_server->m_parser );
 }
 
 SQServer * sq_server_get_instance ( void )
@@ -46,13 +49,17 @@ SQServer * sq_server_get_instance ( void )
 
 void sq_server_internal_handle_byte ( SQServer * _server, SQByte _byte )
 {
-   sq_parser_input_byte ( &_server->m_parser, _server->m_stream, _byte );
+    assert ( _server != NULL );
+    
+    sq_parser_input_byte ( &_server->m_parser, _server->m_stream, _byte );
 }
 
 void sq_server_poll ( SQServer * _server )
 {
    SQByte byte;
 
+   assert ( _server != NULL );
+   
    sq_stream_poll ( _server->m_stream );
 
    if ( !sq_thread_is_supported() )

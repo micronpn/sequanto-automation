@@ -15,6 +15,7 @@
  */
 
 #include <string.h>
+#include <assert.h>
 
 #include "config.h"
 
@@ -24,12 +25,16 @@
 
 void sq_parser_init ( SQParser * _parser )
 {
-   memset ( _parser->m_inputBuffer, 0, SQ_BUFFER_SIZE );
-   _parser->m_inputBufferPosition = 0;
+    assert ( _parser != NULL );
+    
+    memset ( _parser->m_inputBuffer, 0, SQ_BUFFER_SIZE );
+    _parser->m_inputBufferPosition = 0;
 }
 
 size_t sq_parser_internal_read_object_path ( SQParser * _parser, size_t _startIndex )
 {
+    assert ( _parser != NULL );
+    
     while ( _parser->m_inputBuffer[_startIndex] != '\0'
             &&
             _startIndex < SQ_MAX_OBJECT_LENGTH
@@ -63,6 +68,8 @@ void sq_parser_internal_free_values ( SQValue * _values )
 
 void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _outputStream )
 {
+    assert ( _parser != NULL );
+    
     SQValue values[SQ_MAX_PARAMETERS];
     size_t i, endOfObjectPath, index = 0;
     
@@ -189,6 +196,8 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
 
 void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte _byte )
 {
+    assert ( _parser != NULL );
+    
     if ( _parser->m_inputBufferPosition == 0 && (_byte == '\n' || _byte == '\r' ) )
     {
         /* Skip '\n' and '\r' when the message just started. */

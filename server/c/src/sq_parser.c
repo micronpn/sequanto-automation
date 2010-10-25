@@ -133,6 +133,12 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         endOfObjectPath = sq_parser_internal_read_object_path ( _parser, index );
 
         i = sq_values_parse ( values, SQ_MAX_PARAMETERS, _parser->m_inputBuffer + endOfObjectPath );
+        if ( i > SQ_MAX_PARAMETERS )
+        {
+            sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Too many values given in CALL request")) );
+            sq_parser_internal_free_values ( values );
+            return;
+        }
         
         _parser->m_inputBuffer[endOfObjectPath] = '\0';
         

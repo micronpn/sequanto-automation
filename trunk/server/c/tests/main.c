@@ -1,6 +1,6 @@
 #include <check.h>
 
-int main ( int _argc, char * argv[] )
+int main ( int _argc, char * _argv[] )
 {
     int number_failed;
     SRunner *sr = srunner_create ( (Suite*) value_suite() );
@@ -9,7 +9,10 @@ int main ( int _argc, char * argv[] )
     srunner_add_suite ( sr, (Suite*) circularbuffer_suite() );
     srunner_add_suite ( sr, (Suite*) server_suite() );
     srunner_set_xml ( sr, "output.xml" );
-    srunner_set_fork_status ( sr, CK_NOFORK );
+    if ( _argc > 1 && strcmp(_argv[1], "--no-fork") == 0 )
+    {
+        srunner_set_fork_status ( sr, CK_NOFORK );
+    }
     srunner_run_all (sr, CK_NORMAL);
     number_failed = srunner_ntests_failed (sr);
     srunner_free (sr);

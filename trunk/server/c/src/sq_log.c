@@ -41,6 +41,16 @@ void sq_log_internal_write_string ( SQStream * _stream, const char * _value )
       {
          sq_stream_write_string ( _stream, sq_get_constant_string(ESCAPED_QUOTE) );
       }
+      else if ( _value[i] == '\n' )
+      {
+          sq_stream_write_byte ( _stream, '\\' );
+          sq_stream_write_byte ( _stream, 'n' );
+      }
+      else if ( _value[i] == '\r' )
+      {
+          sq_stream_write_byte ( _stream, '\\' );
+          sq_stream_write_byte ( _stream, 'r' );
+      }
       else
       {
          sq_stream_write_byte ( _stream, _value[i] );

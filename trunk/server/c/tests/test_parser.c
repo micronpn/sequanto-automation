@@ -2,6 +2,7 @@
 
 #include <sequanto/parser.h>
 #include <sequanto/stream.h>
+#include <sequanto/server.h>
 
 static SQStream * test_stream;
 
@@ -56,6 +57,26 @@ START_TEST(test_parser_input_byte)
     
     sq_stream_close ( test_stream );
     sq_parser_destroy ( &parser );
+}
+END_TEST
+
+START_TEST(test_parser_bad_command)
+{
+    // We need a server in order for !LOG commands to work.
+    SQServer server;
+    sq_server_init ( &server, -1 );
+    
+    test_stream = server.m_stream; //sq_stream_open ( -1 );
+    
+    input_string ( &server.m_parser, "Ostemad\r\n" );
+
+    char * output = sq_stream_unit_test_pop_write ( test_stream );
+    
+    ck_assert_str_eq ( output, "!LOG \"Bad command 'Ostemad\\r'\"\r\n-\"Unrecognized command.\"\r\n" );
+    
+    free ( output );
+    
+    sq_server_destroy ( &server );
 }
 END_TEST
 
@@ -220,6 +241,7 @@ END_TEST
 SQ_TEST_SUITE(parser_suite, "SQParser");
 SQ_TEST_CASE(test_parser_init);
 SQ_TEST_CASE(test_parser_input_byte);
+SQ_TEST_CASE(test_parser_bad_command);
 SQ_TEST_CASE(test_parser_get_property);
 SQ_TEST_CASE(test_parser_set_property);
 SQ_TEST_CASE(test_parser_call);

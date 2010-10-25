@@ -8,10 +8,26 @@ void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const
 
 void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
+    if ( strcmp(_objectPath, "/this/is/a/property") == 0 )
+    {
+        sq_stream_write_string ( _stream, "+12\r\n" );
+    }
+    else
+    {
+        sq_stream_write_string ( _stream, "- \"Unknown object!\"\r\n" );
+    }
 }
 
 void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _value )
 {
+    if ( strcmp(_objectPath, "/My_Integer_Property") == 0 )
+    {
+        sq_stream_write_string ( _stream, "+\r\n" );
+    }
+    else
+    {
+        sq_stream_write_string ( _stream, "- \"Unknown object!\"\r\n" );
+    }
 }
 
 void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )

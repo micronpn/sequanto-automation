@@ -92,7 +92,7 @@ START_TEST(test_parser_get_property)
     
     // GET a property with parameters (not possible)
     
-    input_string ( &parser, "GET /this/is/a/property 42\r\n" );
+    input_string ( &parser, "GET /this/is/a/property 42 \"Ostemad\"\r\n" );
     
     output = sq_stream_unit_test_pop_write ( test_stream );
     
@@ -151,11 +151,60 @@ START_TEST(test_parser_set_property)
 
     
     // SET a property while providing too many values value
-    input_string ( &parser, "SET /My_Integer_Property 1 2 3 4 5\r\n" );
+    input_string ( &parser, "SET /My_Integer_Property 1 2 3 4 5 0xDEADBEAF\r\n" );
     
     output = sq_stream_unit_test_pop_write ( test_stream );
     
     ck_assert_str_eq ( output, "-\"SET request must be called with one value\"\r\n" );
+    
+    free ( output );
+    
+    
+    // Cleanup
+    
+    sq_stream_close ( test_stream );
+    sq_parser_destroy ( &parser );
+}
+END_TEST
+
+
+START_TEST(test_parser_call)
+{
+    SQParser parser;
+    
+    // Setup
+    
+    test_stream = sq_stream_open ( -1 );
+    
+    sq_parser_init ( &parser );
+    
+    
+    // CALL function
+    input_string ( &parser, "CALL /my/function\r\n" );
+
+    char * output = sq_stream_unit_test_pop_write ( test_stream );
+    
+    ck_assert_str_eq ( output, "+ 42\r\n" );
+    
+    free ( output );
+
+    
+    // CALL a non existing property
+    input_string ( &parser, "CALL /no_function\r\n" );
+    
+    output = sq_stream_unit_test_pop_write ( test_stream );
+    
+    ck_assert_str_eq ( output, "- \"Unknown object!\"\r\n" );
+    
+    free ( output );
+
+
+    // CALL function with too many values
+    input_string ( &parser, "CALL /my/function 0 1 2 3 4 5 5 6 7 8 9 10 11 12\r\n" );
+    
+    output = sq_stream_unit_test_pop_write ( test_stream );
+    
+    ck_assert_str_eq ( output, "-\"Too many values given in CALL request\"\r\n" );
     
     free ( output );
     
@@ -173,4 +222,5 @@ SQ_TEST_CASE(test_parser_init);
 SQ_TEST_CASE(test_parser_input_byte);
 SQ_TEST_CASE(test_parser_get_property);
 SQ_TEST_CASE(test_parser_set_property);
+SQ_TEST_CASE(test_parser_call);
 SQ_END_SUITE();

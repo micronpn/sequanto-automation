@@ -395,7 +395,15 @@ size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buff
          return valuesRead;
       }
    }
-   return valuesRead;
+   if ( *_buffer != '\n' && *_buffer != '\r' )
+   {
+       // Return + 1 to indicate that we did not have enough space to parse all the parameters given.
+       return valuesRead + 1;
+   }
+   else
+   {
+       return valuesRead;
+   }
 }
 
 #undef READ_OR_FAIL

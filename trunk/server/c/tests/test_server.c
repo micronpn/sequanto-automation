@@ -4,6 +4,14 @@
 
 void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _inputValues, int _numberOfValues )
 {
+    if ( strcmp(_objectPath, "/my/function") == 0 )
+    {
+        sq_stream_write_string ( _stream, "+ 42\r\n" );
+    }
+    else
+    {
+        sq_stream_write_string ( _stream, "- \"Unknown object!\"\r\n" );
+    }
 }
 
 void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )

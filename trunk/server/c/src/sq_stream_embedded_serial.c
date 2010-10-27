@@ -17,24 +17,62 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <avr/interrupt.h>
+
 #include "config.h"
 
 #include "sequanto/system.h"
 #include "sequanto/stream.h"
+#include "sequanto/circularbuffer.h"
 
-#include "arduino_serial.h"
+#define INTERNAL_BUFFER 10
 
 typedef struct _SQStream
 {
     SQStreamDataReceivedFunction m_handler;
     void * m_handlerData;
+    SQ_CIRCULAR_BUFFER_DEFINE(m_in, INTERNAL_BUFFER);
+    SQ_CIRCULAR_BUFFER_DEFINE(m_out, INTERNAL_BUFFER);
 } _SQStream;
+
+#ifndef BAUD_TOL
+#   define BAUD_TOL 2
+#endif
+
+static SQStream * s_embeddedSerialStream = NULL;
 
 SQStream * sq_stream_open ( int _portNumber )
 {
    SQStream * ret = (SQStream*) malloc ( sizeof(SQStream) );
    ret->m_handler = NULL;
    ret->m_handlerData = NULL;
+   SQ_CIRCULAR_BUFFER_INIT(ret->m_in, INTERNAL_BUFFER);
+   SQ_CIRCULAR_BUFFER_INIT(ret->m_out, INTERNAL_BUFFER);
+   
+   unsigned long baud = 57600;
+   //unsigned long baud = 9600;
+   
+   uint8_t use2x = 0;
+   uint16_t ubbr =  (F_CPU + 8UL * baud) / (16UL * baud) - 1UL;
+   if ( (100 * (F_CPU)) > (16 * (ubbr + 1) * (100 * ubbr + ubbr * BAUD_TOL)) ) {
+       use2x = 1;
+       ubbr = (F_CPU + 4UL * baud) / (8UL * baud) - 1UL;
+   }
+
+   UBRR0L = ubbr & 0xff;
+   UBRR0H = ubbr >> 8;
+   if (use2x) {
+       UCSR0A |= (1 << U2X0);
+   } else {
+       UCSR0A &= ~(1 << U2X0);
+   }
+
+   UCSR0B |= (1<<TXEN0);  // Enable Transmitter
+   UCSR0B |= (1<<RXEN0);  // Enable Reciever
+   UCSR0B |= (1<<RXCIE0); // Enable Rx Complete Interrupt
+   
+   s_embeddedSerialStream = ret;
+   
    return ret;
 }
 
@@ -55,13 +93,17 @@ void sq_stream_poll( SQStream * _stream )
 
 size_t sq_stream_data_available ( SQStream * _stream )
 {
-    return arduino_serial_available();
+    return SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_in);
 }
 
 
 SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
 {
-    arduino_serial_write ( _string );
+    const char * p;
+    for ( p = _string; *p != 0; p++ )
+    {
+        sq_stream_write_byte ( _stream, *p );
+    }
     return SQ_TRUE;
 }
 
@@ -69,22 +111,62 @@ SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 {
 	while (pString->HasMore(pString))
 	{
-		arduino_serial_write_byte( pString->GetNext(pString) );
+		sq_stream_write_byte ( _stream, pString->GetNext(pString) );
 	}
 	return SQ_TRUE;
 }
 
 SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )
 {
-    arduino_serial_write_byte ( _byte );
+    // Block until there's room in the buffer
+    // XXX: this may block forever if someone externally disabled the transmitter
+    //      or the DRE interrupt and there's data in the buffer. Careful!
+    while ( SQ_CIRCULAR_BUFFER_FULL(_stream->m_out) == SQ_TRUE );
+    
+    SQ_CIRCULAR_BUFFER_PUSH ( _stream->m_out, _byte );
+    
+    UCSR0B |= (1<<UDRIE0); // Enable Data Register Empty interrupt
+    
     return SQ_TRUE;
 }
 
 SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
 {
-    int v = arduino_serial_read();
-    *_byte = (SQByte) v;
+    // disable interrupts
+    uint8_t oldSREG = SREG;
+    cli();
+    if (SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_in) == 0 )
+    {
+        // Better that than block the code waiting for data. Users should call
+        // available() first
+        return SQ_FALSE;
+    } else {
+        *_byte = SQ_CIRCULAR_BUFFER_POP(_stream->m_in);
+    }
+    // Re-enable interrupts
+    SREG = oldSREG;
+    
     return SQ_TRUE;
+}
+
+ISR(USART_RX_vect)
+{
+    uint8_t data = UDR0;
+    SQ_CIRCULAR_BUFFER_PUSH ( s_embeddedSerialStream->m_in,  data );
+}
+
+/**
+ * Data Register Empty Handler
+ */
+ISR(USART_UDRE_vect)
+{
+    if ( SQ_CIRCULAR_BUFFER_AVAILABLE(s_embeddedSerialStream->m_out) == 0 )
+    {
+        // Buffer is empty, disable the interrupt
+        UCSR0B &= ~(1<<UDRIE0);
+    } else {
+        UDR0 = SQ_CIRCULAR_BUFFER_POP(s_embeddedSerialStream->m_out);
+    }
 }
 
 void sq_stream_enter_write ( SQStream * _stream )

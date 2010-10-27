@@ -41,7 +41,19 @@ int sq_circular_buffer_available ( int _size, int _readPosition, int _writePosit
     }
 }
 
-void sq_circular_buffer_push ( int _size, int * _readPosition, int * _writePosition, SQByte * _data, SQByte _value )
+SQBool sq_circular_buffer_full ( int _readPosition )
+{
+    if ( _readPosition == -1 )
+    {
+        return SQ_TRUE;
+    }
+    else
+    {
+        return SQ_FALSE;
+    }
+}
+
+void sq_circular_buffer_push ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data, SQByte _value )
 {
     if ( *_readPosition == -1 )
     {
@@ -61,7 +73,7 @@ void sq_circular_buffer_push ( int _size, int * _readPosition, int * _writePosit
     }
 }
 
-SQByte sq_circular_buffer_pop ( int _size, int * _readPosition, int * _writePosition, SQByte * _data )
+SQByte sq_circular_buffer_pop ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data )
 {
     if ( *_readPosition == -1 )
     {

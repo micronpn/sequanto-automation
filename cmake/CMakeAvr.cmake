@@ -54,30 +54,30 @@ SET(SQ_MAX_PARAMETERS    5       CACHE STRING "")
 SET(SQ_LOGGING_ENABLED   OFF       CACHE BOOL "")
 SET(SQ_ARDUINO           ON      CACHE BOOL "")
 
-FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#ifdef __cplusplus\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "extern \"C\" {\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#endif\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "void arduino_serial_open(long _baudRate);\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "void arduino_serial_write ( const char * const _buff );\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "void arduino_serial_write_byte ( unsigned char _byte );\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "int arduino_serial_read (void);\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "int arduino_serial_available (void);\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#ifdef __cplusplus\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "}\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#endif\n")
+# FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#ifdef __cplusplus\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "extern \"C\" {\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#endif\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "void arduino_serial_open(long _baudRate);\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "void arduino_serial_write ( const char * const _buff );\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "void arduino_serial_write_byte ( unsigned char _byte );\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "int arduino_serial_read (void);\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "int arduino_serial_available (void);\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#ifdef __cplusplus\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "}\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#endif\n")
 
-FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "#include <HardwareSerial.h>\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "extern \"C\" { \n" )
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_open(long _baudRate) { Serial.begin(_baudRate); }\n" )
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_write ( const char * const _buff ) { Serial.write ( _buff ); }\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_write_byte ( unsigned char _byte ) { Serial.write ( _byte ); }\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "int arduino_serial_read (void) { return Serial.read (); }\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "int arduino_serial_available (void) { return Serial.available (); }\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void __cxa_pure_virtual(void) {} \n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "}\n")
+# FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "#include <HardwareSerial.h>\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "extern \"C\" { \n" )
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_open(long _baudRate) { Serial.begin(_baudRate); }\n" )
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_write ( const char * const _buff ) { Serial.write ( _buff ); }\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_write_byte ( unsigned char _byte ) { Serial.write ( _byte ); }\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "int arduino_serial_read (void) { return Serial.read (); }\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "int arduino_serial_available (void) { return Serial.available (); }\n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void __cxa_pure_virtual(void) {} \n")
+# FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "}\n")
 
-SET(EXTRA_SRCS ${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
+SET(EXTRA_SRCS #${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
                ${CMAKE_SOURCE_DIR}/arduino/Print.cpp
                ${CMAKE_SOURCE_DIR}/arduino/wiring.c
                ${CMAKE_SOURCE_DIR}/arduino/wiring_digital.c
@@ -88,8 +88,8 @@ SET(EXTRA_SRCS ${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
                ${CMAKE_SOURCE_DIR}/arduino/WInterrupts.c
                ${CMAKE_SOURCE_DIR}/arduino/WMath.cpp
                ${CMAKE_SOURCE_DIR}/arduino/Wire.cpp
-               ${CMAKE_SOURCE_DIR}/arduino/utility/twi.c
-               ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp)
+               ${CMAKE_SOURCE_DIR}/arduino/utility/twi.c)
+#               ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp)
 
 IF(WIN32)
   FILE(WRITE ${CMAKE_BINARY_DIR}/upload_test_server.bat "SET PORT=%1\n")

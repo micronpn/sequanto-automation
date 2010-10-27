@@ -38,7 +38,6 @@ void sq_shutdown ()
 
 #ifdef SQ_ARDUINO
 
-#include "arduino_serial.h"
 #include "wiring.h"
 
 void sq_init ()
@@ -46,9 +45,14 @@ void sq_init ()
     init();
     pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
-    arduino_serial_open ( 57600 );
+}
+
+void sq_blink ()
+{
     digitalWrite(13, HIGH);
+    sq_system_sleep ( 500 );
     digitalWrite(13, LOW);
+    sq_system_sleep ( 500 );
 }
 
 void sq_shutdown ()

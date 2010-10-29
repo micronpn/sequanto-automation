@@ -41,6 +41,18 @@ int sq_circular_buffer_available ( int _size, int _readPosition, int _writePosit
     }
 }
 
+SQBool sq_circular_buffer_empty ( int _readPosition, int _writePosition )
+{
+	if ( _readPosition == _writePosition )
+	{
+		return SQ_TRUE;
+	}
+	else
+	{
+		return SQ_FALSE;
+	}
+}
+
 SQBool sq_circular_buffer_full ( int _readPosition )
 {
     if ( _readPosition == -1 )

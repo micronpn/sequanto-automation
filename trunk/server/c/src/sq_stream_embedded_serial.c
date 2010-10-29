@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include <avr/interrupt.h>
+#include <Wiring.h>
 
 #include "config.h"
 
@@ -118,34 +119,39 @@ SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 
 SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )
 {
-    // Block until there's room in the buffer
-    // XXX: this may block forever if someone externally disabled the transmitter
-    //      or the DRE interrupt and there's data in the buffer. Careful!
-    while ( SQ_CIRCULAR_BUFFER_FULL(_stream->m_out) == SQ_TRUE );
-    
-    SQ_CIRCULAR_BUFFER_PUSH ( _stream->m_out, _byte );
-    
-    UCSR0B |= (1<<UDRIE0); // Enable Data Register Empty interrupt
-    
+    noInterrupts();
+	 if (SQ_CIRCULAR_BUFFER_EMPTY(_stream->m_out) == SQ_TRUE)
+	 {
+	 	if ( UCSR0A & (1<<UDRE0) )
+	 	{
+			UDR0 = _byte;
+	 	}
+		else
+		{
+			SQ_CIRCULAR_BUFFER_PUSH ( _stream->m_out, _byte );
+			UCSR0B |= (1<<UDRIE0); // Enable Data Register Empty interrupt. Note: Needed because the UDRIEn is level-triggered, not edge-triggered.
+		}
+		interrupts();
+		return SQ_TRUE;
+	 }
+	 else
+	 {
+		 interrupts();	// Allow TX-interrupt to make space in buffer.
+	    while ( SQ_CIRCULAR_BUFFER_FULL(_stream->m_out) == SQ_TRUE );
+		 SQ_CIRCULAR_BUFFER_PUSH ( _stream->m_out, _byte );
+	 }
+
     return SQ_TRUE;
 }
 
 SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
 {
-    // disable interrupts
-    uint8_t oldSREG = SREG;
-    cli();
     if (SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_in) == 0 )
     {
-        // Better that than block the code waiting for data. Users should call
-        // available() first
         return SQ_FALSE;
     } else {
         *_byte = SQ_CIRCULAR_BUFFER_POP(_stream->m_in);
     }
-    // Re-enable interrupts
-    SREG = oldSREG;
-    
     return SQ_TRUE;
 }
 
@@ -160,13 +166,15 @@ ISR(USART_RX_vect)
  */
 ISR(USART_UDRE_vect)
 {
-    if ( SQ_CIRCULAR_BUFFER_AVAILABLE(s_embeddedSerialStream->m_out) == 0 )
-    {
-        // Buffer is empty, disable the interrupt
-        UCSR0B &= ~(1<<UDRIE0);
-    } else {
-        UDR0 = SQ_CIRCULAR_BUFFER_POP(s_embeddedSerialStream->m_out);
-    }
+	if ( SQ_CIRCULAR_BUFFER_AVAILABLE(s_embeddedSerialStream->m_out) != 0 )
+	{
+		UDR0 = SQ_CIRCULAR_BUFFER_POP(s_embeddedSerialStream->m_out);
+	}
+	else
+	{
+		// Buffer is empty, disable the interrupt
+		UCSR0B &= ~(1<<UDRIE0);
+	}
 }
 
 void sq_stream_enter_write ( SQStream * _stream )

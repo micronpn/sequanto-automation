@@ -87,12 +87,14 @@ void sq_circular_buffer_push ( int _size, volatile int * _readPosition, volatile
 
 SQByte sq_circular_buffer_pop ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data )
 {
+    SQByte ret;
+
     if ( *_readPosition == -1 )
     {
         *_readPosition = *_writePosition;
     }
     
-    SQByte ret = _data[*_readPosition];
+    ret = _data[*_readPosition];
     *_readPosition = *_readPosition + 1;
     if ( *_readPosition >= _size )
     {

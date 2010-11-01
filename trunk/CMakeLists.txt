@@ -36,6 +36,9 @@ CHECK_SYMBOL_EXISTS(int64_t "stdint.h" HAVE_INT64_T)
 INCLUDE(CheckCXXSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES("#include <string>\n int main () { std::string s; };" STL_SUPPORTED)
 
+INCLUDE(CheckCSourceCompiles)
+CHECK_CXX_SOURCE_COMPILES("inline int c() {} int main () { c(); };" SQ_C_SUPPORTS_INLINE)
+
 IF(STL_SUPPORTED)
   SET(SQ_CXX 1)
 ELSE(STL_SUPPORTED)

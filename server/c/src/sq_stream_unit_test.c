@@ -30,8 +30,8 @@ typedef struct _SQStream
 {
     SQStreamDataReceivedFunction m_handler;
     void * m_handlerData;
-    SQ_CIRCULAR_BUFFER_DEFINE(m_in, BUFFER_SIZE);
-    SQ_CIRCULAR_BUFFER_DEFINE(m_out, BUFFER_SIZE);
+    SQ_CIRCULAR_BUFFER_DEFINE(m_in, BUFFER_SIZE)
+    SQ_CIRCULAR_BUFFER_DEFINE(m_out, BUFFER_SIZE)
 } _SQStream;
 
 SQStream * sq_stream_open ( int _portNumber )
@@ -77,10 +77,11 @@ size_t sq_stream_data_available ( SQStream * _stream )
 SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
 {
     size_t i;
-    
+    size_t length;
+
     assert ( _stream != NULL );
     
-    size_t length = strlen(_string);
+    length = strlen(_string);
     for ( i = 0; i < length; i++ )
     {
         sq_stream_write_byte ( _stream, _string[i] );
@@ -90,7 +91,7 @@ SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
 
 SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 {
-    assert ( _stream != NULL );
+   assert ( _stream != NULL );
     
 	while (pString->HasMore(pString))
 	{
@@ -132,11 +133,14 @@ void sq_stream_unit_test_push_read ( SQStream * _stream, SQByte _value )
 
 SQByte * sq_stream_unit_test_pop_write ( SQStream * _stream )
 {
+   int i;
+   int available;
+   SQByte * ret;
+
     assert ( _stream != NULL );
     
-    int i;
-    int available = SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_out);
-    SQByte * ret = malloc ( available + 1 );
+    available = SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_out);
+    ret = malloc ( available + 1 );
     for  ( i = 0; i < available; i++ )
     {
         ret[i] = SQ_CIRCULAR_BUFFER_POP(_stream->m_out);

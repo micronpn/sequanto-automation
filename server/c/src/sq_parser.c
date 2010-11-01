@@ -68,10 +68,10 @@ void sq_parser_internal_free_values ( SQValue * _values )
 
 void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _outputStream )
 {
-    assert ( _parser != NULL );
-    
     SQValue values[SQ_MAX_PARAMETERS];
     size_t i, endOfObjectPath, index = 0;
+
+    assert ( _parser != NULL );
     
     for ( i = 0; i < SQ_MAX_PARAMETERS; i++ )
     {

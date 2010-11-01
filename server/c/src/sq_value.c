@@ -186,7 +186,7 @@ SQByte * sq_parse_identifier ( SQValue * _value, SQByte * _buffer )
    return _buffer;
 }
 
-static inline SQByte sq_parse_decode_hex_character ( SQByte _character )
+static SQ_INLINE SQByte sq_parse_decode_hex_character ( SQByte _character )
 {
     SQByte ret = _character - '0';
     if ( ret > 9 )
@@ -200,7 +200,7 @@ static inline SQByte sq_parse_decode_hex_character ( SQByte _character )
     return ret & 0x0F;
 }
 
-static inline SQByte sq_parse_decode_two_hex_characters ( SQByte * _start )
+static SQ_INLINE SQByte sq_parse_decode_two_hex_characters ( SQByte * _start )
 {
     SQByte leftHand = sq_parse_decode_hex_character ( *_start );
     SQByte rightHand = sq_parse_decode_hex_character ( *(_start + 1) );
@@ -211,6 +211,7 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
 {
     int i = 0;
     int numBytes = 0;
+    SQByte * bytes;
     SQByte * start = _buffer;
     while ( *_buffer != ' ' && *_buffer != '\0' && *_buffer != '\r' && *_buffer != '\n' )
     {
@@ -227,7 +228,7 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
     
     numBytes = numBytes / 2;
     
-    SQByte * bytes = malloc ( numBytes );
+    bytes = malloc ( numBytes );
     for ( ; start != _buffer; start += 2 )
     {
         bytes[i] = sq_parse_decode_two_hex_characters ( start );

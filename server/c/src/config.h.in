@@ -27,6 +27,7 @@
 #cmakedefine SQ_UNIX
 #cmakedefine SQ_ARDUINO
 #cmakedefine SQ_LOGGING_ENABLED
+#cmakedefine SQ_C_SUPPORTS_INLINE
 
 #define SQ_MAX_STRING_LENGTH ${SQ_MAX_STRING_LENGTH}
 #define SQ_MAX_OBJECT_LENGTH ${SQ_MAX_OBJECT_LENGTH}
@@ -68,6 +69,12 @@
 #define SNPRINTF_S_FUNCTION _snprintf_s
 #define HAVE_SNPRINTF_S
 #endif
+#endif
+
+#ifdef SQ_C_SUPPORTS_INLIE
+#define SQ_INLINE inline
+#else
+#define SQ_INLINE 
 #endif
 
 #endif /* _CONFIG_H_ */

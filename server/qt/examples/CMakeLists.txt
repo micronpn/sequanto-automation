@@ -28,5 +28,7 @@ IF(SQ_CXX)
     TARGET_LINK_LIBRARIES(qt_automation_example SequantoAutomation_CXX)
     TARGET_LINK_LIBRARIES(qt_automation_example SequantoAutomation_QT)
     TARGET_LINK_LIBRARIES(qt_automation_example ${QT_LIBRARIES})
+    
+    ADD_SUBDIRECTORY(qt_position_test)
   ENDIF(QT4_FOUND)
 ENDIF(SQ_CXX)

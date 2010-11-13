@@ -1,4 +1,5 @@
 #include <QStringListModel>
+#include <QListWidgetItem>
 
 #include "ui_mainwin.h"
 

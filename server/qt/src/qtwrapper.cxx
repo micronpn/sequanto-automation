@@ -4,11 +4,72 @@
 #include <cassert>
 #include <vector>
 #include <stdexcept>
+#include <iostream>
 
 using namespace sequanto::automation;
 
 QtWrapper::QtWrapper()
 {
+}
+
+QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _propertyName )
+{
+  if ( _object->thread() == QThread::currentThread() )
+  {
+    if ( _propertyName == QtWrapper::screen_pos() )
+    {
+       QWidget * widget = qobject_cast<QWidget*>(_object);
+       return widget->geometry().topLeft();
+    }
+    else if ( _propertyName == QtWrapper::global_pos() )
+    {
+       QWidget * widget = qobject_cast<QWidget*>(_object);
+       QWidget * window = widget->window();
+       //QPoint pos = window->geometry().topLeft();
+
+       QPoint pos = widget->mapTo ( window, widget->pos() );
+       qDebug() << "Direct: " << pos;
+       return pos;
+       /*
+       qDebug() << widget->objectName();
+       qDebug() << "   Global: " << widget->mapToGlobal(widget->pos());
+       qDebug() << "   Window topleft: " << pos;
+       pos = widget->mapToGlobal(widget->pos()) - pos;
+       qDebug() << "   Global - Window: " << pos;
+       */
+       
+       //return pos;
+    }
+    else
+    {
+      return _object->property(_propertyName.c_str());
+    }
+  }
+  else
+  {
+    QtAutomationGetPropertyEvent * event = new QtAutomationGetPropertyEvent(_propertyName.c_str());
+    {
+      QMutexLocker ( event->lock() );
+      
+      QCoreApplication::postEvent ( _object, event );
+      
+      event->wait();
+      
+      return event->value();
+    }
+  }
+}
+
+const std::string & QtWrapper::screen_pos ()
+{
+  static std::string SCREEN_POS ( "__sq_screen" );
+  return SCREEN_POS;
+}
+
+const std::string & QtWrapper::global_pos ()
+{
+  static std::string GLOBAL_POS ( "__sq_global" );
+  return GLOBAL_POS;
 }
 
 class QtStringProperty : public PropertyNode
@@ -31,7 +92,7 @@ public:
 
    virtual void HandleGet ( SQValue & _outputValue )
    {
-      std::string value ( QtWrapper::ToString(m_object->property(GetName().c_str()).toString() ) );
+     std::string value ( QtWrapper::ToString(QtWrapper::GetPropertyValue ( m_object, GetName() ).toString()) );
       sq_value_string_copy ( &_outputValue, value.c_str() );
    }
 
@@ -60,7 +121,19 @@ public:
 
    virtual int GetValue ()
    {
-      return m_object->property(GetName().c_str()).toInt();
+     assert ( m_object != NULL );
+     
+     QVariant value = QtWrapper::GetPropertyValue ( m_object, GetName() );
+     if ( value.isValid() )
+     {
+       return value.toInt();
+     }
+     else
+     {
+       qDebug() << "    valid is NOT valid.";
+       
+       return -1;
+     }
    }
 
    virtual void SetValue ( int _newValue )
@@ -88,7 +161,7 @@ public:
 
    virtual bool GetValue ()
    {
-      return m_object->property(GetName().c_str()).toBool();
+      return QtWrapper::GetPropertyValue ( m_object, GetName() ).toBool();
    }
 
    virtual void SetValue ( bool _newValue )
@@ -189,9 +262,7 @@ public:
 
    virtual int GetValue ()
    {
-      QPoint pos ( 0, 0 ); //= m_object->pos();
-      QPoint screenPosition = m_object->mapToGlobal(pos);
-      return screenPosition.x();
+     return QtWrapper::GetPropertyValue ( m_object, QtWrapper::screen_pos() ).toPoint().x();
    }
 
    virtual void SetValue ( int _newValue )
@@ -223,9 +294,7 @@ public:
 
    virtual int GetValue ()
    {
-      QPoint pos ( 0, 0 ); //= m_object->pos();
-      QPoint screenPosition = m_object->mapToGlobal(pos);
-      return screenPosition.y();
+     return QtWrapper::GetPropertyValue ( m_object, QtWrapper::screen_pos() ).toPoint().y();
    }
 
    virtual void SetValue ( int _newValue )
@@ -234,6 +303,70 @@ public:
    }
 
    virtual ~QtScreenYProperty()
+   {
+   }
+};
+
+class QtGlobalXProperty : public IntegerPropertyNode
+{
+private:
+   QWidget * m_object;
+
+public:
+   QtGlobalXProperty ( QWidget * _object )
+      : IntegerPropertyNode ( SQ_UI_NODE_X ),
+        m_object ( _object )
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      return this->GetReadOnlyIntegerNodeInfo();
+   }
+
+   virtual int GetValue ()
+   {
+     return QtWrapper::GetPropertyValue ( m_object, QtWrapper::global_pos() ).toPoint().x();
+   }
+
+   virtual void SetValue ( int _newValue )
+   {
+      throw std::runtime_error ( "Can not set the X value." );
+   }
+
+   virtual ~QtGlobalXProperty()
+   {
+   }
+};
+
+class QtGlobalYProperty : public IntegerPropertyNode
+{
+private:
+   QWidget * m_object;
+
+public:
+   QtGlobalYProperty ( QWidget * _object )
+      : IntegerPropertyNode ( SQ_UI_NODE_Y ),
+        m_object ( _object )
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      return this->GetReadOnlyIntegerNodeInfo();
+   }
+
+   virtual int GetValue ()
+   {
+     return QtWrapper::GetPropertyValue ( m_object, QtWrapper::global_pos() ).toPoint().y();
+   }
+
+   virtual void SetValue ( int _newValue )
+   {
+      throw std::runtime_error ( "Can not set the Y value." );
+   }
+
+   virtual ~QtGlobalYProperty()
    {
    }
 };
@@ -430,9 +563,22 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WIDGET_STRING) );
    }
    _root->AddChild ( new ConstantStringNode ( SQ_UI_NODE_NATIVE_TYPE, _widget->metaObject()->className() ) );
-
-   _root->AddChild ( new QtIntProperty( SQ_UI_NODE_X, _widget ) );
-   _root->AddChild ( new QtIntProperty( SQ_UI_NODE_Y, _widget ) );
+   
+   /*
+   if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
+   {
+     _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_X, 0 ) );
+     _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_Y, 0 ) );
+   }
+   else
+   {
+     _root->AddChild ( new QtIntProperty( SQ_UI_NODE_X, _widget ) );
+     _root->AddChild ( new QtIntProperty( SQ_UI_NODE_Y, _widget ) );
+   }
+   */
+   _root->AddChild ( new QtGlobalXProperty( _widget ) );
+   _root->AddChild ( new QtGlobalYProperty( _widget ) );
+   
    _root->AddChild ( new QtIntProperty( SQ_UI_NODE_WIDTH, _widget ) );
    _root->AddChild ( new QtIntProperty( SQ_UI_NODE_HEIGHT, _widget ) );
 

@@ -41,6 +41,47 @@ QtAutomationResizeEvent::~QtAutomationResizeEvent()
 }
 
 
+const int QtAutomationGetPropertyEvent::ID = QEvent::registerEventType();
+
+QtAutomationGetPropertyEvent::QtAutomationGetPropertyEvent ( const char * const _propertyName )
+   : QEvent( (QEvent::Type) ID),
+     m_propertyName(_propertyName)
+{
+}
+ 
+const QVariant & QtAutomationGetPropertyEvent::value() const
+{
+   return m_value;
+}
+
+const char * QtAutomationGetPropertyEvent::propertyName() const
+{
+  return m_propertyName;
+}
+
+void QtAutomationGetPropertyEvent::done( const QVariant & _value )
+{
+  QMutexLocker locker ( &m_lock );
+  
+  m_value = _value;
+  
+  m_waitCondition.wakeAll ();
+}
+
+QMutex * QtAutomationGetPropertyEvent::lock()
+{
+  return & m_lock;
+}
+
+void QtAutomationGetPropertyEvent::wait()
+{
+  m_waitCondition.wait ( &m_lock );
+}
+
+QtAutomationGetPropertyEvent::~QtAutomationGetPropertyEvent()
+{
+}
+
 QtAutomationEventFilter::QtAutomationEventFilter ( ListNode * _node, QObject * _parent )
       : QObject(_parent),
         m_node ( _node )
@@ -57,12 +98,16 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
       break;
 
    case QEvent::Move:
-      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_X) )->SendUpdate();
-      dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_Y) )->SendUpdate();
+     
       if ( qobject_cast<QMainWindow*>(_object) != NULL || qobject_cast<QDialog*>(_object) != NULL )
       {
 	dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WINDOW_SCREEN_X) )->SendUpdate();
 	dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y) )->SendUpdate();
+      }
+      else
+      {
+	dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_X) )->SendUpdate();
+	dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_Y) )->SendUpdate();
       }
       break;
       
@@ -86,6 +131,35 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
       QSize size = dynamic_cast<QtAutomationResizeEvent*>(_event)->size();
       qobject_cast<QWidget*> ( _object )->resize ( size );
       return true;
+   }
+   else if ( _event->type() == QtAutomationGetPropertyEvent::ID )
+   {
+     QtAutomationGetPropertyEvent * event = dynamic_cast<QtAutomationGetPropertyEvent*>(_event);
+     
+     if ( event->propertyName() == QtWrapper::screen_pos() )
+     {
+        QWidget * widget = qobject_cast<QWidget*>(_object);
+	event->done ( widget->geometry().topLeft() );
+     }
+     else if ( event->propertyName() == QtWrapper::global_pos() )
+     {
+        QWidget * widget = qobject_cast<QWidget*>(_object);
+	QWidget * window = widget->window();
+	
+       QPoint pos = widget->mapTo ( window, widget->pos() );
+       qDebug() << "Filtered: " << pos;
+       
+       event->done ( pos );
+       
+	//qDebug() << widget->objectName() << " (in event handler>";
+	//qDebug() << "   Global: " << widget->mapTo(widget->window(), widget->pos());
+	//event->done ( widget->mapTo(widget->window(), widget->pos()) );
+     }
+     else
+     {
+        event->done ( qobject_cast<QWidget*> ( _object )->property ( event->propertyName() ) );
+     }
+     return true;
    }
    else
    {

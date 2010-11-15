@@ -168,7 +168,7 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
 
        //QPoint pos = widget->mapTo ( window, widget->pos() );
        
-       qDebug() << "Filtered: " << pos;
+       //qDebug() << "Filtered: " << pos;
        
        event->done ( pos );
      }

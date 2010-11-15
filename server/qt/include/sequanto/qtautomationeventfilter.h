@@ -96,8 +96,10 @@ namespace sequanto
        const char * const m_propertyName;
        QVariant m_value;
        QMutex m_lock;
+       QMutex m_doneLock;
        QWaitCondition m_waitCondition;
-       
+       //QWaitCondition m_doneWaitCondition;
+
      public:
        static const int ID;
        
@@ -106,8 +108,7 @@ namespace sequanto
        const QVariant & value () const;
        const char * propertyName() const;
        void done ( const QVariant & _value );
-       QMutex * lock();
-       void wait();
+       QVariant wait( QObject * _objectToPostEventTo );
        
        virtual ~QtAutomationGetPropertyEvent ();
      };

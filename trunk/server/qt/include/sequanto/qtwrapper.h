@@ -37,7 +37,7 @@ namespace sequanto
          friend class QtApplicationAutomationEventFilter;
 
          static void UpdateWindows ( ListNode * _windows );
-         
+	
       public:
          static void Wrap ( ListNode * _root, QObject * _object );
          /**
@@ -56,6 +56,11 @@ namespace sequanto
          static void WrapApplication ( ListNode * _root );
          
          static std::string ToString ( const QString & _value );
+
+	 static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
+
+	 static const std::string & screen_pos ();
+	 static const std::string & global_pos ();
       };
    }
 }

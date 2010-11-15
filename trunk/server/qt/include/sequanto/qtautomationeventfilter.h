@@ -12,6 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
  */
 
 #ifndef SEQUANTO_QT_MOVE_AND_RESIZE_EVENT_FILTER_H_
@@ -88,7 +89,28 @@ namespace sequanto
          
          virtual ~QtApplicationAutomationEventFilter ();
       };
+     
+     class QtAutomationGetPropertyEvent : public QEvent
+     {
+     protected:
+       const char * const m_propertyName;
+       QVariant m_value;
+       QMutex m_lock;
+       QWaitCondition m_waitCondition;
+       
+     public:
+       static const int ID;
+       
+       QtAutomationGetPropertyEvent ( const char * const _propertyName );
 
+       const QVariant & value () const;
+       const char * propertyName() const;
+       void done ( const QVariant & _value );
+       QMutex * lock();
+       void wait();
+       
+       virtual ~QtAutomationGetPropertyEvent ();
+     };
    }
 }
 

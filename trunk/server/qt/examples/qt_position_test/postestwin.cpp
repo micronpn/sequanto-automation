@@ -39,12 +39,14 @@ void PosTestWin::on_m_update_clicked()
    this->ui.m_buttonGlobalY->setText ( QString("Global Y = %1").arg( pos.y() ) );
 
    pos = this->ui.m_button->mapTo ( this, this->ui.m_button->pos() );
-
+   
    this->ui.m_buttonParentX->setText ( QString("Parent X = %1").arg( pos.x() ) );
    this->ui.m_buttonParentY->setText ( QString("Parent Y = %1").arg( pos.y() ) );
-
+   
+   //pos = qobject_cast<QWidget*>(this->ui.m_button->parent())->mapToGlobal ( this->ui.m_button->pos() );
+   
    pos = this->ui.m_button->mapTo ( this->ui.m_button->window(), this->ui.m_button->pos() );
-
+   
    this->ui.m_buttonWindowX->setText ( QString("Window X = %1").arg( pos.x() ) );
    this->ui.m_buttonWindowY->setText ( QString("Window Y = %1").arg( pos.y() ) );
 }

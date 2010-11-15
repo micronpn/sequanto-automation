@@ -33,7 +33,7 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
 
        //QPoint pos = widget->mapTo ( window, widget->pos() );
        
-       qDebug() << "Direct: " << pos;
+       //qDebug() << "Direct: " << pos;
        return pos;
     }
     else
@@ -119,7 +119,7 @@ public:
      }
      else
      {
-       qDebug() << "    valid is NOT valid.";
+       qDebug() << "    value is NOT valid.";
        
        return -1;
      }

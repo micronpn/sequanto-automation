@@ -158,17 +158,19 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
      }
      else if ( event->propertyName() == QtWrapper::global_pos() )
      {
-        QWidget * widget = qobject_cast<QWidget*>(_object);
-	QWidget * window = widget->window();
+       QWidget * widget = qobject_cast<QWidget*>(_object);
+       QWidget * window = widget->window();
+       
+       QPoint pos = widget->mapToGlobal(QPoint(0,0));
+       QPoint windowTopLeft ( window->geometry().topLeft() );
 	
-       QPoint pos = widget->mapTo ( window, widget->pos() );
+       pos -= windowTopLeft;
+
+       //QPoint pos = widget->mapTo ( window, widget->pos() );
+       
        qDebug() << "Filtered: " << pos;
        
        event->done ( pos );
-       
-	//qDebug() << widget->objectName() << " (in event handler>";
-	//qDebug() << "   Global: " << widget->mapTo(widget->window(), widget->pos());
-	//event->done ( widget->mapTo(widget->window(), widget->pos()) );
      }
      else
      {

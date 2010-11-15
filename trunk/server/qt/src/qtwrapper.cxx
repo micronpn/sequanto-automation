@@ -25,20 +25,16 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
     {
        QWidget * widget = qobject_cast<QWidget*>(_object);
        QWidget * window = widget->window();
-       //QPoint pos = window->geometry().topLeft();
+       
+       QPoint pos = widget->mapToGlobal(QPoint(0,0));
+       QPoint windowTopLeft ( window->geometry().topLeft() );
+	
+       pos -= windowTopLeft;
 
-       QPoint pos = widget->mapTo ( window, widget->pos() );
+       //QPoint pos = widget->mapTo ( window, widget->pos() );
+       
        qDebug() << "Direct: " << pos;
        return pos;
-       /*
-       qDebug() << widget->objectName();
-       qDebug() << "   Global: " << widget->mapToGlobal(widget->pos());
-       qDebug() << "   Window topleft: " << pos;
-       pos = widget->mapToGlobal(widget->pos()) - pos;
-       qDebug() << "   Global - Window: " << pos;
-       */
-       
-       //return pos;
     }
     else
     {
@@ -532,8 +528,8 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
-      _root->AddChild ( new QtScreenXProperty( _widget ) );
-      _root->AddChild ( new QtScreenYProperty( _widget ) );
+      _root->AddChild ( new QtScreenXProperty( _widget->window() ) );
+      _root->AddChild ( new QtScreenYProperty( _widget->window() ) );
    }
    else if ( _widget->inherits ( QMenuBar::staticMetaObject.className() ) )
    {

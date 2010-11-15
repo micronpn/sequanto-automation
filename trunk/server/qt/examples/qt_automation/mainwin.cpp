@@ -42,3 +42,19 @@ void MainWin::on_listView_currentItemChanged( QListWidgetItem * _current, QListW
 {
    std::cout << _current->text().toStdString() << std::endl;
 }
+
+void MainWin::on_m_updateButton_clicked()
+{
+  QPoint windowTopLeft ( this->geometry().topLeft() );
+  ui.m_windowGlobalPosition->setText ( QString("Global window pos: %1, %2").arg(windowTopLeft.x()).arg(windowTopLeft.y()) );
+  
+  QPoint pos = ui.m_updateButton->mapTo ( this, ui.m_updateButton->pos() );
+  ui.m_buttonPositionMappedToWindow->setText ( QString("Button pos mapped to window: %1, %2").arg(pos.x()).arg(pos.y()) );
+
+  pos = ui.m_updateButton->mapToGlobal(QPoint(0,0));
+  ui.m_buttonPositionMappedToGlobal->setText ( QString("Button pos mapped to global: %1, %2").arg(pos.x()).arg(pos.y()) );
+  
+  pos -= windowTopLeft;
+  ui.m_buttonPositionTranslated->setText ( QString("Button pos (translated): %1, %2").arg(pos.x()).arg(pos.y()) );
+}
+

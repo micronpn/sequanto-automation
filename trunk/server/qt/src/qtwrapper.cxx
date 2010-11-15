@@ -47,16 +47,9 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
   }
   else
   {
-    QtAutomationGetPropertyEvent * event = new QtAutomationGetPropertyEvent(_propertyName.c_str());
-    {
-      QMutexLocker ( event->lock() );
-      
-      QCoreApplication::postEvent ( _object, event );
-      
-      event->wait();
-      
-      return event->value();
-    }
+     QtAutomationGetPropertyEvent * event = new QtAutomationGetPropertyEvent(_propertyName.c_str());
+     QVariant value = event->wait ( _object );
+     return value;
   }
 }
 

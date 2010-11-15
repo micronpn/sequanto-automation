@@ -61,21 +61,36 @@ const char * QtAutomationGetPropertyEvent::propertyName() const
 
 void QtAutomationGetPropertyEvent::done( const QVariant & _value )
 {
-  QMutexLocker locker ( &m_lock );
-  
+   m_lock.lock();
+
   m_value = _value;
   
   m_waitCondition.wakeAll ();
+
+  m_lock.unlock();
+
+  m_doneLock.lock ();
+
+  m_doneLock.unlock ();
 }
 
-QMutex * QtAutomationGetPropertyEvent::lock()
+QVariant QtAutomationGetPropertyEvent::wait(QObject * _objectToPostEventTo )
 {
-  return & m_lock;
-}
+   QVariant ret;
 
-void QtAutomationGetPropertyEvent::wait()
-{
-  m_waitCondition.wait ( &m_lock );
+   m_doneLock.lock();
+   m_lock.lock();
+
+   QCoreApplication::postEvent ( _objectToPostEventTo, this );
+   
+   m_waitCondition.wait ( &m_lock );
+
+   ret = m_value;
+
+   m_lock.unlock();
+   m_doneLock.unlock();
+
+   return ret;
 }
 
 QtAutomationGetPropertyEvent::~QtAutomationGetPropertyEvent()

@@ -36,6 +36,7 @@ extern "C"
       SQ_WIDGET_TYPE_WINDOW,
       SQ_WIDGET_TYPE_CONTAINER,
       SQ_WIDGET_TYPE_BUTTON,
+      SQ_WIDGET_TYPE_CHECK_BOX,
       SQ_WIDGET_TYPE_LABEL,
       SQ_WIDGET_TYPE_MENU_BAR,
       SQ_WIDGET_TYPE_MENU_ITEM,
@@ -48,6 +49,7 @@ extern "C"
    extern const char * const SQ_WIDGET_TYPE_CONTAINER_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_CHECK_BOX_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
 
@@ -68,6 +70,7 @@ extern "C"
    extern const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE;
 
 #ifdef __cplusplus
 }

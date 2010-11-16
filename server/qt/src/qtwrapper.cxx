@@ -136,13 +136,13 @@ public:
    }
 };
 
-class QtBoolProperty : public BooleanPropertyNode
+class QtBooleanProperty : public BooleanPropertyNode
 {
 private:
    QObject * m_object;
 
 public:
-   QtBoolProperty ( const std::string & _name, QObject * _object )
+   QtBooleanProperty ( const std::string & _name, QObject * _object )
       : BooleanPropertyNode ( _name ),
         m_object ( _object )
    {
@@ -159,7 +159,7 @@ public:
       m_object->setProperty(GetName().c_str(), variantValue );
    }
 
-   virtual ~QtBoolProperty()
+   virtual ~QtBooleanProperty()
    {
    }
 };
@@ -391,7 +391,7 @@ void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
          break;
 
       case QVariant::Bool:
-         _root->AddChild ( new QtBoolProperty(_object->metaObject()->property(i).name(), _object ) );
+         _root->AddChild ( new QtBooleanProperty(_object->metaObject()->property(i).name(), _object ) );
          break;
 
       }
@@ -521,7 +521,12 @@ public:
 
 void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
 {
-   if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
+   if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_CHECK_BOX_STRING) );
+      _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
+   }
+   else if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_BUTTON_STRING) );
    }
@@ -546,18 +551,11 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    else if ( _widget->inherits ( QLabel::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_LABEL_STRING) );
+      _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WIDGET_STRING) );
-   }
-   int textPropertyIndex = _widget->metaObject()->indexOfProperty(SQ_UI_NODE_TEXT);
-   if ( textPropertyIndex != -1 )
-   {
-     if ( _widget->metaObject()->property(textPropertyIndex).type() == QVariant::String )
-     {
-       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
-     }
    }
    _root->AddChild ( new ConstantStringNode ( SQ_UI_NODE_NATIVE_TYPE, _widget->metaObject()->className() ) );
    

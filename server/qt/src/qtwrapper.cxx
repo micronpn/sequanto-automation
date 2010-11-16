@@ -525,10 +525,12 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_CHECK_BOX_STRING) );
       _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
+      _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_BUTTON_STRING) );
+      _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
    {
@@ -659,6 +661,10 @@ void QtWrapper::WrapApplication ( ListNode * _root )
 
    UpdateWindows ( windows );
 
+   QDesktopWidget * desktop = QApplication::desktop();
+   _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_SCREEN_WIDTH, desktop->screenGeometry ().width() ) );
+   _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_SCREEN_HEIGHT, desktop->screenGeometry ().height() ) );
+   
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
 }
 

@@ -551,6 +551,14 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WIDGET_STRING) );
    }
+   int textPropertyIndex = _widget->metaObject()->indexOfProperty(SQ_UI_NODE_TEXT);
+   if ( textPropertyIndex != -1 )
+   {
+     if ( _widget->metaObject()->property(textPropertyIndex).type() == QVariant::String )
+     {
+       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
+     }
+   }
    _root->AddChild ( new ConstantStringNode ( SQ_UI_NODE_NATIVE_TYPE, _widget->metaObject()->className() ) );
    
    /*

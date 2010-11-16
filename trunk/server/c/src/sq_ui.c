@@ -24,6 +24,7 @@ const char * const SQ_WIDGET_TYPE_WINDOW_STRING SQ_CONST_VARIABLE = "Window";
 const char * const SQ_WIDGET_TYPE_CONTAINER_STRING SQ_CONST_VARIABLE = "Container";
 const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE = "Button";
 const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE = "Label";
+const char * const SQ_WIDGET_TYPE_CHECK_BOX_STRING SQ_CONST_VARIABLE = "CheckBox";
 const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
 const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
 
@@ -44,6 +45,7 @@ const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE = "screenX";
 const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE = "screenY";
 
 const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE = "text";
+const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE = "checked";
 
 const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
@@ -69,6 +71,9 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_MENU_ITEM:
       return SQ_WIDGET_TYPE_MENU_ITEM_STRING;
+
+   case SQ_WIDGET_TYPE_CHECK_BOX:
+      return SQ_WIDGET_TYPE_CHECK_BOX_STRING;
 
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;

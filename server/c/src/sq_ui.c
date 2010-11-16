@@ -43,6 +43,8 @@ const char * const SQ_UI_NODE_UNNAMED_OBJECTS SQ_CONST_VARIABLE = "unnamedObject
 const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE = "screenX";
 const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE = "screenY";
 
+const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE = "text";
+
 const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
    switch ( _type )

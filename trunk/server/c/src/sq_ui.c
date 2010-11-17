@@ -30,8 +30,9 @@ const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
-const char * const SQ_UI_NODE_SCREEN_WIDTH SQ_CONST_VARIABLE = "screen_width";
-const char * const SQ_UI_NODE_SCREEN_HEIGHT SQ_CONST_VARIABLE = "screen_height";
+const char * const SQ_UI_NODE_SCREEN SQ_CONST_VARIABLE = "screen";
+const char * const SQ_UI_NODE_MOUSE SQ_CONST_VARIABLE = "mouse";
+const char * const SQ_UI_NODE_CLICK SQ_CONST_VARIABLE = "click";
 const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE = "children";
 const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE = "type";
 const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE = "x";

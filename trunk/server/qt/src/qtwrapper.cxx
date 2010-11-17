@@ -652,6 +652,95 @@ public:
    }
 };
 
+class QtMouseMoveMethod : public Node
+{
+public:
+   QtMouseMoveMethod()
+      : Node(SQ_UI_NODE_MOVE)
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      static MethodInfo info ( VALUE_TYPE_VOID );
+      if ( info.GetNumberOfParameters() == 0 )
+      {
+         info.AddParameter ( VALUE_TYPE_INTEGER );
+         info.AddParameter ( VALUE_TYPE_INTEGER );
+      }
+      return info;
+   }
+   
+   virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
+   {
+      int x = _inputValues[0].Value.m_integerValue;
+      int y = _inputValues[1].Value.m_integerValue;
+      
+      QApplication::postEvent ( QApplication::activeWindow(), new QMouseEvent( QEvent::MouseMove, QPoint(x, y), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+   }
+
+   virtual ~QtMouseMoveMethod()
+   {
+   }
+};
+
+class QtMouseClickMethod : public Node
+{
+public:
+   QtMouseClickMethod()
+      : Node(SQ_UI_NODE_CLICK)
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      static MethodInfo info ( VALUE_TYPE_VOID );
+      if ( info.GetNumberOfParameters() == 0 )
+      {
+         info.AddParameter ( VALUE_TYPE_INTEGER );
+         info.AddParameter ( VALUE_TYPE_INTEGER );
+         info.AddParameter ( VALUE_TYPE_INTEGER );
+      }
+      return info;
+   }
+   
+   virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
+   {
+      int x = _inputValues[0].Value.m_integerValue;
+      int y = _inputValues[1].Value.m_integerValue;
+      int mouseButton = _inputValues[2].Value.m_integerValue;
+      
+      Qt::MouseButton button = Qt::NoButton;
+      switch ( mouseButton )
+      {
+      case 0:
+         button = Qt::LeftButton;
+         break;
+
+      case 1:
+         button = Qt::RightButton;
+         break;
+
+      case 2:
+         button = Qt::MidButton;
+         break;
+      }
+
+      QPoint pos ( x, y );
+      QWidget * receiver = QApplication::widgetAt(pos );
+      if ( receiver != 0 )
+      {
+         QPoint widgetPos = receiver->mapFromGlobal ( pos );
+         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, pos, button, button, Qt::NoModifier ) );
+         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, pos, button, button, Qt::NoModifier ) );
+      }
+   }
+
+   virtual ~QtMouseClickMethod()
+   {
+   }
+};
+
 void QtWrapper::WrapApplication ( ListNode * _root )
 {
    ListNode * windows = new ListNode ( SQ_UI_NODE_WINDOWS );
@@ -662,8 +751,15 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    UpdateWindows ( windows );
 
    QDesktopWidget * desktop = QApplication::desktop();
-   _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_SCREEN_WIDTH, desktop->screenGeometry ().width() ) );
-   _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_SCREEN_HEIGHT, desktop->screenGeometry ().height() ) );
+   ListNode * screen = new ListNode ( SQ_UI_NODE_SCREEN );
+   _root->AddChild ( screen );
+   screen->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_WIDTH, desktop->screenGeometry ().width() ) );
+   screen->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_HEIGHT, desktop->screenGeometry ().height() ) );
+   
+   ListNode * mouse = new ListNode ( SQ_UI_NODE_MOUSE );
+   _root->AddChild ( mouse );
+   mouse->AddChild ( new QtMouseMoveMethod() );
+   mouse->AddChild ( new QtMouseClickMethod() );
    
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
 }

@@ -152,7 +152,7 @@ int main ( int _argc, char * _argv[] )
     
    sq_server_init ( &server, 4321 );
 
-   ListNode root ( "<ROOT>" );
+   ListNode root ( "ROOT" );
    tree.SetRoot ( &root );
 
    vector<MyTestObject*> listOfObjects;

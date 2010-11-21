@@ -468,6 +468,8 @@ public:
 
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+       assert ( _numberOfValues == 2 );
+       
       int x = _inputValues[0].Value.m_integerValue;
       int y = _inputValues[1].Value.m_integerValue;
 
@@ -506,6 +508,8 @@ public:
 
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+       assert ( _numberOfValues == 2 );
+       
       int width = _inputValues[0].Value.m_integerValue;
       int height = _inputValues[1].Value.m_integerValue;
 
@@ -673,10 +677,16 @@ public:
    
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+       assert ( _numberOfValues == 2 );
+       
       int x = _inputValues[0].Value.m_integerValue;
       int y = _inputValues[1].Value.m_integerValue;
-      
-      QApplication::postEvent ( QApplication::activeWindow(), new QMouseEvent( QEvent::MouseMove, QPoint(x, y), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+
+      QWidget * window = QApplication::activeWindow();
+      if ( window != NULL )
+      {
+          QApplication::postEvent ( window, new QMouseEvent( QEvent::MouseMove, QPoint(x, y), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+      }
    }
 
    virtual ~QtMouseMoveMethod()
@@ -706,6 +716,8 @@ public:
    
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+       assert ( _numberOfValues == 3 );
+       
       int x = _inputValues[0].Value.m_integerValue;
       int y = _inputValues[1].Value.m_integerValue;
       int mouseButton = _inputValues[2].Value.m_integerValue;
@@ -728,6 +740,7 @@ public:
 
       QPoint pos ( x, y );
       QWidget * receiver = QApplication::widgetAt(pos );
+      
       if ( receiver != 0 )
       {
          QPoint widgetPos = receiver->mapFromGlobal ( pos );

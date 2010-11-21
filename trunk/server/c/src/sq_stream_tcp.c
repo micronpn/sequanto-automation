@@ -39,6 +39,8 @@ static const ssize_t SOCKET_ERROR = -1;
 
 #include <sequanto/stream.h>
 
+#define SQ_STREAM_OUTPUT_BUFFER_SIZE 100
+
 typedef struct _SQStream
 {
     SQStreamDataReceivedFunction m_dataReceivedHandler;
@@ -48,6 +50,8 @@ typedef struct _SQStream
     size_t m_dataAvailable;
     SQThread * m_pollingThread;
     SQMutex * m_writeLock;
+    SQByte m_outputBuffer[SQ_STREAM_OUTPUT_BUFFER_SIZE];
+    size_t m_outputBufferPosition;
 } _SQStream;
 
 SQStream * sq_stream_open ( int _portNumber )
@@ -62,6 +66,8 @@ SQStream * sq_stream_open ( int _portNumber )
    ret->m_clientSocket = SOCKET_ERROR;
    ret->m_pollingThread = NULL;
    ret->m_writeLock = sq_mutex_create();
+   
+   ret->m_outputBufferPosition = 0;
    
    memset ( &sa, 0, sizeof(sa) );
    sa.sin_family = AF_INET;
@@ -190,33 +196,59 @@ void sq_stream_close ( SQStream * _stream )
    free ( _stream );
 }
 
+SQBool sq_stream_flush ( SQStream * _stream )
+{
+    int sent;
+    int now;
+    int enter = -1;
+    
+    if ( _stream->m_outputBufferPosition > 0 )
+    {
+        do
+        {
+            sent = send ( _stream->m_clientSocket, (char*) _stream->m_outputBuffer, _stream->m_outputBufferPosition, 0 );
+        
+            SQ_LOG2("%i/%i bytes sent successfully.\r\n", sent, _stream->m_outputBufferPosition );
+
+            if ( sent == SOCKET_ERROR )
+            {
+                return SQ_FALSE;
+            }
+            if ( sent != _stream->m_outputBufferPosition )
+            {
+                if ( enter == -1 )
+                {
+                    enter = sq_system_tickcount ();
+                }
+                now = sq_system_tickcount ();
+            
+                if ( now - enter > SQ_SOCKET_TIMEOUT )
+                {
+                    _stream->m_outputBufferPosition = 0;
+                    return SQ_FALSE;
+                }
+            
+                sq_system_sleep ( 100 );
+            }
+        } while ( sent != _stream->m_outputBufferPosition );
+        _stream->m_outputBufferPosition = 0;
+    }
+    return SQ_TRUE;
+}
+
 SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )
 {
-   int sent;
-   int now;
-   int enter = sq_system_tickcount ();
-
-   do
-   {
-      sent = send ( _stream->m_clientSocket, (char*) &_byte, 1, 0 );
-      
-      if ( sent == SOCKET_ERROR )
-      {
-         return SQ_FALSE;
-      }
-      if ( sent != 1 )
-      {
-         now = sq_system_tickcount ();
-
-         if ( now - enter > SQ_SOCKET_TIMEOUT )
-         {
-            return SQ_FALSE;
-         }
-
-         sq_system_sleep ( 100 );
-      }
-   } while ( sent != 1 );
-   return SQ_TRUE;
+    if ( _stream->m_clientSocket != SOCKET_ERROR )
+    {
+        _stream->m_outputBuffer[_stream->m_outputBufferPosition] = _byte;
+        _stream->m_outputBufferPosition ++;
+        
+        if ( _stream->m_outputBufferPosition == SQ_STREAM_OUTPUT_BUFFER_SIZE )
+        {
+            sq_stream_flush ( _stream );
+        }
+    }
+    return SQ_TRUE;
 }
 
 SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
@@ -279,5 +311,7 @@ void sq_stream_enter_write ( SQStream * _stream )
 
 void sq_stream_exit_write ( SQStream * _stream )
 {
+    sq_stream_flush ( _stream );
+    
     sq_mutex_leave ( _stream->m_writeLock );
 }

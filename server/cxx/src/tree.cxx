@@ -6,6 +6,11 @@
 using namespace std;
 using namespace sequanto::automation;
 
+Tree::Tree ()
+   : m_root(NULL)
+{
+}
+
 Node * Tree::FindNode ( const char * _path )
 {
    assert ( m_root != NULL );

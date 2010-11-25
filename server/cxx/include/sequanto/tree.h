@@ -38,6 +38,7 @@ namespace sequanto
          Node * m_root;
          
       public:
+		 Tree ();
          Node * FindNode ( const char * _path );
          SQBool HandleInfo ( SQStream * _stream, const char * _path );
          SQBool HandleList ( SQStream * _stream, const char * _path );

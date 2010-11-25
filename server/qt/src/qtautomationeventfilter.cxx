@@ -116,8 +116,16 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
      
         if ( qobject_cast<QMainWindow*>(_object) != NULL || qobject_cast<QDialog*>(_object) != NULL )
         {
-            dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WINDOW_SCREEN_X) )->SendUpdate();
-            dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y) )->SendUpdate();
+			Node * screenX = m_node->FindChild(SQ_UI_WINDOW_SCREEN_X);
+			Node * screenY = m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y);
+			if ( screenX != NULL )
+			{
+				dynamic_cast<IntegerPropertyNode*> ( screenX )->SendUpdate();
+			}
+			if ( screenY != NULL )
+			{
+				dynamic_cast<IntegerPropertyNode*> ( screenY )->SendUpdate();
+			}
         }
         else
         {

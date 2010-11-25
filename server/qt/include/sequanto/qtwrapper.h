@@ -56,11 +56,12 @@ namespace sequanto
          static void WrapApplication ( ListNode * _root );
          
          static std::string ToString ( const QString & _value );
+		 static std::string GetObjectName ( QObject * _object );
 
-	 static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
+		 static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
 
-	 static const std::string & screen_pos ();
-	 static const std::string & global_pos ();
+		 static const std::string & screen_pos ();
+		 static const std::string & global_pos ();
       };
    }
 }

@@ -366,9 +366,21 @@ std::string QtWrapper::ToString ( const QString & _string )
    return std::string ( value.constData(), value.length() );
 }
 
+std::string QtWrapper::GetObjectName ( QObject * _object )
+{
+	if ( _object->objectName().isEmpty() )
+	{
+		return ToString ( QString("Unnamed_object_at_0x%1").arg ( (size_t) _object, 8, 16, QLatin1Char('0') ) );
+	}
+	else
+	{
+		return ToString(_object->objectName());
+	}
+}
+
 void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
 {
-   std::string name ( ToString(_object->objectName()) );
+   std::string name ( GetObjectName(_object) );
    _root->AddChild ( new ConstantStringNode("name", name ) );
    _root->AddChild ( new ConstantStringNode("className", _object->metaObject()->className() ) );
 
@@ -431,7 +443,7 @@ void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
       {
          QObject * childObject = list.at ( i );
 
-         std::string childName (ToString(childObject->objectName()) );
+         std::string childName ( GetObjectName(childObject) );
          if ( !childName.empty() )
          {
             ListNode * child = new ListNode ( childName );
@@ -525,7 +537,14 @@ public:
 
 void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
 {
-   if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
+   //else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
+   if ( (_widget->windowType() & Qt::Window) == Qt::Window )
+   {
+	  _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
+      _root->AddChild ( new QtScreenXProperty( _widget->window() ) );
+      _root->AddChild ( new QtScreenYProperty( _widget->window() ) );
+   }
+   else if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_CHECK_BOX_STRING) );
       _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
@@ -535,12 +554,6 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_BUTTON_STRING) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
-   }
-   else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
-   {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
-      _root->AddChild ( new QtScreenXProperty( _widget->window() ) );
-      _root->AddChild ( new QtScreenYProperty( _widget->window() ) );
    }
    else if ( _widget->inherits ( QMenuBar::staticMetaObject.className() ) )
    {
@@ -600,7 +613,7 @@ void QtWrapper::WrapUi ( ListNode * _root, QWidget * _widget )
 
          if ( childObject->isWidgetType() )
          {
-            std::string childName (ToString(childObject->objectName()) );
+            std::string childName ( GetObjectName(childObject) );
             if ( !childName.empty() )
             {
                ListNode * child = new ListNode ( childName );
@@ -645,7 +658,7 @@ public:
       }
       else
       {
-         std::string value ( QtWrapper::ToString(activeWindow->objectName()) );
+         std::string value ( QtWrapper::GetObjectName(activeWindow) );
          sq_value_string_copy ( &_outputValue, value.c_str() );
       }
    }
@@ -779,17 +792,17 @@ void QtWrapper::WrapApplication ( ListNode * _root )
 
 void QtWrapper::UpdateWindows( ListNode * _windows )
 {
+	int i = 0;
    foreach ( QWidget * widget, QApplication::topLevelWidgets() )
    {
-      if ( !widget->objectName().isEmpty() )
-      {
-         if ( !_windows->HasChild ( ToString(widget->objectName()) ))
-         {
-            ListNode * newWindow = new ListNode ( ToString(widget->objectName()) );
-            WrapUi ( newWindow, widget );
-            _windows->AddChild ( newWindow );
-         }
-      }
+	   std::string objectName ( GetObjectName(widget) );
+	   if ( !_windows->HasChild ( objectName ))
+	   {
+		   ListNode * newWindow = new ListNode ( objectName );
+		   WrapUi ( newWindow, widget );
+		   _windows->AddChild ( newWindow );
+	   }
+	  i++;
    }
    
    ListNode::Iterator * it = _windows->ListChildren();
@@ -799,7 +812,7 @@ void QtWrapper::UpdateWindows( ListNode * _windows )
       bool found = false;
       foreach ( QWidget * widget, QApplication::topLevelWidgets() )
       {
-         if ( ToString(widget->objectName()) == it->GetCurrent()->GetName() )
+         if ( GetObjectName(widget) == it->GetCurrent()->GetName() )
          {
             found = true;
             break;

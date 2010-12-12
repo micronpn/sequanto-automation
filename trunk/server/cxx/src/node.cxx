@@ -1,3 +1,5 @@
+#include <sequanto/log.h>
+#include <sequanto/server.h>
 #include <sequanto/node.h>
 #include <stdexcept>
 #include <string>
@@ -84,6 +86,10 @@ void Node::HandleMonitorStateChange ( bool _enable )
 {
 }
 
+void Node::LogAsync ( const std::string & _message ) const
+{
+   sq_log ( _message.c_str() );
+}
 
 Node::~Node()
 {

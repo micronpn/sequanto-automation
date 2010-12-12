@@ -1,4 +1,8 @@
 #include <sequanto/qtautomationeventfilter.h>
+#include <sequanto/qtautomationgetpropertyevent.h>
+#include <sequanto/qtautomationmoveevent.h>
+#include <sequanto/qtautomationresizeevent.h>
+#include <sequanto/qtwidgetnode.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -6,99 +10,8 @@
 
 using namespace sequanto::automation;
 
-const int QtAutomationMoveEvent::ID = QEvent::registerEventType();
-
-QtAutomationMoveEvent::QtAutomationMoveEvent ( int _x, int _y )
-    : QEvent( (QEvent::Type) ID),
-      m_position(_x, _y)
-{
-}
- 
-const QPoint & QtAutomationMoveEvent::position()
-{
-    return m_position;
-}
-
-QtAutomationMoveEvent::~QtAutomationMoveEvent()
-{
-}
-
-const int QtAutomationResizeEvent::ID = QEvent::registerEventType();
-
-QtAutomationResizeEvent::QtAutomationResizeEvent ( int _width, int _height )
-    : QEvent( (QEvent::Type) ID),
-      m_size(_width, _height)
-{
-}
-
-const QSize & QtAutomationResizeEvent::size()
-{
-    return m_size;
-}
-
-QtAutomationResizeEvent::~QtAutomationResizeEvent()
-{
-}
-
-
-const int QtAutomationGetPropertyEvent::ID = QEvent::registerEventType();
-
-QtAutomationGetPropertyEvent::QtAutomationGetPropertyEvent ( const char * const _propertyName )
-    : QEvent( (QEvent::Type) ID),
-      m_propertyName(_propertyName)
-{
-}
- 
-const QVariant & QtAutomationGetPropertyEvent::value() const
-{
-    return m_value;
-}
-
-const char * QtAutomationGetPropertyEvent::propertyName() const
-{
-    return m_propertyName;
-}
-
-void QtAutomationGetPropertyEvent::done( const QVariant & _value )
-{
-    m_lock.lock();
-
-    m_value = _value;
-  
-    m_waitCondition.wakeAll ();
-
-    m_lock.unlock();
-
-    m_doneLock.lock ();
-
-    m_doneLock.unlock ();
-}
-
-QVariant QtAutomationGetPropertyEvent::wait(QObject * _objectToPostEventTo )
-{
-    QVariant ret;
-
-    m_doneLock.lock();
-    m_lock.lock();
-
-    QCoreApplication::postEvent ( _objectToPostEventTo, this );
-   
-    m_waitCondition.wait ( &m_lock );
-
-    ret = m_value;
-
-    m_lock.unlock();
-    m_doneLock.unlock();
-
-    return ret;
-}
-
-QtAutomationGetPropertyEvent::~QtAutomationGetPropertyEvent()
-{
-}
-
-QtAutomationEventFilter::QtAutomationEventFilter ( ListNode * _node, QObject * _parent )
-    : QObject(_parent),
+QtAutomationEventFilter::QtAutomationEventFilter ( QtWidgetNode * _node )
+    : QObject(_node->widget()),
       m_node ( _node )
 {
 }
@@ -108,9 +21,22 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
     switch ( _event->type() )
     {
     case QEvent::ChildAdded:
-    case QEvent::ChildRemoved:
-        m_node->SendUpdate();
+       {
+          QChildEvent * childEvent = dynamic_cast<QChildEvent*>(_event );
+          QObject * child = childEvent->child();
+          if ( child->isWidgetType () ) 
+          {
+             QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(child).c_str()) );
+             if ( QtWrapper::AddChild ( m_node, qobject_cast<QWidget*>(child) ) )
+             {
+                m_node->SendUpdate();
+             }
+          }
+       }
         break;
+
+    case QEvent::ChildRemoved:
+       break;
 
     case QEvent::Move:
      
@@ -140,7 +66,11 @@ bool QtAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _event )
         break;
       
     case QEvent::Destroy:
+    case QEvent::DeferredDelete:
+        m_node->WidgetDestroyed ();
         break;
+
+
     }
 
     if ( _event->type() == QtAutomationMoveEvent::ID )

@@ -22,6 +22,7 @@ private slots:
    void on_actionAdd_some_items_activated();
    void on_listView_currentItemChanged(  QListWidgetItem * _current, QListWidgetItem * _previous );
    void on_m_updateButton_clicked();
+   void on_m_addLabel_clicked ();
 
 private:
    Ui::MainWindow ui;

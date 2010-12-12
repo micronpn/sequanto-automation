@@ -85,7 +85,12 @@ void ListNode::AddChild ( Node * _child )
 
 void ListNode::RemoveChild ( std::string _name )
 {
-   m_children.erase ( _name );
+   NodeMap::iterator it = m_children.find(_name);
+   if ( it != m_children.end() )
+   {
+      delete it->second;
+      m_children.erase ( it );
+   }
 }
 
 bool ListNode::HasChild ( std::string _name )
@@ -104,4 +109,9 @@ void ListNode::SendUpdate ()
 
 ListNode::~ListNode()
 {
+   for ( NodeMap::iterator it = m_children.begin(); it != m_children.end(); ++it )
+   {
+      delete it->second;
+   }
+   m_children.clear();
 }

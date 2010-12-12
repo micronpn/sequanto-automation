@@ -58,3 +58,10 @@ void MainWin::on_m_updateButton_clicked()
   ui.m_buttonPositionTranslated->setText ( QString("Button pos (translated): %1, %2").arg(pos.x()).arg(pos.y()) );
 }
 
+void MainWin::on_m_addLabel_clicked()
+{
+   QString label = QString("Button %1").arg(ui.m_labelList->rowCount());
+   QPushButton * button = new QPushButton(label);
+   button->setObjectName ( QString("m_button%1").arg(ui.m_labelList->rowCount()) );
+   ui.m_labelList->addRow ( QString("%1").arg(ui.m_labelList->rowCount()), button );
+}

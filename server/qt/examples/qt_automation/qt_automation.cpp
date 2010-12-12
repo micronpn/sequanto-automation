@@ -105,18 +105,18 @@ int main ( int _argc, char * _argv[] )
     
    sq_server_init ( &server, 4321 );
 
-   ListNode ui_root ( "ui" );
-   ui_tree.SetRoot ( &ui_root );
+   ListNode * ui_root = new ListNode ( "ui" );
+   ui_tree.SetRoot ( ui_root );
 
-   ListNode qt_root ( "qt" );
-   qt_tree.SetRoot ( &qt_root );
+   ListNode * qt_root = new ListNode ( "qt" );
+   qt_tree.SetRoot ( qt_root );
 
-   QtWrapper::WrapApplication ( &ui_root );
+   QtWrapper::WrapApplication ( ui_root );
    
    MainWin mainWin;
    mainWin.show();
 
-   QtWrapper::Wrap ( &qt_root, &mainWin );
+   QtWrapper::Wrap ( qt_root, &mainWin );
    
    //mainWin.findChild<QPushButton*>("exitButton")->connect ( );
 

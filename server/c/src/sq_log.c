@@ -27,9 +27,10 @@ void sq_log ( const char * _message )
 {
    SQServer * server = sq_server_get_instance ();
    
+   sq_stream_enter_write ( server->m_stream );
    sq_stream_write_string ( server->m_stream, sq_get_constant_string(BANG_LOG) );
    sq_protocol_write_string ( server->m_stream, _message );
-
+   sq_stream_exit_write ( server->m_stream );
 }
 
 void sq_log_internal_write_string ( SQStream * _stream, const char * _value )

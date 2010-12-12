@@ -240,12 +240,17 @@ IF(SQ_CXX)
    IF(QT4_FOUND)
      FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
      INCLUDE(${QT_USE_FILE})
-
-     QT4_WRAP_CPP(SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtautomationeventfilter.h)
      
-     SET(QT_SRCS server/qt/src/qtwrapper.cxx server/qt/src/qtautomationeventfilter.cxx ${SequantoAutomation_QT_AUTOMATION_EVENT_FILTER_MOC})
-     SET(QT_HEADERS server/qt/include/sequanto/qtwrapper.h server/qt/include/sequanto/qtautomationeventfilter.h)
-    
+     QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtapplicationautomationeventfilter.h)
+     QT4_WRAP_CPP(SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtwidgetautomationeventfilter.h)
+     
+     SET(QT_SRCS server/qt/src/qtwrapper.cxx server/qt/src/qtwidgetautomationeventfilter.cxx server/qt/src/qtapplicationautomationeventfilter.cxx server/qt/src/qtwidgetnode.cxx
+                 server/qt/src/qtautomationgetpropertyevent.cxx server/qt/src/qtautomationmoveevent.cxx server/qt/src/qtautomationresizeevent.cxx 
+                 ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC} ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC})
+     
+     SET(QT_HEADERS server/qt/include/sequanto/qtwrapper.h server/qt/include/sequanto/qtwidgetautomationeventfilter.h server/qt/include/sequanto/qtapplicationautomationeventfilter.h server/qt/include/sequanto/qtwidgetnode.h
+                    server/qt/include/sequanto/qtautomationgetpropertyevent.h server/qt/include/sequanto/qtautomationresizeevent.h server/qt/include/sequanto/qtautomationmoveevent.h)
+     
      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
      TARGET_LINK_LIBRARIES(SequantoAutomation ${QT_LIBRARIES})

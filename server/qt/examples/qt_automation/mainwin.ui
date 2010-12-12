@@ -143,6 +143,30 @@
      <string>CheckBox</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="m_addLabel">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>60</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add label</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="formLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>20</y>
+      <width>221</width>
+      <height>441</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="m_labelList"/>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -150,7 +174,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>25</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

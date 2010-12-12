@@ -17,10 +17,11 @@
 #ifndef SEQUANTO_QT_WRAPPER_H_
 #define SEQUANTO_QT_WRAPPER_H_
 
+#include <sequanto/tree.h>
+#include <sequanto/qtwidgetnode.h>
+
 #include <string>
 #include <map>
-#include <sequanto/tree.h>
-
 #include <QtCore>
 #include <QtGui>
 
@@ -28,6 +29,8 @@ namespace sequanto
 {
    namespace automation
    {
+      class QtWidgetNode;
+      
       class QtWrapper
       {
       private:
@@ -46,7 +49,7 @@ namespace sequanto
           * 
           * @see WrapApplication
           */
-         static void WrapUi ( ListNode * _root, QWidget * _widget );
+         static void WrapUi ( QtWidgetNode * _root, QWidget * _widget );
          /**
           * Wrap the QApplication instance in this application. This
           * is the preferred way of wrapping a QT application.
@@ -54,14 +57,24 @@ namespace sequanto
           * Only one QApplication exists in a single application, 
           */
          static void WrapApplication ( ListNode * _root );
+
+         /**
+          * Add a child widget to the widget represented in the tree as _root.
+          * 
+          * @returns true if the child was added to the root, false otherwise (child already added, name is empty or child is not a widget).
+          */
+         static bool AddChild ( QtWidgetNode * _root, QWidget * _child );
          
          static std::string ToString ( const QString & _value );
-		 static std::string GetObjectName ( QObject * _object );
+         static std::string GetObjectName ( QObject * _object );
+         static std::string GetUnnamedObjectName ( QObject * _object );
 
-		 static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
+         static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
 
-		 static const std::string & screen_pos ();
-		 static const std::string & global_pos ();
+         static const std::string & screen_pos ();
+         static const std::string & global_pos ();
+
+         static void Log ( const QString & _message );
       };
    }
 }

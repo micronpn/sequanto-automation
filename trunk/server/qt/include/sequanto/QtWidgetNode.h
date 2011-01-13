@@ -19,7 +19,7 @@
 #define SEQUANTO_QT_WIDGET_NODE_H_
 
 #include <sequanto/listnode.h>
-#include <sequanto/qtwidgetautomationeventfilter.h>
+#include <sequanto/QtWidgetAutomationEventFilter.h>
 #include <QObject>
 #include <QtGui>
 

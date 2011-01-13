@@ -241,16 +241,27 @@ IF(SQ_CXX)
      FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
      INCLUDE(${QT_USE_FILE})
      
-     QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtapplicationautomationeventfilter.h)
-     QT4_WRAP_CPP(SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/qtwidgetautomationeventfilter.h)
+     QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/QtApplicationAutomationEventFilter.h)
+     QT4_WRAP_CPP(SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC server/qt/include/sequanto/QtWidgetAutomationEventFilter.h)
      
-     SET(QT_SRCS server/qt/src/qtwrapper.cxx server/qt/src/qtwidgetautomationeventfilter.cxx server/qt/src/qtapplicationautomationeventfilter.cxx server/qt/src/qtwidgetnode.cxx
-                 server/qt/src/qtautomationgetpropertyevent.cxx server/qt/src/qtautomationmoveevent.cxx server/qt/src/qtautomationresizeevent.cxx 
-                 ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC} ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC})
+     SET(QT_SRCS server/qt/src/QtWrapper.cxx
+                 server/qt/src/QtWidgetAutomationEventFilter.cxx
+                 server/qt/src/QtApplicationAutomationEventFilter.cxx
+                 server/qt/src/QtWidgetNode.cxx
+                 server/qt/src/QtAutomationGetPropertyEvent.cxx
+                 server/qt/src/QtAutomationMoveEvent.cxx
+                 server/qt/src/QtAutomationResizeEvent.cxx 
+                 ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
+                 ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC})
      
-     SET(QT_HEADERS server/qt/include/sequanto/qtwrapper.h server/qt/include/sequanto/qtwidgetautomationeventfilter.h server/qt/include/sequanto/qtapplicationautomationeventfilter.h server/qt/include/sequanto/qtwidgetnode.h
-                    server/qt/include/sequanto/qtautomationgetpropertyevent.h server/qt/include/sequanto/qtautomationresizeevent.h server/qt/include/sequanto/qtautomationmoveevent.h)
-     
+     SET(QT_HEADERS server/qt/include/sequanto/QtWrapper.h
+                    server/qt/include/sequanto/QtWidgetAutomationEventFilter.h
+                    server/qt/include/sequanto/QtApplicationAutomationEventFilter.h
+                    server/qt/include/sequanto/QtWidgetNode.h
+                    server/qt/include/sequanto/QtAutomationGetPropertyEvent.h
+                    server/qt/include/sequanto/QtAutomationResizeEvent.h
+                    server/qt/include/sequanto/QtAutomationMoveEvent.h)
+                  
      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
      TARGET_LINK_LIBRARIES(SequantoAutomation ${QT_LIBRARIES})

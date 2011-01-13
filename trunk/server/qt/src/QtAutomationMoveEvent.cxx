@@ -1,4 +1,4 @@
-#include <sequanto/qtautomationmoveevent.h>
+#include <sequanto/QtAutomationMoveEvent.h>
 
 using namespace sequanto::automation;
 

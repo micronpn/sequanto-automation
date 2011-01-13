@@ -1,5 +1,5 @@
-#include <sequanto/qtwidgetnode.h>
-#include <sequanto/qtwrapper.h>
+#include <sequanto/QtWidgetNode.h>
+#include <sequanto/QtWrapper.h>
 
 using namespace sequanto::automation;
 

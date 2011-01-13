@@ -1,4 +1,4 @@
-#include <sequanto/qtautomationresizeevent.h>
+#include <sequanto/QtAutomationResizeEvent.h>
 
 using namespace sequanto::automation;
 

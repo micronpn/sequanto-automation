@@ -19,6 +19,7 @@
 
 #include <sequanto/tree.h>
 #include <sequanto/qtwidgetnode.h>
+#include <sequanto/qtapplicationautomationeventfilter.h>
 
 #include <string>
 #include <map>

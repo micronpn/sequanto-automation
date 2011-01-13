@@ -30,8 +30,8 @@ namespace sequanto
       class QtWidgetNode : public ListNode
       {
       protected:
-         friend QtWidgetAutomationEventFilter;
-
+         friend class QtWidgetAutomationEventFilter;
+          
          QWidget * m_widget;
          QtWidgetAutomationEventFilter * m_eventFilter;
 

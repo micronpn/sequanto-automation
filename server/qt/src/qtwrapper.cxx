@@ -397,12 +397,14 @@ void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
 
    for ( int i = 0; i < _object->metaObject()->propertyCount(); i++ )
    {
+#if QT_VERSION >= 0x040500
       if ( _object->metaObject()->property(i).hasNotifySignal() )
       {
          std::string text ( "The " );
          text += _object->metaObject()->property(i).name();
          text += "property has a notify signal";
       }
+#endif
       if ( !_root->HasChild ( _object->metaObject()->property(i).name() ) )
       {
          switch ( _object->metaObject()->property(i).type() )

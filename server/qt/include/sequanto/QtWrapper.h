@@ -18,8 +18,8 @@
 #define SEQUANTO_QT_WRAPPER_H_
 
 #include <sequanto/tree.h>
-#include <sequanto/qtwidgetnode.h>
-#include <sequanto/qtapplicationautomationeventfilter.h>
+#include <sequanto/QtWidgetNode.h>
+#include <sequanto/QtApplicationAutomationEventFilter.h>
 
 #include <string>
 #include <map>

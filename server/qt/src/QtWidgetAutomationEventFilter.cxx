@@ -1,12 +1,12 @@
-#include <sequanto/qtwidgetautomationeventfilter.h>
-#include <sequanto/qtautomationgetpropertyevent.h>
-#include <sequanto/qtautomationmoveevent.h>
-#include <sequanto/qtautomationresizeevent.h>
-#include <sequanto/qtwidgetnode.h>
+#include <sequanto/QtWidgetAutomationEventFilter.h>
+#include <sequanto/QtAutomationGetPropertyEvent.h>
+#include <sequanto/QtAutomationMoveEvent.h>
+#include <sequanto/QtAutomationResizeEvent.h>
+#include <sequanto/QtWidgetNode.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
-#include <sequanto/qtwrapper.h>
+#include <sequanto/QtWrapper.h>
 
 using namespace sequanto::automation;
 

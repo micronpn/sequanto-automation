@@ -5,7 +5,7 @@
 #include <sequanto/automation.h>
 #include <sequanto/thread.h>
 #include <sequanto/tree.h>
-#include <sequanto/qtwrapper.h>
+#include <sequanto/QtWrapper.h>
 
 #include "qt_automation_automation.h"
 

@@ -1,4 +1,4 @@
-#include <sequanto/qtautomationgetpropertyevent.h>
+#include <sequanto/QtAutomationGetPropertyEvent.h>
 
 using namespace sequanto::automation;
 

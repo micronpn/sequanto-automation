@@ -64,13 +64,6 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
         dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_WIDTH) )->SendUpdate();
         dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_HEIGHT) )->SendUpdate();
         break;
-      
-    case QEvent::Destroy:
-    case QEvent::DeferredDelete:
-        m_node->WidgetDestroyed ();
-        break;
-
-
     }
 
     if ( _event->type() == QtAutomationMoveEvent::ID )
@@ -124,4 +117,5 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
 
 QtWidgetAutomationEventFilter::~QtWidgetAutomationEventFilter ()
 {
+   m_node->WidgetDestroyed();
 }

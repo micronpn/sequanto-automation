@@ -2,7 +2,8 @@
 #include <sequanto/log.h>
 #include "config.h"
 
-typedef signed short bool_t;
+typedef SQBool bool_t;
+typedef unsigned short UINT16;
 
 static signed long signedLongValue;
 static long longValue;
@@ -23,6 +24,7 @@ static float floatValue;
 static double doubleValue;
 static SQBool boolValue;
 static bool_t bool_tValue;
+static UINT16 UINT16Value;
 
 #include "test_server_automation.h"
 
@@ -44,7 +46,8 @@ void type_test_reset ( void )
    doubleValue = 0;
    boolValue = SQ_FALSE;
    bool_tValue = 0;
-   
+   UINT16Value = 0;
+
    sq_type_tests_properties_signed_long_updated ( signedLongValue );
    sq_type_tests_properties_long_updated ( longValue );
    sq_type_tests_properties_unsigned_long_updated ( unsignedLongValue );
@@ -61,6 +64,7 @@ void type_test_reset ( void )
    sq_type_tests_properties_double_updated ( doubleValue );
    sq_type_tests_properties_bool_updated ( boolValue );
    sq_type_tests_properties_bool_t_updated ( bool_tValue );
+   sq_type_tests_properties_UINT16_updated (UINT16Value );
 }
 
 signed long type_test_signed_long_get ( void )
@@ -351,4 +355,21 @@ void type_test_bool_t_set ( bool_t _value )
 #endif
    bool_tValue = _value;
    sq_type_tests_properties_bool_updated ( bool_tValue );
+}
+
+UINT16 type_test_UINT16_get ( void )
+{
+#ifndef SQ_ARDUINO
+   sq_logf ( "Returning value of UINT16: %i", UINT16Value );
+#endif
+   return UINT16Value;
+}
+
+void type_test_UINT16_set ( UINT16 _value )
+{
+#ifndef SQ_ARDUINO
+   sq_logf ( "Setting value of UINT16 value to %i (was %i)", _value, UINT16Value );
+#endif
+   UINT16Value = _value;
+   sq_type_tests_properties_UINT16_updated ( UINT16Value );
 }

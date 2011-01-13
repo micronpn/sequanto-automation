@@ -2,7 +2,8 @@ name test_server
 import test_server.c
 import type_tests.c
 
-typedef signed short bool_t
+typedef SQBool bool_t
+typedef unsigned short UINT16
 
 property /objects/julemand/test get_julemand set_julemand
 function /function/multiply multiply
@@ -81,6 +82,10 @@ property /type_tests/properties/bool type_test_bool_get type_test_bool_set
 function /type_tests/functions/get_bool_t type_test_bool_t_get
 function /type_tests/functions/set_bool_t type_test_bool_t_set
 property /type_tests/properties/bool_t type_test_bool_t_get type_test_bool_t_set
+
+function /type_tests/functions/get_UINT16 type_test_UINT16_get
+function /type_tests/functions/set_bool type_test_UINT16_set
+property /type_tests/properties/UINT16 type_test_UINT16_get type_test_UINT16_set
 
 # Test the new smart property and function
 #property /digital_output/(0..7)/value get_digital_output set_digital_output

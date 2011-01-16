@@ -70,6 +70,7 @@ void sq_logf ( const char * _format, ... )
    const char * stringValue;
    SQServer * server = sq_server_get_instance ();
 
+   sq_stream_enter_write ( server->m_stream );
    sq_stream_write_string ( server->m_stream, sq_get_constant_string(BANG_LOG) );
    sq_stream_write_byte ( server->m_stream, '"' );
    va_start ( lst, _format );
@@ -124,4 +125,5 @@ void sq_logf ( const char * _format, ... )
    va_end ( lst );
    sq_stream_write_byte ( server->m_stream, '"' );
    sq_stream_write_string ( server->m_stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( server->m_stream );
 }

@@ -1,0 +1,9 @@
+name add_widget_test
+import add_widget_test.cpp
+
+branch /ui
+function /create_window create_window
+function /remove_window remove_window
+function /add_widget add_widget
+function /remove_widget remove_widget
+function /quit quit

@@ -14,7 +14,7 @@ QtWidgetNode::QtWidgetNode( QWidget * _widget )
 
 void QtWidgetNode::WidgetDestroyed()
 {
-   // If m_widget is NULL we are in the process of being destroyed
+   // If m_widget is NULL we are in the process of being destroyed (~QtWidgetNode is in progress).
    if ( m_widget != NULL )
    {
       m_widget = NULL;

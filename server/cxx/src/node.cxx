@@ -15,13 +15,31 @@ Node::Node ( const std::string & _name )
    {
       throw runtime_error ( "SequantoAutomation_CXX: Node name can not be empty." );
    }
-   for ( string::const_iterator it = _name.begin(); it != _name.end(); it++ )
+   if ( !IsValidName(_name) )
    {
-      if ( !::isalnum(*it) && *it != '_' && *it != '-' )
+      throw runtime_error ( "SequantoAutomation_CXX: Node name contains illegal characters, only alpha-numeric, dash and underscore are valid characters." );
+   }
+}
+
+bool Node::IsValidName ( const std::string & _name )
+{
+   return IsValidName ( _name.data(), _name.length() );
+}
+
+bool Node::IsValidName ( const char * const _name, size_t _length )
+{
+   if ( _length == 0 )
+   {
+      return false;
+   }
+   for ( size_t i = 0; i < _length; i++ )
+   {
+      if ( !::isalnum(_name[i]) && _name[i] != '_' && _name[i] != '-' )
       {
-         throw runtime_error ( "SequantoAutomation_CXX: Node name contains illegal characters, only alpha-numeric, dash and underscore are valid characters." );
+         return false;
       }
    }
+   return true;
 }
 
 Node * Node::GetParent () const

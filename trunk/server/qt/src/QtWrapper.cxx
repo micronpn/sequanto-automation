@@ -379,13 +379,19 @@ std::string QtWrapper::GetUnnamedObjectName ( QObject * _object )
 
 std::string QtWrapper::GetObjectName ( QObject * _object )
 {
-	if ( _object->objectName().isEmpty() )
+   QString objectName ( _object->objectName() );
+   if ( objectName.isEmpty() )
 	{
       return GetUnnamedObjectName ( _object );
 	}
+   QByteArray value ( _object->objectName().toUtf8() );
+   if ( !Node::IsValidName(value.constData(), value.length()) )
+   {
+      return GetUnnamedObjectName ( _object );
+   }
 	else
 	{
-		return ToString(_object->objectName());
+      return std::string(value.constData(), value.length() );
 	}
 }
 
@@ -820,7 +826,7 @@ void QtWrapper::UpdateWindows( ListNode * _windows )
 {
    foreach ( QWidget * widget, QApplication::topLevelWidgets() )
    {
-      if ( widget->isWindow() )
+      if ( widget->isWindow() && !widget->isHidden() )
       {
          std::string objectName ( GetObjectName(widget) );
          if ( !_windows->HasChild ( objectName ))

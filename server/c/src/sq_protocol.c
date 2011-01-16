@@ -280,42 +280,54 @@ SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte
 
 void sq_protocol_write_protocol ( SQStream * _stream )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+PROTOCOL ")) );
    sq_protocol_write_integer ( _stream, SQ_PROTOCOL_VERSION  );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }
 
 void sq_protocol_write_success ( SQStream * _stream )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '+' );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }
 
 void sq_protocol_write_success_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '+' );
    sq_values_write ( _value, _numberOfValues, _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }
 
 void sq_protocol_write_failure ( SQStream * _stream )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '-' );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }
 
 void sq_protocol_write_failure_with_text ( SQStream * _stream, const char * const _text )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '-' );
    sq_protocol_write_string ( _stream, _text );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }
 
 void sq_protocol_write_failure_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '-' );
    sq_values_write ( _value, _numberOfValues, _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }
 
 void sq_protocol_write_update( SQStream * _stream, const char * const _fullname )
@@ -325,6 +337,7 @@ void sq_protocol_write_update( SQStream * _stream, const char * const _fullname 
 
 void sq_protocol_write_update_with_value( SQStream * _stream, const char * const _fullname, const SQValue * const _value )
 {
+   sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!UPDATE ")) );
    sq_stream_write_string ( _stream, _fullname );
    if ( _value != NULL )
@@ -333,4 +346,5 @@ void sq_protocol_write_update_with_value( SQStream * _stream, const char * const
       sq_value_write( _value, _stream );
    }
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
 }

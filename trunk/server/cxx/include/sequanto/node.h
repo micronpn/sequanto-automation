@@ -69,6 +69,9 @@ namespace sequanto
          virtual void LogAsync ( const std::string & _message ) const;
 
          virtual ~Node ();
+
+         static bool IsValidName ( const std::string & _name );
+         static bool IsValidName ( const char * const _name, size_t _length );
       };
    }
 }

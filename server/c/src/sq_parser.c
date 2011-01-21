@@ -81,7 +81,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
     switch ( _parser->m_inputBuffer[0] )
     {
     case 'P': /* PROTOCOL */
-        sq_protocol_write_protocol(_outputStream);
+        sq_protocol_write_protocol_message(_outputStream);
         break;
         
     case 'G': /* GET */
@@ -93,7 +93,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         i = sq_values_parse ( values, SQ_MAX_PARAMETERS, _parser->m_inputBuffer + endOfObjectPath );
         if ( i != 0 )
         {
-            sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("GET request must be called without values")) );
+            sq_protocol_write_failure_with_text_message ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("GET request must be called without values")) );
             sq_parser_internal_free_values ( values );
             return;
         }
@@ -114,7 +114,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         i = sq_values_parse ( values, SQ_MAX_PARAMETERS, _parser->m_inputBuffer + endOfObjectPath );
         if ( i != 1 )
         {
-            sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("SET request must be called with one value")) );
+            sq_protocol_write_failure_with_text_message ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("SET request must be called with one value")) );
             sq_parser_internal_free_values ( values );
             return;
         }
@@ -135,7 +135,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         i = sq_values_parse ( values, SQ_MAX_PARAMETERS, _parser->m_inputBuffer + endOfObjectPath );
         if ( i > SQ_MAX_PARAMETERS )
         {
-            sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Too many values given in CALL request")) );
+            sq_protocol_write_failure_with_text_message ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Too many values given in CALL request")) );
             sq_parser_internal_free_values ( values );
             return;
         }
@@ -201,7 +201,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         
     default:
         sq_logf ( "Bad command '%s'", _parser->m_inputBuffer );
-        sq_protocol_write_failure_with_text ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );
+        sq_protocol_write_failure_with_text_message ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );
         break;
     }
 

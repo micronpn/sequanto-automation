@@ -767,7 +767,7 @@ class AutomationFile ( object ):
 
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
-                fp.write ( '   sq_protocol_write_success ( _stream );\n' )
+                fp.write ( '   sq_protocol_write_success_message ( _stream );\n' )
                 
             else:
                 fp.write ( '   %s ret = %s ( %s );\n' % (self.getRecognizedCType(function.returnType), function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )

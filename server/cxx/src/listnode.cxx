@@ -102,9 +102,7 @@ void ListNode::SendUpdate ()
 {
    std::string fullname ( this->GetFullName() );
    SQServer * server = sq_server_get_instance();
-   sq_stream_enter_write ( server->m_stream );
-   sq_protocol_write_update ( server->m_stream, fullname.c_str() );
-   sq_stream_exit_write ( server->m_stream );
+   sq_protocol_write_update_message ( server->m_stream, fullname.c_str() );
 }
 
 ListNode::~ListNode()

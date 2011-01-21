@@ -30,6 +30,7 @@ void sq_log ( const char * _message )
    sq_stream_enter_write ( server->m_stream );
    sq_stream_write_string ( server->m_stream, sq_get_constant_string(BANG_LOG) );
    sq_protocol_write_string ( server->m_stream, _message );
+   sq_stream_write_string ( server->m_stream, sq_get_constant_string(NEWLINE) );
    sq_stream_exit_write ( server->m_stream );
 }
 

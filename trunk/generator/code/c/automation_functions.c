@@ -93,9 +93,7 @@ SQBool sq_automation_handle_list_if_branch ( SQStream * _stream, const char * co
 
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->list_handler ( _stream, sq_automation_branch_name(branch, _name) );
-      sq_stream_exit_write ( _stream );
       return ret;
    }
    return SQ_FALSE;
@@ -107,9 +105,7 @@ SQBool sq_automation_handle_info_if_branch ( SQStream * _stream, const char * co
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->info_handler ( _stream, sq_automation_branch_name(branch, _name) );
-      sq_stream_exit_write ( _stream );
       return ret;
 
    }
@@ -122,9 +118,7 @@ SQBool sq_automation_handle_get_if_branch ( SQStream * _stream, const char * con
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->get_handler ( _stream, sq_automation_branch_name(branch, _name) );
-      sq_stream_exit_write ( _stream );
       return ret;
 
    }
@@ -137,9 +131,7 @@ SQBool sq_automation_handle_set_if_branch ( SQStream * _stream, const char * con
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->set_handler ( _stream, sq_automation_branch_name(branch, _name), _value );
-      sq_stream_exit_write ( _stream );
       return ret;
 
    }
@@ -152,9 +144,7 @@ SQBool sq_automation_handle_enable_if_branch ( SQStream * _stream, const char * 
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->enable_handler ( _stream, sq_automation_branch_name(branch, _name) );
-      sq_stream_exit_write ( _stream );
       return ret;
 
    }
@@ -167,9 +157,7 @@ SQBool sq_automation_handle_disable_if_branch ( SQStream * _stream, const char *
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->enable_handler ( _stream, sq_automation_branch_name(branch, _name) );
-      sq_stream_exit_write ( _stream );
       return ret;
 
    }
@@ -182,9 +170,7 @@ SQBool sq_automation_handle_call_if_branch ( SQStream * _stream, const char * co
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      sq_stream_enter_write ( _stream );
       ret = branch->call_handler ( _stream, sq_automation_branch_name(branch, _name), _values, _numberOfValues );
-      sq_stream_exit_write ( _stream );
       return ret;
    }
    return SQ_FALSE;
@@ -219,17 +205,15 @@ void sq_automation_property_set ( const SQInfo * const _info, SQStream * _stream
 {
    const SQPropertyInfo * const propertyInfo = sq_get_property_info(_info->index);
 
-   sq_stream_enter_write ( _stream );
    if ( _value->m_type != propertyInfo->type )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(INCORRECT_TYPE_GIVEN) );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(INCORRECT_TYPE_GIVEN) );
    }
    else
    {
       propertyInfo->set ( _value );
-      sq_protocol_write_success ( _stream );
+      sq_protocol_write_success_message ( _stream );
    }
-   sq_stream_exit_write ( _stream );
 }
 
 void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const SQValue * const _inputValues, int _numberOfValues )
@@ -237,18 +221,14 @@ void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const 
    int i;
    const SQCallableInfo * const callableInfo = sq_get_callable_info(_info->index);
 
-   sq_stream_enter_write ( _stream );
    for ( i = 0; i < NUMBER_OF_PARAMETERS; i++ )
    {
       if ( _inputValues[i].m_type != sq_automation_get_parameter(callableInfo, i) )
       {
-         sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(ILLEGAL_PARAMETERS) );
-         sq_stream_exit_write ( _stream );
+         sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(ILLEGAL_PARAMETERS) );
          return;
       }
    }
-   
-   sq_stream_exit_write ( _stream );
    
    // The callable will write success and perhaps a return value
    
@@ -259,9 +239,7 @@ void sq_automation_monitor_enable ( const SQInfo * const _info, SQStream * _stre
 {
    const SQMonitorInfo * const monitorInfo = sq_get_monitor_info(_info->index);
 
-   sq_stream_enter_write ( _stream );
-   sq_protocol_write_success ( _stream );
-   sq_stream_exit_write ( _stream );
+   sq_protocol_write_success_message ( _stream );
    
    monitor_state[monitorInfo->index] = _enable;
 }
@@ -277,23 +255,19 @@ void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const
    
    info = sq_automation_find_info ( _objectPath, NULL );
    
-   sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
       return;
    }
    
    if ( info->type != INFO_TYPE_CALLABLE )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_CALLABLE) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_CALLABLE) );
       return;
    }
    
    sq_automation_call ( info, _stream, _inputValues, _numberOfValues );
-   sq_stream_exit_write ( _stream );
 }
 
 void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
@@ -307,23 +281,19 @@ void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char
    
    info = sq_automation_find_info ( _objectPath, NULL );
    
-   sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
       return;
    }
    
    if ( info->type != INFO_TYPE_PROPERTY )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_PROPERTY) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_PROPERTY) );
       return;
    }
    
    sq_automation_property_get ( info, _stream );
-   sq_stream_exit_write ( _stream );
 }
 
 void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _value )
@@ -337,23 +307,19 @@ void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char
 
    info = sq_automation_find_info ( _objectPath, NULL );
 
-   sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
       return;
    }
    
    if ( info->type != INFO_TYPE_PROPERTY )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_PROPERTY) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_PROPERTY) );
       return;
    }
    
    sq_automation_property_set ( info, _stream, _value );
-   sq_stream_exit_write ( _stream );
 }
 
 void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
@@ -370,14 +336,13 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
    }
    
    info = sq_automation_find_info ( _objectPath, NULL );
-   sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
       return;
    }
-   
+
+   sq_stream_enter_write ( _stream );
    switch ( info->type )
    {
    case INFO_TYPE_LIST:
@@ -460,21 +425,19 @@ void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const
    objectPathLength = strlen(_objectPath);
    
    info = sq_automation_find_info ( _objectPath, &foundIndex );
-   sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
       return;
    }
    
    if ( info->type != INFO_TYPE_LIST )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_LIST) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_LIST) );
       return;
    }
-   
+
+   sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+LIST ")) );
    
    foundIndex ++;
@@ -511,24 +474,19 @@ void sq_parser_enable_internal ( SQParser * _parser, SQStream * _stream, const c
 {
    const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
 
-   sq_stream_enter_write ( _stream );
    if ( info == NULL )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
       return;
    }
    
    if ( info->type != INFO_TYPE_MONITOR )
    {
-      sq_protocol_write_failure_with_text ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_MONITOR) );
-      sq_stream_exit_write ( _stream );
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_MONITOR) );
       return;
    }
-   
+
    sq_automation_monitor_enable ( info, _stream, _enable );
-   
-   sq_stream_exit_write ( _stream );
 }
 
 void sq_parser_enable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )

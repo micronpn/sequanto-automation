@@ -118,9 +118,7 @@ void PropertyNode::SendUpdate( const SQValue & _value )
 {
    std::string fullname ( this->GetFullName() );
    SQServer * server = sq_server_get_instance();
-   sq_stream_enter_write ( server->m_stream );
-   sq_protocol_write_update_with_value ( server->m_stream, fullname.c_str(), &_value );
-   sq_stream_exit_write ( server->m_stream );
+   sq_protocol_write_update_with_value_message ( server->m_stream, fullname.c_str(), &_value );
 }
 
 PropertyNode::~PropertyNode()

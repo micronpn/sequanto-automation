@@ -278,7 +278,7 @@ SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte
    return SQ_TRUE;
 }
 
-void sq_protocol_write_protocol ( SQStream * _stream )
+void sq_protocol_write_protocol_message ( SQStream * _stream )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+PROTOCOL ")) );
@@ -287,7 +287,7 @@ void sq_protocol_write_protocol ( SQStream * _stream )
    sq_stream_exit_write ( _stream );
 }
 
-void sq_protocol_write_success ( SQStream * _stream )
+void sq_protocol_write_success_message ( SQStream * _stream )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '+' );
@@ -295,7 +295,7 @@ void sq_protocol_write_success ( SQStream * _stream )
    sq_stream_exit_write ( _stream );
 }
 
-void sq_protocol_write_success_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
+void sq_protocol_write_success_with_values_message ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '+' );
@@ -304,7 +304,7 @@ void sq_protocol_write_success_with_values ( SQStream * _stream, const SQValue *
    sq_stream_exit_write ( _stream );
 }
 
-void sq_protocol_write_failure ( SQStream * _stream )
+void sq_protocol_write_failure_message ( SQStream * _stream )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '-' );
@@ -312,7 +312,7 @@ void sq_protocol_write_failure ( SQStream * _stream )
    sq_stream_exit_write ( _stream );
 }
 
-void sq_protocol_write_failure_with_text ( SQStream * _stream, const char * const _text )
+void sq_protocol_write_failure_with_text_message ( SQStream * _stream, const char * const _text )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '-' );
@@ -321,7 +321,7 @@ void sq_protocol_write_failure_with_text ( SQStream * _stream, const char * cons
    sq_stream_exit_write ( _stream );
 }
 
-void sq_protocol_write_failure_with_values ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
+void sq_protocol_write_failure_with_values_message ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_byte ( _stream, '-' );
@@ -330,12 +330,12 @@ void sq_protocol_write_failure_with_values ( SQStream * _stream, const SQValue *
    sq_stream_exit_write ( _stream );
 }
 
-void sq_protocol_write_update( SQStream * _stream, const char * const _fullname )
+void sq_protocol_write_update_message( SQStream * _stream, const char * const _fullname )
 {
-   sq_protocol_write_update_with_value ( _stream, _fullname, NULL );
+   sq_protocol_write_update_with_value_message ( _stream, _fullname, NULL );
 }
 
-void sq_protocol_write_update_with_value( SQStream * _stream, const char * const _fullname, const SQValue * const _value )
+void sq_protocol_write_update_with_value_message( SQStream * _stream, const char * const _fullname, const SQValue * const _value )
 {
    sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!UPDATE ")) );

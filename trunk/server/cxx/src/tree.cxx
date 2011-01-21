@@ -46,6 +46,8 @@ SQBool Tree::HandleInfo(SQStream * _stream, const char * _path)
       return SQ_FALSE;
    }
    const NodeInfo & nodeInfo = node->Info();
+
+   sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, "+INFO " );
    switch ( nodeInfo.GetType() )
    {
@@ -88,6 +90,7 @@ SQBool Tree::HandleInfo(SQStream * _stream, const char * _path)
       break;
    }
    sq_stream_write_string ( _stream, "\r\n" );
+   sq_stream_exit_write ( _stream );
    return SQ_TRUE;
 }
 
@@ -101,6 +104,7 @@ SQBool Tree::HandleList(SQStream * _stream, const char * _path)
    const NodeInfo & nodeInfo = node->Info();
    if ( nodeInfo.GetType() == NodeInfo::SQ_NODE_TYPE_LIST )
    {
+      sq_stream_enter_write ( _stream );
       sq_stream_write_string ( _stream, "+LIST " );
       Node::Iterator * it = node->ListChildren();
       for ( ; it->HasNext (); it->Next() )
@@ -110,10 +114,11 @@ SQBool Tree::HandleList(SQStream * _stream, const char * _path)
          sq_stream_write_byte ( _stream, ' ' );
       }
       sq_stream_write_string ( _stream, "\r\n" );
+      sq_stream_exit_write ( _stream );
    }
    else
    {
-      sq_protocol_write_failure_with_text ( _stream, "The given path does not point to a list" );
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a list" );
    }
    return SQ_TRUE;
 }
@@ -130,11 +135,11 @@ SQBool Tree::HandleEnable ( SQStream * _stream, const char * _path )
    if ( nodeInfo.GetType() == NodeInfo::SQ_NODE_TYPE_MONITOR )
    {
       node->HandleMonitorStateChange ( true );
-      sq_protocol_write_success ( _stream );
+      sq_protocol_write_success_message ( _stream );
    }
    else
    {
-      sq_protocol_write_failure_with_text ( _stream, "The given path does not point to a monitor" );
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a monitor" );
    }
 
    return SQ_TRUE;
@@ -152,11 +157,11 @@ SQBool Tree::HandleDisable ( SQStream * _stream, const char * _path )
    if ( nodeInfo.GetType() == NodeInfo::SQ_NODE_TYPE_MONITOR )
    {
       node->HandleMonitorStateChange ( false );
-      sq_protocol_write_success ( _stream );
+      sq_protocol_write_success_message ( _stream );
    }
    else
    {
-      sq_protocol_write_failure_with_text ( _stream, "The given path does not point to a monitor" );
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a monitor" );
    }
 
    return SQ_TRUE;
@@ -181,7 +186,7 @@ SQBool Tree::HandleGet ( SQStream * _stream, const char * _path )
    }
    else
    {
-      sq_protocol_write_failure_with_text ( _stream, "The given path does not point to a readable property" );
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a readable property" );
    }
 
    return SQ_TRUE;
@@ -199,11 +204,11 @@ SQBool Tree::HandleSet ( SQStream * _stream, const char * _path, const SQValue *
    if ( (nodeInfo.GetType() & NodeInfo::SQ_NODE_TYPE_ANY_WRITABLE_PROPERTY) != 0 )
    {
       node->HandleSet ( _value );
-      sq_protocol_write_success ( _stream );
+      sq_protocol_write_success_message ( _stream );
    }
    else
    {
-      sq_protocol_write_failure_with_text ( _stream, "The given path does not point to a writable property" );
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a writable property" );
    }
    return SQ_TRUE;
 }
@@ -223,7 +228,7 @@ SQBool Tree::HandleCall ( SQStream * _stream, const char * _path, const SQValue 
       node->HandleCall ( _numberOfValues, _values, outputValue );
       if ( outputValue.m_type == VALUE_TYPE_NO_VALUE )
       {
-         sq_protocol_write_success ( _stream );
+         sq_protocol_write_success_message ( _stream );
       }
       else
       {
@@ -232,7 +237,7 @@ SQBool Tree::HandleCall ( SQStream * _stream, const char * _path, const SQValue 
    }
    else
    {
-      sq_protocol_write_failure_with_text ( _stream, "The given path does not point to a writable property" );
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a writable property" );
    }
    return SQ_TRUE;
 }
@@ -244,5 +249,5 @@ void Tree::SetRoot ( Node * _root )
 
 void Tree::WriteOkValue(SQStream *_stream, const SQValue &_value)
 {
-   sq_protocol_write_success_with_values ( _stream, &_value, 1 );
+   sq_protocol_write_success_with_values_message ( _stream, &_value, 1 );
 }

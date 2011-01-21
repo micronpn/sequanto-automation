@@ -208,8 +208,6 @@ SQBool sq_stream_flush ( SQStream * _stream )
         {
             sent = send ( _stream->m_clientSocket, (char*) _stream->m_outputBuffer, _stream->m_outputBufferPosition, 0 );
         
-            SQ_LOG2("%i/%i bytes sent successfully.\r\n", sent, _stream->m_outputBufferPosition );
-
             if ( sent == SOCKET_ERROR )
             {
                 return SQ_FALSE;

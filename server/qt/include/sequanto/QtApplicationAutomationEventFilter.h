@@ -36,6 +36,7 @@ namespace sequanto
       private:
          ListNode * m_windowsNode;
          PropertyNode * m_activeWindowNode;
+         std::string m_previousActiveWindow;
 
       public:
          QtApplicationAutomationEventFilter ( ListNode * _windowsNode, PropertyNode * _activeWindowNode, QObject * _parent );

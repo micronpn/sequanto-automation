@@ -13,7 +13,8 @@ using namespace sequanto::automation;
 QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, PropertyNode * _activeWindowNode, QObject * _parent )
     : QObject(_parent),
       m_windowsNode ( _windowsNode ),
-      m_activeWindowNode ( _activeWindowNode )
+      m_activeWindowNode ( _activeWindowNode ),
+      m_previousActiveWindow ( "<NULL>" )
 {
 }
 
@@ -26,34 +27,40 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
             SQValue value;
             sq_value_init ( &value );
             m_activeWindowNode->HandleGet ( value );
-            m_activeWindowNode->SendUpdate ( value );
+            if ( m_previousActiveWindow != value.Value.m_stringValue )
+            {
+               m_previousActiveWindow = value.Value.m_stringValue;
+               m_activeWindowNode->SendUpdate ( value );
+            }
             sq_value_free ( &value );
         }
         break;
 
     case QEvent::Create:
-        if ( _object->isWidgetType() )
-        {
-            QWidget * widget = qobject_cast<QWidget*> ( _object );
-            if ( widget->isWindow() )
-            {
-                QtWrapper::UpdateWindows ( m_windowsNode );
+       {
+          QWidget * widget = qobject_cast<QWidget*> ( _object );
+          if ( widget->isWindow() )
+          {
+             if ( QtWrapper::UpdateWindows ( m_windowsNode ) )
+             {
                 m_windowsNode->SendUpdate();
-            }
-        }
-        break;
+             }
+          }
+       }
+       break;
 
-    case QEvent::Destroy:
-        if ( _object->isWidgetType() )
-        {
-            QWidget * widget = qobject_cast<QWidget*> ( _object );
-            if ( widget->isWindow() )
-            {
-                QtWrapper::UpdateWindows ( m_windowsNode );
-                m_windowsNode->SendUpdate();
-            }
-        }
-        break;
+    case QEvent::Close:
+       QWidget * widget = qobject_cast<QWidget*> ( _object );
+       if ( widget->isWindow() )
+       {
+          std::string name ( QtWrapper::GetObjectName(widget) );
+          if ( m_windowsNode->HasChild(name ) )
+          {
+             m_windowsNode->RemoveChild ( name );
+             m_windowsNode->SendUpdate();
+          }
+       }
+       break;
     }
     return QObject::eventFilter(_object, _event );
 }

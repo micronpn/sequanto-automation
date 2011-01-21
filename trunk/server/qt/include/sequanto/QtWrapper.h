@@ -40,7 +40,7 @@ namespace sequanto
          
          friend class QtApplicationAutomationEventFilter;
 
-         static void UpdateWindows ( ListNode * _windows );
+         static bool UpdateWindows ( ListNode * _windows );
 	
       public:
          static void Wrap ( ListNode * _root, QObject * _object );
@@ -59,13 +59,6 @@ namespace sequanto
           */
          static void WrapApplication ( ListNode * _root );
 
-         /**
-          * Add a child widget to the widget represented in the tree as _root.
-          * 
-          * @returns true if the child was added to the root, false otherwise (child already added, name is empty or child is not a widget).
-          */
-         static bool AddChild ( QtWidgetNode * _root, QWidget * _child );
-         
          static std::string ToString ( const QString & _value );
          static std::string GetObjectName ( QObject * _object );
          static std::string GetUnnamedObjectName ( QObject * _object );

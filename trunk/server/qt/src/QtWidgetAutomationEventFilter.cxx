@@ -24,19 +24,33 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        {
           QChildEvent * childEvent = dynamic_cast<QChildEvent*>(_event );
           QObject * child = childEvent->child();
-          if ( child->isWidgetType () ) 
+          if ( child->isWidgetType () )
           {
              QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(child).c_str()) );
-             if ( QtWrapper::AddChild ( m_node, qobject_cast<QWidget*>(child) ) )
+             if ( m_node->AddChildWidget ( qobject_cast<QWidget*>(child) ) )
              {
-                m_node->SendUpdate();
+                m_node->SendChildrenUpdate();
              }
           }
        }
-        break;
-
-    case QEvent::ChildRemoved:
        break;
+
+/*
+    case QEvent::ChildRemoved:
+       {
+          QChildEvent * childEvent = dynamic_cast<QChildEvent*>(_event );
+          QObject * child = childEvent->child();
+          if ( child->isWidgetType () )
+          {
+             QtWrapper::Log ( QString("%1: Removing child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(child).c_str()) );
+             if ( m_node->RemoveChildWidget ( qobject_cast<QWidget*>(child) ) )
+             {
+                m_node->SendChildrenUpdate();
+             }
+          }
+       }
+       break;
+*/
 
     case QEvent::Move:
      

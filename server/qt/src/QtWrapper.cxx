@@ -557,37 +557,6 @@ public:
    }
 };
 
-bool QtWrapper::AddChild ( QtWidgetNode * _widgetRoot, QWidget * _child )
-{
-   ListNode * childrenNode = dynamic_cast<ListNode*>( _widgetRoot->FindChild ( SQ_UI_NODE_CHILDREN ) );
-   if ( childrenNode == NULL )
-   {
-      childrenNode = new ListNode ( SQ_UI_NODE_CHILDREN );
-      _widgetRoot->AddChild ( childrenNode );
-   }
-   if ( _child->isWidgetType() )
-   {
-      std::string childName ( GetObjectName(_child) );
-      if ( !childName.empty() )
-      {
-         if ( !childrenNode->HasChild(childName) )
-         {
-            std::string unnamedObjectName ( GetUnnamedObjectName(_child) );
-            if ( childrenNode->HasChild(unnamedObjectName) )
-            {
-               childrenNode->RemoveChild ( unnamedObjectName );
-            }
-
-            QtWidgetNode * child = new QtWidgetNode ( _child );
-            WrapUi ( child, qobject_cast<QWidget*>(_child) );
-            childrenNode->AddChild ( child );
-            return true;
-         }
-      }
-   }
-   return false;
-}
-
 void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 {
    //else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
@@ -652,6 +621,8 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    _root->AddChild ( new QtMoveMethod(_widget ) );
    _root->AddChild ( new QtResizeMethod(_widget ) );
 
+   _root->AddChild ( new ListNode(SQ_UI_NODE_CHILDREN) );
+
    QObjectList list ( _widget->children() );
    if ( !list.empty() )
    {
@@ -660,7 +631,7 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
          QObject * childObject = list.at ( i );
          if ( childObject->isWidgetType() )
          {
-            AddChild ( _root, qobject_cast<QWidget*>(childObject) );
+            _root->AddChildWidget ( qobject_cast<QWidget*>(childObject) );
          }
       }
    }
@@ -822,8 +793,9 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
 }
 
-void QtWrapper::UpdateWindows( ListNode * _windows )
+bool QtWrapper::UpdateWindows( ListNode * _windows )
 {
+   bool changed = false;
    foreach ( QWidget * widget, QApplication::topLevelWidgets() )
    {
       if ( widget->isWindow() && !widget->isHidden() )
@@ -839,6 +811,8 @@ void QtWrapper::UpdateWindows( ListNode * _windows )
             QtWidgetNode * newWindow = new QtWidgetNode ( widget );
             WrapUi ( newWindow, widget );
             _windows->AddChild ( newWindow );
+
+            changed = true;
          }
       }
    }
@@ -865,7 +839,9 @@ void QtWrapper::UpdateWindows( ListNode * _windows )
    for ( std::vector<std::string>::const_iterator removeIt = toBeRemoved.begin(); removeIt != toBeRemoved.end(); removeIt++ )
    {
       _windows->RemoveChild ( *removeIt );
+      changed = true;
    }
+   return changed;
 }
 
 void QtWrapper::Log ( const QString & _message )

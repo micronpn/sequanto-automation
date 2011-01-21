@@ -41,6 +41,17 @@ namespace sequanto
          QtWidgetNode ( QWidget * _widget );
          
          inline QWidget * widget () const { return m_widget; }
+         
+         void SendChildrenUpdate ();
+
+         /**
+          * Add a child widget to the widget contained in this widget node.
+          * 
+          * @returns true if the child was added to the root, false otherwise (child already added or name is empty/invalid).
+          */
+         bool AddChildWidget ( QWidget * _child );
+
+         //bool RemoveChildWidget ( QWidget * _child );
 
          virtual ~QtWidgetNode ();
       };

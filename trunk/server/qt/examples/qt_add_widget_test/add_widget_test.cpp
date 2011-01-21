@@ -14,12 +14,14 @@ class Commander : public QObject
 {
 private:
    int m_nextWindowNumber;
+   int m_nextButtonNumber;
 
 public:
    Commander ( QObject * _parent )
       : QObject(_parent)
    {
       m_nextWindowNumber = 1;
+      m_nextButtonNumber = 1;
    }
 
    virtual bool event ( QEvent * _event )
@@ -57,8 +59,9 @@ public:
          {
             QMainWindow * window = qobject_cast<QMainWindow*>(topLevelWidgets[0]);
             QPushButton * button = new QPushButton( "This is my button" );
-            button->setObjectName ( QString::QString("button_%1").arg(window->centralWidget()->layout()->count()) );
+            button->setObjectName ( QString::QString("button_%1").arg(m_nextButtonNumber) );
             window->centralWidget()->layout()->addWidget ( button );
+            m_nextButtonNumber ++;
          }
          return true;
       }

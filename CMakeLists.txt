@@ -39,6 +39,8 @@ CHECK_CXX_SOURCE_COMPILES("#include <string>\n int main () { std::string s; };" 
 INCLUDE(CheckCSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES("inline int c() {} int main () { c(); };" SQ_C_SUPPORTS_INLINE)
 
+CHECK_INCLUDE_FILE(assert.h HAVE_ASSERT_H)
+
 IF(STL_SUPPORTED)
   SET(SQ_CXX 1)
 ELSE(STL_SUPPORTED)
@@ -82,6 +84,12 @@ SET(SQ_ARDUINO           OFF      CACHE BOOL "Build for arduino")
 SET(SQ_USE_MUTEXES       ON       CACHE BOOL "Use mutexes (Win32 or *nix)")
 SET(SQ_USE_THREADS       ON       CACHE BOOL "Use threads (Win32 or *nix)")
 SET(SQ_MAX_VALUE_LENGTH  12       CACHE INTEGER "Maximum length of the character buffer used to write integer and float values to a stream.")
+IF(HAVE_ASSERT_H)
+  SET(SQ_USE_ASSERT        ON       CACHE BOOL "Use assertions to do runtime checks (uses assert macro from assert.h).")
+ELSE(HAVE_ASSERT_H)
+  SET(SQ_USE_ASSERT        OFF      CACHE BOOL "Use assertions to do runtime checks (uses assert macro from assert.h).")
+ENDIF(HAVE_ASSERT_H)
+
 
 IF(DOXYGEN_FOUND)
     SET(SQ_GENERATE_DOCUMENTATION OFF CACHE BOOL "Should documentation be generated (only if doxygen is found)")

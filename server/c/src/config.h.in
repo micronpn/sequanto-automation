@@ -28,6 +28,7 @@
 #cmakedefine SQ_ARDUINO
 #cmakedefine SQ_LOGGING_ENABLED
 #cmakedefine SQ_C_SUPPORTS_INLINE
+#cmakedefine SQ_USE_ASSERT
 
 #define SQ_MAX_STRING_LENGTH ${SQ_MAX_STRING_LENGTH}
 #define SQ_MAX_OBJECT_LENGTH ${SQ_MAX_OBJECT_LENGTH}
@@ -71,10 +72,16 @@
 #endif
 #endif
 
-#ifdef SQ_C_SUPPORTS_INLIE
+#ifdef SQ_C_SUPPORTS_INLINE
 #define SQ_INLINE inline
 #else
 #define SQ_INLINE 
+#endif
+
+#ifdef SQ_USE_ASSERT
+#define SQ_ASSERT assert
+#else
+#define SQ_ASSERT while(0) 
 #endif
 
 #endif /* _CONFIG_H_ */

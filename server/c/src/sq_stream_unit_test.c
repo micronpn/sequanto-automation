@@ -16,9 +16,12 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include "config.h"
+
+#ifdef SQ_USE_ASSERT
+#include <assert.h>
+#endif
 
 #include "sequanto/system.h"
 #include "sequanto/stream.h"
@@ -48,14 +51,14 @@ SQStream * sq_stream_open ( int _portNumber )
 
 void sq_stream_close ( SQStream * _stream )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     free ( _stream );
 }
 
 void sq_stream_set_data_received_handler ( SQStream * _stream, SQStreamDataReceivedFunction _handler, void * _data )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     _stream->m_handler = _handler;
     _stream->m_handlerData = _data;
@@ -63,12 +66,12 @@ void sq_stream_set_data_received_handler ( SQStream * _stream, SQStreamDataRecei
 
 void sq_stream_poll( SQStream * _stream )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
 }
 
 size_t sq_stream_data_available ( SQStream * _stream )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     return SQ_CIRCULAR_BUFFER_AVAILABLE ( _stream->m_in );
 }
@@ -79,7 +82,7 @@ SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
     size_t i;
     size_t length;
 
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     length = strlen(_string);
     for ( i = 0; i < length; i++ )
@@ -91,7 +94,7 @@ SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
 
 SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 {
-   assert ( _stream != NULL );
+   SQ_ASSERT ( _stream != NULL );
     
 	while (pString->HasMore(pString))
 	{
@@ -102,7 +105,7 @@ SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 
 SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     SQ_CIRCULAR_BUFFER_PUSH ( _stream->m_out, _byte );
     return SQ_TRUE;
@@ -110,7 +113,7 @@ SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )
 
 SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     *_byte = SQ_CIRCULAR_BUFFER_POP ( _stream->m_in );
     return SQ_TRUE;
@@ -126,7 +129,7 @@ void sq_stream_exit_write ( SQStream * _stream )
 
 void sq_stream_unit_test_push_read ( SQStream * _stream, SQByte _value )
 {
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     SQ_CIRCULAR_BUFFER_PUSH(_stream->m_in, _value);
 }
@@ -137,7 +140,7 @@ SQByte * sq_stream_unit_test_pop_write ( SQStream * _stream )
    int available;
    SQByte * ret;
 
-    assert ( _stream != NULL );
+    SQ_ASSERT ( _stream != NULL );
     
     available = SQ_CIRCULAR_BUFFER_AVAILABLE(_stream->m_out);
     ret = malloc ( available + 1 );

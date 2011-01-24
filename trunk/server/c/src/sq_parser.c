@@ -15,9 +15,12 @@
  */
 
 #include <string.h>
-#include <assert.h>
 
 #include "config.h"
+
+#ifdef SQ_USE_ASSERT
+#include <assert.h>
+#endif
 
 #include "sequanto/parser.h"
 #include "sequanto/protocol.h"
@@ -25,7 +28,7 @@
 
 void sq_parser_init ( SQParser * _parser )
 {
-    assert ( _parser != NULL );
+    SQ_ASSERT ( _parser != NULL );
     
     memset ( _parser->m_inputBuffer, 0, SQ_BUFFER_SIZE );
     _parser->m_inputBufferPosition = 0;
@@ -33,7 +36,7 @@ void sq_parser_init ( SQParser * _parser )
 
 size_t sq_parser_internal_read_object_path ( SQParser * _parser, size_t _startIndex )
 {
-    assert ( _parser != NULL );
+    SQ_ASSERT ( _parser != NULL );
     
     while ( _parser->m_inputBuffer[_startIndex] != '\0'
             &&
@@ -71,7 +74,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
     SQValue values[SQ_MAX_PARAMETERS];
     size_t i, endOfObjectPath, index = 0;
 
-    assert ( _parser != NULL );
+    SQ_ASSERT ( _parser != NULL );
     
     for ( i = 0; i < SQ_MAX_PARAMETERS; i++ )
     {
@@ -210,7 +213,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
 
 void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte _byte )
 {
-    assert ( _parser != NULL );
+    SQ_ASSERT ( _parser != NULL );
     
     if ( _parser->m_inputBufferPosition == 0 && (_byte == '\n' || _byte == '\r' ) )
     {

@@ -20,6 +20,7 @@
 #include <string>
 #include <map>
 #include <sequanto/node.h>
+#include <sequanto/mutex.h>
 
 namespace sequanto
 {
@@ -32,24 +33,25 @@ namespace sequanto
 
       private:
          NodeMap m_children;
+         Mutex m_mutex;
          
       public:
          ListNode ( const std::string & _name );
-
+         
          virtual Node * FindChild ( const std::string & _name ) const;
          virtual Iterator * ListChildren () const;
          
          virtual const NodeInfo & Info () const;
-
+         
          void AddChild ( Node * _child );
          void RemoveChild ( std::string _name );
          bool HasChild ( std::string _name );
-
+         
          /**
           * Send a !UPDATE message to the client to notify that this list has changed.
           */
          virtual void SendUpdate ();
-
+         
          virtual ~ListNode ();
       };
    }

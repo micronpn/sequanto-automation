@@ -1,6 +1,7 @@
 #include <sequanto/listnode.h>
 #include <sequanto/protocol.h>
 #include <sequanto/server.h>
+#include <sequanto/lock.h>
 #include <stdexcept>
 
 using namespace std;
@@ -19,14 +20,16 @@ class ListNodeIterator : public Node::Iterator
 private:
    ListNode::NodeMap::const_iterator m_current;
    ListNode::NodeMap::const_iterator m_end;
-
+   Lock m_lock;
+   
 public:
-   ListNodeIterator ( ListNode::NodeMap::const_iterator _begin, ListNode::NodeMap::const_iterator _end )
+   ListNodeIterator ( const Mutex & _mutex, ListNode::NodeMap::const_iterator _begin, ListNode::NodeMap::const_iterator _end )
       : m_current ( _begin ),
-        m_end( _end )
+        m_end( _end ),
+        m_lock ( _mutex )
    {
    }
-
+   
    virtual bool HasNext () const
    {
       return m_current != m_end;
@@ -41,11 +44,16 @@ public:
    {
       m_current ++;
    }
+   
+   virtual ~ListNodeIterator ()
+   {
+   }
 };
 
 ListNode::ListNode ( const std::string & _name )
    : Node(_name),
-     m_children ()
+     m_children (),
+     m_mutex ()
 {
 }
 
@@ -57,6 +65,7 @@ const NodeInfo & ListNode::Info () const
 
 Node * ListNode::FindChild ( const std::string & _name ) const
 {
+   Lock lock ( m_mutex );
    NodeMap::const_iterator it = m_children.find ( _name );
    if ( it == m_children.end() )
    {
@@ -70,11 +79,14 @@ Node * ListNode::FindChild ( const std::string & _name ) const
 
 Node::Iterator * ListNode::ListChildren () const
 {
-   return new ListNodeIterator ( m_children.begin(), m_children.end() );
+   Lock lock ( m_mutex );
+
+   return new ListNodeIterator ( m_mutex, m_children.begin(), m_children.end() );
 }
 
 void ListNode::AddChild ( Node * _child )
 {
+   Lock lock ( m_mutex );
    if ( this->HasChild(_child->GetName()) )
    {
       throw std::runtime_error ( "SequantoAutomation_CXX: This ListNode already contains a child with the same name." );
@@ -85,6 +97,7 @@ void ListNode::AddChild ( Node * _child )
 
 void ListNode::RemoveChild ( std::string _name )
 {
+   Lock lock ( m_mutex );
    NodeMap::iterator it = m_children.find(_name);
    if ( it != m_children.end() )
    {
@@ -95,6 +108,7 @@ void ListNode::RemoveChild ( std::string _name )
 
 bool ListNode::HasChild ( std::string _name )
 {
+   Lock lock ( m_mutex );
    return m_children.find ( _name ) != m_children.end();
 }
 

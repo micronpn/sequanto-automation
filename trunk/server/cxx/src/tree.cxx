@@ -113,6 +113,7 @@ SQBool Tree::HandleList(SQStream * _stream, const char * _path)
          sq_stream_write_string ( _stream, node->GetName().c_str() );
          sq_stream_write_byte ( _stream, ' ' );
       }
+      delete it;
       sq_stream_write_string ( _stream, "\r\n" );
       sq_stream_exit_write ( _stream );
    }

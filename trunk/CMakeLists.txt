@@ -228,7 +228,9 @@ IF(SQ_CXX)
                server/cxx/src/propertynode.cxx
                server/cxx/src/readonlypropertynode.cxx
                server/cxx/src/readwritepropertynode.cxx
-               server/cxx/src/constantnode.cxx)
+               server/cxx/src/constantnode.cxx
+               server/cxx/src/mutex.cxx
+               server/cxx/src/lock.cxx)
 
   SET(CXX_HEADERS server/cxx/include/sequanto/tree.h
                   server/cxx/include/sequanto/node.h
@@ -238,7 +240,9 @@ IF(SQ_CXX)
                   server/cxx/include/sequanto/propertynode.h
                   server/cxx/include/sequanto/readonlypropertynode.h
                   server/cxx/include/sequanto/readwritepropertynode.h
-                  server/cxx/include/sequanto/constantnode.h)
+                  server/cxx/include/sequanto/constantnode.h
+                  server/cxx/include/sequanto/mutex.h
+                  server/cxx/include/sequanto/lock.h)
   
   ADD_LIBRARY(SequantoAutomation_CXX STATIC ${CXX_SRCS} ${CXX_HEADERS})
   TARGET_LINK_LIBRARIES(SequantoAutomation_CXX SequantoAutomation)

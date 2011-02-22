@@ -3,6 +3,8 @@
 
 #ADD_EXECUTABLE(qt_position_test ${qt_position_test_UIS_H} ${qt_position_test_POSTESTWIN_MOC} postestwin.cpp)
 
+FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/generated/qt_add_widget_test/)
+
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/qt_add_widget_test/add_widget_test_automation.c GENERATED)
 
 ADD_EXECUTABLE(qt_add_widget_test add_widget_test.cpp ${CMAKE_BINARY_DIR}/generated/qt_add_widget_test/add_widget_test_automation.c)

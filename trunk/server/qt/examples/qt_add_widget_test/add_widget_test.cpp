@@ -1,6 +1,6 @@
 #include <QtGui>
 #include <sequanto/automation.h>
-#include <sequanto/qtwrapper.h>
+#include <sequanto/QtWrapper.h>
 
 using namespace std;
 using namespace sequanto::automation;

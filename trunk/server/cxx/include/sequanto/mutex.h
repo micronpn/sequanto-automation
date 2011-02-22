@@ -31,7 +31,7 @@ namespace sequanto
          SQMutex * m_mutex;
          
       public:
-         friend Lock;
+         friend class Lock;
          
          Mutex ();
          virtual ~Mutex ();

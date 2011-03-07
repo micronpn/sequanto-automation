@@ -61,7 +61,7 @@ IF(UNIX)
         
   ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/liab_test_automation.c
                      MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/server/c/examples/liab_test.automation
-                     COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_SOURCE_DIR}/sercer/c/examples/liab_test.automation
+                     COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_SOURCE_DIR}/server/c/examples/liab_test.automation
                      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/generated
                      VERBATIM)
 

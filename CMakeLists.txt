@@ -5,7 +5,6 @@ PROJECT(libSequantoAutomation)
 INCLUDE(CPack)
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Sequanto Automation library")
 SET(CPACK_PACKAGE_VENDOR "Sequanto A/S")
-#SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 
 INCLUDE(FindSubversion)
@@ -98,6 +97,9 @@ IF(SQ_GENERATE_DOCUMENTATION)
   ADD_CUSTOM_TARGET(gwiki ${PYTHON_EXECUTABLE} ${DOXYGEN2GWIKI_EXECUTABLE} --skip-svn --docs xml --output wiki --prefix API --label C-API --project sequanto-automation --html html
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/documentation)
   ADD_DEPENDENCIES(gwiki doc)
+  
+  INSTALL(DIRECTORY ${CMAKE_BINARY_DIR}/documentation/html/
+          DESTINATION docs/api)
 ENDIF(SQ_GENERATE_DOCUMENTATION)
 
 ADD_SUBDIRECTORY(server/c)

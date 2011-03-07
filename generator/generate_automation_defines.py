@@ -959,7 +959,13 @@ automationFile = AutomationFile()
 for arg in sys.argv[1:]:
     print 'Parsing %s' % arg
     
-    fp = open (arg, 'r')
+    fp = None
+    try:
+        fp = open (arg, 'r')
+    except Exception, ex:
+        automationFile.reportError ( 0, 'Could not open file named %s: %s', arg, ex )
+        sys.exit(-1)
+        
     automationFile.setErrorReportingFilename ( arg )
     automationFile.parse ( fp, path.dirname(arg) )
     fp.close()

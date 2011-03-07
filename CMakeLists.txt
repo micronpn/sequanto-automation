@@ -2,6 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 PROJECT(libSequantoAutomation)
 
+INCLUDE(CPack)
+
 INCLUDE(FindSubversion)
 Subversion_WC_INFO(${CMAKE_SOURCE_DIR} SVN)
 
@@ -200,6 +202,14 @@ IF(UNIX)
     TARGET_LINK_LIBRARIES(SequantoAutomation_UnitTest pthread)
 ENDIF(UNIX)
 
+INSTALL(TARGETS SequantoAutomation
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+INSTALL(FILES ${HEADERS}
+        DESTINATION include/sequanto)
+
 TARGET_LINK_LIBRARIES(test_server SequantoAutomation)
 
 IF(UNIX)
@@ -249,7 +259,15 @@ IF(SQ_CXX)
 
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
 
-   IF(QT4_FOUND)
+  INSTALL(TARGETS SequantoAutomation_CXX
+          RUNTIME DESTINATION bin
+          LIBRARY DESTINATION lib
+          ARCHIVE DESTINATION lib)
+
+  INSTALL(FILES ${CXX_HEADERS}
+          DESTINATION include/sequanto)
+  
+  IF(QT4_FOUND)
      FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
      INCLUDE(${QT_USE_FILE})
      
@@ -280,5 +298,15 @@ IF(SQ_CXX)
     
      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/qt/include)
+
+     INSTALL(TARGETS SequantoAutomation_QT
+             RUNTIME DESTINATION bin
+             LIBRARY DESTINATION lib
+             ARCHIVE DESTINATION lib)
+
+     INSTALL(FILES ${QT_HEADERS}
+             DESTINATION include/sequanto)
+
    ENDIF(QT4_FOUND)
 ENDIF(SQ_CXX)
+

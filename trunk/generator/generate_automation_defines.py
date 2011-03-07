@@ -963,7 +963,7 @@ for arg in sys.argv[1:]:
     try:
         fp = open (arg, 'r')
     except Exception, ex:
-        automationFile.reportError ( 0, 'Could not open file named %s: %s', arg, ex )
+        automationFile.reportError ( 0, 'Could not open file named %s: %s' % (arg, ex) )
         sys.exit(-1)
         
     automationFile.setErrorReportingFilename ( arg )

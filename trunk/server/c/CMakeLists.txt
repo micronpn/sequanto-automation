@@ -8,7 +8,8 @@ SET(HEADERS include/sequanto/automation.h include/sequanto/stream.h
             include/sequanto/protocol.h include/sequanto/server.h
             include/sequanto/value.h include/sequanto/system.h
             include/sequanto/log.h include/sequanto/ui.h
-            include/sequanto/circularbuffer.h)
+            include/sequanto/circularbuffer.h include/sequanto/types.h
+            include/sequanto/thread.h include/sequanto/parser.h)
 
 SET(SRCS_UNIT_TEST ${SRCS} src/sq_stream_unit_test.c)
 

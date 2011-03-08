@@ -37,5 +37,8 @@ IF(SQ_CXX)
   INSTALL(FILES ${CXX_HEADERS}
           DESTINATION include/sequanto)
   
+  INSTALL(FILES src/cxx_root.cpp src/cxx_root.h
+          DESTINATION src)
+  
   ADD_SUBDIRECTORY(examples)
 ENDIF(SQ_CXX)

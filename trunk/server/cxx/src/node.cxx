@@ -15,7 +15,7 @@ Node::Node ( const std::string & _name )
    {
       throw runtime_error ( "SequantoAutomation_CXX: Node name can not be empty." );
    }
-   if ( !IsValidName(_name) )
+   if ( _name != "<ROOT>" && !IsValidName(_name) )
    {
       throw runtime_error ( "SequantoAutomation_CXX: Node name contains illegal characters, only alpha-numeric, dash and underscore are valid characters." );
    }
@@ -70,8 +70,15 @@ const std::string & Node::GetFullName ()
       const Node * curr = this;
       while ( curr != NULL )
       {
-         m_fullname = slash + curr->GetName() + m_fullname;
-         curr = curr->GetParent();
+         if ( curr->GetName()[0] == '<' )
+         {
+            break;
+         }
+         else
+         {
+            m_fullname = slash + curr->GetName() + m_fullname;
+            curr = curr->GetParent();
+         }
       }
    }
    return m_fullname;

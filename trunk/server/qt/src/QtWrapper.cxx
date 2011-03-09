@@ -678,6 +678,7 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    _root->AddChild ( new QtIntProperty( SQ_UI_NODE_HEIGHT, _widget ) );
 
    _root->AddChild ( new QtBooleanProperty( SQ_UI_NODE_ENABLED, _widget ) );
+   _root->AddChild ( new QtBooleanProperty( SQ_UI_NODE_VISIBLE, _widget ) );
 
    _root->AddChild ( new QtMoveMethod(_widget ) );
    _root->AddChild ( new QtResizeMethod(_widget ) );

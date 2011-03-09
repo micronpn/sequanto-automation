@@ -73,6 +73,7 @@ extern "C"
    extern const char * const SQ_UI_NODE_WIDTH SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_HEIGHT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_ENABLED SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_VISIBLE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_MOVE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_RESIZE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_NATIVE_TYPE SQ_CONST_VARIABLE;

@@ -82,6 +82,11 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     case QEvent::EnabledChange:
        dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_ENABLED) )->SendUpdate();
        break;
+
+    case QEvent::Show:
+    case QEvent::Hide:
+       dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) )->SendUpdate();
+       break;
     }
 
     if ( _event->type() == QtAutomationMoveEvent::ID )

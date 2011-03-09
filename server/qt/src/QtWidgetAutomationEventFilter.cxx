@@ -78,6 +78,10 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
         dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_WIDTH) )->SendUpdate();
         dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_HEIGHT) )->SendUpdate();
         break;
+
+    case QEvent::EnabledChange:
+       dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_ENABLED) )->SendUpdate();
+       break;
     }
 
     if ( _event->type() == QtAutomationMoveEvent::ID )

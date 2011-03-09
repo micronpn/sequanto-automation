@@ -7,6 +7,7 @@
 #include <sequanto/QtAutomationGetPropertyEvent.h>
 #include <sequanto/QtAutomationMoveEvent.h>
 #include <sequanto/QtAutomationResizeEvent.h>
+#include <sequanto/QtPropertyChangedNotificationAdapter.h>
 #include <cassert>
 #include <vector>
 #include <stdexcept>
@@ -67,22 +68,34 @@ const std::string & QtWrapper::global_pos ()
   return GLOBAL_POS;
 }
 
-class QtStringProperty : public PropertyNode
+class QtStringProperty : public PropertyNode, IQtPropertyChangedReceiver
 {
 private:
    QObject * m_object;
    std::string m_cached;
+   QtPropertyChangedNotificationAdapter * m_notifyAdapter;
 
 public:
    QtStringProperty ( const std::string & _name, QObject * _object )
       : PropertyNode ( _name ),
-        m_object ( _object )
+        m_object ( _object ),
+        m_notifyAdapter ( NULL )
    {
+      m_notifyAdapter = QtPropertyChangedNotificationAdapter::ConnectIfPossible ( _object, _name, this );
    }
 
    virtual const NodeInfo & Info () const
    {
       return GetStringNodeInfo();
+   }
+
+   virtual void PropertyChanged ()
+   {
+      SQValue value;
+      sq_value_init ( &value );
+      HandleGet ( value );
+      this->SendUpdate ( value );
+      sq_value_free ( &value );
    }
 
    virtual void HandleGet ( SQValue & _outputValue )
@@ -99,19 +112,32 @@ public:
 
    virtual ~QtStringProperty()
    {
+      if ( m_notifyAdapter )
+      {
+         delete m_notifyAdapter;
+         m_notifyAdapter = NULL;
+      }
    }
 };
 
-class QtIntProperty : public IntegerPropertyNode
+class QtIntProperty : public IntegerPropertyNode, IQtPropertyChangedReceiver
 {
 private:
    QObject * m_object;
+   QtPropertyChangedNotificationAdapter * m_notifyAdapter;
 
 public:
    QtIntProperty ( const std::string & _name, QObject * _object )
       : IntegerPropertyNode ( _name ),
-        m_object ( _object )
+        m_object ( _object ),
+        m_notifyAdapter ( NULL )
    {
+      m_notifyAdapter = QtPropertyChangedNotificationAdapter::ConnectIfPossible ( _object, _name, this );
+   }
+
+   virtual void PropertyChanged ()
+   {
+      this->SendUpdate ();
    }
 
    virtual int GetValue ()
@@ -139,19 +165,32 @@ public:
 
    virtual ~QtIntProperty()
    {
+      if ( m_notifyAdapter )
+      {
+         delete m_notifyAdapter;
+         m_notifyAdapter = NULL;
+      }
    }
 };
 
-class QtBooleanProperty : public BooleanPropertyNode
+class QtBooleanProperty : public BooleanPropertyNode, IQtPropertyChangedReceiver
 {
 private:
    QObject * m_object;
-
+   QtPropertyChangedNotificationAdapter * m_notifyAdapter;
+   
 public:
    QtBooleanProperty ( const std::string & _name, QObject * _object )
       : BooleanPropertyNode ( _name ),
-        m_object ( _object )
+        m_object ( _object ),
+        m_notifyAdapter ( NULL )
    {
+      m_notifyAdapter = QtPropertyChangedNotificationAdapter::ConnectIfPossible ( _object, _name, this );
+   }
+
+   virtual void PropertyChanged ()
+   {
+      this->SendUpdate ();
    }
 
    virtual bool GetValue ()
@@ -167,6 +206,11 @@ public:
 
    virtual ~QtBooleanProperty()
    {
+      if ( m_notifyAdapter )
+      {
+         delete m_notifyAdapter;
+         m_notifyAdapter = NULL;
+      }
    }
 };
 

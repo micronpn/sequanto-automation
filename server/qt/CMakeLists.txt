@@ -5,6 +5,7 @@ IF(SQ_CXX)
      
      QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC include/sequanto/QtApplicationAutomationEventFilter.h)
      QT4_WRAP_CPP(SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC include/sequanto/QtWidgetAutomationEventFilter.h)
+     QT4_WRAP_CPP(SequantoAutomation_QT_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC include/sequanto/QtPropertyChangedNotificationAdapter.h)
      
      SET(QT_SRCS src/QtWrapper.cxx
                  src/QtWidgetAutomationEventFilter.cxx
@@ -12,9 +13,11 @@ IF(SQ_CXX)
                  src/QtWidgetNode.cxx
                  src/QtAutomationGetPropertyEvent.cxx
                  src/QtAutomationMoveEvent.cxx
-                 src/QtAutomationResizeEvent.cxx 
+                 src/QtAutomationResizeEvent.cxx
+                 src/QtPropertyChangedNotificationAdapter.cxx
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
-                 ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC})
+                 ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC}
+                 ${SequantoAutomation_QT_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC})
      
      SET(QT_HEADERS include/sequanto/QtWrapper.h
                     include/sequanto/QtWidgetAutomationEventFilter.h
@@ -22,7 +25,8 @@ IF(SQ_CXX)
                     include/sequanto/QtWidgetNode.h
                     include/sequanto/QtAutomationGetPropertyEvent.h
                     include/sequanto/QtAutomationResizeEvent.h
-                    include/sequanto/QtAutomationMoveEvent.h)
+                    include/sequanto/QtAutomationMoveEvent.h
+                    include/sequanto/QtPropertyChangedNotificationAdapter.h)
                   
      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)

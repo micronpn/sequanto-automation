@@ -40,6 +40,9 @@ extern "C"
       SQ_WIDGET_TYPE_LABEL,
       SQ_WIDGET_TYPE_MENU_BAR,
       SQ_WIDGET_TYPE_MENU_ITEM,
+      SQ_WIDGET_TYPE_RADIO_BUTTON,
+      SQ_WIDGET_TYPE_TEXT_BOX,
+      SQ_WIDGET_TYPE_STATUS_BAR,
       SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
    
@@ -50,8 +53,11 @@ extern "C"
    extern const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_CHECK_BOX_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_RADIO_BUTTON_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_TEXT_BOX_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE;
 
    const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 

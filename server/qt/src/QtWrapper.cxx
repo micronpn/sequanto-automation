@@ -616,6 +616,17 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
       _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
+   else if ( _widget->inherits ( QRadioButton::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_RADIO_BUTTON_STRING) );
+      _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
+      _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
+   }
+   else if ( _widget->inherits ( QLineEdit::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
+      _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
+   }
    else if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_BUTTON_STRING) );
@@ -628,6 +639,10 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    else if ( _widget->inherits ( QMenu::staticMetaObject.className() ) )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_MENU_ITEM_STRING) );
+   }
+   else if ( _widget->inherits ( QStatusBar::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_STATUS_BAR_STRING) );
    }
    else if ( _widget->inherits ( QLayout::staticMetaObject.className() ) )
    {

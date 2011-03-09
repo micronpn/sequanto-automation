@@ -25,8 +25,11 @@ const char * const SQ_WIDGET_TYPE_CONTAINER_STRING SQ_CONST_VARIABLE = "Containe
 const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE = "Button";
 const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE = "Label";
 const char * const SQ_WIDGET_TYPE_CHECK_BOX_STRING SQ_CONST_VARIABLE = "CheckBox";
+const char * const SQ_WIDGET_TYPE_RADIO_BUTTON_STRING SQ_CONST_VARIABLE = "RadioButton";
+const char * const SQ_WIDGET_TYPE_TEXT_BOX_STRING SQ_CONST_VARIABLE = "TextBox";
 const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
 const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
+const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE = "StatusBar";
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
@@ -78,6 +81,15 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_CHECK_BOX:
       return SQ_WIDGET_TYPE_CHECK_BOX_STRING;
+
+   case SQ_WIDGET_TYPE_RADIO_BUTTON:
+      return SQ_WIDGET_TYPE_RADIO_BUTTON_STRING;
+
+   case SQ_WIDGET_TYPE_TEXT_BOX:
+      return SQ_WIDGET_TYPE_TEXT_BOX_STRING;
+
+   case SQ_WIDGET_TYPE_STATUS_BAR:
+      return SQ_WIDGET_TYPE_STATUS_BAR_STRING;
 
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;

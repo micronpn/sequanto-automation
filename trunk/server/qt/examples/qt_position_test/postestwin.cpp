@@ -2,6 +2,12 @@
 
 #include <iostream>
 #include <QtGui>
+#include <sequanto/automation.h>
+#include <sequanto/QtWrapper.h>
+#include <sequanto/listnode.h>
+#include "cxx_root.h"
+
+using namespace sequanto::automation;
 
 PosTestWin::PosTestWin ( QWidget * _parent )
    : QMainWindow ( _parent )
@@ -49,6 +55,13 @@ void PosTestWin::on_m_update_clicked()
    
    this->ui.m_buttonWindowX->setText ( QString("Window X = %1").arg( pos.x() ) );
    this->ui.m_buttonWindowY->setText ( QString("Window Y = %1").arg( pos.y() ) );
+
+   this->ui.enableButton->setEnabled ( !this->ui.enableButton->isEnabled() );
+   this->ui.m_enableCheckBox->setEnabled ( !this->ui.enableButton->isEnabled() );
+   this->ui.m_enableRadioButton->setEnabled ( !this->ui.enableButton->isEnabled() );
+   this->ui.m_enableLineEdit->setEnabled ( !this->ui.enableButton->isEnabled() );
+
+   this->ui.m_button->setVisible ( !this->ui.m_button->isVisible() );
 }
 
 QtPositionTestEventFilter::QtPositionTestEventFilter ()
@@ -77,10 +90,23 @@ QtPositionTestEventFilter::~QtPositionTestEventFilter ()
 
 int main ( int _argc, char * _argv[] )
 {
+   SQServer server;
+   sq_init ();
+   sq_server_init ( &server, 4321 );
+
+   ListNode * ui = new ListNode ( "ui" );
+   sq_get_cxx_root()->AddChild ( ui );
+
    QApplication app ( _argc, _argv );
-   
+
    PosTestWin mainWin;
    mainWin.show();
+
+   QtWrapper::WrapApplication ( ui );
+
+   atexit ( sq_shutdown );
+
+   sq_server_poll ( &server );
 
    return app.exec();
 }

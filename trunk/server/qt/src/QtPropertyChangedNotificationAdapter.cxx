@@ -1,5 +1,6 @@
 #include <sequanto/QtPropertyChangedNotificationAdapter.h>
 #include <QtCore>
+#include <iostream>
 
 using namespace sequanto::automation;
 
@@ -26,7 +27,10 @@ QtPropertyChangedNotificationAdapter * QtPropertyChangedNotificationAdapter::Con
       if ( property.isValid() && property.hasNotifySignal() )
       {
          QtPropertyChangedNotificationAdapter * ret = new QtPropertyChangedNotificationAdapter(_receiver);
-         QObject::connect ( _object, property.notifySignal().signature(),
+         std::string methodName ( "2" );
+         methodName += property.notifySignal().signature();
+
+         QObject::connect ( _object, methodName.c_str(),
                             ret, SLOT(propertyChanged()) );
          return ret;
       }

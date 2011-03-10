@@ -68,12 +68,18 @@ const std::string & QtWrapper::global_pos ()
   return GLOBAL_POS;
 }
 
-class QtStringProperty : public PropertyNode, IQtPropertyChangedReceiver
+class QtStringProperty : public PropertyNode, public virtual IQtPropertyChangedReceiver
 {
 private:
    QObject * m_object;
-   std::string m_cached;
+
+protected:
    QtPropertyChangedNotificationAdapter * m_notifyAdapter;
+
+   virtual const std::string & QtPropertyName () const
+   {
+      return GetName();
+   }
 
 public:
    QtStringProperty ( const std::string & _name, QObject * _object )
@@ -81,7 +87,7 @@ public:
         m_object ( _object ),
         m_notifyAdapter ( NULL )
    {
-      m_notifyAdapter = QtPropertyChangedNotificationAdapter::ConnectIfPossible ( _object, _name, this );
+      m_notifyAdapter = QtPropertyChangedNotificationAdapter::ConnectIfPossible ( _object, QtPropertyName(), this );
    }
 
    virtual const NodeInfo & Info () const
@@ -100,14 +106,14 @@ public:
 
    virtual void HandleGet ( SQValue & _outputValue )
    {
-     std::string value ( QtWrapper::ToString(QtWrapper::GetPropertyValue ( m_object, GetName() ).toString()) );
+     std::string value ( QtWrapper::ToString(QtWrapper::GetPropertyValue ( m_object, QtPropertyName() ).toString()) );
       sq_value_string_copy ( &_outputValue, value.c_str() );
    }
 
    virtual void HandleSet ( const SQValue * const _value )
    {
       QVariant variantValue ( _value->Value.m_stringValue );
-      m_object->setProperty(GetName().c_str(), variantValue );
+      m_object->setProperty(QtPropertyName().c_str(), variantValue );
    }
 
    virtual ~QtStringProperty()
@@ -117,6 +123,46 @@ public:
          delete m_notifyAdapter;
          m_notifyAdapter = NULL;
       }
+   }
+};
+
+class QtStringPropertyWithAlternateName : public QtStringProperty
+{
+private:
+   std::string m_qtPropertyName;
+
+protected:
+   virtual const std::string & QtPropertyName() const
+   {
+      return m_qtPropertyName;
+   }
+
+public:
+   QtStringPropertyWithAlternateName ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName )
+      : QtStringProperty(_propertyName, _object)
+   {
+      init ( _propertyName, _object, _qtPropertyName, _qtPropertyName );
+   }
+
+   QtStringPropertyWithAlternateName ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName, const std::string & _qtPropertyToUseForNotification  )
+      : QtStringProperty(_propertyName, _object)
+   {
+      init ( _propertyName, _object, _qtPropertyName, _qtPropertyToUseForNotification );
+   }
+
+   void init ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName, const std::string & _qtPropertyToUseForNotification )
+   {
+      m_qtPropertyName = _qtPropertyName;
+      // We need to subscribe to the notification again, because the base constructor does not use our QtPropertyName() implementation when connecting.
+      if ( m_notifyAdapter != NULL )
+      {
+         delete m_notifyAdapter;
+      }
+      m_notifyAdapter = QtPropertyChangedNotificationAdapter::ConnectIfPossible ( _object, _qtPropertyToUseForNotification, this );
+   }
+
+   virtual ~QtStringPropertyWithAlternateName ()
+   {
    }
 };
 
@@ -626,6 +672,16 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    {
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
+   }
+   else if ( _widget->inherits ( QPlainTextEdit::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
+      _root->AddChild ( new QtStringPropertyWithAlternateName(SQ_UI_NODE_TEXT, _widget, "plainText") );
+   }
+   else if ( _widget->inherits ( QTextEdit::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
+      _root->AddChild ( new QtStringPropertyWithAlternateName(SQ_UI_NODE_TEXT, _widget, "plainText", "html") );
    }
    else if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {

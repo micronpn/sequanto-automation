@@ -33,15 +33,17 @@ namespace sequanto
       class QtPropertyChangedNotificationAdapter : public QObject
       {
          Q_OBJECT;
-
-      private:
-         IQtPropertyChangedReceiver * m_receiver;
          
+      private:
+         QObject * m_object;
+         std::string m_methodName;
+         IQtPropertyChangedReceiver * m_receiver;
+
       private slots:
          void propertyChanged ();
          
       public:
-         QtPropertyChangedNotificationAdapter ( IQtPropertyChangedReceiver * _receiver );
+         QtPropertyChangedNotificationAdapter ( IQtPropertyChangedReceiver * _receiver, QObject * _object, const std::string & _methodName );
 
          virtual ~QtPropertyChangedNotificationAdapter ();
 

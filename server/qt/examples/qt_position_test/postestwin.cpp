@@ -32,6 +32,11 @@ void PosTestWin::buttonResized()
    std::cout << "Button resized" << std::endl;
 }
 
+void PosTestWin::on_textEdit_textChanged()
+{
+   this->ui.plainTextEdit->setPlainText ( this->ui.textEdit->toPlainText() );
+}
+
 void PosTestWin::on_m_update_clicked()
 {
    QPoint pos ( this->ui.m_button->pos() );

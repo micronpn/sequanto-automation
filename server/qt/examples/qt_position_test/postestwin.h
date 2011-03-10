@@ -11,6 +11,7 @@ private slots:
    void buttonMoved ();
    void buttonResized ();
    void on_m_update_clicked();
+   void on_textEdit_textChanged();
 
 private:
    Ui::PosTestWindow ui;

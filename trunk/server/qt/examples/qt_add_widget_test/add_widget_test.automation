@@ -7,3 +7,6 @@ function /remove_window remove_window
 function /add_widget add_widget
 function /remove_widget remove_widget
 function /quit quit
+
+#typedef unsigned int size_t
+property /unnamed_objects number_of_unnamed_objects

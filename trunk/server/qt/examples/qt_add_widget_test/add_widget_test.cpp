@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <sequanto/automation.h>
 #include <sequanto/QtWrapper.h>
+#include <sequanto/QtUnnamedObjectStore.h>
 
 using namespace std;
 using namespace sequanto::automation;
@@ -30,13 +31,13 @@ public:
       {
          QMainWindow * window = new QMainWindow();
          QString name ( QString::QString("Window_%1").arg(m_nextWindowNumber) );
-         window->setObjectName ( name );
+         //window->setObjectName ( name );
          window->setWindowTitle ( name );
          window->show();
          QWidget * centralWidget = new QWidget();
-         centralWidget->setObjectName ( "centralWidget" );
+         //centralWidget->setObjectName ( "centralWidget" );
          QVBoxLayout * layout = new QVBoxLayout ();
-         layout->setObjectName ( "layout" );
+         //layout->setObjectName ( "layout" );
          centralWidget->setLayout ( layout );
          window->setCentralWidget ( centralWidget );
          m_nextWindowNumber ++;
@@ -58,8 +59,8 @@ public:
          if ( topLevelWidgets.size() > 0 )
          {
             QMainWindow * window = qobject_cast<QMainWindow*>(topLevelWidgets[0]);
-            QPushButton * button = new QPushButton( "This is my button" );
-            button->setObjectName ( QString::QString("button_%1").arg(m_nextButtonNumber) );
+            QPushButton * button = new QPushButton( QString::QString("button_%1").arg(m_nextButtonNumber) );
+            //button->setObjectName ( QString::QString("button_%1").arg(m_nextButtonNumber) );
             window->centralWidget()->layout()->addWidget ( button );
             m_nextButtonNumber ++;
          }
@@ -177,6 +178,11 @@ extern "C"
    void quit ()
    {
       quit_using_commander();
+   }
+
+   int number_of_unnamed_objects ()
+   {
+      return (int) QtUnnamedObjectStore::CachedObjects();
    }
 }
 

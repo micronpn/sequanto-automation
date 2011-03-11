@@ -8,6 +8,7 @@
 #include <sequanto/QtAutomationMoveEvent.h>
 #include <sequanto/QtAutomationResizeEvent.h>
 #include <sequanto/QtPropertyChangedNotificationAdapter.h>
+#include <sequanto/QtUnnamedObjectStore.h>
 #include <cassert>
 #include <vector>
 #include <stdexcept>
@@ -462,22 +463,17 @@ std::string QtWrapper::ToString ( const QString & _string )
    return std::string ( value.constData(), value.length() );
 }
 
-std::string QtWrapper::GetUnnamedObjectName ( QObject * _object )
-{
-   return ToString ( QString("Unnamed_object_at_0x%1").arg ( (size_t) _object, 8, 16, QLatin1Char('0') ) );
-}
-
 std::string QtWrapper::GetObjectName ( QObject * _object )
 {
    QString objectName ( _object->objectName() );
    if ( objectName.isEmpty() )
 	{
-      return GetUnnamedObjectName ( _object );
+      return QtUnnamedObjectStore::GetName ( _object );
 	}
    QByteArray value ( _object->objectName().toUtf8() );
    if ( !Node::IsValidName(value.constData(), value.length()) )
    {
-      return GetUnnamedObjectName ( _object );
+      return QtUnnamedObjectStore::GetName ( _object );
    }
 	else
 	{
@@ -921,10 +917,14 @@ bool QtWrapper::UpdateWindows( ListNode * _windows )
          std::string objectName ( GetObjectName(widget) );
          if ( !_windows->HasChild ( objectName ))
          {
-            std::string unnamedObjectName ( GetUnnamedObjectName(widget) );
-            if ( _windows->HasChild(unnamedObjectName) )
+            if ( QtUnnamedObjectStore::IsKnown ( widget ) )
             {
-               _windows->RemoveChild ( unnamedObjectName );
+               std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
+               if ( _windows->HasChild(unnamedObjectName) )
+               {
+                  _windows->RemoveChild ( unnamedObjectName );
+                  QtUnnamedObjectStore::Deleted ( widget );
+               }
             }
             QtWidgetNode * newWindow = new QtWidgetNode ( widget );
             WrapUi ( newWindow, widget );

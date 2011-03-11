@@ -1,5 +1,6 @@
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtWrapper.h>
+#include <sequanto/QtUnnamedObjectStore.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -32,12 +33,15 @@ bool QtWidgetNode::AddChildWidget ( QWidget * _child )
       {
          if ( !childrenNode->HasChild(childName) )
          {
-            std::string unnamedObjectName ( QtWrapper::GetUnnamedObjectName(_child) );
-            if ( childrenNode->HasChild(unnamedObjectName) )
+            if ( QtUnnamedObjectStore::IsKnown ( _child ) )
             {
-               childrenNode->RemoveChild ( unnamedObjectName );
+               std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(_child) );
+               if ( childrenNode->HasChild(unnamedObjectName) )
+               {
+                  childrenNode->RemoveChild ( unnamedObjectName );
+                  QtUnnamedObjectStore::Deleted ( _child );
+               }
             }
-
             QtWidgetNode * child = new QtWidgetNode ( _child );
             QtWrapper::WrapUi ( child, qobject_cast<QWidget*>(_child) );
             childrenNode->AddChild ( child );
@@ -70,6 +74,7 @@ void QtWidgetNode::WidgetDestroyed()
    // If m_widget is NULL we are in the process of being destroyed (~QtWidgetNode is in progress).
    if ( m_widget != NULL )
    {
+      QtUnnamedObjectStore::Deleted ( m_widget );
       m_widget = NULL;
       ListNode * parent = dynamic_cast<ListNode*>(this->GetParent());
       if ( parent != NULL )
@@ -90,5 +95,7 @@ QtWidgetNode::~QtWidgetNode()
 
       widget->removeEventFilter ( m_eventFilter );
       delete m_eventFilter;
+
+      QtUnnamedObjectStore::Deleted ( widget );
    }
 }

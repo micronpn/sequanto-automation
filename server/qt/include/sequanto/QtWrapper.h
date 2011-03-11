@@ -61,7 +61,6 @@ namespace sequanto
 
          static std::string ToString ( const QString & _value );
          static std::string GetObjectName ( QObject * _object );
-         static std::string GetUnnamedObjectName ( QObject * _object );
 
          static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
 

@@ -15,6 +15,7 @@ IF(SQ_CXX)
                  src/QtAutomationMoveEvent.cxx
                  src/QtAutomationResizeEvent.cxx
                  src/QtPropertyChangedNotificationAdapter.cxx
+                 src/QtUnnamedObjectStore.cxx
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
                  ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC}
                  ${SequantoAutomation_QT_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC})
@@ -26,8 +27,9 @@ IF(SQ_CXX)
                     include/sequanto/QtAutomationGetPropertyEvent.h
                     include/sequanto/QtAutomationResizeEvent.h
                     include/sequanto/QtAutomationMoveEvent.h
-                    include/sequanto/QtPropertyChangedNotificationAdapter.h)
-                  
+                    include/sequanto/QtPropertyChangedNotificationAdapter.h
+                    include/sequanto/QtUnnamedObjectStore.h)
+     
      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT ${QT_LIBRARIES})

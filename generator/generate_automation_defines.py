@@ -412,121 +412,137 @@ class AutomationFile ( object ):
     
     def analyze ( self ):
         for lineNumber, filename in self.m_imports:
-            if not path.exists(filename):
-                self.reportError ( lineNumber, 'Could not find file named "%s"' % filename )
-            else:
-                fp = open ( filename, 'r' )
-                self.m_parser.parse ( fp.read() )
-                fp.close()
+            try:
+                if not path.exists(filename):
+                    self.reportError ( lineNumber, 'Could not find file named "%s"' % filename )
+                else:
+                    fp = open ( filename, 'r' )
+                    self.m_parser.parse ( fp.read() )
+                    fp.close()
+            except Exception, ex:
+                self.reportError ( lineNumber, ex )
         
         propertyIndex = 0
         for lineNumber, objectPath, get_function, set_function in self.m_properties:
-            if self.m_parser.hasFunction(get_function):
-                if set_function is None or self.m_parser.hasFunction(set_function):
-                    get_function = self.m_parser.getFunction(get_function)
-                    if set_function is not None:
-                        set_function = self.m_parser.getFunction(set_function)
-                    
-                    property = Property(self, propertyIndex, objectPath, get_function, set_function)
-                    
-                    if len(get_function.parameters) == property.numSmartParameters:
-                        if set_function is None or len(set_function.parameters) == 1 + property.numSmartParameters:
-                            if set_function is None or get_function.returnType == set_function.parameters[0 + property.numSmartParameters].type:
-                                if property.automationType is not None:
-                                    if property.smart:
-                                        first = True
-                                        for smartObjectPath, values in property.allSmartObjectPaths:
-                                            self.createParents ( smartObjectPath )
-                                            self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_PROPERTY', propertyIndex) )
-                                            self.m_foundProperties.append ( Property(self, propertyIndex, objectPath, get_function, set_function, smartObjectPath, first, values) )
+            try:
+                if self.m_parser.hasFunction(get_function):
+                    if set_function is None or self.m_parser.hasFunction(set_function):
+                        get_function = self.m_parser.getFunction(get_function)
+                        if set_function is not None:
+                            set_function = self.m_parser.getFunction(set_function)
+
+                        property = Property(self, propertyIndex, objectPath, get_function, set_function)
+
+                        if len(get_function.parameters) == property.numSmartParameters:
+                            if set_function is None or len(set_function.parameters) == 1 + property.numSmartParameters:
+                                if set_function is None or get_function.returnType == set_function.parameters[0 + property.numSmartParameters].type:
+                                    if property.automationType is not None:
+                                        if property.smart:
+                                            first = True
+                                            for smartObjectPath, values in property.allSmartObjectPaths:
+                                                self.createParents ( smartObjectPath )
+                                                self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_PROPERTY', propertyIndex) )
+                                                self.m_foundProperties.append ( Property(self, propertyIndex, objectPath, get_function, set_function, smartObjectPath, first, values) )
+                                                propertyIndex += 1
+                                                first = False
+                                        else:
+                                            self.createParents ( objectPath )
+                                            self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_PROPERTY', propertyIndex) )
+                                            self.m_foundProperties.append ( property )
                                             propertyIndex += 1
-                                            first = False
+
                                     else:
-                                        self.createParents ( objectPath )
-                                        self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_PROPERTY', propertyIndex) )
-                                        self.m_foundProperties.append ( property )
-                                        propertyIndex += 1
-                                    
+                                        self.reportError ( lineNumber, 'The property type is not recognized (%s)' % (get_function.returnType) )
                                 else:
-                                    self.reportError ( lineNumber, 'The property type is not recognized (%s)' % (get_function.returnType) )
+                                    self.reportError ( lineNumber, 'The get function returns %s, while the set function expects %s' % (get_function.returnType, set_function.parameters[0].type) )
                             else:
-                                self.reportError ( lineNumber, 'The get function returns %s, while the set function expects %s' % (get_function.returnType, set_function.parameters[0].type) )
+                                self.reportError ( lineNumber, 'The set function takes %i parameters' % len(set_function.parameters) )
                         else:
-                            self.reportError ( lineNumber, 'The set function takes %i parameters' % len(set_function.parameters) )
+                            self.reportError ( lineNumber, 'The get function takes %i parameters' % len(get_function.parameters) )                    
                     else:
-                        self.reportError ( lineNumber, 'The get function takes %i parameters' % len(get_function.parameters) )                    
+                        self.reportError ( lineNumber, 'Could not find set function "%s"' % set_function )
                 else:
-                    self.reportError ( lineNumber, 'Could not find set function "%s"' % set_function )
-            else:
-                self.reportError ( lineNumber, 'Could not find get function "%s"' % get_function )
+                    self.reportError ( lineNumber, 'Could not find get function "%s"' % get_function )
+            except Exception, ex:
+                self.reportError ( lineNumber, ex )
         
         functionIndex = 0
         for lineNumber, objectPath, function in self.m_functions:
-            if self.m_parser.hasFunction(function):
-                function = self.m_parser.getFunction(function)
-                automationType = self.getAutomationType(function.returnType)
-                if automationType is not None:
-                    allParmsOk = True
-                    for parameter in function.parameters:
-                        if self.getAutomationType(parameter.type) is None:
-                            self.reportError ( lineNumber, 'The function takes an unknown parameter type "%s" for the parameter named "%s".' % (parameter.type, parameter.name) )
-                            allParmsOk = False
-                    
-                    if allParmsOk:
-                        functionObject = Function(self, functionIndex, objectPath, function)
-                        if functionObject.smart:
-                            first = True
-                            for smartObjectPath, values in functionObject.allSmartObjectPaths:
-                                self.createParents ( smartObjectPath )
-                                self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
-                                self.m_foundFunctions.append ( Function(self, functionIndex, objectPath, function, smartObjectPath, first, values) )
-                                self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(functionObject.parameters) - functionObject.numSmartParameters)
+            try:
+                if self.m_parser.hasFunction(function):
+                    function = self.m_parser.getFunction(function)
+                    automationType = self.getAutomationType(function.returnType)
+                    if automationType is not None:
+                        allParmsOk = True
+                        for parameter in function.parameters:
+                            if self.getAutomationType(parameter.type) is None:
+                                self.reportError ( lineNumber, 'The function takes an unknown parameter type "%s" for the parameter named "%s".' % (parameter.type, parameter.name) )
+                                allParmsOk = False
+
+                        if allParmsOk:
+                            functionObject = Function(self, functionIndex, objectPath, function)
+                            if functionObject.smart:
+                                first = True
+                                for smartObjectPath, values in functionObject.allSmartObjectPaths:
+                                    self.createParents ( smartObjectPath )
+                                    self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
+                                    self.m_foundFunctions.append ( Function(self, functionIndex, objectPath, function, smartObjectPath, first, values) )
+                                    self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(functionObject.parameters) - functionObject.numSmartParameters)
+                                    functionIndex += 1
+                                    first = False
+
+                            else:
+                                self.createParents ( objectPath )
+                                self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
+                                self.m_foundFunctions.append ( functionObject )
+                                self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(function.parameters))
                                 functionIndex += 1
-                                first = False
-                            
-                        else:
-                            self.createParents ( objectPath )
-                            self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_CALLABLE', functionIndex) )
-                            self.m_foundFunctions.append ( functionObject )
-                            self.m_maxNumberOfParameters = max(self.m_maxNumberOfParameters, len(function.parameters))
-                            functionIndex += 1
+                    else:
+                        self.reportError ( lineNumber, 'The return type is not recognized (%s)' % (function.returnType) )
                 else:
-                    self.reportError ( lineNumber, 'The return type is not recognized (%s)' % (function.returnType) )
-            else:
-                self.reportError ( lineNumber, 'Could not find function "%s"' % function )
+                    self.reportError ( lineNumber, 'Could not find function "%s"' % function )
+            except Exception, ex:
+                self.reportError ( lineNumber, ex )
         
         monitorIndex = 0
         for lineNumber, objectPath, types in self.m_monitors:
-            allTypesOk = True
-            for type in types:
-                try:
-                    automationType = self.getAutomationType(type)
-                except:
-                    self.reportError ( lineNumber, 'The monitor type is not recognized (%s)' % (type) )
-                    allTypesOk = False
-            if allTypesOk:
-                monitor = Monitor(self, monitorIndex, objectPath, types)
-                if monitor.smart:
-                    first = True
-                    for smartObjectPath, values in monitor.allSmartObjectPaths:
-                        self.createParents ( smartObjectPath )
-                        self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
-                        self.m_foundMonitors.append ( Monitor(self, monitorIndex, objectPath, types, smartObjectPath, first, values) )
-                        monitorIndex += 1
-                        first = False
+            try:
+                allTypesOk = True
+                for type in types:
+                    try:
+                        automationType = self.getAutomationType(type)
+                    except:
+                        self.reportError ( lineNumber, 'The monitor type is not recognized (%s)' % (type) )
+                        allTypesOk = False
+                if allTypesOk:
+                    monitor = Monitor(self, monitorIndex, objectPath, types)
+                    if monitor.smart:
+                        first = True
+                        for smartObjectPath, values in monitor.allSmartObjectPaths:
+                            self.createParents ( smartObjectPath )
+                            self.m_objectPaths.append ( (smartObjectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
+                            self.m_foundMonitors.append ( Monitor(self, monitorIndex, objectPath, types, smartObjectPath, first, values) )
+                            monitorIndex += 1
+                            first = False
 
-                else:
-                    self.createParents ( objectPath )
-                    self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
-                    self.m_foundMonitors.append ( monitor )
-                    monitorIndex += 1
+                    else:
+                        self.createParents ( objectPath )
+                        self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_MONITOR', monitorIndex) )
+                        self.m_foundMonitors.append ( monitor )
+                        monitorIndex += 1
+        
+            except Exception, ex:
+                self.reportError ( lineNumber, ex )
         
         branchIndex = 0
         for lineNumber, objectPath in self.m_branches:
-            self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_BRANCH', branchIndex) )
-            self.m_foundBranches.append ( Branch(branchIndex, objectPath) )
-            branchIndex += 1
-            
+            try:
+                self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_BRANCH', branchIndex) )
+                self.m_foundBranches.append ( Branch(branchIndex, objectPath) )
+                branchIndex += 1
+            except Exception, ex:
+                self.reportError ( lineNumber, ex )
+        
         self.m_objectPaths.sort()
         
     def findObjectPathIndex ( self, objectPath ):

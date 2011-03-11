@@ -22,7 +22,6 @@ string QtUnnamedObjectStore::CreateName ( size_t _num )
    stringstream ss;
    ss << "UnnamedObject_";
    ss << _num;
-   std::cout << "Creating name " << ss.str() << std::endl;
    return ss.str();
 }
 

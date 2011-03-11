@@ -46,6 +46,13 @@ void sq_protocol_write_failure_with_values_message ( SQStream * _stream, const S
 void sq_protocol_write_update_message ( SQStream * _stream, const char * const _fullname );
 void sq_protocol_write_update_with_value_message ( SQStream * _stream, const char * const _fullname , const SQValue * const _value );
 
+void sq_protocol_write_success_with_integer_message ( SQStream * _stream, int _value );
+void sq_protocol_write_success_with_string_message ( SQStream * _stream, const char * const _value );
+void sq_protocol_write_success_with_string_out_message ( SQStream * _stream, SQStringOut * _value );
+void sq_protocol_write_success_with_boolean_message ( SQStream * _stream, SQBool _value );
+void sq_protocol_write_success_with_float_message ( SQStream * _stream, float _value );
+void sq_protocol_write_success_with_byte_array_message ( SQStream * _stream, SQByte * _start, SQByte * _end );
+
 #ifdef __cplusplus
 }
 #endif

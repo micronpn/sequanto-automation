@@ -563,20 +563,14 @@ class AutomationFile ( object ):
             raise 'Unknown type %s' % automationType
     
     def writeSuccessMessageWithValue ( self, fp, c_type, automation_type, value ):
-        #fp.write ( '   sq_protocol_write_success_with_values_message ( _stream, &outputValue, 1 );\n' )
-
-        fp.write ( '   sq_stream_enter_write ( _stream );\n' )
-        fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
         if automation_type == 'byte_array':
-            fp.write ( '   sq_protocol_write_%s ( _stream, %s->m_start, %s->m_end );\n' % (automation_type, value, value) )
+            fp.write ( '   sq_protocol_write_success_with_byte_array_message ( _stream, %s->m_start, %s->m_end );\n' % (value, value) )
         elif c_type == 'SQStringOut':
-            fp.write ( '   sq_protocol_write_string_out ( _stream, &%s );\n' % value )
-        elif c_type == 'SQStringOut *':
-            fp.write ( '   sq_protocol_write_string_out ( _stream, %s );\n' % value )
+            fp.write ( '   sq_protocol_write_success_with_string_out_message ( _stream, &%s );\n' % value )
         else:
-            fp.write ( '   sq_protocol_write_%s ( _stream, %s );\n' % (automation_type, value) )
-        fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
-        fp.write ( '   sq_stream_exit_write ( _stream );\n' )
+            if c_type == 'SQStringOut *':
+                automation_type = 'string_out'
+            fp.write ( '   sq_protocol_write_success_with_%s_message ( _stream, %s );\n' % (automation_type, value) )
     
     def generate ( self ):
         print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
@@ -603,7 +597,6 @@ class AutomationFile ( object ):
         fp.write ( '\n' )
         
         fp.write ( 'static const char NEWLINE[] SQ_CONST_VARIABLE = "\\r\\n";\n' )
-        fp.write ( 'static const char PLUS_SPACE[] SQ_CONST_VARIABLE = "+ ";\n' )
         fp.write ( 'static const char UPDATE_START[] SQ_CONST_VARIABLE = "!UPDATE ";\n' )
         
         fp.write ( 'typedef enum _SQInfoType { INFO_TYPE_LIST = 0, INFO_TYPE_PROPERTY = 1, INFO_TYPE_CALLABLE = 2, INFO_TYPE_MONITOR = 3, INFO_TYPE_BRANCH = 4 } SQInfoType;\n' )

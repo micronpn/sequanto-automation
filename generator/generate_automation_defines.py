@@ -562,6 +562,22 @@ class AutomationFile ( object ):
         else:
             raise 'Unknown type %s' % automationType
     
+    def writeSuccessMessageWithValue ( self, fp, c_type, automation_type, value ):
+        #fp.write ( '   sq_protocol_write_success_with_values_message ( _stream, &outputValue, 1 );\n' )
+
+        fp.write ( '   sq_stream_enter_write ( _stream );\n' )
+        fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
+        if automation_type == 'byte_array':
+            fp.write ( '   sq_protocol_write_%s ( _stream, %s->m_start, %s->m_end );\n' % (automation_type, value, value) )
+        elif c_type == 'SQStringOut':
+            fp.write ( '   sq_protocol_write_string_out ( _stream, &%s );\n' % value )
+        elif c_type == 'SQStringOut *':
+            fp.write ( '   sq_protocol_write_string_out ( _stream, %s );\n' % value )
+        else:
+            fp.write ( '   sq_protocol_write_%s ( _stream, %s );\n' % (automation_type, value) )
+        fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
+        fp.write ( '   sq_stream_exit_write ( _stream );\n' )
+    
     def generate ( self ):
         print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
         
@@ -708,17 +724,11 @@ class AutomationFile ( object ):
             else:
                 fp.write ( '   %s value = %s();\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
             
-
-            fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
-            if property.automationType == 'byte_array':
-                fp.write ( '   sq_protocol_write_%s ( _stream, value->m_start, value->m_end );\n' % property.automationType )
-            elif property.type == 'SQStringOut':
-                fp.write ( '   sq_protocol_write_string_out ( _stream, &value );\n' )
-            elif property.type == 'SQStringOut *':
-                fp.write ( '   sq_protocol_write_string_out ( _stream, value );\n' )
-            else:
-                fp.write ( '   sq_protocol_write_%s ( _stream, value );\n' % property.automationType )
-            fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
+            
+            assert property.automationType == self.getAutomationType(property.type)
+            
+            self.writeSuccessMessageWithValue ( fp, property.type, property.automationType, 'value' )
+            
             fp.write ( '}\n' )
             fp.write ( '\n' )
             
@@ -787,10 +797,8 @@ class AutomationFile ( object ):
                 
             else:
                 fp.write ( '   %s ret = %s ( %s );\n' % (self.getRecognizedCType(function.returnType), function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
-                fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_SPACE) );\n' )
-                fp.write ( '   sq_protocol_write_%s ( _stream, ret );\n' % self.getAutomationType(function.returnType) )
-                fp.write ( '   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );\n' )
-                
+                self.writeSuccessMessageWithValue ( fp, function.returnType, self.getAutomationType(function.returnType), 'ret' )
+            
             fp.write ( '}\n' )
             fp.write ( '\n' )
         

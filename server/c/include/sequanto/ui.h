@@ -66,6 +66,8 @@ extern "C"
    extern const char * const SQ_UI_NODE_SCREEN SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_MOUSE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_CLICK SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_KEYBOARD SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_INPUT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE;

@@ -870,6 +870,44 @@ public:
    }
 };
 
+class QtKeyboardInputMethod : public Node
+{
+public:
+   QtKeyboardInputMethod()
+      : Node(SQ_UI_NODE_INPUT)
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      static MethodInfo info ( VALUE_TYPE_VOID );
+      if ( info.GetNumberOfParameters() == 0 )
+      {
+         info.AddParameter ( VALUE_TYPE_STRING );
+      }
+      return info;
+   }
+   
+   virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
+   {
+       assert ( _numberOfValues == 1 );
+       
+       std::string text ( _inputValues[0].Value.m_stringValue );
+
+       QWidget * receiver = QApplication::focusWidget();
+
+       if ( receiver != 0 )
+       {
+          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyPress, Qt::Key::Key_unknown, Qt::KeyboardModifier::NoModifier, text.c_str(), false, text.length() ) );
+          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyRelease, Qt::Key::Key_unknown, Qt::KeyboardModifier::NoModifier, text.c_str(), false, text.length() ) );
+       }
+   }
+
+   virtual ~QtKeyboardInputMethod()
+   {
+   }
+};
+
 void QtWrapper::WrapApplication ( ListNode * _root )
 {
    ListNode * windows = new ListNode ( SQ_UI_NODE_WINDOWS );
@@ -889,6 +927,10 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    _root->AddChild ( mouse );
    mouse->AddChild ( new QtMouseMoveMethod() );
    mouse->AddChild ( new QtMouseClickMethod() );
+
+   ListNode * keyboard = new ListNode ( SQ_UI_NODE_KEYBOARD );
+   _root->AddChild ( keyboard );
+   keyboard->AddChild ( new QtKeyboardInputMethod() );
    
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
 }

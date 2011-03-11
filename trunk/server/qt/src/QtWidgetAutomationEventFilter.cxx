@@ -26,10 +26,18 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
           QObject * child = childEvent->child();
           if ( child->isWidgetType () )
           {
-             QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(child).c_str()) );
-             if ( m_node->AddChildWidget ( qobject_cast<QWidget*>(child) ) )
+             QWidget * childWidget = qobject_cast<QWidget*>(child);
+             if ( childWidget->isWindow() )
              {
-                m_node->SendChildrenUpdate();
+                //QtWrapper::UpdateWindows();
+             }
+             else
+             {
+                QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(child).c_str()) );
+                if ( m_node->AddChildWidget ( childWidget ) )
+                {
+                   m_node->SendChildrenUpdate();
+                }
              }
           }
        }
@@ -54,18 +62,18 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
 
     case QEvent::Move:
      
-        if ( qobject_cast<QMainWindow*>(_object) != NULL || qobject_cast<QDialog*>(_object) != NULL )
+       if ( _object->isWidgetType() && qobject_cast<QWidget*>(_object)->isWindow() )
         {
-			Node * screenX = m_node->FindChild(SQ_UI_WINDOW_SCREEN_X);
-			Node * screenY = m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y);
-			if ( screenX != NULL )
-			{
-				dynamic_cast<IntegerPropertyNode*> ( screenX )->SendUpdate();
-			}
-			if ( screenY != NULL )
-			{
-				dynamic_cast<IntegerPropertyNode*> ( screenY )->SendUpdate();
-			}
+           Node * screenX = m_node->FindChild(SQ_UI_WINDOW_SCREEN_X);
+           Node * screenY = m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y);
+           if ( screenX != NULL )
+           {
+              dynamic_cast<IntegerPropertyNode*> ( screenX )->SendUpdate();
+           }
+           if ( screenY != NULL )
+           {
+              dynamic_cast<IntegerPropertyNode*> ( screenY )->SendUpdate();
+           }
         }
         else
         {

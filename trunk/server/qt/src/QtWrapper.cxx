@@ -39,9 +39,6 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
 	
        pos -= windowTopLeft;
 
-       //QPoint pos = widget->mapTo ( window, widget->pos() );
-       
-       //qDebug() << "Direct: " << pos;
        return pos;
     }
     else
@@ -645,12 +642,13 @@ public:
 
 void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 {
-   //else if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
-   if ( (_widget->windowType() & Qt::Window) == Qt::Window )
+   if ( _widget->isWindow() )
    {
+      assert ( _widget == _widget->window() );
+
       _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
-      _root->AddChild ( new QtScreenXProperty( _widget->window() ) );
-      _root->AddChild ( new QtScreenYProperty( _widget->window() ) );
+      _root->AddChild ( new QtScreenXProperty( _widget ) );
+      _root->AddChild ( new QtScreenYProperty( _widget ) );
    }
    else if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
    {
@@ -711,18 +709,6 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    }
    _root->AddChild ( new ConstantStringNode ( SQ_UI_NODE_NATIVE_TYPE, _widget->metaObject()->className() ) );
    
-   /*
-   if ( _widget->inherits ( QDialog::staticMetaObject.className() ) || _widget->inherits ( QMainWindow::staticMetaObject.className() ) )
-   {
-     _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_X, 0 ) );
-     _root->AddChild ( new ConstantIntegerNode(SQ_UI_NODE_Y, 0 ) );
-   }
-   else
-   {
-     _root->AddChild ( new QtIntProperty( SQ_UI_NODE_X, _widget ) );
-     _root->AddChild ( new QtIntProperty( SQ_UI_NODE_Y, _widget ) );
-   }
-   */
    _root->AddChild ( new QtGlobalXProperty( _widget ) );
    _root->AddChild ( new QtGlobalYProperty( _widget ) );
    

@@ -7,6 +7,8 @@
 #include <sequanto/QtAutomationGetPropertyEvent.h>
 #include <sequanto/QtAutomationMoveEvent.h>
 #include <sequanto/QtAutomationResizeEvent.h>
+#include <sequanto/QtAutomationMouseMoveEvent.h>
+#include <sequanto/QtAutomationMouseClickEvent.h>
 #include <sequanto/QtPropertyChangedNotificationAdapter.h>
 #include <sequanto/QtUnnamedObjectStore.h>
 #include <cassert>
@@ -801,7 +803,7 @@ public:
       QWidget * window = QApplication::activeWindow();
       if ( window != NULL )
       {
-          QApplication::postEvent ( window, new QMouseEvent( QEvent::MouseMove, QPoint(x, y), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+          QApplication::postEvent ( window, new QtAutomationMouseMoveEvent(x, y) );
       }
    }
 
@@ -854,14 +856,10 @@ public:
          break;
       }
 
-      QPoint pos ( x, y );
-      QWidget * receiver = QApplication::widgetAt(pos );
-      
-      if ( receiver != 0 )
+      QWidget * window = QApplication::activeWindow();
+      if ( window != NULL )
       {
-         QPoint widgetPos = receiver->mapFromGlobal ( pos );
-         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, pos, button, button, Qt::NoModifier ) );
-         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, pos, button, button, Qt::NoModifier ) );
+          QApplication::postEvent ( window, new QtAutomationMouseClickEvent(x, y, button) );
       }
    }
 
@@ -898,8 +896,8 @@ public:
 
        if ( receiver != 0 )
        {
-          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyPress, Qt::Key::Key_unknown, Qt::KeyboardModifier::NoModifier, text.c_str(), false, text.length() ) );
-          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyRelease, Qt::Key::Key_unknown, Qt::KeyboardModifier::NoModifier, text.c_str(), false, text.length() ) );
+          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier, text.c_str(), false, text.length() ) );
+          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyRelease, Qt::Key_unknown, Qt::NoModifier, text.c_str(), false, text.length() ) );
        }
    }
 

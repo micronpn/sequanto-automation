@@ -14,6 +14,8 @@ IF(SQ_CXX)
                  src/QtAutomationGetPropertyEvent.cxx
                  src/QtAutomationMoveEvent.cxx
                  src/QtAutomationResizeEvent.cxx
+                 src/QtAutomationMouseMoveEvent.cxx
+                 src/QtAutomationMouseClickEvent.cxx
                  src/QtPropertyChangedNotificationAdapter.cxx
                  src/QtUnnamedObjectStore.cxx
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
@@ -27,6 +29,8 @@ IF(SQ_CXX)
                     include/sequanto/QtAutomationGetPropertyEvent.h
                     include/sequanto/QtAutomationResizeEvent.h
                     include/sequanto/QtAutomationMoveEvent.h
+                    include/sequanto/QtAutomationMouseMoveEvent.h
+                    include/sequanto/QtAutomationMouseClickEvent.h
                     include/sequanto/QtPropertyChangedNotificationAdapter.h
                     include/sequanto/QtUnnamedObjectStore.h)
      

@@ -2,6 +2,8 @@
 #include <sequanto/QtAutomationGetPropertyEvent.h>
 #include <sequanto/QtAutomationMoveEvent.h>
 #include <sequanto/QtAutomationResizeEvent.h>
+#include <sequanto/QtAutomationMouseMoveEvent.h>
+#include <sequanto/QtAutomationMouseClickEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/ui.h>
 #include <cassert>
@@ -139,6 +141,26 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
             event->done ( qobject_cast<QWidget*> ( _object )->property ( event->propertyName() ) );
         }
         return true;
+    }
+    else if ( _event->type() == QtAutomationMouseMoveEvent::ID )
+    {
+       QtAutomationMouseMoveEvent * event = dynamic_cast<QtAutomationMouseMoveEvent*>(_event);
+       QApplication::postEvent ( this, new QMouseEvent( QEvent::MouseMove, event->position(), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+       return true;
+    }
+    else if ( _event->type() == QtAutomationMouseClickEvent::ID )
+    {
+       QtAutomationMouseClickEvent * event = dynamic_cast<QtAutomationMouseClickEvent*>(_event);
+
+       QWidget * receiver = QApplication::widgetAt(event->position());
+       
+       if ( receiver != 0 )
+       {
+          QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
+          
+          QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+          QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+       }
     }
     else
     {

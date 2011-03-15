@@ -642,6 +642,45 @@ public:
    }
 };
 
+class QtInputMethod : public Node
+{
+public:
+   QtInputMethod()
+      : Node(SQ_UI_NODE_INPUT)
+   {
+   }
+
+   virtual const NodeInfo & Info () const
+   {
+      static MethodInfo info ( VALUE_TYPE_VOID );
+      if ( info.GetNumberOfParameters() == 0 )
+      {
+         info.AddParameter ( VALUE_TYPE_STRING );
+      }
+      return info;
+   }
+   
+   virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
+   {
+       assert ( _numberOfValues == 1 );
+
+       std::string text ( _inputValues[0].Value.m_stringValue );
+       
+       QtWidgetNode * parent = dynamic_cast<QtWidgetNode*> ( this->GetParent() );
+       if ( parent != NULL )
+       {
+           QWidget * receiver = parent->widget();
+           
+           QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier, text.c_str(), false, text.length() ) );
+           QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyRelease, Qt::Key_unknown, Qt::NoModifier, text.c_str(), false, text.length() ) );
+       }
+   }
+
+   virtual ~QtInputMethod()
+   {
+   }
+};
+
 void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 {
    if ( _widget->isWindow() )
@@ -722,7 +761,9 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 
    _root->AddChild ( new QtMoveMethod(_widget ) );
    _root->AddChild ( new QtResizeMethod(_widget ) );
-
+   
+   _root->AddChild ( new QtInputMethod() );
+   
    _root->AddChild ( new ListNode(SQ_UI_NODE_CHILDREN) );
 
    QObjectList list ( _widget->children() );
@@ -868,44 +909,6 @@ public:
    }
 };
 
-class QtKeyboardInputMethod : public Node
-{
-public:
-   QtKeyboardInputMethod()
-      : Node(SQ_UI_NODE_INPUT)
-   {
-   }
-
-   virtual const NodeInfo & Info () const
-   {
-      static MethodInfo info ( VALUE_TYPE_VOID );
-      if ( info.GetNumberOfParameters() == 0 )
-      {
-         info.AddParameter ( VALUE_TYPE_STRING );
-      }
-      return info;
-   }
-   
-   virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
-   {
-       assert ( _numberOfValues == 1 );
-       
-       std::string text ( _inputValues[0].Value.m_stringValue );
-
-       QWidget * receiver = QApplication::focusWidget();
-
-       if ( receiver != 0 )
-       {
-          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier, text.c_str(), false, text.length() ) );
-          QApplication::postEvent ( receiver, new QKeyEvent( QEvent::KeyRelease, Qt::Key_unknown, Qt::NoModifier, text.c_str(), false, text.length() ) );
-       }
-   }
-
-   virtual ~QtKeyboardInputMethod()
-   {
-   }
-};
-
 void QtWrapper::WrapApplication ( ListNode * _root )
 {
    ListNode * windows = new ListNode ( SQ_UI_NODE_WINDOWS );
@@ -926,10 +929,6 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    mouse->AddChild ( new QtMouseMoveMethod() );
    mouse->AddChild ( new QtMouseClickMethod() );
 
-   ListNode * keyboard = new ListNode ( SQ_UI_NODE_KEYBOARD );
-   _root->AddChild ( keyboard );
-   keyboard->AddChild ( new QtKeyboardInputMethod() );
-   
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
 }
 

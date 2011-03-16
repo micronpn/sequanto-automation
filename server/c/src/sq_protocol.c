@@ -107,20 +107,26 @@ SQBool sq_protocol_write_string( SQStream * _stream, const char * const _value )
    {
       if ( ch == '\n' )
       {
-				WRITE_BYTE_OR_FAIL ( '\\' );
-				WRITE_BYTE_OR_FAIL ( 'n' );
+         WRITE_BYTE_OR_FAIL ( '\\' );
+         WRITE_BYTE_OR_FAIL ( 'n' );
       }
       else if ( ch == '\r' )
       {
-				WRITE_BYTE_OR_FAIL ( '\\' );
-				WRITE_BYTE_OR_FAIL ( 'r' );
+         WRITE_BYTE_OR_FAIL ( '\\' );
+         WRITE_BYTE_OR_FAIL ( 'r' );
       }
-      else if ( ch >= ' ' )
+      else if ( ch == '\\' )
       {
-         if ( ch == '\\' || ch == '"' )
-         {
-            WRITE_BYTE_OR_FAIL ( '\\' );
-         }
+         WRITE_BYTE_OR_FAIL ( '\\' );
+         WRITE_BYTE_OR_FAIL ( '\\' );
+      }
+      else if ( ch == '"' )
+      {
+         WRITE_BYTE_OR_FAIL ( '\\' );
+         WRITE_BYTE_OR_FAIL ( '"' );
+      }
+      else
+      {
          WRITE_BYTE_OR_FAIL ( ch );
       }
    }

@@ -6,18 +6,20 @@ IF(SQ_CXX)
      QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC include/sequanto/QtApplicationAutomationEventFilter.h)
      QT4_WRAP_CPP(SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC include/sequanto/QtWidgetAutomationEventFilter.h)
      QT4_WRAP_CPP(SequantoAutomation_QT_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC include/sequanto/QtPropertyChangedNotificationAdapter.h)
-     
-     SET(QT_SRCS src/QtWrapper.cxx
-                 src/QtWidgetAutomationEventFilter.cxx
-                 src/QtApplicationAutomationEventFilter.cxx
-                 src/QtWidgetNode.cxx
-                 src/QtAutomationGetPropertyEvent.cxx
-                 src/QtAutomationMoveEvent.cxx
-                 src/QtAutomationResizeEvent.cxx
-                 src/QtAutomationMouseMoveEvent.cxx
-                 src/QtAutomationMouseClickEvent.cxx
-                 src/QtPropertyChangedNotificationAdapter.cxx
-                 src/QtUnnamedObjectStore.cxx
+
+     SET(QT_SRCS_WITHOUT_MOCK src/QtWrapper.cxx
+                              src/QtWidgetAutomationEventFilter.cxx
+                              src/QtApplicationAutomationEventFilter.cxx
+                              src/QtWidgetNode.cxx
+                              src/QtAutomationGetPropertyEvent.cxx
+                              src/QtAutomationMoveEvent.cxx
+                              src/QtAutomationResizeEvent.cxx
+                              src/QtAutomationMouseMoveEvent.cxx
+                              src/QtAutomationMouseClickEvent.cxx
+                              src/QtPropertyChangedNotificationAdapter.cxx
+                              src/QtUnnamedObjectStore.cxx)
+                           
+     SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
                  ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC}
                  ${SequantoAutomation_QT_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC})
@@ -34,6 +36,9 @@ IF(SQ_CXX)
                     include/sequanto/QtPropertyChangedNotificationAdapter.h
                     include/sequanto/QtUnnamedObjectStore.h)
      
+     LIST(APPEND SQ_ALL_SOURCE ${QT_SRCS})
+     LIST(APPEND SQ_ALL_HEADERS ${QT_HEADERS})
+     
      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT ${QT_LIBRARIES})
@@ -42,14 +47,40 @@ IF(SQ_CXX)
      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
      INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/qt/include)
 
-     INSTALL(TARGETS SequantoAutomation_QT
-             RUNTIME DESTINATION bin
-             LIBRARY DESTINATION lib
-             ARCHIVE DESTINATION lib)
+     ADD_SUBDIRECTORY(examples)
+     
+     IF(SQ_GENERATE_QMAKE)
+       STRING(REPLACE ";" " \\\n        " QT_SRCS_REPLACED "${QT_SRCS_WITHOUT_MOCK}")
+       STRING(REPLACE ";" " \\\n           " QT_HEADERS_REPLACED "${QT_HEADERS}")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# QT files\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "QT_SRCS=${QT_SRCS_REPLACED}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "QT_HEADERS=${QT_HEADERS_REPLACED}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# Putting it all together\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "TEMPLATE=lib\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "SOURCES+=\$\${C_SRCS} \$\${CXX_SRCS} \$\${QT_SRCS}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "HEADERS+=\$\${C_HEADERS} \$\${CXX_HEADERS} \$\${QT_HEADERS}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "INCLUDEPATH+=include\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "LIBS:win32+=WS2_32.lib\n")
+       
+       INSTALL(FILES ${CMAKE_BINARY_DIR}/SequantoAutomation.pro
+               DESTINATION .)
+     ENDIF(SQ_GENERATE_QMAKE)
+     
+     IF(SQ_INSTALL_BINARY)
+       INSTALL(TARGETS SequantoAutomation_QT
+               RUNTIME DESTINATION bin
+               LIBRARY DESTINATION lib
+               ARCHIVE DESTINATION lib)
+             
+     ENDIF(SQ_INSTALL_BINARY)
 
      INSTALL(FILES ${QT_HEADERS}
              DESTINATION include/sequanto)
-           
-     ADD_SUBDIRECTORY(examples)
+
+     IF(SQ_INSTALL_SOURCE)
+       INSTALL(FILES ${QT_SRCS_WITHOUT_MOCK}
+               DESTINATION src)
+     ENDIF(SQ_INSTALL_SOURCE)
    ENDIF(QT4_FOUND)
 ENDIF(SQ_CXX)

@@ -105,6 +105,19 @@ IF(SQ_GENERATE_DOCUMENTATION)
           DESTINATION docs/api)
 ENDIF(SQ_GENERATE_DOCUMENTATION)
 
+IF(SQ_GENERATE_QMAKE)
+  SET(SQ_INSTALL_BINARY OFF)
+  SET(SQ_INSTALL_SOURCE ON)
+  
+  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# put custom qmake directives in the custom.pro file\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "include(custom.pro)\n\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/custom.pro "# empty by default\n")
+
+ELSE(SQ_GENERATE_QMAKE)
+  SET(SQ_INSTALL_BINARY ON)
+  SET(SQ_INSTALL_SOURCE OFF)
+ENDIF(SQ_GENERATE_QMAKE)
+
 ADD_SUBDIRECTORY(server/c)
 ADD_SUBDIRECTORY(server/cxx)
 ADD_SUBDIRECTORY(server/qt)

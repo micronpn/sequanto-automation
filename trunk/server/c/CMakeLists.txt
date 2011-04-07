@@ -9,7 +9,8 @@ SET(C_HEADERS include/sequanto/automation.h include/sequanto/stream.h
               include/sequanto/value.h include/sequanto/system.h
               include/sequanto/log.h include/sequanto/ui.h
               include/sequanto/circularbuffer.h include/sequanto/types.h
-              include/sequanto/thread.h include/sequanto/parser.h)
+              include/sequanto/thread.h include/sequanto/parser.h
+              include/sequanto/macros.h)
 
 SET(C_SRCS_UNIT_TEST ${C_SRCS} src/sq_stream_unit_test.c)
 
@@ -41,6 +42,9 @@ IF(SQ_ARDUINO)
     SET(SQ_USE_MUTEXES OFF)
     SET(SQ_USE_THREADS OFF)
 ENDIF(SQ_ARDUINO)
+
+STRING(REPLACE ";" ";c/" C_SRCS_ALL "${C_SRCS}")
+SET(SQ_ALL_SRCS ${SQ_ALL_SRCS} "c/${C_SRCS_ALL}" CACHE INTERNAL "All source files")
 
 ADD_LIBRARY(SequantoAutomation STATIC ${C_SRCS} ${C_HEADERS})
 ADD_LIBRARY(SequantoAutomation_UnitTest STATIC ${C_SRCS_UNIT_TEST} ${C_HEADERS})
@@ -81,10 +85,10 @@ ENDIF(SQ_INSTALL_SOURCE)
 IF(SQ_GENERATE_QMAKE)
   STRING(REPLACE ";" " \\\n       " C_SRCS_REPLACED "${C_SRCS}")
   STRING(REPLACE ";" " \\\n          " C_HEADERS_REPLACED "${C_HEADERS}")
-  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# C files\n")
-  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "C_SRCS=${C_SRCS_REPLACED}\n")
-  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "C_HEADERS=${C_HEADERS_REPLACED}\n")
-  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "# C files\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "C_SRCS=${C_SRCS_REPLACED}\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "C_HEADERS=${C_HEADERS_REPLACED}\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "\n")
 ENDIF(SQ_GENERATE_QMAKE)
 
 ADD_SUBDIRECTORY(tests)

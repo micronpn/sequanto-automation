@@ -17,12 +17,10 @@
 #ifndef SEQUANTO_TYPES_H_
 #define SEQUANTO_TYPES_H_
 
+#include <sequanto/macros.h>
 #include <stdlib.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 typedef unsigned char SQByte;
 typedef SQByte SQBool;
@@ -88,8 +86,6 @@ typedef struct _SQByteArray
 const char * sq_get_constant_string ( const char * const _constantString );
 void sq_get_constant_string_copy ( const char * const _constantString, char * _outputBuffer );
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_TYPES_H_ */

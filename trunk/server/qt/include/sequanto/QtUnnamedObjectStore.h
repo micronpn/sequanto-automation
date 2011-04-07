@@ -14,7 +14,7 @@ namespace sequanto
          size_t m_nextNameId;
          ObjectMap m_map;
 
-         static std::string CreateName ( size_t _num );
+         static std::string CreateName ( const QObject * _object, size_t _num );
 
          QtUnnamedObjectStore ();
          static QtUnnamedObjectStore & Instance();

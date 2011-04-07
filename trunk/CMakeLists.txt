@@ -63,6 +63,8 @@ ENDIF(SQ_QT4)
 
 INCLUDE(FindDoxygen)
 
+OPTION(SQ_BUILD_SHARED_LIBRARIES "Build Shared Libraries" OFF)
+
 SET(SQ_MAX_STRING_LENGTH 1024     CACHE STRING "The maximum string length supported by the library")
 SET(SQ_MAX_OBJECT_LENGTH 256      CACHE STRING "The maximum object length supported by the library")
 SET(SQ_MAX_PARAMETERS    10       CACHE STRING "The maximum number of parameters for function calls")
@@ -118,7 +120,5 @@ ELSE(SQ_GENERATE_QMAKE)
   SET(SQ_INSTALL_SOURCE OFF)
 ENDIF(SQ_GENERATE_QMAKE)
 
-ADD_SUBDIRECTORY(server/c)
-ADD_SUBDIRECTORY(server/cxx)
-ADD_SUBDIRECTORY(server/qt)
+ADD_SUBDIRECTORY(server)
 ADD_SUBDIRECTORY(generator)

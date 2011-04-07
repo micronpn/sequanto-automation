@@ -18,6 +18,7 @@
 #define SEQUANTO_TREE_H_
 
 #include <string>
+#include <sequanto/macros.h>
 #include <sequanto/nodeinfo.h>
 #include <sequanto/methodinfo.h>
 #include <sequanto/node.h>
@@ -32,7 +33,7 @@ namespace sequanto
 {
    namespace automation
    {
-      class Tree
+      class SQ_DECL Tree
       {
       private:
          Node * m_root;

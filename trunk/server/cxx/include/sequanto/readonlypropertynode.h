@@ -19,13 +19,14 @@
 
 #include <string>
 #include <map>
+#include <sequanto/macros.h>
 #include <sequanto/propertynode.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class ReadOnlyPropertyNode : public PropertyNode
+      class SQ_DECL ReadOnlyPropertyNode : public PropertyNode
       {
       public:
          ReadOnlyPropertyNode ( const std::string & _name );
@@ -35,7 +36,7 @@ namespace sequanto
          virtual ~ReadOnlyPropertyNode ();
       };
 
-      class ReadOnlyIntegerPropertyNode : public ReadOnlyPropertyNode
+      class SQ_DECL ReadOnlyIntegerPropertyNode : public ReadOnlyPropertyNode
       {
       protected:
          virtual int GetValue () = 0;
@@ -52,7 +53,7 @@ namespace sequanto
          virtual ~ReadOnlyIntegerPropertyNode();
       };
 
-      class ReadOnlyStringPropertyNode : public ReadOnlyPropertyNode
+      class SQ_DECL ReadOnlyStringPropertyNode : public ReadOnlyPropertyNode
       {
       protected:
          virtual const std::string & GetValue () = 0;
@@ -69,7 +70,7 @@ namespace sequanto
          virtual ~ReadOnlyStringPropertyNode();
       };
 
-      class ReadOnlyBooleanPropertyNode : public ReadOnlyPropertyNode
+      class SQ_DECL ReadOnlyBooleanPropertyNode : public ReadOnlyPropertyNode
       {
       protected:
          virtual bool GetValue () = 0;

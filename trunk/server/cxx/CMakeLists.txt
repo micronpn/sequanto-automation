@@ -22,13 +22,17 @@ IF(SQ_CXX)
                   include/sequanto/constantnode.h
                   include/sequanto/mutex.h
                   include/sequanto/lock.h)
+
+
+  STRING(REPLACE ";" ";cxx/" CXX_SRCS_ALL "${CXX_SRCS}")
+  SET(SQ_ALL_SRCS ${SQ_ALL_SRCS} "cxx/${CXX_SRCS_ALL};cxx/src/cxx_root.cpp" CACHE INTERNAL "All source files")
   
   ADD_LIBRARY(SequantoAutomation_CXX STATIC ${CXX_SRCS} ${CXX_HEADERS})
   TARGET_LINK_LIBRARIES(SequantoAutomation_CXX SequantoAutomation)
-
+  
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include)
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/cxx/include)
-
+  
   IF(SQ_INSTALL_BINARY)
     INSTALL(TARGETS SequantoAutomation_CXX
             RUNTIME DESTINATION bin
@@ -46,15 +50,18 @@ IF(SQ_CXX)
     INSTALL(FILES ${CXX_SRCS}
             DESTINATION src)
   ENDIF(SQ_INSTALL_SOURCE)
-
+  
   IF(SQ_GENERATE_QMAKE)
     STRING(REPLACE ";" " \\\n         " CXX_SRCS_REPLACED "${CXX_SRCS}")
     STRING(REPLACE ";" " \\\n            " CXX_HEADERS_REPLACED "${CXX_HEADERS}")
     SET(CXX_SRCS_REPLACED "${CXX_SRCS_REPLACED} \\\nsrc/cxx_root.cpp")
-    FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# C++ files\n")
-    FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "CXX_SRCS=${CXX_SRCS_REPLACED}\n")
-    FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "CXX_HEADERS=${CXX_HEADERS_REPLACED}\n")
-    FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "# C++ files\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "CXX_SRCS=${CXX_SRCS_REPLACED}\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "CXX_HEADERS=${CXX_HEADERS_REPLACED}\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "\n")
+    
+    INSTALL(FILES src/cxx_root.h
+          DESTINATION include/sequanto)
   ENDIF(SQ_GENERATE_QMAKE)
   
   ADD_SUBDIRECTORY(examples)

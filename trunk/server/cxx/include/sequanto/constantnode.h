@@ -19,6 +19,7 @@
 
 #include <string>
 #include <map>
+#include <sequanto/macros.h>
 #include <sequanto/propertynode.h>
 #include <sequanto/readonlypropertynode.h>
 #include <sequanto/readwritepropertynode.h>
@@ -27,7 +28,7 @@ namespace sequanto
 {
    namespace automation
    {
-      class ConstantIntegerNode : public ReadOnlyIntegerPropertyNode
+      class SQ_DECL ConstantIntegerNode : public ReadOnlyIntegerPropertyNode
       {
       private:
          int m_value;
@@ -41,7 +42,7 @@ namespace sequanto
          virtual ~ConstantIntegerNode();
       };
 
-      class ConstantStringNode : public ReadOnlyStringPropertyNode
+      class SQ_DECL ConstantStringNode : public ReadOnlyStringPropertyNode
       {
       private:
          std::string m_value;
@@ -56,7 +57,7 @@ namespace sequanto
          virtual ~ConstantStringNode();
       };
 
-      class ConstantBooleanNode : public ReadOnlyBooleanPropertyNode
+      class SQ_DECL ConstantBooleanNode : public ReadOnlyBooleanPropertyNode
       {
       private:
          bool m_value;

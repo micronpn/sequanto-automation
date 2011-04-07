@@ -17,10 +17,11 @@ QtUnnamedObjectStore & QtUnnamedObjectStore::Instance ()
    return instance;
 }
 
-string QtUnnamedObjectStore::CreateName ( size_t _num )
+string QtUnnamedObjectStore::CreateName ( const QObject * _object, size_t _num )
 {
    stringstream ss;
-   ss << "UnnamedObject_";
+   ss << _object->metaObject()->className();
+   ss << '_';
    ss << _num;
    return ss.str();
 }
@@ -32,7 +33,7 @@ const string & QtUnnamedObjectStore::GetName ( const QObject * _object )
    ObjectMap::iterator it = instance.m_map.find ( _object );
    if ( it == instance.m_map.end () )
    {
-     string name ( CreateName ( instance.m_nextNameId++ ) );
+     string name ( CreateName ( _object, instance.m_nextNameId++ ) );
      pair<ObjectMap::iterator, bool> foundIt = instance.m_map.insert ( make_pair ( _object, name ) );
      assert ( foundIt.second );
      it = foundIt.first;

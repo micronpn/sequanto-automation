@@ -1,9 +1,10 @@
+#include <sequanto/macros.h>
 #include <sequanto/listnode.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      ListNode * sq_get_cxx_root ();
+      SQ_DECL ListNode * sq_get_cxx_root ();
    }
 }

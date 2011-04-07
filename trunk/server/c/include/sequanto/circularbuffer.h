@@ -17,18 +17,16 @@
 #ifndef SEQUANTO_CIRCULAR_BUFFER_H_
 #define SEQUANTO_CIRCULAR_BUFFER_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
-    int sq_circular_buffer_available ( int _size, int _readPosition, int _writePosition );
-	 SQBool sq_circular_buffer_empty ( int _readPosition, int _writePosition );
-    SQBool sq_circular_buffer_full ( int _readPosition );
-    void sq_circular_buffer_push ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data, SQByte _value );
-    SQByte sq_circular_buffer_pop ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data );
+SQ_DECL int sq_circular_buffer_available ( int _size, int _readPosition, int _writePosition );
+SQ_DECL SQBool sq_circular_buffer_empty ( int _readPosition, int _writePosition );
+SQ_DECL SQBool sq_circular_buffer_full ( int _readPosition );
+SQ_DECL void sq_circular_buffer_push ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data, SQByte _value );
+SQ_DECL SQByte sq_circular_buffer_pop ( int _size, volatile int * _readPosition, volatile int * _writePosition, SQByte * _data );
 
 #define SQ_CIRCULAR_BUFFER_DEFINE(parm_name, parm_size) struct { int m_size; volatile int m_readPosition; volatile int m_writePosition; SQByte m_data[parm_size]; } parm_name;
 #define SQ_CIRCULAR_BUFFER_INIT(parm_name, parm_size) parm_name.m_size = parm_size; parm_name.m_readPosition = 0; parm_name.m_writePosition = 0;
@@ -38,8 +36,6 @@ extern "C"
 #define SQ_CIRCULAR_BUFFER_PUSH(name, value) sq_circular_buffer_push ( name.m_size, &name.m_readPosition, &name.m_writePosition, name.m_data, value )
 #define SQ_CIRCULAR_BUFFER_POP(name) sq_circular_buffer_pop ( name.m_size, &name.m_readPosition, &name.m_writePosition, name.m_data )
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_CIRCULAR_BUFFER_H_ */

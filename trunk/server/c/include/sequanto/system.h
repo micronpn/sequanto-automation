@@ -17,18 +17,15 @@
 #ifndef SEQUANTO_SYSTEM_H_
 #define SEQUANTO_SYSTEM_H_
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#include <sequanto/macros.h>
 
-int sq_system_tickcount ( void );
-void sq_system_sleep ( int _milliseconds );
+SQ_BEGIN_DECL
+
+SQ_DECL int sq_system_tickcount ( void );
+SQ_DECL void sq_system_sleep ( int _milliseconds );
 
 #define SQ_MAX(a,b) ((a) < (b) ? (b) : (a))
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_SYSTEM_H_ */

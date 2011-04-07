@@ -17,6 +17,7 @@
 #ifndef SEQUANTO_QT_WRAPPER_H_
 #define SEQUANTO_QT_WRAPPER_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/tree.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtApplicationAutomationEventFilter.h>
@@ -32,7 +33,7 @@ namespace sequanto
    {
       class QtWidgetNode;
       
-      class QtWrapper
+      class SQ_DECL QtWrapper
       {
       private:
          QtWrapper ();

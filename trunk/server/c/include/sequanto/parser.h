@@ -17,6 +17,7 @@
 #ifndef SEQUANTO_PARSER_H_
 #define SEQUANTO_PARSER_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 #include <sequanto/stream.h>
 #include <sequanto/value.h>
@@ -24,10 +25,7 @@
 /* #define SQ_BUFFER_SIZE 1024 */
 #define SQ_BUFFER_SIZE 256
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 typedef struct _SQParser
 {
@@ -35,10 +33,9 @@ typedef struct _SQParser
    SQByte m_inputBuffer[SQ_BUFFER_SIZE];
 } SQParser;
 
-void sq_parser_init ( SQParser * _parser );
-void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte _byte );
-void sq_parser_destroy ( SQParser * _parser );
-
+SQ_DECL void sq_parser_init ( SQParser * _parser );
+SQ_DECL void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte _byte );
+SQ_DECL void sq_parser_destroy ( SQParser * _parser );
 
 /**
  * @defgroup Application Application functions
@@ -79,8 +76,6 @@ void sq_parser_disable ( SQParser * _parser, SQStream * _stream, const char * co
 
 /*@}*/
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif

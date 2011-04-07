@@ -18,7 +18,7 @@ IF(SQ_CXX)
                               src/QtAutomationMouseClickEvent.cxx
                               src/QtPropertyChangedNotificationAdapter.cxx
                               src/QtUnnamedObjectStore.cxx)
-                           
+
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
                  ${SequantoAutomation_QT_WIDGET_AUTOMATION_EVENT_FILTER_MOC}
@@ -35,9 +35,9 @@ IF(SQ_CXX)
                     include/sequanto/QtAutomationMouseClickEvent.h
                     include/sequanto/QtPropertyChangedNotificationAdapter.h
                     include/sequanto/QtUnnamedObjectStore.h)
-     
-     LIST(APPEND SQ_ALL_SOURCE ${QT_SRCS})
-     LIST(APPEND SQ_ALL_HEADERS ${QT_HEADERS})
+
+     STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")
+     SET(SQ_ALL_SRCS ${SQ_ALL_SRCS} "qt/${QT_SRCS_ALL}" CACHE INTERNAL "All source files")
      
      ADD_LIBRARY(SequantoAutomation_QT STATIC ${QT_SRCS} ${QT_HEADERS})
      TARGET_LINK_LIBRARIES(SequantoAutomation_QT SequantoAutomation_CXX)
@@ -52,18 +52,21 @@ IF(SQ_CXX)
      IF(SQ_GENERATE_QMAKE)
        STRING(REPLACE ";" " \\\n        " QT_SRCS_REPLACED "${QT_SRCS_WITHOUT_MOCK}")
        STRING(REPLACE ";" " \\\n           " QT_HEADERS_REPLACED "${QT_HEADERS}")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# QT files\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "QT_SRCS=${QT_SRCS_REPLACED}\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "QT_HEADERS=${QT_HEADERS_REPLACED}\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# Putting it all together\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "TEMPLATE=lib\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "SOURCES+=\$\${C_SRCS} \$\${CXX_SRCS} \$\${QT_SRCS}\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "HEADERS+=\$\${C_HEADERS} \$\${CXX_HEADERS} \$\${QT_HEADERS}\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "INCLUDEPATH+=include\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "LIBS:win32+=WS2_32.lib\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "# QT files\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "QT_SRCS=${QT_SRCS_REPLACED}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "QT_HEADERS=${QT_HEADERS_REPLACED}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "# Putting it all together\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "TEMPLATE=lib\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "SOURCES+=\$\${C_SRCS} \$\${CXX_SRCS} \$\${QT_SRCS}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "HEADERS+=\$\${C_HEADERS} \$\${CXX_HEADERS} \$\${QT_HEADERS}\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "INCLUDEPATH+=include\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "win32:LIBS+=WS2_32.lib\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro "DEFINES+=SQ_SEQUANTO_AUTOMATION_SOURCE SQ_SEQUANTO_AUTOMATION_SHARED\n")
        
-       INSTALL(FILES ${CMAKE_BINARY_DIR}/SequantoAutomation.pro
+       INSTALL(FILES ${CMAKE_BINARY_DIR}/libSequantoAutomation.pro
+               DESTINATION .)
+       INSTALL(FILES ${CMAKE_BINARY_DIR}/custom.pro
                DESTINATION .)
      ENDIF(SQ_GENERATE_QMAKE)
      

@@ -19,6 +19,7 @@
 
 #include <string>
 #include <map>
+#include <sequanto/macros.h>
 #include <sequanto/node.h>
 #include <sequanto/mutex.h>
 
@@ -26,7 +27,7 @@ namespace sequanto
 {
    namespace automation
    {
-      class ListNode : public sequanto::automation::Node
+      class SQ_DECL ListNode : public sequanto::automation::Node
       {
       public:
          typedef std::map<std::string, Node*> NodeMap;

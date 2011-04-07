@@ -17,22 +17,18 @@
 #ifndef SEQUANTO_AUTOMATION_H_
 #define SEQUANTO_AUTOMATION_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 #include <sequanto/stream.h>
 #include <sequanto/server.h>
 #include <sequanto/system.h>
 #include <sequanto/log.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
-void sq_init ( void );
-void sq_shutdown ( void );
+SQ_DECL void sq_init ( void );
+SQ_DECL void sq_shutdown ( void );
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_AUTOMATION_H_ */

@@ -17,12 +17,10 @@
 #ifndef SEQUANTO_THREAD_H_
 #define SEQUANTO_THREAD_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 typedef struct _SQThread SQThread;
 
@@ -31,21 +29,19 @@ typedef void (*SQThreadRunFunction) ( SQThread * _thread, void * _data );
 /**
  * Determine on runtime if the current platform supports threading.
  */
-SQBool sq_thread_is_supported ( void );
+SQ_DECL SQBool sq_thread_is_supported ( void );
 
-SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data );
-void sq_thread_start ( SQThread * _thread );
-void sq_thread_destroy ( SQThread * _thread );
+SQ_DECL SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data );
+SQ_DECL void sq_thread_start ( SQThread * _thread );
+SQ_DECL void sq_thread_destroy ( SQThread * _thread );
 
 typedef struct _SQMutex SQMutex;
 
-SQMutex * sq_mutex_create ( void );
-void sq_mutex_enter ( SQMutex * _mutex );
-void sq_mutex_leave ( SQMutex * _mutex );
-void sq_mutex_destroy ( SQMutex * _mutex );
+SQ_DECL SQMutex * sq_mutex_create ( void );
+SQ_DECL void sq_mutex_enter ( SQMutex * _mutex );
+SQ_DECL void sq_mutex_leave ( SQMutex * _mutex );
+SQ_DECL void sq_mutex_destroy ( SQMutex * _mutex );
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_THREAD_H_ */

@@ -17,15 +17,13 @@
 #ifndef SEQUANTO_SERVER_H_
 #define SEQUANTO_SERVER_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 #include <sequanto/stream.h>
 #include <sequanto/value.h>
 #include <sequanto/parser.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 typedef struct _SQServer
 {
@@ -47,16 +45,16 @@ typedef struct _SQServer
  * This also sets the singleton variable, which means that you can
  * only have one SQServer object at a time.
  */
-void sq_server_init ( SQServer * _server, int _portNumber );
+SQ_DECL void sq_server_init ( SQServer * _server, int _portNumber );
 
-void sq_server_destroy ( SQServer * _server );
+SQ_DECL void sq_server_destroy ( SQServer * _server );
 
 /**
  * Get the current server singleton instance.
  */
-SQServer * sq_server_get_instance ( void );
+SQ_DECL SQServer * sq_server_get_instance ( void );
 
-void sq_server_poll ( SQServer * _server );
+SQ_DECL void sq_server_poll ( SQServer * _server );
 
 /**
  * @defgroup Internal Internal functions
@@ -66,16 +64,14 @@ void sq_server_poll ( SQServer * _server );
 /**
  * The SQServer's callback to handle when data is received on the stream.
  */
-void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, SQByte * _buffer, size_t _length );
+SQ_DECL void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, SQByte * _buffer, size_t _length );
 /**
  * Parse the input buffer.
  */
-void sq_server_parse_input_buffer ( SQServer * _server );
+SQ_DECL void sq_server_parse_input_buffer ( SQServer * _server );
 
 /*@}*/
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_SERVER_H_ */

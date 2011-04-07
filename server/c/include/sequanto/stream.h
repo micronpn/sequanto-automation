@@ -17,12 +17,10 @@
 #ifndef SEQUANTO_STREAM_H_
 #define SEQUANTO_STREAM_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 typedef struct _SQStream SQStream;
 
@@ -37,7 +35,7 @@ typedef void (*SQStreamDataReceivedFunction) ( SQStream * _stream, void * _data,
  * sq_stream_set_data_received_handler it will only be called if
  * sq_stream_poll is called periodically.
  */
-SQStream * sq_stream_open ( int _portNumber );
+SQ_DECL SQStream * sq_stream_open ( int _portNumber );
 
 /**
  * Register a function that should be called when data is received
@@ -47,35 +45,35 @@ SQStream * sq_stream_open ( int _portNumber );
  * @param _handler The handler to be called when data is available.
  * @param _data _data Extra data that will be supplied to the handler when it is invoked.
  */
-void sq_stream_set_data_received_handler ( SQStream * _stream, SQStreamDataReceivedFunction _handler, void * _data );
+SQ_DECL void sq_stream_set_data_received_handler ( SQStream * _stream, SQStreamDataReceivedFunction _handler, void * _data );
 
 /**
  * Poll the stream for data and, if using TCP, accept any client waiting to be accepted.
  */
-void sq_stream_poll( SQStream * _stream );
+SQ_DECL void sq_stream_poll( SQStream * _stream );
 
 /**
  * Return the number of bytes available to be read from the stream.
  */
-size_t sq_stream_data_available ( SQStream * _stream );
+SQ_DECL size_t sq_stream_data_available ( SQStream * _stream );
 
 /**
  * Write a single byte to the stream, returns true if the write was
  * successful.
  */
-SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte );
+SQ_DECL SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte );
 
 /**
  * Write a zero terminated string to the stream, returns true if all
  * the characters were written successfully.
  */
-SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string );
+SQ_DECL SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string );
 
 /**
  * Read a single byte from the stream, returns true if the read was
  * successful.
  */
-SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte );
+SQ_DECL SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte );
 
 /**
  * To avoid multiple people writing to the stream at once you should
@@ -85,16 +83,14 @@ SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte );
  * 
  * @see sq_stream_enter_write
  */
-void sq_stream_enter_write ( SQStream * _stream );
+SQ_DECL void sq_stream_enter_write ( SQStream * _stream );
 /**
  * @see sq_stream_exit_write
  */
-void sq_stream_exit_write ( SQStream * _stream );
+SQ_DECL void sq_stream_exit_write ( SQStream * _stream );
 
-void sq_stream_close (SQStream * _stream );
+SQ_DECL void sq_stream_close (SQStream * _stream );
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_STREAM_H_ */

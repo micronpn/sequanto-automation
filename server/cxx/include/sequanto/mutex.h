@@ -17,15 +17,16 @@
 #ifndef SEQUANTO_MUTEX_H_
 #define SEQUANTO_MUTEX_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/thread.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class Lock;
+      class SQ_DECL Lock;
       
-      class Mutex
+      class SQ_DECL Mutex
       {
       private:
          SQMutex * m_mutex;

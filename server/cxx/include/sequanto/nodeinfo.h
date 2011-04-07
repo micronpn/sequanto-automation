@@ -18,13 +18,14 @@
 #define SEQUANTO_NODEINFO_H_
 
 #include <string>
+#include <sequanto/macros.h>
 #include <sequanto/value.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class NodeInfo
+      class SQ_DECL NodeInfo
       {
       public:
          typedef enum _Type

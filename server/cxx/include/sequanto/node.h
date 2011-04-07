@@ -19,6 +19,7 @@
 
 #include <string>
 
+#include <sequanto/macros.h>
 #include <sequanto/nodeinfo.h>
 
 namespace sequanto
@@ -27,9 +28,9 @@ namespace sequanto
    {
 #include <sequanto/value.h>
 
-      class ListNode;
+      class SQ_DECL ListNode;
 
-      class Node
+      class SQ_DECL Node
       {
       private:
          friend class ListNode;

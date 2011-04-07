@@ -17,13 +17,11 @@
 #ifndef SEQUANTO_VALUE_H_
 #define SEQUANTO_VALUE_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/types.h>
 #include <sequanto/stream.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 typedef enum
 {
@@ -60,29 +58,29 @@ typedef struct
 /**
  * Initialize the SQValue as having no value.
  */
-void sq_value_init ( SQValue * _value );
+SQ_DECL void sq_value_init ( SQValue * _value );
 
 /**
  * Initialize the SQValue as an integer.
  */
-void sq_value_integer ( SQValue * _value, int _initialValue);
+SQ_DECL void sq_value_integer ( SQValue * _value, int _initialValue);
 
 /**
  * Initialize the SQValue as a float.
  */
-void sq_value_float ( SQValue * _value, float _initialValue);
+SQ_DECL void sq_value_float ( SQValue * _value, float _initialValue);
 
 /**
  * Initialize the SQValue as a boolean.
  */
-void sq_value_boolean ( SQValue * _value, SQBool _initialValue);
+SQ_DECL void sq_value_boolean ( SQValue * _value, SQBool _initialValue);
 
 /**
  * Initialize the SQValue as a string.
  *
  * Please note that the given value will _not_ be copied, the string will be free'ed when sq_value_free(...) is called.
  */
-void sq_value_string ( SQValue * _value, char * _initialValue);
+SQ_DECL void sq_value_string ( SQValue * _value, char * _initialValue);
 
 /**
  * Initialize the SQValue as a const string.
@@ -90,14 +88,14 @@ void sq_value_string ( SQValue * _value, char * _initialValue);
  * Please note that the given value will _not_ be copied, the string will have to be valid while this SQValue is valid.
  * The value is _not_ free'ed when sq_value_free(...) is called.
  */
-void sq_value_const_string ( SQValue * _value, const char * _initialValue);
+SQ_DECL void sq_value_const_string ( SQValue * _value, const char * _initialValue);
 
 /**
  * Initialize the SQValue as a string.
  *
  * Please note that the given value will be copied and the string will be free'ed when sq_value_free(...) is called.
  */
-void sq_value_string_copy ( SQValue * _value, const char * const _initialValue);
+SQ_DECL void sq_value_string_copy ( SQValue * _value, const char * const _initialValue);
 
 /**
  * Initialize the SQValue as a byte array.
@@ -106,37 +104,35 @@ void sq_value_string_copy ( SQValue * _value, const char * const _initialValue);
  *
  * @see sq_value_string
  */
-void sq_value_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength );
+SQ_DECL void sq_value_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength );
 
 /**
  * Initialize the SQValue as a null.
  */
-void sq_value_null ( SQValue * _value );
+SQ_DECL void sq_value_null ( SQValue * _value );
 
 /**
  * Write the given value to the given stream.
  */
-SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream );
+SQ_DECL SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream );
 
 /**
  * Free any memory that the given SQValue is consuming (string or byte array) and set the type to "NO VALUE".
  */
-void sq_value_free ( SQValue * _value );
+SQ_DECL void sq_value_free ( SQValue * _value );
 
 /**
  * Write values from _start to _start + _numberOfValues separated by space.
  */
-SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfValues, SQStream * _stream );
+SQ_DECL SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfValues, SQStream * _stream );
 
 /**
  * Parse a list of values separated by spaces and terminated by \r\n from _buffer.
  *
  * @return the number of values read.
  */
-size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buffer );
+SQ_DECL size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buffer );
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif /* SEQUANTO_VALUE_H_ */

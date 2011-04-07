@@ -14,26 +14,29 @@
  * permissions and limitations under the License.
  */
 
-#ifndef SEQUANTO_LOCK_H_
-#define SEQUANTO_LOCK_H_
+#ifndef SEQUANTO_MACROS_H_
+#define SEQUANTO_MACROS_H_
 
-#include <sequanto/macros.h>
-#include <sequanto/mutex.h>
-
-namespace sequanto
-{
-   namespace automation
-   {
-      class SQ_DECL Lock
-      {
-      private:
-         const Mutex & m_mutex;
-         
-      public:
-         Lock ( const Mutex & _mutex );
-         virtual ~Lock ();
-      };
-   }
-}
-
+#ifdef __cplusplus
+#   define SQ_BEGIN_DECL extern "C" {
+#   define SQ_END_DECL }
+#else
+#   define SQ_BEGIN_DECL
+#   define SQ_END_DECL
 #endif
+
+#ifdef SQ_SEQUANTO_AUTOMATION_SHARED
+#   ifdef _WIN32
+#      ifdef SQ_SEQUANTO_AUTOMATION_SOURCE
+#         define SQ_DECL __declspec(dllexport)
+#      else
+#         define SQ_DECL __declspec(dllimport)
+#      endif
+#   else
+#      define SQ_DECL
+#   endif
+#else
+#   define SQ_DECL
+#endif
+
+#endif  /* SEQUANTO_MACROS_H_ */

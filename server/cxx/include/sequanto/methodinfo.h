@@ -18,13 +18,14 @@
 #define SEQUANTO_METHODINFO_H_
 
 #include <vector>
+#include <sequanto/macros.h>
 #include <sequanto/node.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class MethodInfo : public NodeInfo
+      class SQ_DECL MethodInfo : public NodeInfo
       {
       protected:
          SQValueType m_returnType;

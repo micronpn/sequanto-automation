@@ -19,13 +19,14 @@
 
 #include <string>
 #include <map>
+#include <sequanto/macros.h>
 #include <sequanto/node.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class PropertyNode : public sequanto::automation::Node
+      class SQ_DECL PropertyNode : public sequanto::automation::Node
       {
       public:
          static const NodeInfo & GetIntegerNodeInfo ();

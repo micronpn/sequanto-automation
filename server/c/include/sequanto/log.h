@@ -17,6 +17,7 @@
 #ifndef SEQUANTO_LOG_H_
 #define SEQUANTO_LOG_H_
 
+#include <sequanto/macros.h>
 #include <sequanto/log.h>
 #include <stdarg.h>
 
@@ -32,10 +33,7 @@
  * protocol.
  */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
 #ifdef SQ_DISABLE_AUTOMATION_INTERFACE
 
@@ -51,7 +49,7 @@ extern "C"
     * 
     * @param _message The message to write.
     */
-   void sq_log ( const char * _message );
+   SQ_DECL void sq_log ( const char * _message );
 
    /**
     * Write a log message to the connected clients (if any) using a
@@ -71,12 +69,10 @@ extern "C"
     *
     * @param _format The message to write, including any printf-like statements.
     */
-   void sq_logf ( const char * _format, ... );
+   SQ_DECL void sq_logf ( const char * _format, ... );
 
 #endif
-   
-#ifdef __cplusplus
-}
-#endif
+
+SQ_END_DECL   
 
 #endif

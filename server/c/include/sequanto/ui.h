@@ -14,20 +14,18 @@
  * permissions and limitations under the License.
  */
 
-#include <sequanto/types.h>
-
 #ifndef SEQUANTO_UI_H_
 #define SEQUANTO_UI_H_
+
+#include <sequanto/macros.h>
+#include <sequanto/types.h>
 
 /**
  * \file ui.h
  * \brief Standard values and types used when exposing a UI tree.
  */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+SQ_BEGIN_DECL
 
    typedef enum
    {
@@ -59,7 +57,7 @@ extern "C"
    extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE;
 
-   const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
+   SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 
    extern const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE;
@@ -85,8 +83,6 @@ extern "C"
    extern const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE;
 
-#ifdef __cplusplus
-}
-#endif
+SQ_END_DECL
 
 #endif

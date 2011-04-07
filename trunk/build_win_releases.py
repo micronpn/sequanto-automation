@@ -21,7 +21,13 @@ BUILD_DIR = 'releases'
 CONFIGURATIONS = [
     {'generator': 'Visual Studio 8 2005',
      'name': 'vs2005-win32',
-     'devenv': DEVENV_8}
+     'devenv': DEVENV_8,
+     'configuration': 'Release'}
+    ,
+    {'generator': 'Visual Studio 8 2005',
+     'name': 'vs2005-win32-debug',
+     'devenv': DEVENV_8,
+     'configuration': 'Debug'}
     ,
 #    {'generator': 'Visual Studio 8 2005 Win64',
 #     'name': 'vs2005-win64',
@@ -29,7 +35,19 @@ CONFIGURATIONS = [
 #    ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'vs2008-win32',
-     'devenv': VCEXPRESS_9}
+     'devenv': VCEXPRESS_9,
+     'configuration': 'Release'}
+    ,
+    {'generator': 'Visual Studio 9 2008',
+     'name': 'vs2008-win32-debug',
+     'devenv': VCEXPRESS_9,
+     'configuration': 'Debug'}
+    ,
+    {'generator': 'Visual Studio 9 2008',
+     'name': 'qmake',
+     'devenv': VCEXPRESS_9,
+     'configuration': 'Release',
+     'defines': ['SQ_GENERATE_QMAKE:BOOL=ON', 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
 #    {'generator': 'Visual Studio 9 2008 Win64',
 #     'name': 'vs2008-win64'}
@@ -55,26 +73,34 @@ for conf in CONFIGURATIONS:
     
     os.makedirs ( build_dir )
     
-    run ( ['cmake',
+    args = ['cmake',
            '-G', conf['generator'],
            '-D', 'SQ_GENERATE_DOCUMENTATION:BOOL=ON',
            '-D', 'SQ_QT4:BOOL=ON', 
            '-D', 'CPACK_BINARY_ZIP:BOOL=ON',
-           '-D', 'CPACK_SYSTEM_NAME:STRING=' + conf['name'], 
-           '../..'], cwd = build_dir )
+           '-D', 'CPACK_SYSTEM_NAME:STRING=' + conf['name']]
+    if 'defines' in conf:
+        for define in conf['defines']:
+            args.append ( '-D' )
+            args.append ( define )
+    
+    args.append ( '../..' )
+    
+    run ( args, cwd = build_dir )
     
     run ( [conf['devenv'],
            'libSequantoAutomation.sln',
            '/out', '..\\build-%s.log' % conf['name'],
-           '/build', 'Release'], cwd = build_dir )
+           '/build', conf['configuration']], cwd = build_dir )
     
     run ( [conf['devenv'],
            'libSequantoAutomation.sln',
            '/out', '..\\package-%s.log' % conf['name'],
-           '/build', 'Release',
+           '/build', conf['configuration'],
            '/project', 'PACKAGE'], cwd = build_dir )
     
     run ( ['copy', 'libSequantoAutomation*.exe', '..'], cwd = build_dir, shell = True )
     run ( ['copy', 'libSequantoAutomation*.zip', '..'], cwd = build_dir, shell = True )
     
-    shutil.rmtree(build_dir)
+    if '--debug' not in sys.argv:
+        shutil.rmtree(build_dir)

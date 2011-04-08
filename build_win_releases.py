@@ -22,12 +22,14 @@ CONFIGURATIONS = [
     {'generator': 'Visual Studio 8 2005',
      'name': 'vs2005-win32',
      'devenv': DEVENV_8,
-     'configuration': 'Release'}
+     'configuration': 'Release',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 8 2005',
      'name': 'vs2005-win32-debug',
      'devenv': DEVENV_8,
-     'configuration': 'Debug'}
+     'configuration': 'Debug',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
 #    {'generator': 'Visual Studio 8 2005 Win64',
 #     'name': 'vs2005-win64',
@@ -36,12 +38,14 @@ CONFIGURATIONS = [
     {'generator': 'Visual Studio 9 2008',
      'name': 'vs2008-win32',
      'devenv': VCEXPRESS_9,
-     'configuration': 'Release'}
+     'configuration': 'Release',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'vs2008-win32-debug',
      'devenv': VCEXPRESS_9,
-     'configuration': 'Debug'}
+     'configuration': 'Debug',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'qmake',
@@ -80,6 +84,7 @@ for conf in CONFIGURATIONS:
            '-D', 'CPACK_BINARY_ZIP:BOOL=ON',
            '-D', 'CPACK_SYSTEM_NAME:STRING=' + conf['name']]
     if 'defines' in conf:
+        assert type(conf['defines']) == list
         for define in conf['defines']:
             args.append ( '-D' )
             args.append ( define )

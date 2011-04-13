@@ -5,6 +5,10 @@
  *      Author: Rasmus T. Olesen <rasmus@sequanto.com>
  */
 
+#ifdef SQ_USE_ALTERNATIVE_CONFIG_H
+#include "config_alternative.h"
+#else
+
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
@@ -86,3 +90,5 @@
 #endif
 
 #endif /* _CONFIG_H_ */
+
+#endif /* SQ_USE_ALTERNATIVE_CONFIG_H */

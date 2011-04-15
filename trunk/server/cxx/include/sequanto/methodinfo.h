@@ -27,9 +27,11 @@ namespace sequanto
    {
       class SQ_DECL MethodInfo : public NodeInfo
       {
-      protected:
+      private:
+         typedef std::vector<SQValueType> Parameters;
+         
          SQValueType m_returnType;
-         std::vector<SQValueType> m_parameters;
+         Parameters m_parameters;
          
       public:
          MethodInfo ();

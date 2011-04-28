@@ -53,8 +53,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
 */
 
     case QEvent::Move:
-     
-       if ( _object->isWidgetType() && qobject_cast<QWidget*>(_object)->isWindow() )
+       if ( _object->isWidgetType() && QtWrapper::IsWindow(qobject_cast<QWidget*>(_object)) )
         {
            Node * screenX = m_node->FindChild(SQ_UI_WINDOW_SCREEN_X);
            Node * screenY = m_node->FindChild(SQ_UI_WINDOW_SCREEN_Y);
@@ -86,6 +85,9 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     case QEvent::Show:
     case QEvent::Hide:
        dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) )->SendUpdate();
+       break;
+
+    default:
        break;
     }
 
@@ -157,9 +159,10 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     {
        QtAutomationChildAddedEvent * event = dynamic_cast<QtAutomationChildAddedEvent*>(_event);
 
-       if ( event->child()->isWindow() )
+       if ( QtWrapper::IsWindow(event->child()) )
        {
-          //QtWrapper::UpdateWindows();
+          qDebug() << "*** Window child found, we should update windows.";
+          QtWrapper::UpdateWindows();
        }
        else
        {
@@ -169,6 +172,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
              m_node->SendChildrenUpdate();
           }
        }
+       return true;
     }
     else
     {

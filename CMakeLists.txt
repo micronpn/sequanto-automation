@@ -111,7 +111,7 @@ IF(SQ_GENERATE_QMAKE)
   SET(SQ_INSTALL_BINARY OFF)
   SET(SQ_INSTALL_SOURCE ON)
   
-  FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# put custom qmake directives in the custom.pro file\n")
+  FILE(WRITE ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# put custom qmake directives in the custom.pro file\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "include(custom.pro)\n\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/custom.pro "# empty by default\n")
 

@@ -2,6 +2,7 @@
 
 #include <sequanto/tree.h>
 #include <sequanto/protocol.h>
+#include <stdexcept>
 
 using namespace std;
 using namespace sequanto::automation;
@@ -15,7 +16,7 @@ Node * Tree::FindNode ( const char * _path )
 {
    assert ( m_root != NULL );
 
-   std::string path ( _path );
+   string path ( _path );
    if ( path == "/" )
    {
       return m_root;
@@ -24,7 +25,7 @@ Node * Tree::FindNode ( const char * _path )
    size_t start = 1;
    size_t end = path.find ( '/', start );
    Node * node = m_root;
-   while ( end != -1 )
+   while ( end != string::npos )
    {
       node = node->FindChild ( path.substr(start, end - start) );
       if ( node == NULL )
@@ -88,6 +89,9 @@ SQBool Tree::HandleInfo(SQStream * _stream, const char * _path)
          sq_protocol_write_type ( _stream, nodeInfo.GetParameterType(i) );
       }
       break;
+
+   default:
+      throw runtime_error ( "SequantoAutomation_CXX: Unsupported NodeType." );
    }
    sq_stream_write_string ( _stream, "\r\n" );
    sq_stream_exit_write ( _stream );

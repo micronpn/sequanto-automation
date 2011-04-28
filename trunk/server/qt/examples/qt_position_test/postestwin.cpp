@@ -85,6 +85,9 @@ bool QtPositionTestEventFilter::eventFilter ( QObject * _object, QEvent * _event
    case QEvent::Resize:
       resized();
       break;
+
+   default:
+      break;
    }
    return QObject::eventFilter(_object, _event );
 }

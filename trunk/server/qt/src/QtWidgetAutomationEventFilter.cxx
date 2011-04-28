@@ -4,6 +4,7 @@
 #include <sequanto/QtAutomationResizeEvent.h>
 #include <sequanto/QtAutomationMouseMoveEvent.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
+#include <sequanto/QtAutomationChildAddedEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/ui.h>
 #include <cassert>
@@ -29,18 +30,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
           if ( child->isWidgetType () )
           {
              QWidget * childWidget = qobject_cast<QWidget*>(child);
-             if ( childWidget->isWindow() )
-             {
-                //QtWrapper::UpdateWindows();
-             }
-             else
-             {
-                QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(child).c_str()) );
-                if ( m_node->AddChildWidget ( childWidget ) )
-                {
-                   m_node->SendChildrenUpdate();
-                }
-             }
+             QApplication::postEvent ( m_node->widget(), new QtAutomationChildAddedEvent(childWidget) );
           }
        }
        break;
@@ -162,6 +152,23 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
           QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
        }
        return true;
+    }
+    else if ( _event->type() == QtAutomationChildAddedEvent::ID )
+    {
+       QtAutomationChildAddedEvent * event = dynamic_cast<QtAutomationChildAddedEvent*>(_event);
+
+       if ( event->child()->isWindow() )
+       {
+          //QtWrapper::UpdateWindows();
+       }
+       else
+       {
+          QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(event->child()).c_str()) );
+          if ( m_node->AddChildWidget ( event->child() ) )
+          {
+             m_node->SendChildrenUpdate();
+          }
+       }
     }
     else
     {

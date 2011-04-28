@@ -3,8 +3,7 @@
 #include <sequanto/tree.h>
 #include <sequanto/QtWrapper.h>
 #include "../cxx/src/cxx_root.h"
-
-#include <windows.h>
+#include "config.h"
 
 using namespace sequanto::automation;
 

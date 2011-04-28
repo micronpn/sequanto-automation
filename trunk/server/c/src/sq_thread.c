@@ -101,6 +101,7 @@ SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
 
 void sq_thread_start ( SQThread * _thread )
 {
+   SQ_UNUSED_PARAMETER(_thread);
 }
 
 #endif

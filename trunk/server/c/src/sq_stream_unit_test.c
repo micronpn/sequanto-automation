@@ -39,6 +39,8 @@ typedef struct _SQStream
 
 SQStream * sq_stream_open ( int _portNumber )
 {
+   SQ_UNUSED_PARAMETER(_portNumber);
+   
    SQStream * ret = (SQStream*) malloc ( sizeof(SQStream) );
    ret->m_handler = NULL;
    ret->m_handlerData = NULL;
@@ -121,10 +123,12 @@ SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
 
 void sq_stream_enter_write ( SQStream * _stream )
 {
+   SQ_UNUSED_PARAMETER(_stream);
 }
 
 void sq_stream_exit_write ( SQStream * _stream )
 {
+   SQ_UNUSED_PARAMETER(_stream);
 }
 
 void sq_stream_unit_test_push_read ( SQStream * _stream, SQByte _value )

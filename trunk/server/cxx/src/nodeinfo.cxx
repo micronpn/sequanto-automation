@@ -20,6 +20,7 @@ size_t NodeInfo::GetNumberOfParameters () const
 
 SQValueType NodeInfo::GetParameterType ( size_t _parameterIndex ) const
 {
+   SQ_UNUSED_PARAMETER(_parameterIndex);
    return VALUE_TYPE_NO_VALUE;
 }
 

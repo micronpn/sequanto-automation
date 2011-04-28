@@ -1,5 +1,6 @@
 #include "mainwin.h"
 
+#include <sequanto/macros.h>
 #include <iostream>
 #include <QtGui>
 
@@ -40,6 +41,8 @@ void MainWin::on_actionAdd_some_items_activated()
 
 void MainWin::on_listView_currentItemChanged( QListWidgetItem * _current, QListWidgetItem * _previous )
 {
+   SQ_UNUSED_PARAMETER(_previous);
+   
    std::cout << _current->text().toStdString() << std::endl;
 }
 

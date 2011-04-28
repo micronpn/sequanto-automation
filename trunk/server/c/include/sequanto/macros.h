@@ -39,4 +39,6 @@
 #   define SQ_DECL
 #endif
 
+#define SQ_UNUSED_PARAMETER(parameter) (void) parameter
+
 #endif  /* SEQUANTO_MACROS_H_ */

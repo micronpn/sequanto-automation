@@ -124,6 +124,8 @@ void sq_stream_internal_close_client ( SQStream * _stream )
 
 void sq_stream_internal_reader ( SQThread * _thread, void * _data )
 {
+   SQ_UNUSED_PARAMETER(_thread);
+   
    SQStream * stream = (SQStream*) _data;
    int ret = 0;
    SQByte buff[100];
@@ -146,6 +148,8 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
 
 void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
 {
+   SQ_UNUSED_PARAMETER(_thread);
+   
     SQThread * clientThread;
     SQStream * stream = (SQStream*) _data;
     int newClient;
@@ -212,7 +216,7 @@ SQBool sq_stream_flush ( SQStream * _stream )
             {
                 return SQ_FALSE;
             }
-            if ( sent != _stream->m_outputBufferPosition )
+            if ( sent != ((int) _stream->m_outputBufferPosition) )
             {
                 if ( enter == -1 )
                 {
@@ -228,7 +232,7 @@ SQBool sq_stream_flush ( SQStream * _stream )
             
                 sq_system_sleep ( 100 );
             }
-        } while ( sent != _stream->m_outputBufferPosition );
+        } while ( sent != ((int) _stream->m_outputBufferPosition) );
         _stream->m_outputBufferPosition = 0;
     }
     return SQ_TRUE;

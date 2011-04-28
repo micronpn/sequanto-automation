@@ -778,6 +778,8 @@ class AutomationFile ( object ):
             
             fp.write ( 'void sq_generated_function_%s%s ( SQStream * _stream, const SQValue * _inputValues )\n' % (function.name, function.additionalSmartName) )
             fp.write ( '{\n' )
+            fp.write ( '   SQ_UNUSED_PARAMETER(_inputValues);\n' )
+            
             for index, parameter in enumerate(function.parameters):
                 if index < function.numSmartParameters:
                     fp.write ( '   %s %s_parameter = %s;\n' % (self.getRecognizedCType(parameter.type), parameter.name, function.smartValues[index]) )
@@ -815,17 +817,22 @@ class AutomationFile ( object ):
         
         fp.write ( 'SQValueType sq_automation_get_parameter ( const SQCallableInfo * const _callableInfo, int _parameterIndex )\n' )
         fp.write ( '{\n' )
-        fp.write ( '   switch ( _parameterIndex )\n' )
-        fp.write ( '   {\n' )
-        for i in range(self.m_maxNumberOfParameters):
-            fp.write ( '   case %i:\n' % i )
-            fp.write ( '      return _callableInfo->parm%i;\n' % i )
-        fp.write ( '   default:\n' )
-        fp.write ( '      return VALUE_TYPE_NO_VALUE;\n' )
-        fp.write ( '   }\n' )
+        if self.m_maxNumberOfParameters == 0:
+            fp.write ( '   SQ_UNUSED_PARAMETER(_callableInfo);\n' )
+            fp.write ( '   SQ_UNUSED_PARAMETER(_parameterIndex);\n\n' )
+            fp.write ( '   return VALUE_TYPE_NO_VALUE;\n' )
+        else:
+            fp.write ( '   switch ( _parameterIndex )\n' )
+            fp.write ( '   {\n' )
+            for i in range(self.m_maxNumberOfParameters):
+                fp.write ( '   case %i:\n' % i )
+                fp.write ( '      return _callableInfo->parm%i;\n' % i )
+            fp.write ( '   default:\n' )
+            fp.write ( '      return VALUE_TYPE_NO_VALUE;\n' )
+            fp.write ( '   }\n' )
         fp.write ( '}\n' )
         fp.write ( '\n' )
-
+        
         if len(self.m_foundMonitors) > 0:
             fp.write ( 'static SQBool monitor_state[] = { %s };\n' % ', '.join ( (['SQ_FALSE'] * len(self.m_foundMonitors)) ) )
         else:

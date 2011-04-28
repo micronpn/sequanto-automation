@@ -14,6 +14,7 @@ ReadOnlyPropertyNode::ReadOnlyPropertyNode ( const std::string & _name )
 
 void ReadOnlyPropertyNode::HandleSet ( const SQValue * const _value )
 {
+   SQ_UNUSED_PARAMETER(_value);
    throw std::runtime_error ( "Can not set value of a read-only property." );
 }
 

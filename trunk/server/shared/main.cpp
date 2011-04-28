@@ -16,7 +16,8 @@ int main ( int argc, char * argv[] )
    sq_server_init ( &server, 4321 );
 
    QApplication * application = new QApplication ( argc, argv );
-
+   SQ_UNUSED_PARAMETER(application);
+   
    ListNode * test = new ListNode ("test");
 
    sq_get_cxx_root()->AddChild ( test );

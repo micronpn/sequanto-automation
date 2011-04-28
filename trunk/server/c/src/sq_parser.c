@@ -237,4 +237,5 @@ void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte
 
 void sq_parser_destroy ( SQParser * _parser )
 {
+   SQ_UNUSED_PARAMETER(_parser);
 }

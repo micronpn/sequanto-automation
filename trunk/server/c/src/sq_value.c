@@ -219,7 +219,7 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
         _buffer ++;
     }
     
-    // If numBytes is even then have received only "half" of the last byte.
+    /* If numBytes is even then have received only "half" of the last byte. */
     if ( (numBytes & 1) != 0 )
     {
         SQ_LOG0("Received an un-even number of hexadecimal characters when parsing byte array.");
@@ -398,7 +398,7 @@ size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buff
    }
    if ( *_buffer != '\n' && *_buffer != '\r' )
    {
-       // Return + 1 to indicate that we did not have enough space to parse all the parameters given.
+      /* Return + 1 to indicate that we did not have enough space to parse all the parameters given. */
        return valuesRead + 1;
    }
    else

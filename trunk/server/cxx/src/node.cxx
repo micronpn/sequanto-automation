@@ -86,7 +86,7 @@ const std::string & Node::GetFullName ()
 
 Node * Node::FindChild ( const std::string & _name ) const
 {
-
+   SQ_UNUSED_PARAMETER(_name);
    return NULL;
 }
 
@@ -97,18 +97,24 @@ Node::Iterator * Node::ListChildren () const
 
 void Node::HandleGet ( SQValue & _outputValue )
 {
+   SQ_UNUSED_PARAMETER(_outputValue);
 }
 
 void Node::HandleSet ( const SQValue * const _value )
 {
+   SQ_UNUSED_PARAMETER(_value);
 }
 
 void Node::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
 {
+   SQ_UNUSED_PARAMETER(_numberOfValues);
+   SQ_UNUSED_PARAMETER(_inputValues);
+   SQ_UNUSED_PARAMETER(_output);
 }
 
 void Node::HandleMonitorStateChange ( bool _enable )
 {
+   SQ_UNUSED_PARAMETER(_enable);
 }
 
 void Node::LogAsync ( const std::string & _message ) const

@@ -6,3 +6,4 @@ property /info/os/release os_release
 property /info/os/type os_type
 property /button/1 get_button_1
 property /button/2 get_button_2
+function /read get_file_contents

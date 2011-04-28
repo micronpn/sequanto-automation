@@ -7,6 +7,7 @@ static int julemand;
 
 void Ostemad ( short _value )
 {
+   SQ_UNUSED_PARAMETER(_value);
 }
 
 unsigned int get_julemand ( void )
@@ -101,7 +102,7 @@ void close ( void )
     //   sq_server_stop ( server );
 }
 
-const char * const firmware_version ( void )
+const char * firmware_version ( void )
 {
 #ifdef SQ_DISABLE_AUTOMATION_INTERFACE
    return NULL;
@@ -112,6 +113,9 @@ const char * const firmware_version ( void )
 
 int main ( int argc, char * argv[] )
 {
+   SQ_UNUSED_PARAMETER(argc);
+   SQ_UNUSED_PARAMETER(argv);
+   
 #ifndef SQ_DISABLE_AUTOMATION_INTERFACE
    static SQServer server;
 

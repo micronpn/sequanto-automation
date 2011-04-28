@@ -512,6 +512,8 @@ void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
             _root->AddChild ( new QtBooleanProperty(_object->metaObject()->property(i).name(), _object ) );
             break;
 
+         default:
+            break;
          }
       }
    }
@@ -683,7 +685,7 @@ public:
 
 void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 {
-   if ( _widget->isWindow() )
+   if ( QtWrapper::IsWindow(_widget) )
    {
       assert ( _widget == _widget->window() );
 
@@ -909,8 +911,12 @@ public:
    }
 };
 
+ListNode * s_applicationRoot;
+
 void QtWrapper::WrapApplication ( ListNode * _root )
 {
+    s_applicationRoot = _root;
+    
    ListNode * windows = new ListNode ( SQ_UI_NODE_WINDOWS );
    _root->AddChild ( windows );
    QtActiveWindowProperty * activeWindow = new QtActiveWindowProperty();
@@ -932,16 +938,50 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
 }
 
+bool QtWrapper::IsWindow ( QWidget * _widget )
+{
+   if ( _widget->isWindow() && _widget == _widget->window() ) //|| _widget->inherits(QMainWindow::staticMetaObject.className()) || _widget->inherits(QDialog::staticMetaObject.className()) )
+   {
+      qDebug() << "*** " << _widget->objectName() << " is a window:";
+      qDebug() << "    IsWindow? " << _widget->isWindow();
+      qDebug() << "    Inherits QMainWindow? " << _widget->inherits(QMainWindow::staticMetaObject.className());
+      qDebug() << "    Inherits QDialog? " << _widget->inherits(QDialog::staticMetaObject.className());
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+bool QtWrapper::UpdateWindows()
+{
+   ListNode * windowsNode = dynamic_cast<ListNode*>(s_applicationRoot->FindChild ( SQ_UI_NODE_WINDOWS ));
+   if ( windowsNode != NULL )
+   {
+      return UpdateWindows ( windowsNode );
+   }
+   else
+   {
+      return false;
+   }
+}
+
 bool QtWrapper::UpdateWindows( ListNode * _windows )
 {
    bool changed = false;
    foreach ( QWidget * widget, QApplication::topLevelWidgets() )
+      //foreach ( QWidget * widget, QApplication::allWidgets() )
    {
-      if ( widget->isWindow() && !widget->isHidden() )
+      if ( IsWindow(widget) )
       {
          std::string objectName ( GetObjectName(widget) );
+         qDebug() << "*** Found window: " << QString(objectName.c_str());
+         
          if ( !_windows->HasChild ( objectName ))
          {
+            qDebug() << "*** Unknown window - adding!";
+             
             if ( QtUnnamedObjectStore::IsKnown ( widget ) )
             {
                std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
@@ -957,9 +997,13 @@ bool QtWrapper::UpdateWindows( ListNode * _windows )
 
             changed = true;
          }
+         else
+         {
+             qDebug() << "*** That window is already known.";
+         }
       }
    }
-   
+
    ListNode::Iterator * it = _windows->ListChildren();
    std::vector<std::string> toBeRemoved;
    for ( ; it->HasNext(); it->Next() )

@@ -39,7 +39,7 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
     case QEvent::Create:
        {
           QWidget * widget = qobject_cast<QWidget*> ( _object );
-          if ( widget->isWindow() )
+          if ( QtWrapper::IsWindow(widget) )
           {
              if ( QtWrapper::UpdateWindows ( m_windowsNode ) )
              {
@@ -50,16 +50,21 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
        break;
 
     case QEvent::Close:
-       QWidget * widget = qobject_cast<QWidget*> ( _object );
-       if ( widget->isWindow() )
        {
-          std::string name ( QtWrapper::GetObjectName(widget) );
-          if ( m_windowsNode->HasChild(name ) )
+          QWidget * widget = qobject_cast<QWidget*> ( _object );
+          if ( QtWrapper::IsWindow(widget) )
           {
-             m_windowsNode->RemoveChild ( name );
-             m_windowsNode->SendUpdate();
+             std::string name ( QtWrapper::GetObjectName(widget) );
+             if ( m_windowsNode->HasChild(name ) )
+             {
+                m_windowsNode->RemoveChild ( name );
+                m_windowsNode->SendUpdate();
+             }
           }
        }
+       break;
+
+    default:
        break;
     }
     return QObject::eventFilter(_object, _event );

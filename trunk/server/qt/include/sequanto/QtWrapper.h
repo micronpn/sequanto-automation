@@ -40,9 +40,12 @@ namespace sequanto
          virtual ~QtWrapper ();
          
          friend class QtApplicationAutomationEventFilter;
-
+         friend class QtWidgetAutomationEventFilter;
+         
+         static bool UpdateWindows ();
          static bool UpdateWindows ( ListNode * _windows );
-	
+         static bool IsWindow ( QWidget * _widget );
+         
       public:
          static void Wrap ( ListNode * _root, QObject * _object );
          /**

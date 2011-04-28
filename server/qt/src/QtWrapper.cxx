@@ -152,6 +152,8 @@ public:
 
    void init ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName, const std::string & _qtPropertyToUseForNotification )
    {
+      SQ_UNUSED_PARAMETER(_propertyName);
+      
       m_qtPropertyName = _qtPropertyName;
       // We need to subscribe to the notification again, because the base constructor does not use our QtPropertyName() implementation when connecting.
       if ( m_notifyAdapter != NULL )
@@ -352,6 +354,8 @@ public:
 
    virtual void SetValue ( int _newValue )
    {
+      SQ_UNUSED_PARAMETER(_newValue);
+      
       throw std::runtime_error ( "Can not set the screenX value." );
    }
 
@@ -384,6 +388,8 @@ public:
 
    virtual void SetValue ( int _newValue )
    {
+      SQ_UNUSED_PARAMETER(_newValue);
+      
       throw std::runtime_error ( "Can not set the screenY value." );
    }
 
@@ -416,6 +422,8 @@ public:
 
    virtual void SetValue ( int _newValue )
    {
+      SQ_UNUSED_PARAMETER(_newValue);
+      
       throw std::runtime_error ( "Can not set the X value." );
    }
 
@@ -448,6 +456,8 @@ public:
 
    virtual void SetValue ( int _newValue )
    {
+      SQ_UNUSED_PARAMETER(_newValue);
+      
       throw std::runtime_error ( "Can not set the Y value." );
    }
 
@@ -664,6 +674,8 @@ public:
    
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+      SQ_UNUSED_PARAMETER(_output);
+      
        assert ( _numberOfValues == 1 );
 
        std::string text ( _inputValues[0].Value.m_stringValue );
@@ -813,6 +825,8 @@ public:
 
    virtual void HandleSet ( const SQValue * const _value )
    {
+      SQ_UNUSED_PARAMETER(_value);
+      
       throw std::runtime_error ( "Can not set the active window" );
    }
 };
@@ -838,6 +852,8 @@ public:
    
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+      SQ_UNUSED_PARAMETER(_output);
+      
        assert ( _numberOfValues == 2 );
        
       int x = _inputValues[0].Value.m_integerValue;
@@ -877,6 +893,8 @@ public:
    
    virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
    {
+      SQ_UNUSED_PARAMETER(_output);
+      
        assert ( _numberOfValues == 3 );
        
       int x = _inputValues[0].Value.m_integerValue;

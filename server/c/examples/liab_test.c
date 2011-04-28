@@ -53,6 +53,8 @@ SQBool get_button_2 ()
 
 void update_buttons ( SQServer * _server )
 {
+   SQ_UNUSED_PARAMETER(_server);
+   
     FILE * fp;
     int ret;
     SQBool newButton1, newButton2;

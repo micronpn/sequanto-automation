@@ -18,6 +18,9 @@ extern "C"
 {
    int test_me ( int _x, int _y )
    {
+      SQ_UNUSED_PARAMETER(_x);
+      SQ_UNUSED_PARAMETER(_y);
+      
       return -1;
    }
 
@@ -146,6 +149,9 @@ public:
 
 int main ( int _argc, char * _argv[] )
 {
+   SQ_UNUSED_PARAMETER(_argc);
+   SQ_UNUSED_PARAMETER(_argv);
+   
    static SQServer server;
     
    sq_init ();   

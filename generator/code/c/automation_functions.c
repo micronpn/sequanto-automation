@@ -218,10 +218,10 @@ void sq_automation_property_set ( const SQInfo * const _info, SQStream * _stream
 
 void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const SQValue * const _inputValues, int _numberOfValues )
 {
-   SQ_UNUSED_PARAMETER(_numberOfValues);
-   
    int i;
    const SQCallableInfo * const callableInfo = sq_get_callable_info(_info->index);
+   
+   SQ_UNUSED_PARAMETER(_numberOfValues);
    
    for ( i = 0; i < NUMBER_OF_PARAMETERS; i++ )
    {
@@ -248,10 +248,10 @@ void sq_automation_monitor_enable ( const SQInfo * const _info, SQStream * _stre
 
 void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _inputValues, int _numberOfValues )
 {
+   const SQInfo * info;
+
    SQ_UNUSED_PARAMETER(_parser);
    
-   const SQInfo * info;
- 
    if ( sq_automation_handle_call_if_branch(_stream, _objectPath, _inputValues, _numberOfValues) == SQ_TRUE )
    {
       return;
@@ -276,9 +276,9 @@ void sq_parser_call ( SQParser * _parser, SQStream * _stream, const char * const
 
 void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
-   SQ_UNUSED_PARAMETER(_parser);
-   
    const SQInfo * info;
+
+   SQ_UNUSED_PARAMETER(_parser);
 
    if ( sq_automation_handle_get_if_branch ( _stream, _objectPath ) == SQ_TRUE )
    {
@@ -304,9 +304,9 @@ void sq_parser_property_get ( SQParser * _parser, SQStream * _stream, const char
 
 void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, const SQValue * const _value )
 {
-   SQ_UNUSED_PARAMETER(_parser);
-   
    const SQInfo * info;
+
+   SQ_UNUSED_PARAMETER(_parser);
 
    if ( sq_automation_handle_set_if_branch ( _stream, _objectPath, _value ) == SQ_TRUE )
    {
@@ -332,13 +332,13 @@ void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char
 
 void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
-   SQ_UNUSED_PARAMETER(_parser);
-   
    int i;
    const SQCallableInfo * callableInfo;
    const SQPropertyInfo * propertyInfo;
    const SQMonitorInfo * monitorInfo;
    const SQInfo * info;
+
+   SQ_UNUSED_PARAMETER(_parser);
    
    if ( sq_automation_handle_info_if_branch ( _stream, _objectPath ) == SQ_TRUE )
    {
@@ -421,13 +421,13 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
 
 void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
 {
-   SQ_UNUSED_PARAMETER(_parser);
-   
    int foundIndex;
    size_t i;
    char c;
    const SQInfo * info;
    size_t objectPathLength;
+
+   SQ_UNUSED_PARAMETER(_parser);
    
    if ( sq_automation_handle_list_if_branch ( _stream, _objectPath ) == SQ_TRUE )
    {
@@ -484,10 +484,10 @@ void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const
 
 void sq_parser_enable_internal ( SQParser * _parser, SQStream * _stream, const char * const _objectPath, SQBool _enable )
 {
-   SQ_UNUSED_PARAMETER(_parser);
-   
    const SQInfo * const info = sq_automation_find_info ( _objectPath, NULL );
 
+   SQ_UNUSED_PARAMETER(_parser);
+   
    if ( info == NULL )
    {
       sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );

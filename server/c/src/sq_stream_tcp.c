@@ -124,11 +124,11 @@ void sq_stream_internal_close_client ( SQStream * _stream )
 
 void sq_stream_internal_reader ( SQThread * _thread, void * _data )
 {
-   SQ_UNUSED_PARAMETER(_thread);
-   
    SQStream * stream = (SQStream*) _data;
    int ret = 0;
    SQByte buff[100];
+
+   SQ_UNUSED_PARAMETER(_thread);
    do
    {
       ret = recv ( stream->m_clientSocket, buff, 100, 0 );
@@ -148,11 +148,12 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
 
 void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
 {
-   SQ_UNUSED_PARAMETER(_thread);
-   
     SQThread * clientThread;
     SQStream * stream = (SQStream*) _data;
     int newClient;
+
+    SQ_UNUSED_PARAMETER(_thread);
+
     while ( 1 )
     {
         newClient = accept(stream->m_listenerSocket, NULL, NULL );

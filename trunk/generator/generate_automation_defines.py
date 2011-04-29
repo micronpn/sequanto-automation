@@ -792,8 +792,9 @@ class AutomationFile ( object ):
             else:
                 fp.write ( '   %s ret = %s ( %s );\n' % (self.getRecognizedCType(function.returnType), function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
                 self.writeSuccessMessageWithValue ( fp, function.returnType, self.getAutomationType(function.returnType), 'ret' )
-
-            fp.write ( '   SQ_UNUSED_PARAMETER(_inputValues);\n' )
+            
+            if len(function.parameters) == 0:
+                fp.write ( '   SQ_UNUSED_PARAMETER(_inputValues);\n' )
             
             fp.write ( '}\n' )
             fp.write ( '\n' )

@@ -88,10 +88,11 @@ void sq_server_poll ( SQServer * _server )
 
 void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, SQByte * _buffer, size_t _length )
 {
-   SQ_UNUSED_PARAMETER(_stream);
-   
    size_t i ;
    SQServer * server = (SQServer *) _data;
+
+   SQ_UNUSED_PARAMETER(_stream);
+   
    for ( i= 0; i < _length; i++ )
    {
       sq_server_internal_handle_byte ( server, _buffer[i] );

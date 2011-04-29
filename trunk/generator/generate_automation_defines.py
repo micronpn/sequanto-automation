@@ -778,14 +778,13 @@ class AutomationFile ( object ):
             
             fp.write ( 'void sq_generated_function_%s%s ( SQStream * _stream, const SQValue * _inputValues )\n' % (function.name, function.additionalSmartName) )
             fp.write ( '{\n' )
-            fp.write ( '   SQ_UNUSED_PARAMETER(_inputValues);\n' )
             
             for index, parameter in enumerate(function.parameters):
                 if index < function.numSmartParameters:
                     fp.write ( '   %s %s_parameter = %s;\n' % (self.getRecognizedCType(parameter.type), parameter.name, function.smartValues[index]) )
                 else:
                     fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (self.getRecognizedCType(parameter.type), parameter.name, index - function.numSmartParameters, self.getAutomationType(parameter.type)) )
-
+            
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
                 fp.write ( '   sq_protocol_write_success_message ( _stream );\n' )
@@ -793,6 +792,8 @@ class AutomationFile ( object ):
             else:
                 fp.write ( '   %s ret = %s ( %s );\n' % (self.getRecognizedCType(function.returnType), function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
                 self.writeSuccessMessageWithValue ( fp, function.returnType, self.getAutomationType(function.returnType), 'ret' )
+
+            fp.write ( '   SQ_UNUSED_PARAMETER(_inputValues);\n' )
             
             fp.write ( '}\n' )
             fp.write ( '\n' )

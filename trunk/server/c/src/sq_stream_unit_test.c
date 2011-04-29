@@ -39,9 +39,10 @@ typedef struct _SQStream
 
 SQStream * sq_stream_open ( int _portNumber )
 {
-   SQ_UNUSED_PARAMETER(_portNumber);
-   
    SQStream * ret = (SQStream*) malloc ( sizeof(SQStream) );
+
+   SQ_UNUSED_PARAMETER(_portNumber);
+
    ret->m_handler = NULL;
    ret->m_handlerData = NULL;
    

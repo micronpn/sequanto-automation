@@ -113,9 +113,6 @@ const char * firmware_version ( void )
 
 int main ( int argc, char * argv[] )
 {
-   SQ_UNUSED_PARAMETER(argc);
-   SQ_UNUSED_PARAMETER(argv);
-   
 #ifndef SQ_DISABLE_AUTOMATION_INTERFACE
    static SQServer server;
 
@@ -134,4 +131,7 @@ int main ( int argc, char * argv[] )
 
    sq_shutdown ();   
 #endif
+
+   SQ_UNUSED_PARAMETER(argc);
+   SQ_UNUSED_PARAMETER(argv);
 }

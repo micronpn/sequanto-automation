@@ -2,6 +2,7 @@
 #include <sequanto/QtAutomationGetPropertyEvent.h>
 #include <sequanto/QtAutomationMoveEvent.h>
 #include <sequanto/QtAutomationResizeEvent.h>
+#include <sequanto/QtAutomationWidgetCreatedEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/ui.h>
 #include <cassert>
@@ -39,12 +40,9 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
     case QEvent::Create:
        {
           QWidget * widget = qobject_cast<QWidget*> ( _object );
-          if ( QtWrapper::IsWindow(widget) )
+          if ( widget != NULL )
           {
-             if ( QtWrapper::UpdateWindows ( m_windowsNode ) )
-             {
-                m_windowsNode->SendUpdate();
-             }
+             QApplication::postEvent ( this, new QtAutomationWidgetCreatedEvent(widget) );
           }
        }
        break;
@@ -65,6 +63,18 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
        break;
 
     default:
+       if ( _event->type() == QtAutomationWidgetCreatedEvent::ID )
+       {
+          QtAutomationWidgetCreatedEvent * event = dynamic_cast<QtAutomationWidgetCreatedEvent*>(_event);
+          if ( QtWrapper::IsWindow(event->widget()) )
+          {
+             if ( QtWrapper::UpdateWindows ( m_windowsNode ) )
+             {
+                m_windowsNode->SendUpdate();
+             }
+          }
+          return true;
+       }
        break;
     }
     return QObject::eventFilter(_object, _event );

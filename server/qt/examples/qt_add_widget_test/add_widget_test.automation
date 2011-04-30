@@ -6,6 +6,8 @@ function /create_window create_window
 function /remove_window remove_window
 function /add_widget add_widget
 function /remove_widget remove_widget
+function /open_dialog open_dialog
+function /open_child_dialog open_child_dialog
 function /quit quit
 
 #typedef unsigned int size_t

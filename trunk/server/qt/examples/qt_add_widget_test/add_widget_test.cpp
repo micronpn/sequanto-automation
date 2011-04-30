@@ -10,6 +10,8 @@ static int CREATE_WINDOW_EVENT = QEvent::registerEventType();
 static int REMOVE_WINDOW_EVENT = QEvent::registerEventType();
 static int ADD_WIDGET_EVENT = QEvent::registerEventType();
 static int REMOVE_WIDGET_EVENT = QEvent::registerEventType();
+static int OPEN_DIALOG_EVENT = QEvent::registerEventType();
+static int OPEN_CHILD_DIALOG_EVENT = QEvent::registerEventType();
 
 class Commander : public QObject
 {
@@ -82,6 +84,31 @@ public:
          }
          return true;
       }
+      else if ( _event->type() == OPEN_DIALOG_EVENT )
+      {
+         QDialog * dialog = new QDialog();
+         QString name ( QString::QString("Dialog_%1").arg(m_nextWindowNumber) );
+         dialog->setObjectName ( name );
+         dialog->setWindowTitle ( name );
+         dialog->show();
+         m_nextWindowNumber ++;
+         return true;
+      }
+      else if ( _event->type() == OPEN_CHILD_DIALOG_EVENT )
+      {
+         QWidgetList topLevelWidgets ( QApplication::topLevelWidgets() );
+         if ( topLevelWidgets.size() > 0 )
+         {
+            QMainWindow * window = qobject_cast<QMainWindow*>(topLevelWidgets[0]);
+            QDialog * dialog = new QDialog(window);
+            QString name ( QString::QString("ChildDialog_%1").arg(m_nextWindowNumber) );
+            dialog->setObjectName ( name );
+            dialog->setWindowTitle ( name );
+            dialog->show();
+            m_nextWindowNumber ++;
+         }
+         return true;
+      }
       else
       {
          return false;
@@ -109,6 +136,16 @@ void add_widget_using_commander ()
 void remove_widget_using_commander ()
 {
    QApplication::postEvent ( s_commander, new QEvent ( (QEvent::Type) REMOVE_WIDGET_EVENT ) );
+}
+
+void open_dialog_using_commander ()
+{
+   QApplication::postEvent ( s_commander, new QEvent( (QEvent::Type) OPEN_DIALOG_EVENT ) );
+}
+
+void open_child_dialog_using_commander ()
+{
+   QApplication::postEvent ( s_commander, new QEvent( (QEvent::Type) OPEN_CHILD_DIALOG_EVENT ) );
 }
 
 void quit_using_commander ()
@@ -175,6 +212,16 @@ extern "C"
       remove_widget_using_commander ();
    }
 
+   void open_dialog ()
+   {
+      open_dialog_using_commander ();
+   }
+
+   void open_child_dialog ()
+   {
+      open_child_dialog_using_commander ();
+   }
+   
    void quit ()
    {
       quit_using_commander();

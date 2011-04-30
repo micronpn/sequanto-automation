@@ -960,7 +960,9 @@ bool QtWrapper::IsWindow ( QWidget * _widget )
 {
    if ( _widget->isWindow() && _widget == _widget->window() ) //|| _widget->inherits(QMainWindow::staticMetaObject.className()) || _widget->inherits(QDialog::staticMetaObject.className()) )
    {
-      qDebug() << "*** " << _widget->objectName() << " is a window:";
+      std::string objectName ( GetObjectName(_widget) );
+      QString objectNameQ ( objectName.c_str() );
+      qDebug() << "*** " << objectNameQ << " is a window:";
       qDebug() << "    IsWindow? " << _widget->isWindow();
       qDebug() << "    Inherits QMainWindow? " << _widget->inherits(QMainWindow::staticMetaObject.className());
       qDebug() << "    Inherits QDialog? " << _widget->inherits(QDialog::staticMetaObject.className());

@@ -202,6 +202,10 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         sq_parser_disable ( _parser, _outputStream, (const char * const) _parser->m_inputBuffer + index );
         break;
         
+    case 'N': /* NOOP */
+        sq_protocol_write_success_message ( _outputStream );
+        break;
+        
     default:
         sq_logf ( "Bad command '%s'", _parser->m_inputBuffer );
         sq_protocol_write_failure_with_text_message ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );

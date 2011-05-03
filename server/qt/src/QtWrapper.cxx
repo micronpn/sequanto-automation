@@ -788,17 +788,65 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
          QObject * childObject = list.at ( i );
          if ( childObject->isWidgetType() )
          {
-            _root->AddChildWidget ( qobject_cast<QWidget*>(childObject) );
+			 QWidget * childWidget = qobject_cast<QWidget*>(childObject);
+			 if ( !IsWindow(childWidget) )
+			 {
+				 _root->AddChildWidget ( childWidget );
+			 }
          }
       }
    }
 }
 
-class QtActiveWindowProperty : public PropertyNode
+class QtActiveWindowProperty : public PropertyNode, public virtual IQtActiveWindowProperty
 {
+private:
+	std::string m_previousActiveWindow;
+
+	void InternalGet ( SQValue * _outputValue, bool _sendUpdateIfNeeded )
+	{
+		static std::string NO_ACTIVE_WINDOW ( "" );
+
+		std::string newActiveWindow;
+		QWidget * activeWindow = QApplication::activeWindow();
+		if ( activeWindow == NULL )
+		{
+			newActiveWindow = NO_ACTIVE_WINDOW;
+		}
+		else
+		{
+			newActiveWindow = QtWrapper::GetObjectName(activeWindow);
+		}
+
+		if ( _outputValue != NULL )
+		{
+			sq_value_string_copy ( _outputValue, newActiveWindow.c_str() );
+		}
+
+		if ( newActiveWindow != m_previousActiveWindow )
+		{
+			m_previousActiveWindow = newActiveWindow;
+
+			// Re-use _outputValue
+			if( _outputValue != NULL )
+			{
+				PropertyNode::SendUpdate ( *_outputValue );
+			}
+			else
+			{
+				SQValue value;
+				sq_value_init ( &value );
+				sq_value_const_string ( &value, m_previousActiveWindow.c_str() );
+				PropertyNode::SendUpdate ( value );
+				sq_value_free ( &value );
+			}
+		}
+	}
+
 public:
    QtActiveWindowProperty ()
-      : PropertyNode ( SQ_UI_NODE_ACTIVE_WINDOW )
+      : PropertyNode ( SQ_UI_NODE_ACTIVE_WINDOW ),
+	    m_previousActiveWindow ( "<NULL>" )
    {
    }
 
@@ -809,18 +857,7 @@ public:
 
    virtual void HandleGet ( SQValue & _outputValue )
    {
-      static std::string NO_ACTIVE_WINDOW ( "" );
-
-      QWidget * activeWindow = QApplication::activeWindow();
-      if ( activeWindow == NULL )
-      {
-         sq_value_string_copy ( &_outputValue, NO_ACTIVE_WINDOW.c_str() );
-      }
-      else
-      {
-         std::string value ( QtWrapper::GetObjectName(activeWindow) );
-         sq_value_string_copy ( &_outputValue, value.c_str() );
-      }
+	   InternalGet ( &_outputValue, false );
    }
 
    virtual void HandleSet ( const SQValue * const _value )
@@ -828,6 +865,11 @@ public:
       SQ_UNUSED_PARAMETER(_value);
       
       throw std::runtime_error ( "Can not set the active window" );
+   }
+
+   virtual void TrySendUpdate ()
+   {
+	   InternalGet ( NULL, true );
    }
 };
 
@@ -940,7 +982,7 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    QtActiveWindowProperty * activeWindow = new QtActiveWindowProperty();
    _root->AddChild ( activeWindow );
 
-   UpdateWindows ( windows );
+   UpdateWindows ( windows, activeWindow );
 
    QDesktopWidget * desktop = QApplication::desktop();
    ListNode * screen = new ListNode ( SQ_UI_NODE_SCREEN );
@@ -977,9 +1019,10 @@ bool QtWrapper::IsWindow ( QWidget * _widget )
 bool QtWrapper::UpdateWindows()
 {
    ListNode * windowsNode = dynamic_cast<ListNode*>(s_applicationRoot->FindChild ( SQ_UI_NODE_WINDOWS ));
-   if ( windowsNode != NULL )
+   IQtActiveWindowProperty * activeWindowNode = dynamic_cast<IQtActiveWindowProperty*>(s_applicationRoot->FindChild ( SQ_UI_NODE_ACTIVE_WINDOW ));
+   if ( windowsNode != NULL && activeWindowNode != NULL )
    {
-      return UpdateWindows ( windowsNode );
+      return UpdateWindows ( windowsNode, activeWindowNode );
    }
    else
    {
@@ -987,11 +1030,10 @@ bool QtWrapper::UpdateWindows()
    }
 }
 
-bool QtWrapper::UpdateWindows( ListNode * _windows )
+bool QtWrapper::UpdateWindows( ListNode * _windows, IQtActiveWindowProperty * _activeWindowNode )
 {
    bool changed = false;
-   foreach ( QWidget * widget, QApplication::topLevelWidgets() )
-      //foreach ( QWidget * widget, QApplication::allWidgets() )
+   foreach ( QWidget * widget, QApplication::allWidgets() )
    {
       if ( IsWindow(widget) )
       {
@@ -1047,6 +1089,11 @@ bool QtWrapper::UpdateWindows( ListNode * _windows )
    {
       _windows->RemoveChild ( *removeIt );
       changed = true;
+   }
+
+   if ( changed )
+   {
+	   _activeWindowNode->TrySendUpdate ();
    }
    return changed;
 }

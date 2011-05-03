@@ -567,6 +567,8 @@ class AutomationFile ( object ):
             fp.write ( '   sq_protocol_write_success_with_byte_array_message ( _stream, %s->m_start, %s->m_end );\n' % (value, value) )
         elif c_type == 'SQStringOut':
             fp.write ( '   sq_protocol_write_success_with_string_out_message ( _stream, &%s );\n' % value )
+        elif automation_type == 'float' and c_type != 'float':
+            fp.write ( '   sq_protocol_write_success_with_float_message ( _stream, (float) %s );\n' % value )
         else:
             if c_type == 'SQStringOut *':
                 automation_type = 'string_out'
@@ -696,6 +698,8 @@ class AutomationFile ( object ):
                     fp.write ( '   sq_protocol_write_string_out ( stream, &_value );\n' )
                 elif property.type == 'SQStringOut *':
                     fp.write ( '   sq_protocol_write_string_out ( stream, _value );\n' )
+                elif property.automationType == 'float' and property.type != 'float':
+                    fp.write ( '   sq_protocol_write_float ( stream, (float) _value );\n' )
                 else:
                     fp.write ( '   sq_protocol_write_%s ( stream, _value );\n' % property.automationType )
                 fp.write ( '   sq_stream_write_string ( stream, sq_get_constant_string( NEWLINE ) );\n' )
@@ -883,9 +887,11 @@ class AutomationFile ( object ):
                     if automationType == 'byte_array':
                         fp.write ( '      sq_protocol_write_%s ( stream, _value%i->m_start, _value%i->m_end );\n' % (automationType, num, num) )
                     elif monitor.types[num] == 'SQStringOut':
-                        fp.write ( '      sq_protocol_write_string_out ( stream, &_value%i );\n', num )
+                        fp.write ( '      sq_protocol_write_string_out ( stream, &_value%i );\n' % num )
                     elif monitor.types[num] == 'SQStringOut *':
-                        fp.write ( '      sq_protocol_write_string_out ( stream, _value%i );\n', num )
+                        fp.write ( '      sq_protocol_write_string_out ( stream, _value%i );\n' % num )
+                    elif automationType == 'float' and monitor.types[num] != 'float':
+                        fp.write ( '   sq_protocol_write_float ( stream, (float) _value%i );\n' % num )
                     else:
                         fp.write ( '      sq_protocol_write_%s ( stream, _value%i );\n' % (automationType, num) )
                 fp.write ( '      sq_stream_write_string ( stream, sq_get_constant_string( NEWLINE ) );\n' )

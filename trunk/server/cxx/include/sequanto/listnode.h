@@ -33,7 +33,9 @@ namespace sequanto
          typedef std::map<std::string, Node*> NodeMap;
 
       private:
+         SQ_STL_USE_BEGIN;
          NodeMap m_children;
+         SQ_STL_USE_END;
          Mutex m_mutex;
          
       public:

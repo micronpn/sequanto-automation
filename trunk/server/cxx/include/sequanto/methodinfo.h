@@ -31,8 +31,10 @@ namespace sequanto
          typedef std::vector<SQValueType> Parameters;
          
          SQValueType m_returnType;
+         SQ_STL_USE_BEGIN;
          Parameters m_parameters;
-         
+         SQ_STL_USE_END;
+
       public:
          MethodInfo ();
          MethodInfo ( SQValueType _returnType );

@@ -21,7 +21,7 @@
 
 static const char BANG_LOG[] SQ_CONST_VARIABLE = "!LOG ";
 static const char ESCAPED_QUOTE[] SQ_CONST_VARIABLE = "\\\"";
-static char NEWLINE[] SQ_CONST_VARIABLE = "\r\n";
+static const char NEWLINE[] SQ_CONST_VARIABLE = "\r\n";
 
 void sq_log ( const char * _message )
 {

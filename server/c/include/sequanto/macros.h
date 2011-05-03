@@ -41,4 +41,12 @@
 
 #define SQ_UNUSED_PARAMETER(parameter) (void) parameter
 
+#ifdef _MSC_VER
+#define SQ_STL_USE_BEGIN __pragma(warning(disable : 4251))
+#define SQ_STL_USE_END __pragma(warning(default : 4251))
+#else
+#define SQ_STL_USE_BEGIN
+#define SQ_STL_USE_END
+#endif
+
 #endif  /* SEQUANTO_MACROS_H_ */

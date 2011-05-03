@@ -29,17 +29,18 @@ namespace sequanto
 {
    namespace automation
    {
+	  class IQtActiveWindowProperty;
+
       class QtApplicationAutomationEventFilter : public QObject
       {
          Q_OBJECT;
 
       private:
          ListNode * m_windowsNode;
-         PropertyNode * m_activeWindowNode;
-         std::string m_previousActiveWindow;
+         IQtActiveWindowProperty * m_activeWindowNode;
 
       public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, PropertyNode * _activeWindowNode, QObject * _parent );
+         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, IQtActiveWindowProperty * _activeWindowNode, QObject * _parent );
 
          virtual bool eventFilter ( QObject * _object, QEvent * _event );
          

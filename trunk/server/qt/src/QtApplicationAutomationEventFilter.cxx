@@ -11,11 +11,10 @@
 
 using namespace sequanto::automation;
 
-QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, PropertyNode * _activeWindowNode, QObject * _parent )
+QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, IQtActiveWindowProperty * _activeWindowNode, QObject * _parent )
     : QObject(_parent),
       m_windowsNode ( _windowsNode ),
-      m_activeWindowNode ( _activeWindowNode ),
-      m_previousActiveWindow ( "<NULL>" )
+      m_activeWindowNode ( _activeWindowNode )
 {
 }
 
@@ -24,18 +23,12 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
     switch ( _event->type() )
     {
     case QEvent::WindowActivate:
-        {
-            SQValue value;
-            sq_value_init ( &value );
-            m_activeWindowNode->HandleGet ( value );
-            if ( m_previousActiveWindow != value.Value.m_stringValue )
-            {
-               m_previousActiveWindow = value.Value.m_stringValue;
-               m_activeWindowNode->SendUpdate ( value );
-            }
-            sq_value_free ( &value );
-        }
+		m_activeWindowNode->TrySendUpdate ();
         break;
+
+	case QEvent::WindowDeactivate:
+		m_activeWindowNode->TrySendUpdate ();
+		break;
 
     case QEvent::Create:
        {
@@ -68,7 +61,7 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
           QtAutomationWidgetCreatedEvent * event = dynamic_cast<QtAutomationWidgetCreatedEvent*>(_event);
           if ( QtWrapper::IsWindow(event->widget()) )
           {
-             if ( QtWrapper::UpdateWindows ( m_windowsNode ) )
+		     if ( QtWrapper::UpdateWindows ( m_windowsNode, m_activeWindowNode ) )
              {
                 m_windowsNode->SendUpdate();
              }

@@ -138,7 +138,7 @@ START_TEST(test_value_byte_array)
     SQValue value;
     sq_value_init ( &value );
     
-    int length = 4;
+    size_t length = 4;
     SQByte *values = malloc ( sizeof(SQByte) * length );
     values[0] = 0xAA;
     values[1] = 0xBB;

@@ -17,6 +17,10 @@ Node * Tree::FindNode ( const char * _path )
    assert ( m_root != NULL );
 
    string path ( _path );
+   if ( path.empty() || path[0] != '/' )
+   {
+      return NULL;
+   }
    if ( path == "/" )
    {
       return m_root;

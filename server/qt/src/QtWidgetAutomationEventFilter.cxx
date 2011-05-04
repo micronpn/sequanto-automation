@@ -119,7 +119,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        
             QPoint pos = widget->mapToGlobal(QPoint(0,0));
             QPoint windowTopLeft ( window->geometry().topLeft() );
-            
+	
             pos -= windowTopLeft;
 
             //QPoint pos = widget->mapTo ( window, widget->pos() );

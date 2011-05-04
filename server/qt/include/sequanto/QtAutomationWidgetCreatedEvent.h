@@ -28,7 +28,7 @@ namespace sequanto
       class QtAutomationWidgetCreatedEvent : public QEvent
       {
       protected:
-         QWidget * m_widget;
+         QPointer<QWidget> m_widget;
          
       public:
          static const int ID;

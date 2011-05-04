@@ -158,18 +158,21 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     else if ( _event->type() == QtAutomationChildAddedEvent::ID )
     {
        QtAutomationChildAddedEvent * event = dynamic_cast<QtAutomationChildAddedEvent*>(_event);
-
-       if ( QtWrapper::IsWindow(event->child()) )
+       QWidget * childWidget = event->child();
+       if ( childWidget != NULL )
        {
-          qDebug() << "*** Window child found, we should update windows.";
-          QtWrapper::UpdateWindows();
-       }
-       else
-       {
-          QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(event->child()).c_str()) );
-          if ( m_node->AddChildWidget ( event->child() ) )
+          if ( QtWrapper::IsWindow(childWidget) )
           {
-             m_node->SendChildrenUpdate();
+             qDebug() << "*** Window child found, we should update windows.";
+             QtWrapper::UpdateWindows();
+          }
+          else
+          {
+             QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(childWidget).c_str()) );
+             if ( m_node->AddChildWidget ( childWidget ) )
+             {
+                m_node->SendChildrenUpdate();
+             }
           }
        }
        return true;

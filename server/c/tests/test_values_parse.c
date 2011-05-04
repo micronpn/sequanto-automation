@@ -35,7 +35,7 @@ START_TEST(test_single_integer)
 {
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "42\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "42\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_INTEGER );
     fail_unless ( values[0].Value.m_integerValue == 42 );
@@ -50,7 +50,7 @@ START_TEST(test_single_string)
 {
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "\"Rasmus Toftdahl Olesen\"\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "\"Rasmus Toftdahl Olesen\"\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_STRING );
     ck_assert_str_eq( values[0].Value.m_stringValue, "Rasmus Toftdahl Olesen" );
@@ -61,7 +61,7 @@ START_TEST(test_single_string)
 
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "\"Foo\\n\\\"Bar\"\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "\"Foo\\n\\\"Bar\"\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_STRING );
     ck_assert_str_eq( values[0].Value.m_stringValue, "Foo\n\"Bar" );
@@ -76,7 +76,7 @@ START_TEST(test_single_float)
 {
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "3.14\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "3.14\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_FLOAT );
     
@@ -92,7 +92,7 @@ START_TEST(test_single_boolean)
 {
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "true\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "true\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_BOOLEAN );
     fail_unless ( values[0].Value.m_booleanValue == SQ_TRUE );
@@ -107,7 +107,7 @@ START_TEST(test_single_byte_array)
 {
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "0xDEAD\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "0xDEAD\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_BYTE_ARRAY );
     fail_unless ( values[0].Value.ArrayValue.m_byteArrayLength == 2 );
@@ -120,7 +120,7 @@ START_TEST(test_single_byte_array)
 
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "0xdeaf2243\r\n" ) == 1 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "0xdeaf2243\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_BYTE_ARRAY );
     fail_unless ( values[0].Value.ArrayValue.m_byteArrayLength == 4 );
@@ -135,7 +135,7 @@ START_TEST(test_single_byte_array)
 
     init();
     
-    fail_unless ( sq_values_parse ( values, NUM_VALUES, "0xdead2243f\r\n" ) == 0 );
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "0xdead2243f\r\n" ) == 0 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_NO_VALUE );
     

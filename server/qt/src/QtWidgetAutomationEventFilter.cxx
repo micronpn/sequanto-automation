@@ -119,7 +119,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        
             QPoint pos = widget->mapToGlobal(QPoint(0,0));
             QPoint windowTopLeft ( window->geometry().topLeft() );
-	
+            
             pos -= windowTopLeft;
 
             //QPoint pos = widget->mapTo ( window, widget->pos() );
@@ -163,12 +163,10 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        {
           if ( QtWrapper::IsWindow(childWidget) )
           {
-             qDebug() << "*** Window child found, we should update windows.";
              QtWrapper::UpdateWindows();
           }
           else
           {
-             QtWrapper::Log ( QString("%1: Adding child %2").arg(m_node->GetFullName().c_str()).arg(QtWrapper::GetObjectName(childWidget).c_str()) );
              if ( m_node->AddChildWidget ( childWidget ) )
              {
                 m_node->SendChildrenUpdate();

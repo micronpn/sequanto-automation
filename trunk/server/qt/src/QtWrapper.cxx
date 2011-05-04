@@ -827,19 +827,22 @@ private:
 		{
 			m_previousActiveWindow = newActiveWindow;
 
-			// Re-use _outputValue
-			if( _outputValue != NULL )
-			{
-				PropertyNode::SendUpdate ( *_outputValue );
-			}
-			else
-			{
-				SQValue value;
-				sq_value_init ( &value );
-				sq_value_const_string ( &value, m_previousActiveWindow.c_str() );
-				PropertyNode::SendUpdate ( value );
-				sq_value_free ( &value );
-			}
+         if ( _sendUpdateIfNeeded )
+         {
+            // Re-use _outputValue
+            if( _outputValue != NULL )
+            {
+               PropertyNode::SendUpdate ( *_outputValue );
+            }
+            else
+            {
+               SQValue value;
+               sq_value_init ( &value );
+               sq_value_const_string ( &value, m_previousActiveWindow.c_str() );
+               PropertyNode::SendUpdate ( value );
+               sq_value_free ( &value );
+            }
+         }
 		}
 	}
 

@@ -72,7 +72,7 @@ SQStream * sq_stream_open ( int _portNumber )
    memset ( &sa, 0, sizeof(sa) );
    sa.sin_family = AF_INET;
    sa.sin_addr.s_addr = INADDR_ANY;
-   sa.sin_port = htons(_portNumber);
+   sa.sin_port = htons((u_short)_portNumber);
    ret->m_listenerSocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 #ifdef SQ_USE_WINSOCK
    ioctlsocket(ret->m_listenerSocket, FIONBIO, 0 );
@@ -131,7 +131,7 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
    SQ_UNUSED_PARAMETER(_thread);
    do
    {
-      ret = recv ( stream->m_clientSocket, buff, 100, 0 );
+      ret = recv ( stream->m_clientSocket, (char*) buff, 100, 0 );
       if ( ret > 0 && ret != SOCKET_ERROR )
       {
          stream->m_dataReceivedHandler ( stream, stream->m_dataReceivedHandlerData, buff, ret );

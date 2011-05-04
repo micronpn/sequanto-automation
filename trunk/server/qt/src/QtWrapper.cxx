@@ -38,7 +38,7 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
        
        QPoint pos = widget->mapToGlobal(QPoint(0,0));
        QPoint windowTopLeft ( window->geometry().topLeft() );
-	
+   
        pos -= windowTopLeft;
 
        return pos;
@@ -476,18 +476,18 @@ std::string QtWrapper::GetObjectName ( QObject * _object )
 {
    QString objectName ( _object->objectName() );
    if ( objectName.isEmpty() )
-	{
+   {
       return QtUnnamedObjectStore::GetName ( _object );
-	}
+   }
    QByteArray value ( _object->objectName().toUtf8() );
    if ( !Node::IsValidName(value.constData(), value.length()) )
    {
       return QtUnnamedObjectStore::GetName ( _object );
    }
-	else
-	{
+   else
+   {
       return std::string(value.constData(), value.length() );
-	}
+   }
 }
 
 void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
@@ -788,11 +788,11 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
          QObject * childObject = list.at ( i );
          if ( childObject->isWidgetType() )
          {
-			 QWidget * childWidget = qobject_cast<QWidget*>(childObject);
-			 if ( !IsWindow(childWidget) )
-			 {
-				 _root->AddChildWidget ( childWidget );
-			 }
+          QWidget * childWidget = qobject_cast<QWidget*>(childObject);
+          if ( !IsWindow(childWidget) )
+          {
+             _root->AddChildWidget ( childWidget );
+          }
          }
       }
    }
@@ -801,31 +801,31 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 class QtActiveWindowProperty : public PropertyNode, public virtual IQtActiveWindowProperty
 {
 private:
-	std::string m_previousActiveWindow;
+   std::string m_previousActiveWindow;
 
-	void InternalGet ( SQValue * _outputValue, bool _sendUpdateIfNeeded )
-	{
-		static std::string NO_ACTIVE_WINDOW ( "" );
+   void InternalGet ( SQValue * _outputValue, bool _sendUpdateIfNeeded )
+   {
+      static std::string NO_ACTIVE_WINDOW ( "" );
 
-		std::string newActiveWindow;
-		QWidget * activeWindow = QApplication::activeWindow();
-		if ( activeWindow == NULL )
-		{
-			newActiveWindow = NO_ACTIVE_WINDOW;
-		}
-		else
-		{
-			newActiveWindow = QtWrapper::GetObjectName(activeWindow);
-		}
+      std::string newActiveWindow;
+      QWidget * activeWindow = QApplication::activeWindow();
+      if ( activeWindow == NULL )
+      {
+         newActiveWindow = NO_ACTIVE_WINDOW;
+      }
+      else
+      {
+         newActiveWindow = QtWrapper::GetObjectName(activeWindow);
+      }
 
-		if ( _outputValue != NULL )
-		{
-			sq_value_string_copy ( _outputValue, newActiveWindow.c_str() );
-		}
+      if ( _outputValue != NULL )
+      {
+         sq_value_string_copy ( _outputValue, newActiveWindow.c_str() );
+      }
 
-		if ( newActiveWindow != m_previousActiveWindow )
-		{
-			m_previousActiveWindow = newActiveWindow;
+      if ( newActiveWindow != m_previousActiveWindow )
+      {
+         m_previousActiveWindow = newActiveWindow;
 
          if ( _sendUpdateIfNeeded )
          {
@@ -843,13 +843,13 @@ private:
                sq_value_free ( &value );
             }
          }
-		}
-	}
+      }
+   }
 
 public:
    QtActiveWindowProperty ()
       : PropertyNode ( SQ_UI_NODE_ACTIVE_WINDOW ),
-	    m_previousActiveWindow ( "<NULL>" )
+       m_previousActiveWindow ( "<NULL>" )
    {
    }
 
@@ -860,7 +860,7 @@ public:
 
    virtual void HandleGet ( SQValue & _outputValue )
    {
-	   InternalGet ( &_outputValue, false );
+      InternalGet ( &_outputValue, false );
    }
 
    virtual void HandleSet ( const SQValue * const _value )
@@ -872,7 +872,7 @@ public:
 
    virtual void TrySendUpdate ()
    {
-	   InternalGet ( NULL, true );
+      InternalGet ( NULL, true );
    }
 };
 
@@ -1005,12 +1005,6 @@ bool QtWrapper::IsWindow ( QWidget * _widget )
 {
    if ( _widget->isWindow() && _widget == _widget->window() ) //|| _widget->inherits(QMainWindow::staticMetaObject.className()) || _widget->inherits(QDialog::staticMetaObject.className()) )
    {
-      std::string objectName ( GetObjectName(_widget) );
-      QString objectNameQ ( objectName.c_str() );
-      qDebug() << "*** " << objectNameQ << " is a window:";
-      qDebug() << "    IsWindow? " << _widget->isWindow();
-      qDebug() << "    Inherits QMainWindow? " << _widget->inherits(QMainWindow::staticMetaObject.className());
-      qDebug() << "    Inherits QDialog? " << _widget->inherits(QDialog::staticMetaObject.className());
       return true;
    }
    else
@@ -1041,12 +1035,8 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, IQtActiveWindowProperty * _a
       if ( IsWindow(widget) )
       {
          std::string objectName ( GetObjectName(widget) );
-         qDebug() << "*** Found window: " << QString(objectName.c_str());
-         
          if ( !_windows->HasChild ( objectName ))
          {
-            qDebug() << "*** Unknown window - adding!";
-             
             if ( QtUnnamedObjectStore::IsKnown ( widget ) )
             {
                std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
@@ -1061,10 +1051,6 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, IQtActiveWindowProperty * _a
             _windows->AddChild ( newWindow );
 
             changed = true;
-         }
-         else
-         {
-             qDebug() << "*** That window is already known.";
          }
       }
    }
@@ -1096,7 +1082,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, IQtActiveWindowProperty * _a
 
    if ( changed )
    {
-	   _activeWindowNode->TrySendUpdate ();
+      _activeWindowNode->TrySendUpdate ();
    }
    return changed;
 }

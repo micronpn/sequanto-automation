@@ -207,6 +207,7 @@ void sq_parser_internal_parse_input_buffer ( SQParser * _parser, SQStream * _out
         break;
         
     default:
+        _parser->m_inputBuffer[_parser->m_inputBufferPosition] = '\0';
         sq_logf ( "Bad command '%s'", _parser->m_inputBuffer );
         sq_protocol_write_failure_with_text_message ( _outputStream, sq_get_constant_string(SQ_STRING_CONSTANT("Unrecognized command.")) );
         break;
@@ -225,17 +226,27 @@ void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte
     }
     else
     {
-        _parser->m_inputBuffer[_parser->m_inputBufferPosition] = _byte;
+       if ( _parser->m_inputBufferPosition == SQ_BUFFER_SIZE )
+       {
+          sq_log ( "Input line is too long, truncating." );
+          
+          _parser->m_inputBuffer[0] = _byte;
+          _parser->m_inputBufferPosition = 1;
+       }
+       else
+       {
+          _parser->m_inputBuffer[_parser->m_inputBufferPosition] = _byte;
         
-        if ( _parser->m_inputBuffer[_parser->m_inputBufferPosition] == '\n' || _parser->m_inputBuffer[_parser->m_inputBufferPosition] == '\r' )
-        {
-           sq_parser_internal_parse_input_buffer ( _parser, _outputStream );
+          if ( _parser->m_inputBuffer[_parser->m_inputBufferPosition] == '\n' || _parser->m_inputBuffer[_parser->m_inputBufferPosition] == '\r' )
+          {
+             sq_parser_internal_parse_input_buffer ( _parser, _outputStream );
            _parser->m_inputBufferPosition = 0;
-        }
-        else
-        {
-           _parser->m_inputBufferPosition ++;
-        }
+          }
+          else
+          {
+             _parser->m_inputBufferPosition ++;
+          }
+       }
     }
 }
 

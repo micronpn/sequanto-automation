@@ -47,6 +47,10 @@ bool QtWidgetNode::AddChildWidget ( QWidget * _child )
             childrenNode->AddChild ( child );
             return true;
          }
+		 else
+		 {
+			 QtWrapper::Log ( QString("ERROR: Tried to add the child %1 to the widget %2 but it already contains a child with the given name.").arg(childName.c_str()).arg(GetFullName().c_str()) );
+		 }
       }
    }
    return false;

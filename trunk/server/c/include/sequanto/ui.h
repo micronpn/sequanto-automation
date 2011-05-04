@@ -41,6 +41,7 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_RADIO_BUTTON,
       SQ_WIDGET_TYPE_TEXT_BOX,
       SQ_WIDGET_TYPE_STATUS_BAR,
+      SQ_WIDGET_TYPE_SLIDER,
       SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
    
@@ -56,6 +57,7 @@ SQ_BEGIN_DECL
    extern const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE;
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 
@@ -82,6 +84,9 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_VALUE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_MINIMUM SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_MAXIMUM SQ_CONST_VARIABLE;
 
 SQ_END_DECL
 

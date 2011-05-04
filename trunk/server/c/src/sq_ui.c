@@ -30,6 +30,7 @@ const char * const SQ_WIDGET_TYPE_TEXT_BOX_STRING SQ_CONST_VARIABLE = "TextBox";
 const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
 const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
 const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE = "StatusBar";
+const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE = "Slider";
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
@@ -56,6 +57,10 @@ const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE = "screenY";
 
 const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE = "text";
 const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE = "checked";
+
+const char * const SQ_UI_NODE_VALUE SQ_CONST_VARIABLE = "value";
+const char * const SQ_UI_NODE_MINIMUM SQ_CONST_VARIABLE = "minimum";
+const char * const SQ_UI_NODE_MAXIMUM SQ_CONST_VARIABLE = "maximum";
 
 const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
@@ -93,6 +98,9 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_STATUS_BAR:
       return SQ_WIDGET_TYPE_STATUS_BAR_STRING;
+
+   case SQ_WIDGET_TYPE_SLIDER:
+      return SQ_WIDGET_TYPE_SLIDER_STRING;
 
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;

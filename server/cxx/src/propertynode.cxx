@@ -121,6 +121,15 @@ void PropertyNode::SendUpdate( const SQValue & _value )
    sq_protocol_write_update_with_value_message ( server->m_stream, fullname.c_str(), &_value );
 }
 
+void PropertyNode::SendUpdate ()
+{
+	SQValue value;
+	sq_value_init ( &value );
+	HandleGet ( value );
+	SendUpdate ( value );
+	sq_value_free ( &value);
+}
+
 PropertyNode::~PropertyNode()
 {
 }

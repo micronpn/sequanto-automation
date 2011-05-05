@@ -49,6 +49,13 @@ namespace sequanto
 
          virtual void SendUpdate( const SQValue & _value );
 
+         /**
+          * Send update for this property by first retrieving the
+          * value using HandleGet and then sending an upadte using
+          * SendUpdate(const SQValue &).
+          */
+         virtual void SendUpdate();
+         
          virtual ~PropertyNode ();
       };
    }

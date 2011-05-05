@@ -37,15 +37,6 @@ void ReadOnlyIntegerPropertyNode::HandleGet ( SQValue & _outputValue )
    sq_value_integer ( &_outputValue, this->GetValue() );
 }
 
-void ReadOnlyIntegerPropertyNode::SendUpdate ()
-{
-   SQValue value;
-   sq_value_init ( &value );
-   sq_value_integer ( &value, GetValue() );
-   PropertyNode::SendUpdate ( value );
-   sq_value_free( &value );
-}
-
 ReadOnlyIntegerPropertyNode::~ReadOnlyIntegerPropertyNode()
 {
 }
@@ -65,15 +56,6 @@ void ReadOnlyStringPropertyNode::HandleGet ( SQValue & _outputValue )
    sq_value_const_string ( &_outputValue, this->GetValue().c_str() );
 }
 
-void ReadOnlyStringPropertyNode::SendUpdate ()
-{
-   SQValue value;
-   sq_value_init ( &value );
-   sq_value_const_string ( &value, GetValue().c_str() );
-   PropertyNode::SendUpdate ( value );
-   sq_value_free( &value );
-}
-
 ReadOnlyStringPropertyNode::~ReadOnlyStringPropertyNode()
 {
 }
@@ -91,15 +73,6 @@ const NodeInfo & ReadOnlyBooleanPropertyNode::Info() const
 void ReadOnlyBooleanPropertyNode::HandleGet ( SQValue & _outputValue )
 {
    sq_value_boolean ( &_outputValue, this->GetValue() );
-}
-
-void ReadOnlyBooleanPropertyNode::SendUpdate ()
-{
-   SQValue value;
-   sq_value_init ( &value );
-   sq_value_boolean ( &value, GetValue() );
-   PropertyNode::SendUpdate ( value );
-   sq_value_free( &value );
 }
 
 ReadOnlyBooleanPropertyNode::~ReadOnlyBooleanPropertyNode()

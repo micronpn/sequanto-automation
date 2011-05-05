@@ -48,8 +48,6 @@ namespace sequanto
 
          virtual void HandleGet ( SQValue & _outputValue );
 
-         virtual void SendUpdate ();
-
          virtual ~ReadOnlyIntegerPropertyNode();
       };
 
@@ -65,8 +63,6 @@ namespace sequanto
 
          virtual void HandleGet ( SQValue & _outputValue );
 
-         virtual void SendUpdate ();
-
          virtual ~ReadOnlyStringPropertyNode();
       };
 
@@ -81,8 +77,6 @@ namespace sequanto
          virtual const NodeInfo & Info() const;
 
          virtual void HandleGet ( SQValue & _outputValue );
-
-         virtual void SendUpdate ();
 
          virtual ~ReadOnlyBooleanPropertyNode();
       };

@@ -18,6 +18,7 @@
 #ifndef SEQUANTO_QT_WIDGET_NODE_H_
 #define SEQUANTO_QT_WIDGET_NODE_H_
 
+#include <sequanto/ui.h>
 #include <sequanto/listnode.h>
 #include <sequanto/QtWidgetAutomationEventFilter.h>
 #include <QObject>
@@ -41,6 +42,8 @@ namespace sequanto
          QtWidgetNode ( QWidget * _widget );
          
          inline QWidget * widget () const { return m_widget; }
+         
+         SQWidgetType type () const;
          
          void SendChildrenUpdate ();
 

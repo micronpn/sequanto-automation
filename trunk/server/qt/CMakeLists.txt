@@ -18,6 +18,7 @@ IF(SQ_CXX)
                               src/QtAutomationMouseClickEvent.cxx
                               src/QtAutomationChildAddedEvent.cxx
                               src/QtAutomationWidgetCreatedEvent.cxx
+                              src/QtUiTypeProperty.cxx
                               src/QtPropertyChangedNotificationAdapter.cxx
                               src/QtUnnamedObjectStore.cxx)
 
@@ -37,6 +38,7 @@ IF(SQ_CXX)
                     include/sequanto/QtAutomationMouseClickEvent.h
                     include/sequanto/QtAutomationChildAddedEvent.h
                     include/sequanto/QtAutomationWidgetCreatedEvent.h
+                    include/sequanto/QtUiTypeProperty.h
                     include/sequanto/QtPropertyChangedNotificationAdapter.h
                     include/sequanto/QtUnnamedObjectStore.h)
 

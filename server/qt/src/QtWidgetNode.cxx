@@ -1,6 +1,7 @@
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtWrapper.h>
 #include <sequanto/QtUnnamedObjectStore.h>
+#include <sequanto/QtUiTypeProperty.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -12,6 +13,19 @@ QtWidgetNode::QtWidgetNode( QWidget * _widget )
 {
    m_eventFilter = new QtWidgetAutomationEventFilter(this);
    m_widget->installEventFilter( m_eventFilter );
+}
+
+SQWidgetType QtWidgetNode::type () const
+{
+   QtUiTypeProperty * typeProperty = dynamic_cast<QtUiTypeProperty*>(FindChild(SQ_UI_NODE_TYPE));
+   if ( typeProperty != NULL )
+   {
+      return typeProperty->type();
+   }
+   else
+   {
+      return SQ_WIDGET_TYPE_UNKNOWN;
+   }
 }
 
 void QtWidgetNode::SendChildrenUpdate ()

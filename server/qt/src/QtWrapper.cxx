@@ -11,6 +11,7 @@
 #include <sequanto/QtAutomationMouseClickEvent.h>
 #include <sequanto/QtPropertyChangedNotificationAdapter.h>
 #include <sequanto/QtUnnamedObjectStore.h>
+#include <sequanto/QtUiTypeProperty.h>
 #include <cassert>
 #include <vector>
 #include <stdexcept>
@@ -700,74 +701,74 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    if ( QtWrapper::IsWindow(_widget) )
    {
       assert ( _widget == _widget->window() );
-
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WINDOW_STRING) );
+      
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_WINDOW) );
       _root->AddChild ( new QtScreenXProperty( _widget ) );
       _root->AddChild ( new QtScreenYProperty( _widget ) );
    }
    else if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_CHECK_BOX_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_CHECK_BOX) );
       _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits ( QRadioButton::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_RADIO_BUTTON_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_RADIO_BUTTON) );
       _root->AddChild ( new QtBooleanProperty(SQ_UI_NODE_CHECKED, _widget) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits ( QLineEdit::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_TEXT_BOX) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits ( QPlainTextEdit::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_TEXT_BOX) );
       _root->AddChild ( new QtStringPropertyWithAlternateName(SQ_UI_NODE_TEXT, _widget, "plainText") );
    }
    else if ( _widget->inherits ( QTextEdit::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_TEXT_BOX_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_TEXT_BOX) );
       _root->AddChild ( new QtStringPropertyWithAlternateName(SQ_UI_NODE_TEXT, _widget, "plainText", "html") );
    }
    else if ( _widget->inherits ( QAbstractButton::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_BUTTON_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_BUTTON) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits ( QMenuBar::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_MENU_BAR_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_MENU_BAR) );
    }
    else if ( _widget->inherits ( QMenu::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_MENU_ITEM_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_MENU_ITEM) );
    }
    else if ( _widget->inherits ( QStatusBar::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_STATUS_BAR_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_STATUS_BAR) );
    }
    else if ( _widget->inherits ( QLayout::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_CONTAINER_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_CONTAINER) );
    }
    else if ( _widget->inherits ( QLabel::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_LABEL_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_LABEL) );
       _root->AddChild ( new QtStringProperty(SQ_UI_NODE_TEXT, _widget) );
    }
    else if ( _widget->inherits( QAbstractSlider::staticMetaObject.className() ) )
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_SLIDER_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_SLIDER) );
       _root->AddChild ( new QtIntProperty(SQ_UI_NODE_VALUE, _widget) );
       _root->AddChild ( new QtIntProperty(SQ_UI_NODE_MINIMUM, _widget) );
       _root->AddChild ( new QtIntProperty(SQ_UI_NODE_MAXIMUM, _widget) );
    }
    else
    {
-      _root->AddChild ( new ConstantStringNode(SQ_UI_NODE_TYPE, SQ_WIDGET_TYPE_WIDGET_STRING) );
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_WIDGET) );
    }
    _root->AddChild ( new ConstantStringNode ( SQ_UI_NODE_NATIVE_TYPE, _widget->metaObject()->className() ) );
    

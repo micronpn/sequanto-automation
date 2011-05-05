@@ -37,6 +37,36 @@ void QtWidgetNode::SendChildrenUpdate ()
    }
 }
 
+void QtWidgetNode::SendPositionUpdateForAllChildren()
+{
+   PropertyNode * xNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_NODE_X ) );
+   if( xNode != NULL )
+   {
+	   xNode->SendUpdate();
+   }
+   
+   PropertyNode * yNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_NODE_Y ) );
+   if( yNode != NULL )
+   {
+	   yNode->SendUpdate();
+   }
+   
+   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
+   if ( childrenNode != NULL )
+   {
+	   ListNode::Iterator * it = childrenNode->ListChildren();
+	   for ( ; it->HasNext(); it->Next() )
+	   {
+		   QtWidgetNode * node = dynamic_cast<QtWidgetNode*>(it->GetCurrent());
+		   if ( node != NULL )
+		   {
+			   node->SendPositionUpdateForAllChildren();
+		   }
+	   }
+	   delete it;
+   }
+}
+
 bool QtWidgetNode::AddChildWidget ( QWidget * _child )
 {
    ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );

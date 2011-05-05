@@ -222,6 +222,70 @@ public:
    }
 };
 
+class QtScrollBarProperty : public QtIntProperty
+{
+private:
+   QtWidgetNode * m_associatedScrollArea;
+   bool m_hasSearchedForAssociatedScrollArea;
+   
+public:
+   QtScrollBarProperty ( const std::string & _name, QObject * _object )
+	   : QtIntProperty(_name, _object)
+   {
+      m_associatedScrollArea = NULL;
+      m_hasSearchedForAssociatedScrollArea = false;
+   }
+   
+   virtual void PropertyChanged ()
+   {
+      QtIntProperty::SendUpdate ();
+
+      if ( !m_hasSearchedForAssociatedScrollArea )
+      {
+		  // Get my widget (which is my parent, since i am a property
+         Node * parent = GetParent();
+         if ( parent != NULL )
+         {
+            // My widget's parent (the parent widget's children list)
+            parent = parent->GetParent();
+            if ( parent != NULL )
+            {
+               // My actual parent (the QtWidgetNode instance)
+               // For scrollbars on a QScrollArea this will be qt_scrollarea_vcontainer or qt_scrollarea_hcontainer
+               parent = parent->GetParent();
+               if ( parent != NULL )
+               {
+                  // Get widget list of actual parent (hopefully this is a QScrollArea).
+                  parent = parent->GetParent();
+                  if ( parent != NULL )
+                  {
+                     // Get actual parent
+                     parent = parent->GetParent();
+                     if ( parent != NULL )
+                     {
+                        QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(parent);
+                        if ( widgetNode != NULL )
+                        {
+                           if ( widgetNode->type() == SQ_WIDGET_TYPE_SCROLL_AREA )
+                           {
+                              m_associatedScrollArea = widgetNode;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }         
+         m_hasSearchedForAssociatedScrollArea = true;
+      }
+      
+      if ( m_associatedScrollArea != NULL )
+      {
+         m_associatedScrollArea->SendPositionUpdateForAllChildren();
+      }
+   }
+};
+
 class QtBooleanProperty : public BooleanPropertyNode, IQtPropertyChangedReceiver
 {
 private:
@@ -762,9 +826,13 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    else if ( _widget->inherits( QAbstractSlider::staticMetaObject.className() ) )
    {
       _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_SLIDER) );
-      _root->AddChild ( new QtIntProperty(SQ_UI_NODE_VALUE, _widget) );
+      _root->AddChild ( new QtScrollBarProperty(SQ_UI_NODE_VALUE, _widget) );
       _root->AddChild ( new QtIntProperty(SQ_UI_NODE_MINIMUM, _widget) );
       _root->AddChild ( new QtIntProperty(SQ_UI_NODE_MAXIMUM, _widget) );
+   }
+   else if ( _widget->inherits ( QScrollArea::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_SCROLL_AREA) );
    }
    else
    {

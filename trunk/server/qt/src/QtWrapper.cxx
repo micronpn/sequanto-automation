@@ -98,11 +98,7 @@ public:
 
    virtual void PropertyChanged ()
    {
-      SQValue value;
-      sq_value_init ( &value );
-      HandleGet ( value );
-      this->SendUpdate ( value );
-      sq_value_free ( &value );
+      SendUpdate ();
    }
 
    virtual void HandleGet ( SQValue & _outputValue )

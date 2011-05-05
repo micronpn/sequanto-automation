@@ -31,6 +31,7 @@ const char * const SQ_WIDGET_TYPE_MENU_BAR_STRING SQ_CONST_VARIABLE = "MenuBar";
 const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE = "MenuItem";
 const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE = "StatusBar";
 const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE = "Slider";
+const char * const SQ_WIDGET_TYPE_SCROLL_AREA_STRING SQ_CONST_VARIABLE = "ScrollArea";
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
@@ -101,6 +102,9 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_SLIDER:
       return SQ_WIDGET_TYPE_SLIDER_STRING;
+
+   case SQ_WIDGET_TYPE_SCROLL_AREA:
+      return SQ_WIDGET_TYPE_SCROLL_AREA_STRING;
 
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;

@@ -42,6 +42,7 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_TEXT_BOX,
       SQ_WIDGET_TYPE_STATUS_BAR,
       SQ_WIDGET_TYPE_SLIDER,
+      SQ_WIDGET_TYPE_SCROLL_AREA,
       SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
    
@@ -58,6 +59,7 @@ SQ_BEGIN_DECL
    extern const char * const SQ_WIDGET_TYPE_MENU_ITEM_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_SCROLL_AREA_STRING SQ_CONST_VARIABLE;
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 

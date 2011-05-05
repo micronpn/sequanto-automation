@@ -47,6 +47,8 @@ namespace sequanto
          
          void SendChildrenUpdate ();
 
+		 void SendPositionUpdateForAllChildren();
+
          /**
           * Add a child widget to the widget contained in this widget node.
           * 

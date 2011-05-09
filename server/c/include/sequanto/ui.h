@@ -81,7 +81,8 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_NODE_MOVE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_RESIZE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_NATIVE_TYPE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_UNNAMED_OBJECTS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_NATIVE_ID SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_AUTO_GENERATED_NAME SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE;

@@ -7,7 +7,7 @@ QtUiTypeProperty::QtUiTypeProperty ( SQWidgetType _type )
      m_type(_type)
 {
 }
-   
+
 const NodeInfo & QtUiTypeProperty::Info() const
 {
    return GetReadOnlyStringNodeInfo();

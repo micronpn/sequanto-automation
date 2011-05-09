@@ -85,6 +85,13 @@ void sq_value_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byt
    _value->Value.ArrayValue.m_byteArrayLength = _byteArrayLength;
 }
 
+void sq_value_const_byte_array ( SQValue * _value, const SQByte * _initialValue, size_t _byteArrayLength)
+{
+   _value->m_type = VALUE_TYPE_CONST_BYTE_ARRAY;
+   _value->Value.ConstArrayValue.m_byteArrayValue = _initialValue;
+   _value->Value.ConstArrayValue.m_byteArrayLength = _byteArrayLength;
+}
+
 void sq_value_null ( SQValue * _value )
 {
    _value->m_type = VALUE_TYPE_NULL;
@@ -109,6 +116,9 @@ SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream )
    case VALUE_TYPE_BYTE_ARRAY:
       return sq_protocol_write_byte_array ( _stream, _value->Value.ArrayValue.m_byteArrayValue, _value->Value.ArrayValue.m_byteArrayValue + _value->Value.ArrayValue.m_byteArrayLength );
 
+   case VALUE_TYPE_CONST_BYTE_ARRAY:
+      return sq_protocol_write_byte_array ( _stream, _value->Value.ConstArrayValue.m_byteArrayValue, _value->Value.ConstArrayValue.m_byteArrayValue + _value->Value.ConstArrayValue.m_byteArrayLength );
+
    case VALUE_TYPE_FLOAT:
       return sq_protocol_write_float ( _stream, _value->Value.m_floatValue );
 
@@ -130,7 +140,7 @@ void sq_value_free ( SQValue * _value )
     break;
     
   case VALUE_TYPE_CONST_STRING:
-    _value->Value.m_stringValue = NULL;
+    _value->Value.m_constStringValue = NULL;
     break;
       
   case VALUE_TYPE_BYTE_ARRAY:
@@ -138,7 +148,12 @@ void sq_value_free ( SQValue * _value )
     _value->Value.ArrayValue.m_byteArrayValue = NULL;
     _value->Value.ArrayValue.m_byteArrayLength = 0;
     break;
-    
+
+  case VALUE_TYPE_CONST_BYTE_ARRAY:
+     _value->Value.ConstArrayValue.m_byteArrayValue = NULL;
+     _value->Value.ConstArrayValue.m_byteArrayLength = 0;
+     break;
+
   default:
     break;
   }

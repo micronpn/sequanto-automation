@@ -58,6 +58,8 @@ namespace sequanto
 
          //bool RemoveChildWidget ( QWidget * _child );
 
+         void HandleGetNativeId ( SQValue & _value );
+
          virtual ~QtWidgetNode ();
       };
    }

@@ -117,6 +117,11 @@ bool QtWidgetNode::RemoveChildWidget ( QWidget * _child )
 }
 */
 
+void QtWidgetNode::HandleGetNativeId ( SQValue & _value )
+{
+   sq_value_const_byte_array ( &_value, (SQByte*) (&m_widget), sizeof(QWidget*) );
+}
+
 void QtWidgetNode::WidgetDestroyed()
 {
    // If m_widget is NULL we are in the process of being destroyed (~QtWidgetNode is in progress).

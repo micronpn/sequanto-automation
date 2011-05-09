@@ -255,9 +255,9 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 #endif
 }
 
-SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte * _end )
+SQBool sq_protocol_write_byte_array( SQStream * _stream, const SQByte * _start, const SQByte * _end )
 {
-   SQByte *it = _start;
+   const SQByte *it = _start;
 
    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("0x")) );
    

@@ -33,7 +33,7 @@ SQ_DECL SQBool sq_protocol_write_string_out( SQStream * _stream, SQStringOut * _
 SQ_DECL SQBool sq_protocol_write_boolean( SQStream * _stream, SQBool _value );
 SQ_DECL SQBool sq_protocol_write_null ( SQStream * _stream );
 SQ_DECL SQBool sq_protocol_write_float( SQStream * _stream, float _value );
-SQ_DECL SQBool sq_protocol_write_byte_array( SQStream * _stream, SQByte * _start, SQByte * _end );
+SQ_DECL SQBool sq_protocol_write_byte_array( SQStream * _stream, const SQByte * _start, const SQByte * _end );
 
 SQ_DECL void sq_protocol_write_protocol_message ( SQStream * _stream );
 SQ_DECL void sq_protocol_write_success_message ( SQStream * _stream );

@@ -33,8 +33,9 @@ typedef enum
 	VALUE_TYPE_SQSTRINGOUT = VALUE_TYPE_STRING,
 	VALUE_TYPE_BYTE_ARRAY,
 	VALUE_TYPE_NULL,
-    VALUE_TYPE_VOID,
-	VALUE_TYPE_CONST_STRING
+   VALUE_TYPE_VOID,
+	VALUE_TYPE_CONST_STRING,
+	VALUE_TYPE_CONST_BYTE_ARRAY
 } SQValueType;
 
 typedef struct
@@ -52,6 +53,11 @@ typedef struct
          SQByte * m_byteArrayValue;
          size_t m_byteArrayLength;
       } ArrayValue;
+      struct
+      {
+         const SQByte * m_byteArrayValue;
+         size_t m_byteArrayLength;
+      } ConstArrayValue;
    } Value;
 } SQValue;
 
@@ -101,10 +107,16 @@ SQ_DECL void sq_value_string_copy ( SQValue * _value, const char * const _initia
  * Initialize the SQValue as a byte array.
  *
  * The initial value is _not_ copied, and will be freed when the sq_value_free is called.
- *
- * @see sq_value_string
  */
 SQ_DECL void sq_value_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength );
+
+/**
+ * Initialize the SQValue as a const byte array.
+ *
+ * Please note that the given value will _not_ be copied, the byte array will have to be valid while this SQValue is valid.
+ * The value is _not_ free'ed when sq_value_free(...) is called.
+ */
+SQ_DECL void sq_value_const_byte_array ( SQValue * _value, const SQByte * _initialValue, size_t _byteArrayLength );
 
 /**
  * Initialize the SQValue as a null.

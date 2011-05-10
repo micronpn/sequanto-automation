@@ -15,36 +15,31 @@
  *
  */
 
-#ifndef SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
-#define SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
+#ifndef SEQUANTO_QT_METHOD_2_PARAMETERS_H_
+#define SEQUANTO_QT_METHOD_2_PARAMETERS_H_
 
-#include <string>
-#include <map>
-#include <sequanto/tree.h>
-
-#include <QObject>
-#include <QtGui>
+#include <sequanto/propertynode.h>
+#include <sequanto/methodinfo.h>
+#include <QtCore>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtActiveWindowProperty;
-
-      class QtApplicationAutomationEventFilter : public QObject
+      class QtMethod2Parameters : public Node
       {
-         Q_OBJECT;
-
       private:
-         ListNode * m_windowsNode;
-         QtActiveWindowProperty * m_activeWindowNode;
+         QObject * m_object;
+         MethodInfo m_methodInfo;
+         int m_methodIndex;
 
       public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent );
+         QtMethod2Parameters ( const std::string & _name, QObject * _object, int _methodIndex );
 
-         virtual bool eventFilter ( QObject * _object, QEvent * _event );
+         virtual const NodeInfo & Info () const;
          
-         virtual ~QtApplicationAutomationEventFilter ();
+         static bool Valid ( const QMetaMethod & _method );
+         static SQValueType ConvertType ( QByteArray _typeByteArray );
       };
    }
 }

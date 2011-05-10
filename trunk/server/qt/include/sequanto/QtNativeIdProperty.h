@@ -15,36 +15,22 @@
  *
  */
 
-#ifndef SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
-#define SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
+#ifndef SEQUANTO_QT_NATIVE_ID_PROPERTY_H_
+#define SEQUANTO_QT_NATIVE_ID_PROPERTY_H_
 
-#include <string>
-#include <map>
-#include <sequanto/tree.h>
-
-#include <QObject>
-#include <QtGui>
+#include <sequanto/readonlypropertynode.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtActiveWindowProperty;
-
-      class QtApplicationAutomationEventFilter : public QObject
+      class QtNativeIdProperty : public ReadOnlyPropertyNode
       {
-         Q_OBJECT;
-
-      private:
-         ListNode * m_windowsNode;
-         QtActiveWindowProperty * m_activeWindowNode;
-
       public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent );
-
-         virtual bool eventFilter ( QObject * _object, QEvent * _event );
+         QtNativeIdProperty ();
          
-         virtual ~QtApplicationAutomationEventFilter ();
+         virtual const NodeInfo & Info () const ;
+         virtual void HandleGet ( SQValue & _value );
       };
    }
 }

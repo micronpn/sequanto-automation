@@ -12,39 +12,33 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  */
 
-#ifndef SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
-#define SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
+#ifndef SEQUANTO_QT_BOOLEAN_PROPERTY_H_
+#define SEQUANTO_QT_BOOLEAN_PROPERTY_H_
 
-#include <string>
-#include <map>
-#include <sequanto/tree.h>
-
-#include <QObject>
-#include <QtGui>
+#include <sequanto/macros.h>
+#include <sequanto/readwritepropertynode.h>
+#include <sequanto/QtPropertyChangedNotificationAdapter.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtActiveWindowProperty;
-
-      class QtApplicationAutomationEventFilter : public QObject
+      class SQ_DECL QtBooleanProperty : public BooleanPropertyNode, IQtPropertyChangedReceiver
       {
-         Q_OBJECT;
-
       private:
-         ListNode * m_windowsNode;
-         QtActiveWindowProperty * m_activeWindowNode;
-
+         QObject * m_object;
+         QtPropertyChangedNotificationAdapter * m_notifyAdapter;
+   
       public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent );
-
-         virtual bool eventFilter ( QObject * _object, QEvent * _event );
+         QtBooleanProperty ( const std::string & _name, QObject * _object );
          
-         virtual ~QtApplicationAutomationEventFilter ();
+         virtual void PropertyChanged ();
+         virtual bool GetValue ();
+         virtual void SetValue ( bool _newValue );
+
+         virtual ~QtBooleanProperty();
       };
    }
 }

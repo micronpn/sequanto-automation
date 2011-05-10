@@ -21,6 +21,7 @@
 #include <sequanto/tree.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtApplicationAutomationEventFilter.h>
+#include <sequanto/QtActiveWindowProperty.h>
 
 #include <string>
 #include <map>
@@ -31,20 +32,6 @@ namespace sequanto
 {
    namespace automation
    {
-      class QtWidgetNode;
-      
-      class IQtActiveWindowProperty
-      {
-      public:
-         /**
-          * Notify the client that the active winow has changed by
-          * retrieving it and comparing it to the last sent
-          * !UPDATE. Will only send if the last !UPDATE is different
-          * from the current value.
-          */
-         virtual void TrySendUpdate () = 0;
-      };
-      
       class SQ_DECL QtWrapper
       {
       private:
@@ -55,7 +42,7 @@ namespace sequanto
          friend class QtWidgetAutomationEventFilter;
          
          static bool UpdateWindows ();
-         static bool UpdateWindows ( ListNode * _windowsNode, IQtActiveWindowProperty * _activeWinowNode );
+         static bool UpdateWindows ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWinowNode );
          static bool IsWindow ( QWidget * _widget );
          
       public:

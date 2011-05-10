@@ -1,6 +1,7 @@
 #include <sequanto/QtScreenPositionProperty.h>
 #include <sequanto/QtWrapper.h>
 #include <sequanto/ui.h>
+#include <stdexcept>
 
 using namespace sequanto::automation;
 

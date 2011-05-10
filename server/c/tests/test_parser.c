@@ -72,7 +72,7 @@ START_TEST(test_parser_bad_command)
 
     char * output = (char*) sq_stream_unit_test_pop_write ( test_stream );
     
-    ck_assert_str_eq ( output, "!LOG \"Bad command 'Ostemad\\r'\"\r\n-\"Unrecognized command.\"\r\n" );
+    ck_assert_str_eq ( output, "!LOG \"Bad command 'Ostemad'\"\r\n-\"Unrecognized command.\"\r\n" );
     
     free ( output );
     

@@ -2,6 +2,7 @@
 #include <sequanto/QtWrapper.h>
 #include <sequanto/ui.h>
 #include <QtGui>
+#include <stdexcept>
 
 using namespace sequanto::automation;
 

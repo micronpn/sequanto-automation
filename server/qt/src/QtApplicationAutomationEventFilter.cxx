@@ -4,6 +4,7 @@
 #include <sequanto/QtAutomationResizeEvent.h>
 #include <sequanto/QtAutomationWidgetCreatedEvent.h>
 #include <sequanto/QtWidgetNode.h>
+#include <sequanto/QtActiveWindowProperty.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -11,7 +12,7 @@
 
 using namespace sequanto::automation;
 
-QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, IQtActiveWindowProperty * _activeWindowNode, QObject * _parent )
+QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent )
     : QObject(_parent),
       m_windowsNode ( _windowsNode ),
       m_activeWindowNode ( _activeWindowNode )

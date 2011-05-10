@@ -15,36 +15,24 @@
  *
  */
 
-#ifndef SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
-#define SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
+#ifndef SEQUANTO_QT_MOUSE_CLICK_METHOD_H_
+#define SEQUANTO_QT_MOUSE_CLICK_METHOD_H_
 
-#include <string>
-#include <map>
-#include <sequanto/tree.h>
-
-#include <QObject>
-#include <QtGui>
+#include <sequanto/node.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtActiveWindowProperty;
-
-      class QtApplicationAutomationEventFilter : public QObject
+      class QtMouseClickMethod : public Node
       {
-         Q_OBJECT;
-
-      private:
-         ListNode * m_windowsNode;
-         QtActiveWindowProperty * m_activeWindowNode;
-
       public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent );
+         QtMouseClickMethod();
 
-         virtual bool eventFilter ( QObject * _object, QEvent * _event );
-         
-         virtual ~QtApplicationAutomationEventFilter ();
+         virtual const NodeInfo & Info () const;
+         virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output );
+   
+         virtual ~QtMouseClickMethod();
       };
    }
 }

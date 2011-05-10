@@ -15,36 +15,31 @@
  *
  */
 
-#ifndef SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
-#define SEQUANTO_QT_APPLICATION_AUTOMATION_EVENT_FILTER_H_
+#ifndef SEQUANTO_QT_ACTIVE_WINDOW_PROPERTY_H_
+#define SEQUANTO_QT_ACTIVE_WINDOW_PROPERTY_H_
 
-#include <string>
-#include <map>
-#include <sequanto/tree.h>
-
-#include <QObject>
-#include <QtGui>
+#include <sequanto/propertynode.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtActiveWindowProperty;
-
-      class QtApplicationAutomationEventFilter : public QObject
+      class QtActiveWindowProperty : public PropertyNode
       {
-         Q_OBJECT;
-
       private:
-         ListNode * m_windowsNode;
-         QtActiveWindowProperty * m_activeWindowNode;
+         std::string m_previousActiveWindow;
 
-      public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent );
-
-         virtual bool eventFilter ( QObject * _object, QEvent * _event );
+         void InternalGet ( SQValue * _outputValue, bool _sendUpdateIfNeeded );
          
-         virtual ~QtApplicationAutomationEventFilter ();
+      public:
+         QtActiveWindowProperty ();
+
+         virtual const NodeInfo & Info () const;
+         virtual void HandleGet ( SQValue & _outputValue );
+         virtual void HandleSet ( const SQValue * const _value );
+         virtual void TrySendUpdate ();
+         
+         virtual ~QtActiveWindowProperty();
       };
    }
 }

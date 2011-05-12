@@ -337,7 +337,10 @@ void QtWrapper::WrapApplication ( ListNode * _root )
 
 bool QtWrapper::IsWindow ( QWidget * _widget )
 {
-   if ( _widget->isWindow() && _widget == _widget->window() ) //|| _widget->inherits(QMainWindow::staticMetaObject.className()) || _widget->inherits(QDialog::staticMetaObject.className()) )
+   if ( _widget->isWindow() && _widget == _widget->window() &&
+        ( _widget->inherits(QMainWindow::staticMetaObject.className()) ||
+          _widget->inherits(QDialog::staticMetaObject.className()) ||
+          _widget->isVisible() ) )
    {
 	  return true;
    }

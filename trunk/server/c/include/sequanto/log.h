@@ -21,9 +21,10 @@
 #include <sequanto/log.h>
 #include <stdarg.h>
 
+SQ_BEGIN_DECL
+
 /**
- * \file log.h
- * \brief Write log message to the client.
+ * @defgroup log Write log message to the client.
  * 
  * These functions provides a simple way for the server (target) to
  * send logging statements to any conneted client.
@@ -31,14 +32,22 @@
  * These log messages are sent to the client using the !LOG
  * asynchronous message introduced in revision 2 of the automation
  * protocol.
+ *
+ * @ingroup c
+ *
+ * @{
  */
 
-SQ_BEGIN_DECL
-
+/**
+ * If this token is defined it will disable all calls to the sequanto
+ * automation library, this is very useful to e.g. disable the
+ * automation interface in release builds without having to modify
+ * your code.
+ */
 #ifdef SQ_DISABLE_AUTOMATION_INTERFACE
 
-#define sq_log(_message) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
-#define sq_logf(...) /* Disable because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
+#define sq_log(_message) /* Disabled because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
+#define sq_logf(...) /* Disabled because SQ_DISABLE_AUTOMATION_INTERFACE is defined. */
 
 #else
    
@@ -72,6 +81,10 @@ SQ_BEGIN_DECL
    SQ_DECL void sq_logf ( const char * _format, ... );
 
 #endif
+
+/**
+ * @}
+ */
 
 SQ_END_DECL   
 

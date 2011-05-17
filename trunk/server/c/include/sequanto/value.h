@@ -23,6 +23,20 @@
 
 SQ_BEGIN_DECL
 
+/**
+ * @defgroup value Variant struct for automation values.
+ * 
+ * The SQValue struct is used through-out the library, both for
+ * holding values read by the parser, or when exchanging values with
+ * user code.
+ * 
+ * @ingroup c
+ * @{
+ */
+
+/**
+ * The different types of value a SQValue struct can hold.
+ */
 typedef enum
 {
 	VALUE_TYPE_NO_VALUE,
@@ -38,6 +52,11 @@ typedef enum
 	VALUE_TYPE_CONST_BYTE_ARRAY
 } SQValueType;
 
+/**
+ * The SQValue struct, you should only read the members from the
+ * struct, never write to it. Use the appropriate sq_value_* functions
+ * instead.
+ */
 typedef struct
 {
 	SQValueType m_type;
@@ -144,6 +163,10 @@ SQ_DECL SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfV
  * @return the number of values read.
  */
 SQ_DECL size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buffer );
+
+/**
+ * @}
+ */
 
 SQ_END_DECL
 

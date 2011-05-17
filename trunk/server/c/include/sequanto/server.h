@@ -25,6 +25,20 @@
 
 SQ_BEGIN_DECL
 
+/**
+ * @defgroup server Server
+ * @ingroup c
+ * 
+ * Contains a target-specific server implementation (serial, tcp,
+ * user-defined) ready to serve request from clients connecting to the
+ * server. 
+ * 
+ * @{
+ */
+
+/**
+ * The actual server struct, you should never have to access the members inside it directly.
+ */
 typedef struct _SQServer
 {
    SQStream * m_stream;
@@ -47,6 +61,9 @@ typedef struct _SQServer
  */
 SQ_DECL void sq_server_init ( SQServer * _server, int _portNumber );
 
+/**
+ * Destroy the server, release all resources held by it (connection, memory, etc.).
+ */
 SQ_DECL void sq_server_destroy ( SQServer * _server );
 
 /**
@@ -54,23 +71,33 @@ SQ_DECL void sq_server_destroy ( SQServer * _server );
  */
 SQ_DECL SQServer * sq_server_get_instance ( void );
 
+/**
+ * For TCP targets, this will start listeing on the server socet, and
+ * return immediately.
+ * 
+ * For serial targets you need to keep calling this function in your
+ * main-loop to keep handling incoming client data.
+ */
 SQ_DECL void sq_server_poll ( SQServer * _server );
 
 /**
- * @defgroup Internal Internal functions
+ * The SQServer's callback to handle when data is received on the stream.
+ * 
+ * @ingroup internal
  */
-/*@{*/
+
+SQ_DECL void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, SQByte * _buffer, size_t _length );
 
 /**
- * The SQServer's callback to handle when data is received on the stream.
- */
-SQ_DECL void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, SQByte * _buffer, size_t _length );
-/**
  * Parse the input buffer.
+ * 
+ * @ingroup internal
  */
 SQ_DECL void sq_server_parse_input_buffer ( SQServer * _server );
 
-/*@}*/
+/**
+ * @}
+ */
 
 SQ_END_DECL
 

@@ -22,35 +22,79 @@
 #include <sequanto/stream.h>
 #include <sequanto/value.h>
 
+/**
+ * @defgroup parser Parser
+ * @ingroup c
+ * 
+ * The parser will evaluate automation commands as they as fed into it
+ * using sq_parser_input_byte. The parser will then call the functions
+ * mentioned in the list of application functions, which can be
+ * implemented by the user to handle requests.
+ * 
+ * @see application
+ * 
+ * @{
+ */
+
+/**
+ * The length of the internal buffer in the parser, this means that
+ * the parser can only handle requests with a length shorter or equal
+ * to SQ_BUFFER_SIZE.
+ */
 /* #define SQ_BUFFER_SIZE 1024 */
 #define SQ_BUFFER_SIZE 256
 
 SQ_BEGIN_DECL
 
+/**
+ * The actual parser struct, you should never have to access the members of the struct directly.
+ */
 typedef struct _SQParser
 {
    size_t m_inputBufferPosition;
    SQByte m_inputBuffer[SQ_BUFFER_SIZE];
 } SQParser;
 
+/**
+ * Initialize the parser struct.
+ */
 SQ_DECL void sq_parser_init ( SQParser * _parser );
+
+/**
+ * Pass one byte into the parser, if the buffer contains a request
+ * after the byte is added, the request will be evaluated and the
+ * appropriate application function will be called.
+ *
+ * @see application
+ */
 SQ_DECL void sq_parser_input_byte ( SQParser * _parser, SQStream * _outputStream, SQByte _byte );
+
+/**
+ * Destroy the parser struct.
+ */
 SQ_DECL void sq_parser_destroy ( SQParser * _parser );
 
 /**
- * @defgroup Application Application functions
+ * @}
  */
-/*@{*/
 
 /**
+ * @defgroup application Application functions
+ * 
  * The sq_parser_info, _list, _call, _property_set and _property_get should be implemented in the application.
  * 
  * Normally these are just implemented by generating them using generate_automation_defines.py
  * 
+ * @ingroup c
+ */
+/*@{*/
+
+/**
+ * @see application
  */ 
 void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const _objectPath );
 /**
- * @see sq_parser_info
+ * @see application
  */
 void sq_parser_list ( SQParser * _parser, SQStream * _stream, const char * const _objectPath );
 /**

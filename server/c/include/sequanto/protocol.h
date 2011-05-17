@@ -24,6 +24,23 @@
 
 SQ_BEGIN_DECL
 
+/**
+ * @defgroup protocol Write automation messages to a stream.
+ * 
+ * Provides a central place for all functions which can write properly
+ * formatted automation messages to a stream.
+ * 
+ * @ingroup c
+ * @{
+ */
+
+/**
+ * Version of the automation protocol support by this library, see the
+ * sequanto-automation library for a list of versions of the
+ * automation protocol.
+ *
+ * @link http://code.google.com/p/sequanto-automation/
+ */
 static const int SQ_PROTOCOL_VERSION = 1;
 
 SQ_DECL SQBool sq_protocol_write_type( SQStream * _stream, SQValueType _type );
@@ -35,21 +52,79 @@ SQ_DECL SQBool sq_protocol_write_null ( SQStream * _stream );
 SQ_DECL SQBool sq_protocol_write_float( SQStream * _stream, float _value );
 SQ_DECL SQBool sq_protocol_write_byte_array( SQStream * _stream, const SQByte * _start, const SQByte * _end );
 
+/**
+ * Writes a response to a PROTOCOL request.
+ */
 SQ_DECL void sq_protocol_write_protocol_message ( SQStream * _stream );
+
+/**
+ * Writes a successful response without values.
+ */
 SQ_DECL void sq_protocol_write_success_message ( SQStream * _stream );
+
+/**
+ * Writes a successful response with the given values.
+ */
 SQ_DECL void sq_protocol_write_success_with_values_message ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues );
+
+/**
+ * Writes a failure response without values.
+ */
 SQ_DECL void sq_protocol_write_failure_message ( SQStream * _stream );
+
+/**
+ * Write a failure response with a single string value.
+ */
 SQ_DECL void sq_protocol_write_failure_with_text_message ( SQStream * _stream, const char * const _text );
+
+/**
+ * Write a failure response with the given values.
+ */
 SQ_DECL void sq_protocol_write_failure_with_values_message ( SQStream * _stream, const SQValue * const _value, size_t _numberOfValues );
+
+/**
+ * Writes an asynchronous !UPDATE message for the object with the given full name without values (usually this is done for lists).
+ */
 SQ_DECL void sq_protocol_write_update_message ( SQStream * _stream, const char * const _fullname );
+
+/**
+ * Writes an asynchronous !UPDATE message for the object with the given full name with the given value (usually this is done for properties and monitors).
+ */
 SQ_DECL void sq_protocol_write_update_with_value_message ( SQStream * _stream, const char * const _fullname , const SQValue * const _value );
 
+/**
+ * Write successful response with an integer value.
+ */
 SQ_DECL void sq_protocol_write_success_with_integer_message ( SQStream * _stream, int _value );
+
+/**
+ * Write successful response with a string value.
+ */
 SQ_DECL void sq_protocol_write_success_with_string_message ( SQStream * _stream, const char * const _value );
+
+/**
+ * Write successful response with a string value (given as a SQStringOut value).
+ */
 SQ_DECL void sq_protocol_write_success_with_string_out_message ( SQStream * _stream, SQStringOut * _value );
+
+/**
+ * Write successful response with a boolean value.
+ */
 SQ_DECL void sq_protocol_write_success_with_boolean_message ( SQStream * _stream, SQBool _value );
+
+/**
+ * Write successful response with a floting point value.
+ */
 SQ_DECL void sq_protocol_write_success_with_float_message ( SQStream * _stream, float _value );
+
+/**
+ * Write successful response with a byte array value.
+ */
 SQ_DECL void sq_protocol_write_success_with_byte_array_message ( SQStream * _stream, SQByte * _start, SQByte * _end );
+
+/**
+ * @}
+ */
 
 SQ_END_DECL
 

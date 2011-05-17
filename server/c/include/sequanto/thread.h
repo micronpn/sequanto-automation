@@ -22,8 +22,26 @@
 
 SQ_BEGIN_DECL
 
+/**
+ * @defgroup thread Threading and mutexes.
+ * 
+ * Wrapper around the platform specific threading primitives.
+ * 
+ * On platforms which do not support threads and mutexes (embedded
+ * platforms) they will simply do nothing.
+ *
+ * @ingroup c
+ * @{
+ */
+
+/**
+ * Thread pimpl.
+ */
 typedef struct _SQThread SQThread;
 
+/**
+ * The prototype for functions which should be run in another thread.
+ */
 typedef void (*SQThreadRunFunction) ( SQThread * _thread, void * _data );
 
 /**
@@ -31,16 +49,53 @@ typedef void (*SQThreadRunFunction) ( SQThread * _thread, void * _data );
  */
 SQ_DECL SQBool sq_thread_is_supported ( void );
 
+/**
+ * Create a thread which will run the function _function in a new
+ * thread when sq_thread_start is called.
+ * 
+ * The _data will be passed as a parameter to the _function when the
+ * thread is started.
+ */
 SQ_DECL SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data );
+
+/**
+ * Start the given thread.
+ */
 SQ_DECL void sq_thread_start ( SQThread * _thread );
+
+/**
+ * Destroy the given thread.
+ */
 SQ_DECL void sq_thread_destroy ( SQThread * _thread );
 
+/**
+ * Mutex pimpl.
+ */
 typedef struct _SQMutex SQMutex;
 
+/**
+ * Create a new mutex.
+ */
 SQ_DECL SQMutex * sq_mutex_create ( void );
+
+/**
+ * Lock the mutex.
+ */
 SQ_DECL void sq_mutex_enter ( SQMutex * _mutex );
+
+/**
+ * Unlock the mutex.
+ */
 SQ_DECL void sq_mutex_leave ( SQMutex * _mutex );
+
+/**
+ * Destroy the mutex.
+ */
 SQ_DECL void sq_mutex_destroy ( SQMutex * _mutex );
+
+/**
+ * @}
+ */
 
 SQ_END_DECL
 

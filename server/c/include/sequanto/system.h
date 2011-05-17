@@ -21,10 +21,37 @@
 
 SQ_BEGIN_DECL
 
+/**
+ * @defgroup system General system calls.
+ * 
+ * Wrapper around a few system calls which are used by the library.
+ * 
+ * @ingroup c
+ * @{
+ */
+
+/**
+ * Get the tick count for this process in milliseconds.
+ * 
+ * On most platforms this returns the number of milliseconds since the
+ * process was started.
+ */
 SQ_DECL int sq_system_tickcount ( void );
+
+/**
+ * Delay execution in the current thread for the given number of
+ * milliseconds.
+ */
 SQ_DECL void sq_system_sleep ( int _milliseconds );
 
+/**
+ * Return the larger value.
+ */
 #define SQ_MAX(a,b) ((a) < (b) ? (b) : (a))
+
+/**
+ * @}
+ */
 
 SQ_END_DECL
 

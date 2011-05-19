@@ -29,13 +29,15 @@ namespace sequanto
       {
       protected:
          QPointer<QWidget> m_child;
+         int m_iteration;
          
       public:
          static const int ID;
          
-         QtAutomationChildAddedEvent ( QWidget * _child );
+         QtAutomationChildAddedEvent ( QWidget * _child, int _iteration = 0 );
          
          QWidget * child () const;
+         int iteration() const;
          
          virtual ~QtAutomationChildAddedEvent ();
       };

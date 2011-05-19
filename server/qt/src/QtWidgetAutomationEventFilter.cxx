@@ -167,9 +167,22 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
           }
           else
           {
-             if ( m_node->AddChildWidget ( childWidget ) )
+             switch ( m_node->AddChildWidget ( childWidget ) )
              {
+             case QtWidgetNode::ADDED:
                 m_node->SendChildrenUpdate();
+                break;
+                
+             case QtWidgetNode::ALREADY_EXISTS:
+                if ( event->iteration() < 2 )
+                {
+                   QtWrapper::Log ( QString("WARN: Child was not added the first time around, trying again.") );
+                   QApplication::postEvent ( _object, new QtAutomationChildAddedEvent( childWidget, event->iteration() + 1 ) );
+                }
+                break;
+
+             case QtWidgetNode::NOT_ADDED:
+                break;
              }
           }
        }

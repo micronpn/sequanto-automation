@@ -67,7 +67,7 @@ void QtWidgetNode::SendPositionUpdateForAllChildren()
    }
 }
 
-bool QtWidgetNode::AddChildWidget ( QWidget * _child )
+QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child )
 {
    ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
    if ( childrenNode != NULL )
@@ -89,15 +89,16 @@ bool QtWidgetNode::AddChildWidget ( QWidget * _child )
             QtWidgetNode * child = new QtWidgetNode ( _child );
             QtWrapper::WrapUi ( child, qobject_cast<QWidget*>(_child) );
             childrenNode->AddChild ( child );
-            return true;
+            return QtWidgetNode::ADDED;
          }
 		 else
 		 {
 			 QtWrapper::Log ( QString("ERROR: Tried to add the child %1 to the widget %2 but it already contains a child with the given name.").arg(childName.c_str()).arg(GetFullName().c_str()) );
+          return QtWidgetNode::ALREADY_EXISTS;
 		 }
       }
    }
-   return false;
+   return QtWidgetNode::NOT_ADDED;
 }
 
 /*

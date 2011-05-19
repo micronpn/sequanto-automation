@@ -49,12 +49,20 @@ namespace sequanto
 
 		 void SendPositionUpdateForAllChildren();
 
+         typedef enum _AddChildWidgetResult
+         {
+            NOT_ADDED = 0,
+            ADDED = 1,
+            ALREADY_EXISTS = 2,
+         } AddChildWidgetResult;
+         
+
          /**
           * Add a child widget to the widget contained in this widget node.
           * 
           * @returns true if the child was added to the root, false otherwise (child already added or name is empty/invalid).
           */
-         bool AddChildWidget ( QWidget * _child );
+         AddChildWidgetResult AddChildWidget ( QWidget * _child );
 
          //bool RemoveChildWidget ( QWidget * _child );
 

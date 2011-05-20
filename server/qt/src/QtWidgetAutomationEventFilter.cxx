@@ -119,7 +119,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        
             QPoint pos = widget->mapToGlobal(QPoint(0,0));
             QPoint windowTopLeft ( window->geometry().topLeft() );
-	
+            
             pos -= windowTopLeft;
 
             //QPoint pos = widget->mapTo ( window, widget->pos() );
@@ -171,6 +171,21 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
              {
              case QtWidgetNode::ADDED:
                 m_node->SendChildrenUpdate();
+                if ( event->iteration() > 0 )
+                {
+                   // If iteration is larger than 1 we have seen this
+                   // child before, We may have removed the older
+                   // child because is is not visible before adding
+                   // this new one, but the client may not have
+                   // received our SendChildrenUpdate message (or not
+                   // found out that the old child was removed) so we
+                   // send a update message for all the immediate children for the node, just in case.
+                   QtWidgetNode * newChild = m_node->FindNodeForWidget(childWidget);
+                   if ( newChild != NULL )
+                   {
+                      newChild->SendUpdateForAllImmediateChildren();
+                   }
+                }
                 break;
                 
              case QtWidgetNode::ALREADY_EXISTS:
@@ -180,7 +195,18 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
                    QApplication::postEvent ( _object, new QtAutomationChildAddedEvent( childWidget, event->iteration() + 1 ) );
                 }
                 break;
-
+                
+             case QtWidgetNode::ALREADY_EXISTS_BUT_REMOVED_SINCE_IT_IS_NOT_VISIBLE:
+                {
+                   m_node->SendChildrenUpdate();
+                   QApplication::postEvent ( _object, new QtAutomationChildAddedEvent( childWidget, event->iteration() + 1 ) );
+                }
+                break;
+                
+             case QtWidgetNode::PREVIOUSLY_ADDED:
+                m_node->SendChildrenUpdate();
+                break;
+                
              case QtWidgetNode::NOT_ADDED:
                 break;
              }

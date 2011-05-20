@@ -47,13 +47,17 @@ namespace sequanto
          
          void SendChildrenUpdate ();
 
-		 void SendPositionUpdateForAllChildren();
-
+         void SendPositionUpdateForAllChildren();
+         
+         void SendUpdateForAllImmediateChildren ();
+         
          typedef enum _AddChildWidgetResult
          {
             NOT_ADDED = 0,
             ADDED = 1,
             ALREADY_EXISTS = 2,
+            ALREADY_EXISTS_BUT_REMOVED_SINCE_IT_IS_NOT_VISIBLE = 3,
+            PREVIOUSLY_ADDED = 4,
          } AddChildWidgetResult;
          
 
@@ -67,7 +71,9 @@ namespace sequanto
          //bool RemoveChildWidget ( QWidget * _child );
 
          void HandleGetNativeId ( SQValue & _value );
-
+         
+         QtWidgetNode * FindNodeForWidget ( QWidget * _child );
+         
          virtual ~QtWidgetNode ();
       };
    }

@@ -42,29 +42,51 @@ void QtWidgetNode::SendPositionUpdateForAllChildren()
    PropertyNode * xNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_NODE_X ) );
    if( xNode != NULL )
    {
-	   xNode->SendUpdate();
+      xNode->SendUpdate();
    }
    
    PropertyNode * yNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_NODE_Y ) );
    if( yNode != NULL )
    {
-	   yNode->SendUpdate();
+      yNode->SendUpdate();
    }
    
    ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
    if ( childrenNode != NULL )
    {
-	   ListNode::Iterator * it = childrenNode->ListChildren();
-	   for ( ; it->HasNext(); it->Next() )
-	   {
-		   QtWidgetNode * node = dynamic_cast<QtWidgetNode*>(it->GetCurrent());
-		   if ( node != NULL )
-		   {
-			   node->SendPositionUpdateForAllChildren();
-		   }
-	   }
-	   delete it;
+      ListNode::Iterator * it = childrenNode->ListChildren();
+      for ( ; it->HasNext(); it->Next() )
+      {
+         QtWidgetNode * node = dynamic_cast<QtWidgetNode*>(it->GetCurrent());
+         if ( node != NULL )
+         {
+            node->SendPositionUpdateForAllChildren();
+         }
+      }
+      delete it;
    }
+}
+
+void QtWidgetNode::SendUpdateForAllImmediateChildren ()
+{
+   ListNode::Iterator * it = ListChildren();
+   for ( ; it->HasNext(); it->Next() )
+   {
+      PropertyNode * propertyNode = dynamic_cast<PropertyNode*>(it->GetCurrent());
+      if ( propertyNode != NULL )
+      {
+         propertyNode->SendUpdate();
+      }
+      else
+      {
+         ListNode * listNode = dynamic_cast<ListNode*>(it->GetCurrent());
+         if ( listNode != NULL )
+         {
+            listNode->SendUpdate();
+         }
+      }
+   }
+   delete it;
 }
 
 QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child )
@@ -91,11 +113,42 @@ QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _chi
             childrenNode->AddChild ( child );
             return QtWidgetNode::ADDED;
          }
-		 else
-		 {
-			 QtWrapper::Log ( QString("ERROR: Tried to add the child %1 to the widget %2 but it already contains a child with the given name.").arg(childName.c_str()).arg(GetFullName().c_str()) );
-          return QtWidgetNode::ALREADY_EXISTS;
-		 }
+         else
+         {
+            QtWrapper::Log ( QString("WARN: Tried to add the child %1 to the widget %2 but it already contains a child with the given name.").arg(childName.c_str()).arg(GetFullName().c_str()) );
+            QtWidgetNode * alreadyExistingNode = dynamic_cast<QtWidgetNode*>(childrenNode->FindChild(childName));
+            if ( alreadyExistingNode != NULL )
+            {
+               if ( alreadyExistingNode->widget() == _child )
+               {
+                  QtWrapper::Log ( QString("WARN: The child %1 has been added to %2 previously.").arg(childName.c_str()).arg(GetFullName().c_str()) );
+                  return QtWidgetNode::PREVIOUSLY_ADDED;
+               }
+               else if ( !alreadyExistingNode->widget()->isVisible() )
+               {
+                  QtWrapper::Log ( QString("WARN: The already existing child is not visible, removing that in favour of the new one.") );
+                  childrenNode->RemoveChild ( childName );
+                  return QtWidgetNode::ALREADY_EXISTS_BUT_REMOVED_SINCE_IT_IS_NOT_VISIBLE;
+               }
+            }
+            QWidget * parent = _child->parentWidget();
+            if ( parent != NULL )
+            {
+               int count = 0;
+               for ( QObjectList::const_iterator it = parent->children().begin(); it != parent->children().end(); it++ )
+               {
+                  if ( QtWrapper::GetObjectName(*it) == childName )
+                  {
+                     count ++;
+                  }
+               }
+               if ( count > 1 )
+               {
+                  QtWrapper::Log ( QString("WARN: %1 contains %2 children with the name %3, you might have a bug in your code.").arg(GetFullName().c_str()).arg(count).arg(childName.c_str()) );
+               }
+            }
+            return QtWidgetNode::ALREADY_EXISTS;
+         }
       }
    }
    return QtWidgetNode::NOT_ADDED;
@@ -117,6 +170,29 @@ bool QtWidgetNode::RemoveChildWidget ( QWidget * _child )
    return false;
 }
 */
+
+QtWidgetNode * QtWidgetNode::FindNodeForWidget ( QWidget * _child )
+{
+   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
+   if ( childrenNode != NULL )
+   {
+      ListNode::Iterator * it = childrenNode->ListChildren();
+      for ( ; it->HasNext(); it->Next() )
+      {
+         QtWidgetNode * node = dynamic_cast<QtWidgetNode*>(it->GetCurrent());
+         if ( node != NULL )
+         {
+            if ( node->widget() == _child )
+            {
+               delete it;
+               return node;
+            }
+         }
+      }
+      delete it;
+   }
+   return NULL;
+}
 
 void QtWidgetNode::HandleGetNativeId ( SQValue & _value )
 {

@@ -27,7 +27,7 @@ namespace sequanto
    {
       class QtIntegerProperty : public IntegerPropertyNode, IQtPropertyChangedReceiver
       {
-      private:
+      protected:
          QObject * m_object;
          QtPropertyChangedNotificationAdapter * m_notifyAdapter;
 

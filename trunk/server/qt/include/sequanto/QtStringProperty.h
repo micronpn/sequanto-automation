@@ -27,10 +27,9 @@ namespace sequanto
    {
       class SQ_DECL QtStringProperty : public PropertyNode, public virtual IQtPropertyChangedReceiver
       {
-      private:
+      protected:
          QObject * m_object;
 
-      protected:
          QtPropertyChangedNotificationAdapter * m_notifyAdapter;
 
          virtual const std::string & QtPropertyName () const;

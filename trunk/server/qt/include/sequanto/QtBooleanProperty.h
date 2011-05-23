@@ -27,7 +27,7 @@ namespace sequanto
    {
       class SQ_DECL QtBooleanProperty : public BooleanPropertyNode, IQtPropertyChangedReceiver
       {
-      private:
+      protected:
          QObject * m_object;
          QtPropertyChangedNotificationAdapter * m_notifyAdapter;
    

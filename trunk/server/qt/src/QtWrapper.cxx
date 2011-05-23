@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <sequanto/ui.h>
 #include <sequanto/log.h>
 #include <sequanto/QtWidgetNode.h>
@@ -26,6 +28,11 @@
 #include <sequanto/QtMoveMethod.h>
 #include <sequanto/QtResizeMethod.h>
 #include <sequanto/QtInputMethod.h>
+
+#ifdef SQ_QT_USE_CACHE
+#include <sequanto/QtCachedProperty.h>
+#endif
+
 #include <cassert>
 #include <vector>
 #include <stdexcept>
@@ -276,12 +283,20 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    
    _root->AddChild ( new QtGlobalXProperty( _widget ) );
    _root->AddChild ( new QtGlobalYProperty( _widget ) );
-   
+
+#ifdef SQ_QT_USE_CACHE
+   _root->AddChild ( new QtCachedIntegerProperty( SQ_UI_NODE_WIDTH, _widget, QtCacheItem::WIDTH ) );
+   _root->AddChild ( new QtCachedIntegerProperty( SQ_UI_NODE_HEIGHT, _widget, QtCacheItem::HEIGHT ) );
+
+   _root->AddChild ( new QtCachedBooleanProperty( SQ_UI_NODE_ENABLED, _widget, QtCacheItem::ENABLED ) );
+   _root->AddChild ( new QtCachedBooleanProperty( SQ_UI_NODE_VISIBLE, _widget, QtCacheItem::VISIBLE ) );
+#else
    _root->AddChild ( new QtIntegerProperty( SQ_UI_NODE_WIDTH, _widget ) );
    _root->AddChild ( new QtIntegerProperty( SQ_UI_NODE_HEIGHT, _widget ) );
 
    _root->AddChild ( new QtBooleanProperty( SQ_UI_NODE_ENABLED, _widget ) );
    _root->AddChild ( new QtBooleanProperty( SQ_UI_NODE_VISIBLE, _widget ) );
+#endif
 
    _root->AddChild ( new QtMoveMethod(_widget ) );
    _root->AddChild ( new QtResizeMethod(_widget ) );

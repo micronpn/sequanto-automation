@@ -5,6 +5,7 @@
 #include <sequanto/QtAutomationMouseMoveEvent.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
 #include <sequanto/QtAutomationChildAddedEvent.h>
+#include <sequanto/QtUpdateCacheEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/ui.h>
 #include <cassert>
@@ -90,8 +91,13 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     default:
        break;
     }
-
-    if ( _event->type() == QtAutomationMoveEvent::ID )
+    
+    if ( _event->type() == QtUpdateCacheEvent::ID )
+    {
+       dynamic_cast<QtUpdateCacheEvent*>(_event)->update();
+       return true;
+    }
+    else if ( _event->type() == QtAutomationMoveEvent::ID )
     {
         QPoint position = dynamic_cast<QtAutomationMoveEvent*>(_event)->position();
         qobject_cast<QWidget*> ( _object )->move ( position );
@@ -106,7 +112,6 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     else if ( _event->type() == QtAutomationGetPropertyEvent::ID )
     {
         QtAutomationGetPropertyEvent * event = dynamic_cast<QtAutomationGetPropertyEvent*>(_event);
-     
         if ( event->propertyName() == QtWrapper::screen_pos() )
         {
             QWidget * widget = qobject_cast<QWidget*>(_object);

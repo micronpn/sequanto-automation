@@ -59,6 +59,8 @@ SET(SQ_QT4   OFF       CACHE BOOL "Build QT4 wrapper functionality")
 IF(SQ_QT4)
   INCLUDE(FindQt4)
   FIND_PACKAGE(Qt4)
+
+  SET(SQ_QT_USE_CACHE       OFF       CACHE BOOL "Use QtCache class to avoid using the UI thread as much in QT")
 ENDIF(SQ_QT4)
 
 INCLUDE(FindDoxygen)

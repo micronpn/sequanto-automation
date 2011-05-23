@@ -165,6 +165,11 @@ SQ_DECL SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfV
 SQ_DECL size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buffer );
 
 /**
+ * Copy the value held in _from to _to.
+ */
+SQ_DECL void sq_value_copy ( SQValue * _from, SQValue * _to );
+
+/**
  * @}
  */
 

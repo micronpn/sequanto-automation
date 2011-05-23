@@ -422,4 +422,52 @@ size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buff
    }
 }
 
+void sq_value_copy ( SQValue * _from, SQValue * _to )
+{
+   switch ( _from->m_type )
+   {
+   case VALUE_TYPE_NO_VALUE:
+      sq_value_init ( _to );
+      break;
+      
+   case VALUE_TYPE_INTEGER:
+      sq_value_integer ( _to, _from->Value.m_integerValue );
+      break;
+      
+   case VALUE_TYPE_FLOAT:
+      sq_value_float ( _to, _from->Value.m_floatValue );
+      break;
+      
+   case VALUE_TYPE_BOOLEAN:
+      sq_value_boolean ( _to, _from->Value.m_booleanValue );
+      break;
+      
+   case VALUE_TYPE_STRING:
+      sq_value_string_copy ( _to, _from->Value.m_stringValue );
+      break;
+      
+   case VALUE_TYPE_BYTE_ARRAY:
+      sq_value_byte_array ( _to, _from->Value.ArrayValue.m_byteArrayValue,
+                            _from->Value.ArrayValue.m_byteArrayLength );
+      break;
+      
+   case VALUE_TYPE_NULL:
+      sq_value_null ( _to );
+      break;
+      
+   case VALUE_TYPE_VOID:
+      _to->m_type = VALUE_TYPE_VOID;
+      break;
+      
+   case VALUE_TYPE_CONST_STRING:
+      sq_value_const_string ( _to, _from->Value.m_constStringValue );
+      break;
+      
+   case VALUE_TYPE_CONST_BYTE_ARRAY:
+      sq_value_const_byte_array ( _to, _from->Value.ConstArrayValue.m_byteArrayValue,
+                                  _from->Value.ConstArrayValue.m_byteArrayLength );
+      break;
+   }
+}
+
 #undef READ_OR_FAIL

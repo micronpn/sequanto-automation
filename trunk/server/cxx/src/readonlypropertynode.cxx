@@ -78,3 +78,23 @@ void ReadOnlyBooleanPropertyNode::HandleGet ( SQValue & _outputValue )
 ReadOnlyBooleanPropertyNode::~ReadOnlyBooleanPropertyNode()
 {
 }
+
+
+ReadOnlyFloatPropertyNode::ReadOnlyFloatPropertyNode ( const std::string & _name )
+: ReadOnlyPropertyNode ( _name )
+{
+}
+
+const NodeInfo & ReadOnlyFloatPropertyNode::Info() const
+{
+   return GetReadOnlyFloatNodeInfo();
+}
+
+void ReadOnlyFloatPropertyNode::HandleGet ( SQValue & _outputValue )
+{
+   sq_value_float ( &_outputValue, this->GetValue() );
+}
+
+ReadOnlyFloatPropertyNode::~ReadOnlyFloatPropertyNode()
+{
+}

@@ -70,6 +70,20 @@ namespace sequanto
 
          virtual ~ConstantBooleanNode();
       };
+
+      class SQ_DECL ConstantFloatNode : public ReadOnlyFloatPropertyNode
+      {
+      private:
+         float m_value;
+         
+      protected:
+         virtual float GetValue ();
+
+      public:
+         ConstantFloatNode ( const std::string & _name, float _value );
+
+         virtual ~ConstantFloatNode();
+      };
    }
 }
 

@@ -61,3 +61,22 @@ void BooleanPropertyNode::HandleSet ( const SQValue * const _value )
 BooleanPropertyNode::~BooleanPropertyNode()
 {
 }
+
+FloatPropertyNode::FloatPropertyNode(const std::string &_name)
+  : ReadOnlyFloatPropertyNode(_name )
+{
+}
+
+const NodeInfo & FloatPropertyNode::Info () const
+{
+   return GetFloatNodeInfo();
+}
+
+void FloatPropertyNode::HandleSet ( const SQValue * const _value )
+{
+   this->SetValue ( _value->Value.m_floatValue );
+}
+
+FloatPropertyNode::~FloatPropertyNode()
+{
+}

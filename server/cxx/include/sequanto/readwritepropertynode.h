@@ -72,6 +72,20 @@ namespace sequanto
          virtual ~BooleanPropertyNode();
       };
 
+      class SQ_DECL FloatPropertyNode : public ReadOnlyFloatPropertyNode
+      {
+      protected:
+         virtual float GetValue () = 0;
+         virtual void SetValue ( float _newValue ) = 0;
+
+      public:
+         FloatPropertyNode ( const std::string & _name );
+
+         virtual const NodeInfo & Info () const;
+         virtual void HandleSet ( const SQValue * const _value );
+
+         virtual ~FloatPropertyNode();
+      };
    }
 }
 

@@ -53,3 +53,18 @@ bool ConstantBooleanNode::GetValue ()
 ConstantBooleanNode::~ConstantBooleanNode ()
 {
 }
+
+ConstantFloatNode::ConstantFloatNode ( const std::string & _name, float _value )
+   : ReadOnlyFloatPropertyNode ( _name ),
+     m_value ( _value )
+{
+}
+
+float ConstantFloatNode::GetValue ()
+{
+   return m_value;
+}
+
+ConstantFloatNode::~ConstantFloatNode ()
+{
+}

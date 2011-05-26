@@ -354,6 +354,8 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    _root->AddChild ( stats );
    stats->AddChild ( new QtStatsGetPropertyEventsHandled() );
    stats->AddChild ( new QtStatsGetPropertyAverageDeliveryTime() );
+   stats->AddChild ( new QtStatsCacheHits() );
+   stats->AddChild ( new QtStatsCacheMisses() );
 }
 
 bool QtWrapper::IsWindow ( QWidget * _widget )

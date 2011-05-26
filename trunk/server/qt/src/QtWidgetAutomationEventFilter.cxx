@@ -112,6 +112,8 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     else if ( _event->type() == QtAutomationGetPropertyEvent::ID )
     {
         QtAutomationGetPropertyEvent * event = dynamic_cast<QtAutomationGetPropertyEvent*>(_event);
+        event->received();
+        
         if ( event->propertyName() == QtWrapper::screen_pos() )
         {
             QWidget * widget = qobject_cast<QWidget*>(_object);

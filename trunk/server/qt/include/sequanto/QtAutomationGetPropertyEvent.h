@@ -33,7 +33,9 @@ namespace sequanto
          QMutex m_lock;
          QMutex m_doneLock;
          QWaitCondition m_waitCondition;
-         //QWaitCondition m_doneWaitCondition;
+         int m_sentAt;
+         static int s_eventsPosted;
+         static int s_totalDeliveryTime;
          
       public:
          static const int ID;
@@ -42,10 +44,14 @@ namespace sequanto
          
          const QVariant & value () const;
          const char * propertyName() const;
+         void received ();
          void done ( const QVariant & _value );
          QVariant wait( QObject * _objectToPostEventTo );
          
          virtual ~QtAutomationGetPropertyEvent ();
+
+         static int eventsPosted ();
+         static float averageDeliveryTime ();
       };
    }
 }

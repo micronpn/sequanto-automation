@@ -8,6 +8,9 @@ using namespace sequanto::automation;
 
 QtCache::QtCache ()
 {
+   m_cacheHits = 0;
+   m_cacheMisses = 0;
+   
    for ( int i = 0; i < CACHE_SIZE; i++ )
    {
       m_cache[i] = NULL;
@@ -37,7 +40,7 @@ void QtCache::HandleGet ( QWidget * _object, QtCacheItem::Property _property, SQ
       {
          if ( m_cache[i]->m_time < cacheTimeout )
          {
-            std::cout << "Expiring cache for " << m_cache[i]->m_object << " (age is " << (cacheTimeout - m_cache[i]->m_time) << ")" << std::endl;
+            //std::cout << "Expiring cache for " << m_cache[i]->m_object << " (age is " << (cacheTimeout - m_cache[i]->m_time) << ")" << std::endl;
             delete m_cache[i];
             m_cache[i] = NULL;
             emptyIndex = i;
@@ -46,7 +49,8 @@ void QtCache::HandleGet ( QWidget * _object, QtCacheItem::Property _property, SQ
          {
             if ( m_cache[i]->m_object == _object )
             {
-               std::cout << "Found cache for " << _object << std::endl;
+               m_cacheHits ++;
+               //std::cout << "Found cache for " << _object << std::endl;
                sq_value_copy ( &m_cache[i]->m_cachedValues[_property], &_outputValue );
                return;
             }
@@ -63,12 +67,23 @@ void QtCache::HandleGet ( QWidget * _object, QtCacheItem::Property _property, SQ
       emptyIndex = 0;
    }
    
-   std::cout << "Cache for " << _object << " not found. Creating at " << emptyIndex << std::endl;
+   //std::cout << "Cache for " << _object << " not found. Creating at " << emptyIndex << std::endl;
+   m_cacheMisses ++;
    
    m_cache[emptyIndex] = new QtCacheItem(_object);
    QtUpdateCacheEvent * event = new QtUpdateCacheEvent(m_cache[emptyIndex]);
    event->wait(_object);
    sq_value_copy ( &m_cache[emptyIndex]->m_cachedValues[_property], &_outputValue );
+}
+
+int QtCache::cacheHits () const
+{
+   return m_cacheHits;
+}
+
+int QtCache::cacheMisses () const
+{
+   return m_cacheMisses;
 }
 
 QtCache::~QtCache()

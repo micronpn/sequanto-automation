@@ -1,5 +1,6 @@
 #include <sequanto/QtStatsProperties.h>
 #include <sequanto/QtAutomationGetPropertyEvent.h>
+#include <sequanto/QtCache.h>
 
 using namespace sequanto::automation;
 
@@ -21,4 +22,24 @@ QtStatsGetPropertyAverageDeliveryTime::QtStatsGetPropertyAverageDeliveryTime()
 float QtStatsGetPropertyAverageDeliveryTime::GetValue ()
 {
    return QtAutomationGetPropertyEvent::averageDeliveryTime();
+}
+
+QtStatsCacheHits::QtStatsCacheHits()
+   : ReadOnlyIntegerPropertyNode("cache_hits")
+{
+}
+
+int QtStatsCacheHits::GetValue ()
+{
+   return QtCache::Instance().cacheHits();
+}
+
+QtStatsCacheMisses::QtStatsCacheMisses()
+   : ReadOnlyIntegerPropertyNode("cache_misses")
+{
+}
+
+int QtStatsCacheMisses::GetValue ()
+{
+   return QtCache::Instance().cacheMisses();
 }

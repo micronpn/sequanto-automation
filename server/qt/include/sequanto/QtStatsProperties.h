@@ -41,6 +41,24 @@ namespace sequanto
       public:
          QtStatsGetPropertyAverageDeliveryTime ();
       };
+
+      class QtStatsCacheHits : public ReadOnlyIntegerPropertyNode
+      {
+      protected:
+         virtual int GetValue();
+         
+      public:
+         QtStatsCacheHits ();
+      };
+
+      class QtStatsCacheMisses : public ReadOnlyIntegerPropertyNode
+      {
+      protected:
+         virtual int GetValue();
+         
+      public:
+         QtStatsCacheMisses ();
+      };
    }
 }
 

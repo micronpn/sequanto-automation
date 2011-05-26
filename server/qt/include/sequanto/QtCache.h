@@ -63,12 +63,16 @@ namespace sequanto
          static const int CACHE_SIZE = 10;
          QtCacheItem * m_cache[CACHE_SIZE];
          Mutex m_mutex;
+         int m_cacheMisses;
+         int m_cacheHits;
          
       public:
          static QtCache & Instance();
          
          QtCache ();
          void HandleGet ( QWidget * _object, QtCacheItem::Property _property, SQValue & _outputValue );
+         int cacheHits () const;
+         int cacheMisses () const;
          ~QtCache ();
       };
    }

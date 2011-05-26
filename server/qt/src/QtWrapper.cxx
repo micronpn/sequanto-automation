@@ -28,6 +28,7 @@
 #include <sequanto/QtMoveMethod.h>
 #include <sequanto/QtResizeMethod.h>
 #include <sequanto/QtInputMethod.h>
+#include <sequanto/QtStatsProperties.h>
 
 #ifdef SQ_QT_USE_CACHE
 #include <sequanto/QtCachedProperty.h>
@@ -348,6 +349,11 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    mouse->AddChild ( new QtMouseClickMethod() );
 
    QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
+
+   ListNode * stats = new ListNode ( "stats" );
+   _root->AddChild ( stats );
+   stats->AddChild ( new QtStatsGetPropertyEventsHandled() );
+   stats->AddChild ( new QtStatsGetPropertyAverageDeliveryTime() );
 }
 
 bool QtWrapper::IsWindow ( QWidget * _widget )

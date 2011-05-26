@@ -38,7 +38,8 @@ IF(SQ_CXX)
                               src/QtUnnamedObjectStore.cxx
                               src/QtCache.cxx
                               src/QtCachedProperty.cxx
-                              src/QtUpdateCacheEvent.cxx)
+                              src/QtUpdateCacheEvent.cxx
+                              src/QtStatsProperties.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
@@ -76,7 +77,8 @@ IF(SQ_CXX)
                     include/sequanto/QtUnnamedObjectStore.h
                     include/sequanto/QtCache.h
                     include/sequanto/QtCachedProperty.h
-                    include/sequanto/QtUpdateCacheEvent.h)
+                    include/sequanto/QtUpdateCacheEvent.h
+                    include/sequanto/QtStatsProperties.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")
      SET(SQ_ALL_SRCS ${SQ_ALL_SRCS} "qt/${QT_SRCS_ALL}" CACHE INTERNAL "All source files")

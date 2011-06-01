@@ -3,6 +3,7 @@
 #include <sequanto/ui.h>
 #include <sequanto/QtAutomationMouseMoveEvent.h>
 #include <cassert>
+#include <stdexcept>
 #include <QtGui>
 
 using namespace sequanto::automation;
@@ -36,7 +37,11 @@ void QtMouseMoveMethod::HandleCall ( size_t _numberOfValues, const SQValue * con
    QWidget * window = QApplication::activeWindow();
    if ( window != NULL )
    {
-      QApplication::postEvent ( window, new QtAutomationMouseMoveEvent(x, y) );
+      QtAutomationMouseMoveEvent * event = new QtAutomationMouseMoveEvent(x, y);
+      if ( !QtAutomationMouseMoveEvent::wait ( event, window, TIMEOUT ) )
+      {
+         throw std::runtime_error ("Mouse move event was never handled.");
+      }
    }
 }
 

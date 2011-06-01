@@ -39,6 +39,7 @@ IF(SQ_CXX)
                               src/QtCache.cxx
                               src/QtCachedProperty.cxx
                               src/QtUpdateCacheEvent.cxx
+                              src/QtAutomationDelayedDoneEvent.cxx
                               src/QtStatsProperties.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
@@ -78,6 +79,8 @@ IF(SQ_CXX)
                     include/sequanto/QtCache.h
                     include/sequanto/QtCachedProperty.h
                     include/sequanto/QtUpdateCacheEvent.h
+                    include/sequanto/QtAutomationEventWithSynchronization.h
+                    include/sequanto/QtAutomationDelayedDoneEvent.h
                     include/sequanto/QtStatsProperties.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")

@@ -144,21 +144,55 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     else if ( _event->type() == QtAutomationMouseMoveEvent::ID )
     {
        QtAutomationMouseMoveEvent * event = dynamic_cast<QtAutomationMouseMoveEvent*>(_event);
-       QApplication::postEvent ( this, new QMouseEvent( QEvent::MouseMove, event->position(), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+       
+       assert ( event != NULL );
+       
+       if ( event->iteration() == 0 )
+       {
+          QWidget * receiver = QApplication::widgetAt ( event->position() );
+          if ( receiver != NULL )
+          {
+             QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseMove, event->position(), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
+             
+             event->delayedDone ( receiver );
+          }
+          else
+          {
+             event->done ();
+          }
+       }
+       else
+       {
+          event->done ();
+       }
        return true;
     }
     else if ( _event->type() == QtAutomationMouseClickEvent::ID )
     {
        QtAutomationMouseClickEvent * event = dynamic_cast<QtAutomationMouseClickEvent*>(_event);
-
-       QWidget * receiver = QApplication::widgetAt(event->position());
        
-       if ( receiver != 0 )
+       assert ( event != NULL );
+       
+       if ( event->iteration() == 0 )
        {
-          QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
+          QWidget * receiver = QApplication::widgetAt(event->position());
           
-          QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
-          QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+          if ( receiver != 0 )
+          {
+             QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
+             
+             QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+             QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+             event->delayedDone( receiver );
+          }
+          else
+          {
+             event->done ();
+          }
+       }
+       else
+       {
+          event->done ();
        }
        return true;
     }

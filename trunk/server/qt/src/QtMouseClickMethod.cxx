@@ -4,6 +4,7 @@
 #include <sequanto/ui.h>
 #include <QtGui>
 #include <cassert>
+#include <stdexcept>
 
 using namespace sequanto::automation;
 
@@ -49,11 +50,15 @@ void QtMouseClickMethod::HandleCall ( size_t _numberOfValues, const SQValue * co
       button = Qt::MidButton;
       break;
    }
-
+   
    QWidget * window = QApplication::activeWindow();
    if ( window != NULL )
    {
-      QApplication::postEvent ( window, new QtAutomationMouseClickEvent(x, y, button) );
+      QtAutomationMouseClickEvent * event = new QtAutomationMouseClickEvent(x, y, button);
+      if ( !QtAutomationMouseClickEvent::wait ( event, window, TIMEOUT ) )
+      {
+         throw std::runtime_error ("Mouse click event was never handled.");
+      }
    }
 }
 

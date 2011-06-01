@@ -27,6 +27,8 @@ namespace sequanto
       class QtMouseMoveMethod : public Node
       {
       public:
+         static const unsigned long TIMEOUT = 10000;
+         
          QtMouseMoveMethod();
          
          virtual const NodeInfo & Info () const;

@@ -20,16 +20,20 @@
 
 #include <QObject>
 #include <QtGui>
+#include <sequanto/QtAutomationDelayedDoneEvent.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtAutomationMouseMoveEvent : public QEvent
+      class QtAutomationMouseMoveEvent : public QtAutomationDelayedDoneEvent
       {
       protected:
          QPoint m_position;
 
+         QtAutomationMouseMoveEvent ( const QtAutomationMouseMoveEvent & _toClone );
+         QtAutomationMouseMoveEvent * clone () const;
+         
       public:
          static const int ID;
 

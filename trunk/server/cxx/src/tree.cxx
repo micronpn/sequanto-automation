@@ -143,8 +143,15 @@ SQBool Tree::HandleEnable ( SQStream * _stream, const char * _path )
 
    if ( nodeInfo.GetType() == NodeInfo::SQ_NODE_TYPE_MONITOR )
    {
-      node->HandleMonitorStateChange ( true );
-      sq_protocol_write_success_message ( _stream );
+      try
+      {
+         node->HandleMonitorStateChange ( true );
+         sq_protocol_write_success_message ( _stream );
+      }
+      catch ( const std::exception & _ex )
+      {
+         sq_protocol_write_failure_with_text_message ( _stream, _ex.what() );
+      }
    }
    else
    {
@@ -165,8 +172,15 @@ SQBool Tree::HandleDisable ( SQStream * _stream, const char * _path )
 
    if ( nodeInfo.GetType() == NodeInfo::SQ_NODE_TYPE_MONITOR )
    {
-      node->HandleMonitorStateChange ( false );
-      sq_protocol_write_success_message ( _stream );
+      try
+      {
+         node->HandleMonitorStateChange ( false );
+         sq_protocol_write_success_message ( _stream );
+      }
+      catch ( const std::exception & _ex )
+      {
+         sq_protocol_write_failure_with_text_message ( _stream, _ex.what() );
+      }
    }
    else
    {
@@ -189,8 +203,15 @@ SQBool Tree::HandleGet ( SQStream * _stream, const char * _path )
    {
       SQValue value;
       sq_value_init ( &value );
-      node->HandleGet ( value );
-      WriteOkValue ( _stream, value );
+      try
+      {
+         node->HandleGet ( value );
+         WriteOkValue ( _stream, value );
+      }
+      catch ( const std::exception & _ex )
+      {
+         sq_protocol_write_failure_with_text_message ( _stream, _ex.what() );
+      }
       sq_value_free ( &value );
    }
    else
@@ -212,8 +233,15 @@ SQBool Tree::HandleSet ( SQStream * _stream, const char * _path, const SQValue *
 
    if ( (nodeInfo.GetType() & NodeInfo::SQ_NODE_TYPE_ANY_WRITABLE_PROPERTY) != 0 )
    {
-      node->HandleSet ( _value );
-      sq_protocol_write_success_message ( _stream );
+      try
+      {
+         node->HandleSet ( _value );
+         sq_protocol_write_success_message ( _stream );
+      }
+      catch ( const std::exception & _ex )
+      {
+         sq_protocol_write_failure_with_text_message ( _stream, _ex.what() );
+      }
    }
    else
    {
@@ -234,15 +262,24 @@ SQBool Tree::HandleCall ( SQStream * _stream, const char * _path, const SQValue 
    if ( (nodeInfo.GetType() & NodeInfo::SQ_NODE_TYPE_CALLABLE) != 0 )
    {
       SQValue outputValue;
-      node->HandleCall ( _numberOfValues, _values, outputValue );
-      if ( outputValue.m_type == VALUE_TYPE_NO_VALUE )
+      sq_value_init ( &outputValue );
+      try
       {
-         sq_protocol_write_success_message ( _stream );
+         node->HandleCall ( _numberOfValues, _values, outputValue );
+         if ( outputValue.m_type == VALUE_TYPE_NO_VALUE )
+         {
+            sq_protocol_write_success_message ( _stream );
+         }
+         else
+         {
+            WriteOkValue ( _stream, outputValue );
+         }
       }
-      else
+      catch ( const std::exception & _ex )
       {
-         WriteOkValue ( _stream, outputValue );
+         sq_protocol_write_failure_with_text_message ( _stream, _ex.what() );
       }
+      sq_value_free ( &outputValue );
    }
    else
    {

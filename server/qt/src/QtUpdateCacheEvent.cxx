@@ -6,7 +6,7 @@ using namespace sequanto::automation;
 const int QtUpdateCacheEvent::ID = QEvent::registerEventType();
 
 QtUpdateCacheEvent::QtUpdateCacheEvent ( QtCacheItem * _cacheItem )
-   : QEvent( (QEvent::Type) ID),
+   : QtAutomationEventWithSynchronization<bool>( (QEvent::Type) ID),
      m_cacheItem ( _cacheItem )
 {
 }
@@ -21,31 +21,13 @@ void QtUpdateCacheEvent::wait ( QObject * _object )
    }
    else
    {
-      m_doneLock.lock();
-      m_lock.lock();
-      
-      QCoreApplication::postEvent ( _object, this );
-      
-      m_waitCondition.wait ( &m_lock );
-      
-      m_lock.unlock();
-      m_doneLock.unlock();
+      QtAutomationEventWithSynchronization<bool>::wait ( _object );
    }
 }
 
 void QtUpdateCacheEvent::update ()
 {
-   m_lock.lock();
-   
    m_cacheItem->update();
-   
-   m_waitCondition.wakeAll ();
-   
-   m_lock.unlock();
-
-   m_doneLock.lock ();
-   
-   m_doneLock.unlock ();
 }
 
 QtUpdateCacheEvent::~QtUpdateCacheEvent ()

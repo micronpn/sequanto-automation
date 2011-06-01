@@ -84,8 +84,23 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        break;
 
     case QEvent::Show:
+       {
+          BooleanPropertyNode * node = dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) );
+          SQValue value;
+          sq_value_init ( &value );
+          sq_value_boolean ( &value, SQ_TRUE );
+          node->SendUpdate( value );
+       }
+       break;
+       
     case QEvent::Hide:
-       dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) )->SendUpdate();
+       {
+          BooleanPropertyNode * node = dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) );
+          SQValue value;
+          sq_value_init ( &value );
+          sq_value_boolean ( &value, SQ_FALSE );
+          node->SendUpdate( value );
+       }
        break;
 
     default:

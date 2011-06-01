@@ -20,20 +20,16 @@
 
 #include <QObject>
 #include <QtGui>
+#include <sequanto/QtAutomationEventWithSynchronization.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtAutomationGetPropertyEvent : public QEvent
+      class QtAutomationGetPropertyEvent : public QtAutomationEventWithSynchronization<QVariant>
       {
       protected:
          const char * const m_propertyName;
-         QVariant m_value;
-         QMutex m_lock;
-         QMutex m_doneLock;
-         QWaitCondition m_waitCondition;
-         int m_sentAt;
          static int s_eventsPosted;
          static int s_totalDeliveryTime;
          
@@ -42,11 +38,8 @@ namespace sequanto
          
          QtAutomationGetPropertyEvent ( const char * const _propertyName );
          
-         const QVariant & value () const;
          const char * propertyName() const;
          void received ();
-         void done ( const QVariant & _value );
-         QVariant wait( QObject * _objectToPostEventTo );
          
          virtual ~QtAutomationGetPropertyEvent ();
 

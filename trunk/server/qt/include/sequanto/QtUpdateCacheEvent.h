@@ -20,12 +20,13 @@
 
 #include <QtGui>
 #include <sequanto/QtCache.h>
+#include <sequanto/QtAutomationEventWithSynchronization.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtUpdateCacheEvent : public QEvent
+      class QtUpdateCacheEvent : public QtAutomationEventWithSynchronization<bool>
       {
       private:
          QtCacheItem * m_cacheItem;

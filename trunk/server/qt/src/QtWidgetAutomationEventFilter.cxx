@@ -94,7 +94,9 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     
     if ( _event->type() == QtUpdateCacheEvent::ID )
     {
-       dynamic_cast<QtUpdateCacheEvent*>(_event)->update();
+       QtUpdateCacheEvent * event = dynamic_cast<QtUpdateCacheEvent*>(_event);
+       event->update ();
+       event->done ( true );
        return true;
     }
     else if ( _event->type() == QtAutomationMoveEvent::ID )

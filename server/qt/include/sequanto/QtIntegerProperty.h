@@ -25,12 +25,14 @@ namespace sequanto
 {
    namespace automation
    {
-      class QtIntegerProperty : public IntegerPropertyNode, IQtPropertyChangedReceiver
+      class QtIntegerProperty : public IntegerPropertyNode, public virtual IQtPropertyChangedReceiver
       {
       protected:
          QObject * m_object;
          QtPropertyChangedNotificationAdapter * m_notifyAdapter;
 
+         virtual const std::string & QtPropertyName () const;
+         
       public:
          QtIntegerProperty ( const std::string & _name, QObject * _object );
 
@@ -38,6 +40,23 @@ namespace sequanto
          virtual int GetValue ();
          virtual void SetValue ( int _newValue );
          virtual ~QtIntegerProperty();
+      };
+
+      class QtIntegerPropertyWithAlternateName : public QtIntegerProperty
+      {
+      private:
+         std::string m_qtPropertyName;
+
+      protected:
+         virtual const std::string & QtPropertyName() const;
+         
+      public:
+         QtIntegerPropertyWithAlternateName ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName );
+         QtIntegerPropertyWithAlternateName ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName, const std::string & _qtPropertyToUseForNotification  );
+         
+         void init ( const std::string & _propertyName, QObject * _object, const std::string & _qtPropertyName, const std::string & _qtPropertyToUseForNotification );
+         
+         virtual ~QtIntegerPropertyWithAlternateName ();
       };
    }
 }

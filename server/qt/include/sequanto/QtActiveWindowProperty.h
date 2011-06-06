@@ -18,25 +18,23 @@
 #ifndef SEQUANTO_QT_ACTIVE_WINDOW_PROPERTY_H_
 #define SEQUANTO_QT_ACTIVE_WINDOW_PROPERTY_H_
 
-#include <sequanto/propertynode.h>
+#include <sequanto/readonlypropertynode.h>
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtActiveWindowProperty : public PropertyNode
+      class QtActiveWindowProperty : public ReadOnlyStringPropertyNode
       {
       private:
-         std::string m_previousActiveWindow;
+         std::string m_currentActiveWindow;
 
-         void InternalGet ( SQValue * _outputValue, bool _sendUpdateIfNeeded );
-         
       public:
+         static const std::string NO_ACTIVE_WINDOW;
+         
          QtActiveWindowProperty ();
 
-         virtual const NodeInfo & Info () const;
-         virtual void HandleGet ( SQValue & _outputValue );
-         virtual void HandleSet ( const SQValue * const _value );
+         virtual const std::string & GetValue ();
          virtual void TrySendUpdate ();
          
          virtual ~QtActiveWindowProperty();

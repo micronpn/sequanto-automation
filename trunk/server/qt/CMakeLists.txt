@@ -40,6 +40,16 @@ IF(SQ_CXX)
                               src/QtCachedProperty.cxx
                               src/QtUpdateCacheEvent.cxx
                               src/QtAutomationDelayedDoneEvent.cxx
+                              src/QtTableRowsProperty.cxx
+                              src/QtTableColumnsProperty.cxx
+                              src/QtTableCellTextMethod.cxx
+                              src/QtTableRowHeightMethod.cxx
+                              src/QtTableColumnWidthMethod.cxx
+                              src/QtTableUpdateProperty.cxx
+                              src/QtTableRowHeaderHeightProperty.cxx
+                              src/QtTableColumnHeaderWidthProperty.cxx
+                              src/QtTableRowHeaderMethod.cxx
+                              src/QtTableColumnHeaderMethod.cxx
                               src/QtStatsProperties.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
@@ -81,6 +91,16 @@ IF(SQ_CXX)
                     include/sequanto/QtUpdateCacheEvent.h
                     include/sequanto/QtAutomationEventWithSynchronization.h
                     include/sequanto/QtAutomationDelayedDoneEvent.h
+                    include/sequanto/QtTableRowsProperty.h
+                    include/sequanto/QtTableColumnsProperty.h
+                    include/sequanto/QtTableCellTextMethod.h
+                    include/sequanto/QtTableRowHeightMethod.h
+                    include/sequanto/QtTableColumnWidthMethod.h
+                    include/sequanto/QtTableUpdateProperty.h
+                    include/sequanto/QtTableRowHeaderHeightProperty.h
+                    include/sequanto/QtTableColumnHeaderWidthProperty.h
+                    include/sequanto/QtTableRowHeaderMethod.h
+                    include/sequanto/QtTableColumnHeaderMethod.h
                     include/sequanto/QtStatsProperties.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")

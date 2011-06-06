@@ -6,14 +6,15 @@ QtScrollBarProperty::QtScrollBarProperty ( const std::string & _name, QObject * 
    : QtIntegerProperty(_name, _object)
 {
    m_associatedScrollArea = NULL;
-   m_hasSearchedForAssociatedScrollArea = false;
+   m_associatedTable = NULL;
+   m_hasSearchedForAssociatedWidget = false;
 }
    
 void QtScrollBarProperty::PropertyChanged ()
 {
    QtIntegerProperty::SendUpdate ();
 
-   if ( !m_hasSearchedForAssociatedScrollArea )
+   if ( !m_hasSearchedForAssociatedWidget )
    {
       // Get my widget (which is my parent, since i am a property
       Node * parent = GetParent();
@@ -43,18 +44,26 @@ void QtScrollBarProperty::PropertyChanged ()
                         {
                            m_associatedScrollArea = widgetNode;
                         }
+                        else if ( widgetNode->type() == SQ_WIDGET_TYPE_TABLE )
+                        {
+                           m_associatedTable = widgetNode;
+                        }
                      }
                   }
                }
             }
          }
       }         
-      m_hasSearchedForAssociatedScrollArea = true;
+      m_hasSearchedForAssociatedWidget = true;
    }
       
    if ( m_associatedScrollArea != NULL )
    {
       m_associatedScrollArea->SendPositionUpdateForAllChildren();
+   }
+   if ( m_associatedTable != NULL )
+   {
+      m_associatedTable->SendPositionUpdateForAllChildren ();
    }
 }
 

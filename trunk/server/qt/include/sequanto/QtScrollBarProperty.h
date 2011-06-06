@@ -30,8 +30,9 @@ namespace sequanto
       {
       private:
          QtWidgetNode * m_associatedScrollArea;
-         bool m_hasSearchedForAssociatedScrollArea;
-   
+         QtWidgetNode * m_associatedTable;
+         bool m_hasSearchedForAssociatedWidget;
+         
       public:
          QtScrollBarProperty ( const std::string & _name, QObject * _object );
    

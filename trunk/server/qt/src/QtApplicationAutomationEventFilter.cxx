@@ -5,6 +5,7 @@
 #include <sequanto/QtAutomationWidgetCreatedEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtActiveWindowProperty.h>
+#include <sequanto/QtAutomationMouseClickEvent.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -60,17 +61,21 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
        if ( _event->type() == QtAutomationWidgetCreatedEvent::ID )
        {
           QtAutomationWidgetCreatedEvent * event = dynamic_cast<QtAutomationWidgetCreatedEvent*>(_event);
-		  if ( event->widget() != NULL )
-		  {
-			  if ( QtWrapper::IsWindow(event->widget()) )
-			  {
-				  if ( QtWrapper::UpdateWindows ( m_windowsNode, m_activeWindowNode ) )
-				  {
-					  m_windowsNode->SendUpdate();
-				  }
-			  }
-		  }
+          if ( event->widget() != NULL )
+          {
+             if ( QtWrapper::IsWindow(event->widget()) )
+             {
+                if ( QtWrapper::UpdateWindows ( m_windowsNode, m_activeWindowNode ) )
+                {
+                   m_windowsNode->SendUpdate();
+                }
+             }
+          }
           return true;
+       }
+       else if ( _event->type() == QtAutomationMouseClickEvent::ID )
+       {
+          dynamic_cast<QtAutomationMouseClickEvent*>(_event)->done();
        }
        break;
     }

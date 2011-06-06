@@ -200,7 +200,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
              
              QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
              QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
-             event->delayedDone( receiver );
+             event->delayedDone( QApplication::instance() );
           }
           else
           {

@@ -51,6 +51,14 @@ void sq_value_string ( SQValue * _value, char * _initialValue)
    _value->Value.m_stringValue = _initialValue;
 }
 
+static const char EMPTY_STRING[] SQ_CONST_VARIABLE = "";
+
+void sq_value_string_empty ( SQValue * _value )
+{
+   _value->m_type = VALUE_TYPE_CONST_STRING;
+   _value->Value.m_constStringValue = EMPTY_STRING;
+}
+
 void sq_value_const_string ( SQValue * _value, const char * _initialValue)
 {
    _value->m_type = VALUE_TYPE_CONST_STRING;

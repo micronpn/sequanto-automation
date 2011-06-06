@@ -108,6 +108,11 @@ SQ_DECL void sq_value_boolean ( SQValue * _value, SQBool _initialValue);
 SQ_DECL void sq_value_string ( SQValue * _value, char * _initialValue);
 
 /**
+ * Initialize the SQValue as a const empty string.
+ */
+SQ_DECL void sq_value_string_empty ( SQValue * _value );
+
+/**
  * Initialize the SQValue as a const string.
  *
  * Please note that the given value will _not_ be copied, the string will have to be valid while this SQValue is valid.

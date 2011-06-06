@@ -23,8 +23,10 @@ void QtPropertyChangedNotificationAdapter::propertyChanged ()
 
 QtPropertyChangedNotificationAdapter::~QtPropertyChangedNotificationAdapter()
 {
+   /*
    QObject::disconnect ( m_object, m_methodName.c_str(),
                         this, SLOT(propertyChanged()) );
+   */
 }
 
 QtPropertyChangedNotificationAdapter * QtPropertyChangedNotificationAdapter::ConnectIfPossible ( QObject * _object, const std::string & _propertyName, IQtPropertyChangedReceiver * _receiver )

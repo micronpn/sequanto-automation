@@ -31,5 +31,6 @@ IF(SQ_CXX)
     
     ADD_SUBDIRECTORY(qt_position_test)
     ADD_SUBDIRECTORY(qt_add_widget_test)
+    ADD_SUBDIRECTORY(table_test)
   ENDIF(QT4_FOUND)
 ENDIF(SQ_CXX)

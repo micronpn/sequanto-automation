@@ -28,6 +28,16 @@
 #include <sequanto/QtMoveMethod.h>
 #include <sequanto/QtResizeMethod.h>
 #include <sequanto/QtInputMethod.h>
+#include <sequanto/QtTableRowsProperty.h>
+#include <sequanto/QtTableColumnsProperty.h>
+#include <sequanto/QtTableCellTextMethod.h>
+#include <sequanto/QtTableRowHeightMethod.h>
+#include <sequanto/QtTableColumnWidthMethod.h>
+#include <sequanto/QtTableUpdateProperty.h>
+#include <sequanto/QtTableRowHeaderHeightProperty.h>
+#include <sequanto/QtTableColumnHeaderWidthProperty.h>
+#include <sequanto/QtTableRowHeaderMethod.h>
+#include <sequanto/QtTableColumnHeaderMethod.h>
 #include <sequanto/QtStatsProperties.h>
 
 #ifdef SQ_QT_USE_CACHE
@@ -202,6 +212,7 @@ void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
 
 void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 {
+   bool wrapChildren = true;
    if ( QtWrapper::IsWindow(_widget) )
    {
       assert ( _widget == _widget->window() );
@@ -274,6 +285,22 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    {
       _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_SCROLL_AREA) );
    }
+   else if ( _widget->inherits( QTableWidget::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_TABLE) );
+      _root->AddChild ( new QtTableRowsProperty() );
+      _root->AddChild ( new QtTableColumnsProperty() );
+      _root->AddChild ( new QtTableCellTextMethod() );
+      _root->AddChild ( new QtTableRowHeightMethod() );
+      _root->AddChild ( new QtTableColumnWidthMethod() );
+      _root->AddChild ( new QtTableUpdateProperty() );
+      _root->AddChild ( new QtTableRowHeaderHeightProperty() );
+      _root->AddChild ( new QtTableColumnHeaderWidthProperty() );
+      _root->AddChild ( new QtTableRowHeaderMethod() );
+      _root->AddChild ( new QtTableColumnHeaderMethod() );
+      
+      wrapChildren = false;
+   }
    else
    {
       _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_WIDGET) );
@@ -308,20 +335,23 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    _root->AddChild ( new QtInputMethod() );
    
    _root->AddChild ( new ListNode(SQ_UI_NODE_CHILDREN) );
-
-   QObjectList list ( _widget->children() );
-   if ( !list.empty() )
+   
+   if ( wrapChildren )
    {
-      for ( int i = 0; i < list.count(); i++ )
+      QObjectList list ( _widget->children() );
+      if ( !list.empty() )
       {
-         QObject * childObject = list.at ( i );
-         if ( childObject->isWidgetType() )
+         for ( int i = 0; i < list.count(); i++ )
          {
-			 QWidget * childWidget = qobject_cast<QWidget*>(childObject);
-			 if ( !IsWindow(childWidget) )
-			 {
-				 _root->AddChildWidget ( childWidget );
-			 }
+            QObject * childObject = list.at ( i );
+            if ( childObject->isWidgetType() )
+            {
+               QWidget * childWidget = qobject_cast<QWidget*>(childObject);
+               if ( !IsWindow(childWidget) )
+               {
+                  _root->AddChildWidget ( childWidget );
+               }
+            }
          }
       }
    }

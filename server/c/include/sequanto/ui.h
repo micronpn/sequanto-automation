@@ -43,6 +43,7 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_STATUS_BAR,
       SQ_WIDGET_TYPE_SLIDER,
       SQ_WIDGET_TYPE_SCROLL_AREA,
+      SQ_WIDGET_TYPE_TABLE,
       SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
    
@@ -60,6 +61,7 @@ SQ_BEGIN_DECL
    extern const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_SCROLL_AREA_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_TABLE_STRING SQ_CONST_VARIABLE;
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 
@@ -90,6 +92,17 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_NODE_VALUE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_MINIMUM SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_MAXIMUM SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_ROWS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_COLUMNS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_CELL_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_ROW_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_COLUMN_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_ROW_HEADER_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_COLUMN_HEADER_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_ROW_HEADER SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_COLUMN_HEADER SQ_CONST_VARIABLE;
+
+   extern const char * const SQ_UI_NODE_UPDATE SQ_CONST_VARIABLE;
 
 SQ_END_DECL
 

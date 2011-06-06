@@ -43,7 +43,13 @@ namespace sequanto
 
       protected:
          Node ( const std::string & _name );
-
+         
+         /**
+          * Can be used by sub-classes which need to perform some
+          * action after the parent of the node has been set.
+          */
+         virtual void ParentResolved ();
+         
       public:
          class Iterator
          {

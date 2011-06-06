@@ -54,8 +54,13 @@ void Node::SetParent ( Node * _parent )
       throw std::runtime_error ( "SequantoAutomation_CXX: This node already has a parent associated with it." );
    }
    m_parent = _parent;
+
+   ParentResolved ();
 }
 
+void Node::ParentResolved ()
+{
+}
 
 const std::string & Node::GetName () const
 {

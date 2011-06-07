@@ -53,6 +53,7 @@ namespace sequanto
       public:
          QtCacheItem ( QWidget * _object );
          void update ();
+         static void getDirectly ( QWidget * _object, Property _property, SQValue & _output );
          ~QtCacheItem ();
       };
 

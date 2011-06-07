@@ -26,54 +26,61 @@ QtCache & QtCache::Instance()
 
 void QtCache::HandleGet ( QWidget * _object, QtCacheItem::Property _property, SQValue & _outputValue )
 {
-   Lock lock ( m_mutex );
-   
-   int cacheTimeout = sq_system_tickcount() - CACHE_TIMEOUT;
-   int emptyIndex = -1;
-   for ( int i = 0; i < CACHE_SIZE; i++ )
+   if ( _object->thread() == QThread::currentThread() )
    {
-      if ( m_cache[i] == NULL )
+      QtCacheItem::getDirectly ( _object, _property, _outputValue );
+   }
+   else
+   {
+      Lock lock ( m_mutex );
+   
+      int cacheTimeout = sq_system_tickcount() - CACHE_TIMEOUT;
+      int emptyIndex = -1;
+      for ( int i = 0; i < CACHE_SIZE; i++ )
       {
-         emptyIndex = i;
-      }
-      else
-      {
-         if ( m_cache[i]->m_time < cacheTimeout )
+         if ( m_cache[i] == NULL )
          {
-            //std::cout << "Expiring cache for " << m_cache[i]->m_object << " (age is " << (cacheTimeout - m_cache[i]->m_time) << ")" << std::endl;
-            delete m_cache[i];
-            m_cache[i] = NULL;
             emptyIndex = i;
          }
          else
          {
-            if ( m_cache[i]->m_object == _object )
+            if ( m_cache[i]->m_time < cacheTimeout )
             {
-               m_cacheHits ++;
-               //std::cout << "Found cache for " << _object << std::endl;
-               sq_value_copy ( &m_cache[i]->m_cachedValues[_property], &_outputValue );
-               return;
+               //std::cout << "Expiring cache for " << m_cache[i]->m_object << " (age is " << (cacheTimeout - m_cache[i]->m_time) << ")" << std::endl;
+               delete m_cache[i];
+               m_cache[i] = NULL;
+               emptyIndex = i;
+            }
+            else
+            {
+               if ( m_cache[i]->m_object == _object )
+               {
+                  m_cacheHits ++;
+                  //std::cout << "Found cache for " << _object << std::endl;
+                  sq_value_copy ( &m_cache[i]->m_cachedValues[_property], &_outputValue );
+                  return;
+               }
             }
          }
       }
+   
+      // Cached value not found (or cache too old), update the cache
+      if ( emptyIndex == -1 )
+      {
+         // TODO: Find oldest cached item
+         delete m_cache[0];
+         m_cache[0] = NULL;
+         emptyIndex = 0;
+      }
+   
+      //std::cout << "Cache for " << _object << " not found. Creating at " << emptyIndex << std::endl;
+      m_cacheMisses ++;
+   
+      m_cache[emptyIndex] = new QtCacheItem(_object);
+      QtUpdateCacheEvent * event = new QtUpdateCacheEvent(m_cache[emptyIndex]);
+      event->wait(_object);
+      sq_value_copy ( &m_cache[emptyIndex]->m_cachedValues[_property], &_outputValue );
    }
-   
-   // Cached value not found (or cache too old), update the cache
-   if ( emptyIndex == -1 )
-   {
-      // TODO: Find oldest cached item
-      delete m_cache[0];
-      m_cache[0] = NULL;
-      emptyIndex = 0;
-   }
-   
-   //std::cout << "Cache for " << _object << " not found. Creating at " << emptyIndex << std::endl;
-   m_cacheMisses ++;
-   
-   m_cache[emptyIndex] = new QtCacheItem(_object);
-   QtUpdateCacheEvent * event = new QtUpdateCacheEvent(m_cache[emptyIndex]);
-   event->wait(_object);
-   sq_value_copy ( &m_cache[emptyIndex]->m_cachedValues[_property], &_outputValue );
 }
 
 int QtCache::cacheHits () const
@@ -108,10 +115,53 @@ QtCacheItem::QtCacheItem ( QWidget * _object )
    }
 }
 
+void QtCacheItem::getDirectly ( QWidget * _object, QtCacheItem::Property _property, SQValue & _output )
+{
+   switch ( _property )
+   {
+   case GLOBAL_X:
+   case GLOBAL_Y:
+      {
+         QWidget * window = _object->window();
+         QPoint pos = _object->mapToGlobal(QPoint(0,0));
+         QPoint windowTopLeft ( window->geometry().topLeft() );
+         
+         pos -= windowTopLeft;
+         
+         if ( _property == GLOBAL_X )
+         {
+            sq_value_integer ( &_output, pos.x() );
+         }
+         else
+         {
+            sq_value_integer ( &_output, pos.y() );
+         }
+      }
+      break;
+      
+   case WIDTH:
+      sq_value_integer ( &_output, _object->width() );
+      break;
+      
+   case HEIGHT:
+      sq_value_integer ( &_output, _object->height() );
+      break;
+
+   case ENABLED:
+      sq_value_boolean ( &_output, _object->isEnabled() );
+      break;
+      
+   case VISIBLE:
+      sq_value_boolean ( &_output, _object->isVisible() );
+      break;
+   }
+}
+
+
 void QtCacheItem::update ()
 {
    m_time = sq_system_tickcount();
-
+   
    QWidget * window = m_object->window();
    QPoint pos = m_object->mapToGlobal(QPoint(0,0));
    QPoint windowTopLeft ( window->geometry().topLeft() );
@@ -120,10 +170,11 @@ void QtCacheItem::update ()
    
    sq_value_integer ( &m_cachedValues[GLOBAL_X], pos.x() );
    sq_value_integer ( &m_cachedValues[GLOBAL_Y], pos.y() );
-   sq_value_integer ( &m_cachedValues[WIDTH], m_object->width() );
-   sq_value_integer ( &m_cachedValues[HEIGHT], m_object->height() );
-   sq_value_boolean ( &m_cachedValues[ENABLED], m_object->isEnabled() );
-   sq_value_boolean ( &m_cachedValues[VISIBLE], m_object->isVisible() );
+   
+   getDirectly ( m_object, WIDTH, m_cachedValues[WIDTH] );
+   getDirectly ( m_object, HEIGHT, m_cachedValues[HEIGHT] );
+   getDirectly ( m_object, ENABLED, m_cachedValues[ENABLED] );
+   getDirectly ( m_object, VISIBLE, m_cachedValues[VISIBLE] );
 }
 
 QtCacheItem::~QtCacheItem ()

@@ -16,6 +16,7 @@
 #include <sequanto/QtStringProperty.h>
 #include <sequanto/QtIntegerProperty.h>
 #include <sequanto/QtBooleanProperty.h>
+#include <sequanto/QtColorProperty.h>
 #include <sequanto/QtMouseClickMethod.h>
 #include <sequanto/QtMouseMoveMethod.h>
 #include <sequanto/QtActiveWindowProperty.h>
@@ -220,6 +221,7 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
       _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_WINDOW) );
       _root->AddChild ( new QtScreenXProperty( _widget ) );
       _root->AddChild ( new QtScreenYProperty( _widget ) );
+      _root->AddChild ( new QtColorProperty(SQ_UI_NODE_BACKGROUND_COLOR, _widget, QPalette::Background) );
    }
    else if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
    {

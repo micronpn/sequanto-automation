@@ -22,6 +22,7 @@ IF(SQ_CXX)
                               src/QtStringProperty.cxx
                               src/QtIntegerProperty.cxx
                               src/QtBooleanProperty.cxx
+                              src/QtColorProperty.cxx
                               src/QtMouseClickMethod.cxx
                               src/QtMouseMoveMethod.cxx
                               src/QtActiveWindowProperty.cxx
@@ -72,6 +73,7 @@ IF(SQ_CXX)
                     include/sequanto/QtStringProperty.h
                     include/sequanto/QtIntegerProperty.h
                     include/sequanto/QtBooleanProperty.h
+                    include/sequanto/QtColorProperty.h
                     include/sequanto/QtMouseClickMethod.h
                     include/sequanto/QtMouseMoveMethod.h
                     include/sequanto/QtActiveWindowProperty.h

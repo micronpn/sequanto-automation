@@ -87,6 +87,7 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_NODE_AUTO_GENERATED_NAME SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_BACKGROUND_COLOR SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_VALUE SQ_CONST_VARIABLE;

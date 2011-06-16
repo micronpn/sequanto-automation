@@ -167,6 +167,19 @@
     </property>
     <layout class="QFormLayout" name="m_labelList"/>
    </widget>
+   <widget class="QPushButton" name="m_changeColor">
+    <property name="geometry">
+     <rect>
+      <x>404</x>
+      <y>162</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Change color</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -174,7 +187,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>18</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

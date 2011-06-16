@@ -7,6 +7,7 @@
 #include <sequanto/QtAutomationChildAddedEvent.h>
 #include <sequanto/QtUpdateCacheEvent.h>
 #include <sequanto/QtWidgetNode.h>
+#include <sequanto/QtColorProperty.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -102,7 +103,23 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
           node->SendUpdate( value );
        }
        break;
-
+       
+    case QEvent::PaletteChange:
+    case QEvent::ApplicationPaletteChange:
+       {
+          ListNode::Iterator * it = m_node->ListChildren();
+          for ( ; it->HasNext(); it->Next() )
+          {
+             QtColorProperty * colorProperty = dynamic_cast<QtColorProperty*>(it->GetCurrent());
+             if ( colorProperty != NULL )
+             {
+                colorProperty->SendUpdate();
+             }
+          }
+          delete it;
+       }
+       break;
+       
     default:
        break;
     }

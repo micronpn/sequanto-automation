@@ -68,3 +68,22 @@ void MainWin::on_m_addLabel_clicked()
    button->setObjectName ( QString("m_button%1").arg(ui.m_labelList->rowCount()) );
    ui.m_labelList->addRow ( QString("%1").arg(ui.m_labelList->rowCount()), button );
 }
+
+void MainWin::on_m_changeColor_clicked()
+{
+   QPalette palette ( this->palette() );
+   QColor current = palette.color ( QPalette::Background );
+   if ( current == QColor("blue") )
+   {
+      QLinearGradient gradient ( (qreal) width() / 2, 0, (qreal) width() / 2, height() );
+      gradient.setColorAt(0, QColor("red") );
+      gradient.setColorAt(1, QColor("yellow") );
+
+      palette.setBrush ( QPalette::Background, QBrush(gradient) );
+   }
+   else
+   {
+      palette.setColor ( QPalette::Background, QColor("blue") );
+   }
+   this->setPalette ( palette );
+}

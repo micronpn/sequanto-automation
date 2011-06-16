@@ -57,7 +57,8 @@ const char * const SQ_UI_NODE_AUTO_GENERATED_NAME SQ_CONST_VARIABLE = "autoGener
 
 const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE = "screenX";
 const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE = "screenY";
-
+const char * const SQ_UI_NODE_BACKGROUND_COLOR SQ_CONST_VARIABLE = "backgroundColor";
+ 
 const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE = "text";
 const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE = "checked";
 

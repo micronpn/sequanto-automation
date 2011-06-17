@@ -61,7 +61,23 @@ void QtColorProperty::HandleGet ( SQValue & _outputValue )
    case Qt::TexturePattern:
       break;
    }
-   std::string stringValue ( QtWrapper::ToString(color.name()) );
+
+   std::string stringValue;
+   // colors with alpha channel requires special handling since QColor::name does not handle it.
+   if ( color.alpha() != 255 )
+   {
+      static QLatin1Char fillChar ( '0' );
+      QString valueWithAlpha = QString("#%1%2%3%4")
+         .arg( (int) color.alpha(), (int) 2, (int) 16, fillChar )
+         .arg( (int) color.red(),   (int) 2, (int) 16, fillChar )
+         .arg( (int) color.green(), (int) 2, (int) 16, fillChar )
+         .arg( (int) color.blue(),  (int) 2, (int) 16, fillChar );
+      stringValue = QtWrapper::ToString(valueWithAlpha);
+   }
+   else
+   {
+      stringValue = QtWrapper::ToString(color.name());
+   }
    sq_value_string_copy ( &_outputValue, stringValue.c_str() );
 }
 

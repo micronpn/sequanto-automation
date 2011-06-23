@@ -1,6 +1,8 @@
 #ifndef LCD03_H_
 #define LCD03_H_
 
+#include <wiring.h>
+
 void PutChar(char ch);
 void PutString(const char *text);
 void SetCursorPosition(int line, int column);

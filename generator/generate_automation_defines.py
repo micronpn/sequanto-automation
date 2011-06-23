@@ -19,6 +19,8 @@ if path.isdir ( path.join ( path.dirname(__file__), 'code' ) ):
 from sequanto_automation.codeparser import get as get_code_parser
 from sequanto_automation.codeparser import Parameter
 
+error_reported = False
+
 class SmartObject ( object ):
     @property
     def index ( self ):
@@ -365,8 +367,11 @@ class AutomationFile ( object ):
             raise 'No name defined in the automation definition'
     
     def reportError ( self, _lineNumber, _text ):
-        print '%s (%i) : error: %s' % (self.m_errorReportingFilename, _lineNumber, _text)
+        global error_reported
         
+        print '%s (%i) : error: %s' % (self.m_errorReportingFilename, _lineNumber, _text)
+        error_reported = True
+    
     def getRecognizedCType ( self, type ):
         if type in ['unsigned long', 'long', 'signed long', 'unsigned int', 'int', 'signed int', 'unsigned short', 'short', 'signed short', 'unsigned char', 'char', 'signed char',
                     'int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int32_t', 'uint32_t', 'int64_t', 'uint64_t',
@@ -1003,3 +1008,7 @@ for arg in sys.argv[1:]:
     fp.close()
 automationFile.analyze()
 automationFile.generate ()
+
+if error_reported:
+    sys.exit(-1)
+    

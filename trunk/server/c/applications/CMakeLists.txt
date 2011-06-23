@@ -1,4 +1,4 @@
-#ADD_SUBDIRECTORY(arduino_demo)
+ADD_SUBDIRECTORY(arduino_demo)
 ADD_SUBDIRECTORY(labview_automation)
 ADD_SUBDIRECTORY(arduino_io)
 ADD_SUBDIRECTORY(light_dimmer)

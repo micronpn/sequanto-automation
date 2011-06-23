@@ -1,0 +1,20 @@
+name light_dimmer
+import main.cxx
+
+# Global
+property /version sequanto_automation_version
+function /reset reset
+function /hard_reset hard_reset
+
+# Dimmer
+property /dimmer/level dimmer_get_current_level dimmer_set_current_level
+property /dimmer/saved_level dimmer_get_saved_level dimmer_set_saved_level
+
+# Interface
+property /interface/grasped interface_get_grasped
+function /interface/grasp interface_grasp
+function /interface/release interface_release
+
+# Statemachines
+property /statemachines/interface/state get_interface_state
+property /statemachines/dimmer/state get_dimmer_state

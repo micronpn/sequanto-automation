@@ -4,7 +4,7 @@
   'sequanto-automation-mode
   '("#")                    
   '("name" "import" "function" "property"
-    "monitor" "branch" "typedef")                     ;; some keywords
+    "monitor" "branch" "typedef" "enum")                     ;; some keywords
   nil
   '("\\.automation$")
   nil ;; other functions to call

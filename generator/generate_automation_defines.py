@@ -16,6 +16,7 @@ code_dir = 'code'
 if path.isdir ( path.join ( path.dirname(__file__), 'code' ) ):
     code_dir = path.join ( path.dirname(__file__), 'code' )
 
+import sequanto_automation.codeparser as codeparser
 from sequanto_automation.codeparser import get as get_code_parser
 from sequanto_automation.codeparser import Parameter
 
@@ -166,6 +167,10 @@ class SmartObject ( object ):
 
 class Property ( SmartObject ):
     @property
+    def generateGetFunction ( self ):
+        return True
+    
+    @property
     def type ( self ):
         return self.getFunction.returnType
     
@@ -191,6 +196,29 @@ class Property ( SmartObject ):
         self.m_getFunction = _getFunction
         self.m_setFunction = _setFunction
     
+
+class EnumValue ( Property ):
+    @property
+    def generateGetFunction ( self ):
+        return False
+    
+    @property
+    def type ( self ):
+        return 'int'
+    
+    @property
+    def writeUpdateFunction ( self ):
+        return False
+
+    @property
+    def valueName ( self ):
+        return self.m_valueName
+    
+    def __init__ ( self, _automationFile, _index, _name, _valueName ):
+        super ( EnumValue, self ).__init__ ( _automationFile, _index, '/typeinfo/enums/%s/%s' %  (_name, _valueName), codeparser.Function('type_info_enums_%s_%s' % (_name, _valueName), 'int', []), None )
+        
+        self.m_name = _name
+        self.m_valueName = _valueName
 
 class Function ( SmartObject ):
     @property
@@ -294,6 +322,7 @@ class AutomationFile ( object ):
         self.m_name = None
         self.m_typedefs = {}
         self.m_typedefs_c_name = {}
+        self.m_enums = []
         
         self.m_errorReportingFilename = '<unknown>'
         
@@ -302,6 +331,7 @@ class AutomationFile ( object ):
         self.m_foundFunctions = []
         self.m_foundMonitors = []
         self.m_foundBranches = []
+        self.m_foundEnums = []
         self.m_maxNumberOfParameters = 0
         self.m_seenUpdateFunctions = set()
     
@@ -357,6 +387,10 @@ class AutomationFile ( object ):
                     self.m_typedefs_c_name[c_name] = c_type
                 except:
                     self.reportError ( lineNumber, '%s is not a recognized C-type' % (c_type) )
+            
+            elif command == 'enum':
+                name = rest.strip()
+                self.m_enums.append ( (lineNumber, name) )
                 
             else:
                 self.reportError ( lineNumber, 'Unknown command "%s"' % command )
@@ -547,6 +581,22 @@ class AutomationFile ( object ):
                 branchIndex += 1
             except Exception, ex:
                 self.reportError ( lineNumber, ex )
+
+        for lineNumber, name in self.m_enums:
+            if self.m_parser.hasEnum(name):
+                enum = self.m_parser.getEnum(name)
+                
+                for key, value in enum.values:
+                    objectPath = '/typeinfo/enums/%s/%s' % (name, key)
+                    enumValue = EnumValue(self, propertyIndex, name, key)
+                    self.createParents ( objectPath )
+                    self.m_objectPaths.append ( (objectPath, 'INFO_TYPE_PROPERTY', propertyIndex) )
+                    self.m_foundProperties.append ( enumValue )
+                    propertyIndex += 1
+
+                    self.m_foundEnums.append ( enumValue )
+            else:
+                self.reportError ( lineNumber, 'Could not find enum named %s' % name )
         
         self.m_objectPaths.sort()
         
@@ -663,6 +713,28 @@ class AutomationFile ( object ):
         else:
             fp.write ( '    { NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL },\n' )
         fp.write ( '};\n' )
+
+        for lineNumber, name in self.m_enums:
+            enum = self.m_parser.getEnum(name)
+            fp.write ( 'enum %s\n' % (name) )
+            fp.write ( '{\n' )
+            first = True
+            for key, value in enum.values:
+                if first:
+                    first = False
+                else:
+                    fp.write ( ', ' )
+                if value is None:
+                    fp.write ( '%s\n' % (key) )
+                else:
+                    fp.write ( '%s = %s\n' % (key, value) )
+            fp.write ( '};\n' )
+
+        for enum in self.m_foundEnums:
+            fp.write ( 'void %s ( SQStream * _stream )\n' % (enum.getFunction.name) )
+            fp.write ( '{\n' )
+            self.writeSuccessMessageWithValue ( fp, enum.type, enum.automationType, enum.valueName )
+            fp.write ( '}\n' )
         
         for property in self.m_foundProperties:
             translatedObjectPath = property.translatedObjectPath
@@ -712,27 +784,28 @@ class AutomationFile ( object ):
                 fp.write ( '}\n' )
                 fp.write ( '\n' )
             
-            if property.smart:
-                if property.firstSmartObjectPath:
-                    fp.write ( '%s %s ( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, property.additionalSmartParameters) )
-            else:
-                fp.write ( '%s %s ( void );\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
+            if property.generateGetFunction:
+                if property.smart:
+                    if property.firstSmartObjectPath:
+                        fp.write ( '%s %s ( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, property.additionalSmartParameters) )
+                else:
+                    fp.write ( '%s %s ( void );\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
             
-            fp.write ( 'void sq_generated_property_%s%s ( SQStream * _stream )\n' % (property.getFunction.name, property.additionalSmartName) )
-            fp.write ( '{\n' )
-            if property.smart:
-                fp.write ( '   %s value = %s( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, ', '.join(property.smartValues)) )
-                
-            else:
-                fp.write ( '   %s value = %s();\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
-            
-            
-            assert property.automationType == self.getAutomationType(property.type)
-            
-            self.writeSuccessMessageWithValue ( fp, property.type, property.automationType, 'value' )
-            
-            fp.write ( '}\n' )
-            fp.write ( '\n' )
+                fp.write ( 'void sq_generated_property_%s%s ( SQStream * _stream )\n' % (property.getFunction.name, property.additionalSmartName) )
+                fp.write ( '{\n' )
+                if property.smart:
+                    fp.write ( '   %s value = %s( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, ', '.join(property.smartValues)) )
+
+                else:
+                    fp.write ( '   %s value = %s();\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
+
+
+                assert property.automationType == self.getAutomationType(property.type)
+
+                self.writeSuccessMessageWithValue ( fp, property.type, property.automationType, 'value' )
+
+                fp.write ( '}\n' )
+                fp.write ( '\n' )
             
             if property.setFunction is not None:
                 fp.write ( 'void %s ( %s );\n' % (property.setFunction.name, ', '.join(['%s %s' % (self.getRecognizedCType(parameter.type), parameter.name) for parameter in property.setFunction.parameters])) )
@@ -766,8 +839,12 @@ class AutomationFile ( object ):
                     fp.write ( ',\n' )
                 
                 if property.setFunction is None:
-                    fp.write ( '   { sq_generated_property_%s%s, NULL, VALUE_TYPE_%s }' \
-                                   % (property.getFunction.name, property.additionalSmartName, property.automationType.upper()) )
+                    if property.generateGetFunction:
+                        fp.write ( '   { sq_generated_property_%s%s, NULL, VALUE_TYPE_%s }' \
+                                       % (property.getFunction.name, property.additionalSmartName, property.automationType.upper()) )
+                    else:
+                        fp.write ( '   { %s%s, NULL, VALUE_TYPE_%s }' \
+                                       % (property.getFunction.name, property.additionalSmartName, property.automationType.upper()) )
                 else:
                     fp.write ( '   { sq_generated_property_%s%s, sq_generated_property_%s%s, VALUE_TYPE_%s }' \
                                    % (property.getFunction.name, property.additionalSmartName, 
@@ -938,7 +1015,7 @@ class AutomationFile ( object ):
         fp.write ( '   }\n' )
         fp.write ( '}\n' )
         fp.write ( '\n' )
-        
+
         automation_functions_c = open(path.join ( code_dir, 'c', 'automation_functions.c' ), 'r').read()
         fp.write ( automation_functions_c.replace('\r\n', '\n') )
         fp.close()

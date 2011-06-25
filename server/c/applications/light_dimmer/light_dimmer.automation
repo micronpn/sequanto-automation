@@ -18,3 +18,5 @@ function /interface/release interface_release
 # Statemachines
 property /statemachines/interface/state get_interface_state
 property /statemachines/dimmer/state get_dimmer_state
+enum DimmerState
+enum InterfaceState

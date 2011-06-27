@@ -86,18 +86,16 @@ void sq_value_string_copy ( SQValue * _value, const char * const _initialValue)
 #endif
 }
 
-void sq_value_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength)
+void sq_value_byte_array ( SQValue * _value, SQByteArray * _initialValue )
 {
    _value->m_type = VALUE_TYPE_BYTE_ARRAY;
-   _value->Value.ArrayValue.m_byteArrayValue = _initialValue;
-   _value->Value.ArrayValue.m_byteArrayLength = _byteArrayLength;
+   _value->Value.m_byteArrayValue = _initialValue;
 }
 
-void sq_value_const_byte_array ( SQValue * _value, const SQByte * _initialValue, size_t _byteArrayLength)
+void sq_value_const_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength)
 {
    _value->m_type = VALUE_TYPE_CONST_BYTE_ARRAY;
-   _value->Value.ConstArrayValue.m_byteArrayValue = _initialValue;
-   _value->Value.ConstArrayValue.m_byteArrayLength = _byteArrayLength;
+   _value->Value.m_byteArrayValue = sq_byte_array_create ( _initialValue, _byteArrayLength );
 }
 
 void sq_value_null ( SQValue * _value )
@@ -122,11 +120,9 @@ SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream )
       return sq_protocol_write_boolean ( _stream, _value->Value.m_booleanValue );
 
    case VALUE_TYPE_BYTE_ARRAY:
-      return sq_protocol_write_byte_array ( _stream, _value->Value.ArrayValue.m_byteArrayValue, _value->Value.ArrayValue.m_byteArrayValue + _value->Value.ArrayValue.m_byteArrayLength );
-
-   case VALUE_TYPE_CONST_BYTE_ARRAY:
-      return sq_protocol_write_byte_array ( _stream, _value->Value.ConstArrayValue.m_byteArrayValue, _value->Value.ConstArrayValue.m_byteArrayValue + _value->Value.ConstArrayValue.m_byteArrayLength );
-
+   case VALUE_TYPE_CONST_BYTE_ARRAY:      
+      return sq_protocol_write_byte_array ( _stream, _value->Value.m_byteArrayValue->m_start, _value->Value.m_byteArrayValue->m_start + _value->Value.m_byteArrayValue->m_length );
+      
    case VALUE_TYPE_FLOAT:
       return sq_protocol_write_float ( _stream, _value->Value.m_floatValue );
 
@@ -152,14 +148,13 @@ void sq_value_free ( SQValue * _value )
     break;
       
   case VALUE_TYPE_BYTE_ARRAY:
-    free ( _value->Value.ArrayValue.m_byteArrayValue );
-    _value->Value.ArrayValue.m_byteArrayValue = NULL;
-    _value->Value.ArrayValue.m_byteArrayLength = 0;
-    break;
+     sq_byte_array_free ( _value->Value.m_byteArrayValue, SQ_TRUE );
+     _value->Value.m_byteArrayValue = NULL;
+     break;
 
   case VALUE_TYPE_CONST_BYTE_ARRAY:
-     _value->Value.ConstArrayValue.m_byteArrayValue = NULL;
-     _value->Value.ConstArrayValue.m_byteArrayLength = 0;
+     sq_byte_array_free ( _value->Value.m_byteArrayValue, SQ_FALSE );
+     _value->Value.m_byteArrayValue = NULL;
      break;
 
   default:
@@ -242,7 +237,7 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
         _buffer ++;
     }
     
-    /* If numBytes is even then have received only "half" of the last byte. */
+    /* If numBytes is even then we have received only "half" of the last byte. */
     if ( (numBytes & 1) != 0 )
     {
         SQ_LOG0("Received an un-even number of hexadecimal characters when parsing byte array.");
@@ -257,7 +252,7 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
         bytes[i] = sq_parse_decode_two_hex_characters ( start );
         i++;
     }
-    sq_value_byte_array ( _value, bytes, numBytes );
+    sq_value_byte_array ( _value, sq_byte_array_create(bytes, numBytes) );
     
     return _buffer;
 }
@@ -455,8 +450,7 @@ void sq_value_copy ( SQValue * _from, SQValue * _to )
       break;
       
    case VALUE_TYPE_BYTE_ARRAY:
-      sq_value_byte_array ( _to, _from->Value.ArrayValue.m_byteArrayValue,
-                            _from->Value.ArrayValue.m_byteArrayLength );
+      sq_value_byte_array ( _to, sq_byte_array_clone ( _from->Value.m_byteArrayValue ) );
       break;
       
    case VALUE_TYPE_NULL:
@@ -472,8 +466,8 @@ void sq_value_copy ( SQValue * _from, SQValue * _to )
       break;
       
    case VALUE_TYPE_CONST_BYTE_ARRAY:
-      sq_value_const_byte_array ( _to, _from->Value.ConstArrayValue.m_byteArrayValue,
-                                  _from->Value.ConstArrayValue.m_byteArrayLength );
+      sq_value_const_byte_array ( _to, _from->Value.m_byteArrayValue->m_start,
+                                  _from->Value.m_byteArrayValue->m_length );
       break;
    }
 }

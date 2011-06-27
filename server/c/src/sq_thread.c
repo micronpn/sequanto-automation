@@ -32,19 +32,6 @@ typedef struct SQThreadInternalData
    void * m_data;
 } SQThreadInternalData;
 
-void* sq_thread_internal_run_function ( void * _internalData )
-{
-   struct SQThreadInternalData * internalData = (SQThreadInternalData*)  _internalData;
-   SQThread * thread = internalData->m_thread;
-   SQThreadRunFunction runFunction = internalData->m_runFunction;
-   void * data = internalData->m_data;
-   free ( internalData );
-   
-   runFunction ( thread, data );
-
-   return NULL;
-}
-
 #ifdef SQ_WIN32
 
 #define WIN32_LEAN_AND_MEAN
@@ -54,7 +41,23 @@ typedef struct _SQThread
 {
    HANDLE m_thread;
    DWORD m_threadId;
+   HANDLE m_threadJoinEvent;
 } _SQThread;
+
+void * sq_thread_internal_run_function ( void * _internalData )
+{
+   struct SQThreadInternalData * internalData = (SQThreadInternalData*)  _internalData;
+   SQThread * thread = internalData->m_thread;
+   SQThreadRunFunction runFunction = internalData->m_runFunction;
+   void * data = internalData->m_data;
+   free ( internalData );
+   
+   runFunction ( thread, data );
+   
+   PulseEvent ( thread->m_threadJoinEvent );
+   
+   return NULL;
+}
 
 SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
 {
@@ -63,6 +66,7 @@ SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
    internalData->m_thread = thread;
    internalData->m_runFunction = _function;
    internalData->m_data = _data;
+   thread->m_threadJoinEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
    thread->m_thread = CreateThread ( NULL, 0, (LPTHREAD_START_ROUTINE) sq_thread_internal_run_function, internalData, CREATE_SUSPENDED, &thread->m_threadId );
    return thread;
 }
@@ -72,14 +76,33 @@ void sq_thread_start ( SQThread * _thread )
    ResumeThread ( _thread->m_thread );
 }
 
+void sq_thread_join ( SQThread * _thread )
+{
+   WaitForSingleObject ( _thread->m_threadJoinEvent, NMPWAIT_WAIT_FOREVER );
+}
+
 void sq_thread_destroy ( SQThread * _thread )
 {
+   CloseHandle ( _thread->m_threadJoinEvent );
    CloseHandle ( _thread->m_thread );
    /* WaitForSingleObject( _thread->m_thread ); */
    free ( _thread );
 }
 
 #else
+
+void* sq_thread_internal_run_function ( void * _internalData )
+{
+   struct SQThreadInternalData * internalData = (SQThreadInternalData*)  _internalData;
+   SQThread * thread = internalData->m_thread;
+   SQThreadRunFunction runFunction = internalData->m_runFunction;
+   void * data = internalData->m_data;
+   free ( internalData );
+   
+   runFunction ( thread, data );
+   
+   return NULL;
+}
 
 #include <pthread.h>
 

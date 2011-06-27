@@ -69,6 +69,11 @@ SQ_DECL void sq_thread_start ( SQThread * _thread );
 SQ_DECL void sq_thread_destroy ( SQThread * _thread );
 
 /**
+ * Make the current thread wait for another thread to end.
+ */
+SQ_DECL void sq_thread_join ( SQThread * _thread );
+
+/**
  * Mutex pimpl.
  */
 typedef struct _SQMutex SQMutex;

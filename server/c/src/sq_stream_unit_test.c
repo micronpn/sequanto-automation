@@ -132,6 +132,11 @@ void sq_stream_exit_write ( SQStream * _stream )
    SQ_UNUSED_PARAMETER(_stream);
 }
 
+void sq_stream_join ( SQStream * _stream )
+{
+   SQ_UNUSED_PARAMETER(_stream);
+}
+
 void sq_stream_unit_test_push_read ( SQStream * _stream, SQByte _value )
 {
     SQ_ASSERT ( _stream != NULL );

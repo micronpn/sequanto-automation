@@ -99,6 +99,11 @@ void sq_server_handle_stream_data_received ( SQStream * _stream, void * _data, S
    }
 }
 
+void sq_server_join ( SQServer * _server )
+{
+   sq_stream_join ( _server->m_stream );
+}
+
 /*
 void sq_server_start( SQServer * _server)
 {

@@ -96,6 +96,13 @@ SQ_DECL void sq_server_handle_stream_data_received ( SQStream * _stream, void * 
 SQ_DECL void sq_server_parse_input_buffer ( SQServer * _server );
 
 /**
+ * Make the current thead wait for the server to be destroyed by a call to sq_server_destroy.
+ * 
+ * Useful in main() when implementing a server which does nothing but react to requests.
+ */
+SQ_DECL void sq_server_join ( SQServer * _server );
+
+/**
  * @}
  */
 

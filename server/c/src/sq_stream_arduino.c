@@ -94,3 +94,7 @@ void sq_stream_enter_write ( SQStream * _stream )
 void sq_stream_exit_write ( SQStream * _stream )
 {
 }
+
+void sq_stream_join ( SQStream * _stream )
+{
+}

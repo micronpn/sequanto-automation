@@ -619,7 +619,7 @@ class AutomationFile ( object ):
     
     def writeSuccessMessageWithValue ( self, fp, c_type, automation_type, value ):
         if automation_type == 'byte_array':
-            fp.write ( '   sq_protocol_write_success_with_byte_array_message ( _stream, %s->m_start, %s->m_end );\n' % (value, value) )
+            fp.write ( '   sq_protocol_write_success_with_byte_array_message ( _stream, %s->m_start, %s->m_start + %s->m_length );\n' % (value, value, value) )
         elif c_type == 'SQStringOut':
             fp.write ( '   sq_protocol_write_success_with_string_out_message ( _stream, &%s );\n' % value )
         elif automation_type == 'float' and c_type != 'float':
@@ -770,7 +770,7 @@ class AutomationFile ( object ):
                 
                 fp.write ( '   sq_stream_write_byte ( stream, \' \' );\n' )
                 if property.automationType == 'byte_array':
-                    fp.write ( '   sq_protocol_write_%s ( stream, _value->m_start, _value->m_end );\n' % property.automationType )
+                    fp.write ( '   sq_protocol_write_%s ( stream, _value->m_start, _value->m_start + _value->m_length );\n' % property.automationType )
                 elif property.type == 'SQStringOut':
                     fp.write ( '   sq_protocol_write_string_out ( stream, &_value );\n' )
                 elif property.type == 'SQStringOut *':
@@ -869,7 +869,10 @@ class AutomationFile ( object ):
                 if index < function.numSmartParameters:
                     fp.write ( '   %s %s_parameter = %s;\n' % (self.getRecognizedCType(parameter.type), parameter.name, function.smartValues[index]) )
                 else:
-                    fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (self.getRecognizedCType(parameter.type), parameter.name, index - function.numSmartParameters, self.getAutomationType(parameter.type)) )
+                    if self.getAutomationType(parameter.type) == 'byte_array':
+                        fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_byteArrayValue;\n' % (self.getRecognizedCType(parameter.type), parameter.name, index - function.numSmartParameters) )
+                    else:
+                        fp.write ( '   %s %s_parameter = _inputValues[%i].Value.m_%sValue;\n' % (self.getRecognizedCType(parameter.type), parameter.name, index - function.numSmartParameters, self.getAutomationType(parameter.type)) )
             
             if function.returnType == 'void':
                 fp.write ( '   %s ( %s );\n' % (function.name, ', '.join(['%s_parameter' % parm.name for parm in function.parameters]) ) )
@@ -967,7 +970,7 @@ class AutomationFile ( object ):
                         fp.write ( '      sq_stream_write_byte ( stream, \' \' );\n' )
                     
                     if automationType == 'byte_array':
-                        fp.write ( '      sq_protocol_write_%s ( stream, _value%i->m_start, _value%i->m_end );\n' % (automationType, num, num) )
+                        fp.write ( '      sq_protocol_write_%s ( stream, _value%i->m_start, _value%i->m_start + _value%i->m_length );\n' % (automationType, num, num, num) )
                     elif monitor.types[num] == 'SQStringOut':
                         fp.write ( '      sq_protocol_write_string_out ( stream, &_value%i );\n' % num )
                     elif monitor.types[num] == 'SQStringOut *':

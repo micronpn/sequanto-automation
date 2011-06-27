@@ -14,6 +14,8 @@
  * permissions and limitations under the License.
  */
 
+#include <string.h>
+
 #include "config.h"
 
 #include "sequanto/types.h"
@@ -39,7 +41,37 @@ SQStringOut sq_external_fixed_length_string (char * _text, int _length)
 	return so;
 }
 
+SQByteArray * sq_byte_array_create_prealloc ( size_t _length )
+{
+   SQByteArray * ret = malloc ( sizeof(SQByteArray) );
+   ret->m_start = malloc ( _length * sizeof(SQByte) );
+   ret->m_length = _length;
+   return ret;
+}
 
+SQByteArray * sq_byte_array_create ( SQByte * _start, size_t _length )
+{
+   SQByteArray * ret = malloc ( sizeof(SQByteArray) );
+   ret->m_start = _start;
+   ret->m_length = _length;
+   return ret;
+}
+
+SQByteArray * sq_byte_array_clone ( SQByteArray * _array )
+{
+   SQByte * data = malloc ( _array->m_length );
+   memcpy ( data, _array->m_start, _array->m_length );
+   return sq_byte_array_create ( data, _array->m_length );
+}
+
+void sq_byte_array_free ( SQByteArray * _array, SQBool _alsoFreeData )
+{
+   if ( _alsoFreeData == SQ_TRUE )
+   {
+      free ( _array->m_start );
+   }
+   free ( _array );
+}
 
 #ifdef SQ_ARDUINO
 

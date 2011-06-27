@@ -61,8 +61,13 @@ extern SQStringOut sq_external_fixed_length_string( char *pText, int length );
 typedef struct _SQByteArray
 {
    SQByte * m_start;
-   SQByte * m_end;
+   size_t m_length;
 } SQByteArray;
+
+SQ_DECL SQByteArray * sq_byte_array_create ( SQByte * _start, size_t _length );
+SQ_DECL SQByteArray * sq_byte_array_create_prealloc ( size_t _length );
+SQ_DECL SQByteArray * sq_byte_array_clone ( SQByteArray * _array );
+SQ_DECL void sq_byte_array_free ( SQByteArray * _array, SQBool _alsoFreeData );
 
 #ifdef SQ_ARDUINO
 #   include <avr/pgmspace.h>

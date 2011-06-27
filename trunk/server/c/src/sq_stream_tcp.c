@@ -43,6 +43,7 @@ static const ssize_t SOCKET_ERROR = -1;
 
 typedef struct _SQStream
 {
+    SQByte m_keepListening;
     SQStreamDataReceivedFunction m_dataReceivedHandler;
     void * m_dataReceivedHandlerData;
     int m_listenerSocket;
@@ -59,6 +60,7 @@ SQStream * sq_stream_open ( int _portNumber )
    struct sockaddr_in sa;
 
    SQStream * ret = malloc ( sizeof(SQStream) );
+   ret->m_keepListening = SQ_TRUE;
    ret->m_dataReceivedHandler = NULL;
    ret->m_dataReceivedHandlerData = NULL;
 
@@ -154,7 +156,7 @@ void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
 
     SQ_UNUSED_PARAMETER(_thread);
 
-    while ( 1 )
+    while ( stream->m_keepListening == SQ_TRUE )
     {
         newClient = accept(stream->m_listenerSocket, NULL, NULL );
         if ( stream->m_clientSocket == SOCKET_ERROR && newClient != SOCKET_ERROR )
@@ -187,8 +189,15 @@ void sq_stream_poll( SQStream * _stream )
    }
 }
 
+void sq_stream_join ( SQStream * _stream )
+{
+   sq_thread_join ( _stream->m_pollingThread );
+}
+
 void sq_stream_close ( SQStream * _stream )
 {
+   _stream->m_keepListening = SQ_FALSE;
+   
    sq_stream_internal_close_client ( _stream );
    
 #  ifdef SQ_USE_WINSOCK

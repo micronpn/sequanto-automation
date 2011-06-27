@@ -84,10 +84,18 @@ SQ_DECL SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte );
  * @see sq_stream_enter_write
  */
 SQ_DECL void sq_stream_enter_write ( SQStream * _stream );
+
 /**
  * @see sq_stream_exit_write
  */
 SQ_DECL void sq_stream_exit_write ( SQStream * _stream );
+
+/**
+ * Make the current thread wait for the listning thread of this stream to end.
+ * 
+ * Only available for platforms with thread support.
+ */
+SQ_DECL void sq_stream_join ( SQStream * _stream );
 
 SQ_DECL void sq_stream_close (SQStream * _stream );
 

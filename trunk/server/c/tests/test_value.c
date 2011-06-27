@@ -14,8 +14,7 @@ START_TEST(test_value_init)
     fail_unless ( value.Value.m_booleanValue == SQ_FALSE );
     fail_unless ( value.Value.m_stringValue == NULL );
     fail_unless ( value.Value.m_constStringValue == NULL );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayValue == NULL );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayLength == 0 );
+    fail_unless ( value.Value.m_byteArrayValue == NULL );
     */
 }
 END_TEST
@@ -145,20 +144,19 @@ START_TEST(test_value_byte_array)
     values[2] = 0xCC;
     values[3] = 0xDD;
     
-    sq_value_byte_array ( &value, values, length );
+    sq_value_byte_array ( &value, sq_byte_array_create(values, length) );
     
     fail_unless ( value.m_type == VALUE_TYPE_BYTE_ARRAY );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayLength == length );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayValue[0] == 0xAA );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayValue[1] == 0xBB );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayValue[2] == 0xCC );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayValue[3] == 0xDD );
+    fail_unless ( value.Value.m_byteArrayValue->m_length == length );
+    fail_unless ( value.Value.m_byteArrayValue->m_start[0] == 0xAA );
+    fail_unless ( value.Value.m_byteArrayValue->m_start[1] == 0xBB );
+    fail_unless ( value.Value.m_byteArrayValue->m_start[2] == 0xCC );
+    fail_unless ( value.Value.m_byteArrayValue->m_start[3] == 0xDD );
     
     sq_value_free ( &value );
     
     fail_unless ( value.m_type == VALUE_TYPE_NO_VALUE );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayLength == 0 );
-    fail_unless ( value.Value.ArrayValue.m_byteArrayValue == NULL );
+    fail_unless ( value.Value.m_byteArrayValue == NULL );
 }
 END_TEST
 

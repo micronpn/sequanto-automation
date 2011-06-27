@@ -110,9 +110,9 @@ START_TEST(test_single_byte_array)
     fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "0xDEAD\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_BYTE_ARRAY );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayLength == 2 );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayValue[0] == 0xDE );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayValue[1] == 0xAD );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_length == 2 );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_start[0] == 0xDE );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_start[1] == 0xAD );
     
     expect_empty ( 1 );
     
@@ -123,11 +123,11 @@ START_TEST(test_single_byte_array)
     fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "0xdeaf2243\r\n" ) == 1 );
     
     fail_unless ( values[0].m_type == VALUE_TYPE_BYTE_ARRAY );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayLength == 4 );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayValue[0] == 0xDE );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayValue[1] == 0xAF );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayValue[2] == 0x22 );
-    fail_unless ( values[0].Value.ArrayValue.m_byteArrayValue[3] == 0x43 );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_length == 4 );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_start[0] == 0xDE );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_start[1] == 0xAF );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_start[2] == 0x22 );
+    fail_unless ( values[0].Value.m_byteArrayValue->m_start[3] == 0x43 );
     
     expect_empty ( 1 );
     

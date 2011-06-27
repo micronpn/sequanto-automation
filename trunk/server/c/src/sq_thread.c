@@ -127,6 +127,11 @@ void sq_thread_start ( SQThread * _thread )
    SQ_UNUSED_PARAMETER(_thread);
 }
 
+void sq_thread_join ( SQThread * _thread )
+{
+   pthread_join ( _thread->m_thread, NULL );
+}
+
 #endif
 
 #else
@@ -147,6 +152,10 @@ SQThread * sq_thread_create ( SQThreadRunFunction _function, void * _data )
 }
 
 void sq_thread_start ( SQThread * _thread )
+{
+}
+
+void sq_thread_join ( SQThread * _thread )
 {
 }
 

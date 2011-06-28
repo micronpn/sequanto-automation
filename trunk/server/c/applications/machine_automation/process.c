@@ -5,6 +5,55 @@
 
 #include "config.h"
 
+static char UNKNOWN[] = "<UNKNOWN>";
+static int g_numberOfProcesses = 0;
+static struct Process
+{
+   int m_id;
+   char * m_name;
+   char * m_filename;
+   int m_memoryUsage;
+} *g_processes;
+
+int process_count ()
+{
+   return g_numberOfProcesses;
+}
+
+int process_id ( int _index )
+{
+   return g_processes[_index].m_id;
+}
+
+const char * process_name ( int _index )
+{
+   if ( g_processes[_index].m_name == NULL )
+   {
+      return UNKNOWN;
+   }
+   else
+   {
+      return g_processes[_index].m_name;
+   }
+}
+
+const char * process_filename ( int _index )
+{
+   if ( g_processes[_index].m_filename == NULL )
+   {
+      return UNKNOWN;
+   }
+   else
+   {
+      return g_processes[_index].m_filename;
+   }
+}
+
+int process_memory ( int _index )
+{
+   return g_processes[_index].m_memoryUsage;
+}
+
 #ifdef SQ_WIN32
 
 #define WIN32_LEAN_AND_MEAN
@@ -12,21 +61,6 @@
 #include <psapi.h>
 
 #define MAX_PROCESSES (1024 * 10)
-
-static char UNKNOWN[] = "<UNKNOWN>";
-static DWORD g_numberOfProcesses = 0;
-static struct Process
-{
-   DWORD m_id;
-   char * m_name;
-   char * m_filename;
-   DWORD m_memoryUsage;
-} *g_processes;
-
-int process_count ()
-{
-   return g_numberOfProcesses;
-}
 
 void process_refresh ()
 {
@@ -93,40 +127,21 @@ void process_refresh ()
    sq_process_count_updated ( g_numberOfProcesses );
 }
 
-int process_id ( int _index )
-{
-   return g_processes[_index].m_id;
-}
-
-const char * process_name ( int _index )
-{
-   if ( g_processes[_index].m_name == NULL )
-   {
-      return UNKNOWN;
-   }
-   else
-   {
-      return g_processes[_index].m_name;
-   }
-}
-
-const char * process_filename ( int _index )
-{
-   if ( g_processes[_index].m_filename == NULL )
-   {
-      return UNKNOWN;
-   }
-   else
-   {
-      return g_processes[_index].m_filename;
-   }
-}
-
-int process_memory ( int _index )
-{
-   return g_processes[_index].m_memoryUsage;
-}
-
 #else
+
+#include <string.h>
+
+void process_refresh ()
+{
+}
+
+int process_exec ( const char * _commandLine )
+{
+    size_t lengthOfCommandLine = strlen(_commandLine);
+    // "sh -c " +_commandLine
+    char * commandLine = malloc ( lengthOfCommandLine + 6 );
+    memcpy ( commandLine, "sh -c ", 5 );
+    memcpy ( commandLine + 5, _commandLine, lengthOfCommandLine + 1 );
+}
 
 #endif

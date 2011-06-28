@@ -38,4 +38,24 @@ size_t memory_available_virtual ()
 
 #else
 
+size_t memory_total_physical ()
+{
+    return 0;
+}
+
+size_t memory_available_physical ()
+{
+    return 0;
+}
+
+size_t memory_total_virtual ()
+{
+    return 0;
+}
+
+size_t memory_available_virtual ()
+{
+    return 0;
+}
+
 #endif

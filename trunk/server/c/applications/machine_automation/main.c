@@ -15,6 +15,13 @@ int server_process_id ()
 
 #else
 
+#include <unistd.h>
+
+int server_process_id ()
+{
+    return getpid();
+}
+
 #endif
 
 const char * server_version ( void )

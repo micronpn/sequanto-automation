@@ -62,6 +62,139 @@ void files_info ( const char * _path, int * _numberOfDirectories, int * _numberO
    free ( pathWithWildcard );
 }
 
+static char PATH_SEP[] = "\\";
+const char * files_separator ()
+{
+   return PATH_SEP;
+}
+
+size_t files_size ( const char * _path )
+{
+   LARGE_INTEGER ret;
+   HANDLE fileHandle;
+   fileHandle = CreateFile ( _path, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL );
+   if ( fileHandle != INVALID_HANDLE_VALUE )
+   {
+      GetFileSizeEx ( fileHandle, &ret );
+      CloseHandle ( fileHandle );
+      return (size_t) ret.QuadPart;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+void files_create_directory ( const char * _path )
+{
+   CreateDirectory ( _path, NULL );
+}
+
+void files_remove_directory ( const char * _path )
+{
+   RemoveDirectory ( _path );
+}
+
+void files_remove_file ( const char * _path )
+{
+   DeleteFile ( _path );
+}
+
+#else /* SQ_WIN32 */
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <string.h>
+
+static char PATH_SEP[] = "/";
+const char * files_separator ()
+{
+   return PATH_SEP;
+}
+
+static char * found_filename = NULL;
+
+void files_info ( const char * _path, int * _numberOfDirectories, int * _numberOfFiles, int _directoryIndex, int _fileIndex )
+{
+   DIR * dir;
+   struct dirent * entry;
+   *_numberOfDirectories = 0;
+   *_numberOfFiles = 0;
+   
+   if ( found_filename != NULL )
+   {
+      free ( found_filename );
+   }
+   found_filename = NULL;
+
+   dir = opendir ( _path );
+   if ( dir != NULL )
+   {
+       while ( entry = readdir ( dir ) )
+       {
+           if ( strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0 )
+           {
+               if (entry->d_type == DT_DIR )
+               {
+                   if ( *_numberOfDirectories == _directoryIndex )
+                   {
+                       found_filename = strdup ( entry->d_name );
+                       break;
+                   }
+                   *_numberOfDirectories = *_numberOfDirectories + 1;
+               }
+               else
+               {
+                   if ( *_numberOfFiles == _fileIndex )
+                   {
+                       found_filename = strdup ( entry->d_name );
+                       break;
+                   }
+                   *_numberOfFiles = *_numberOfFiles + 1;
+            }
+         }
+      }
+      closedir ( dir );
+   }
+}
+
+size_t files_size ( const char * _path )
+{
+    struct stat buf;
+    if ( stat ( _path, &buf ) == 0 )
+    {
+        return buf.st_size;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void files_list ( const char * _path )
+{
+   
+}
+
+void files_create_directory ( const char * _path )
+{
+   mkdir ( _path, 0 );
+}
+
+void files_remove_directory ( const char * _path )
+{
+   rmdir ( _path );
+}
+
+void files_remove_file ( const char * _path )
+{
+   unlink ( _path );
+}
+
+#endif /* SQ_WIN32 */
+
 int files_number_of_directories ( const char * _path )
 {
    int numberOfDirectories, numberOfFiles;
@@ -98,29 +231,6 @@ char * files_directoryname ( const char * _path, int _index )
    return found_filename;
 }
 
-static char PATH_SEP[] = "\\";
-const char * files_separator ()
-{
-   return PATH_SEP;
-}
-
-size_t files_size ( const char * _path )
-{
-   LARGE_INTEGER ret;
-   HANDLE fileHandle;
-   fileHandle = CreateFile ( _path, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL );
-   if ( fileHandle != INVALID_HANDLE_VALUE )
-   {
-      GetFileSizeEx ( fileHandle, &ret );
-      CloseHandle ( fileHandle );
-      return (size_t) ret.QuadPart;
-   }
-   else
-   {
-      return 0;
-   }
-}
-
 SQByteArray * files_read ( const char * _path )
 {
    SQByteArray * ret;
@@ -128,7 +238,7 @@ SQByteArray * files_read ( const char * _path )
    size_t file_size = files_size ( _path );
 
    ret = sq_byte_array_create_prealloc ( file_size );
-   fopen_s ( &fp, _path, "rb" );
+   fp = fopen ( _path, "rb" );
    ret->m_length = file_size;
    fread ( ret->m_start, sizeof(SQByte), file_size, fp );
    fclose ( fp );
@@ -138,33 +248,7 @@ SQByteArray * files_read ( const char * _path )
 void files_write ( const char * _path, SQByteArray * _value )
 {
    FILE * fp;
-   fopen_s ( &fp, _path, "wb" );
+   fp = fopen ( _path, "wb" );
    fwrite ( _value->m_start, sizeof(SQByte), _value->m_length, fp );
    fclose ( fp );
 }
-
-void files_create_directory ( const char * _path )
-{
-   CreateDirectory ( _path, NULL );
-}
-
-void files_remove_directory ( const char * _path )
-{
-   RemoveDirectory ( _path );
-}
-
-void files_remove_file ( const char * _path )
-{
-   DeleteFile ( _path );
-}
-
-#else /* SQ_WIN32 */
-
-#include <dirent.h>
-
-void files_list ( const char * _path )
-{
-   
-}
-
-#endif /* SQ_WIN32 */

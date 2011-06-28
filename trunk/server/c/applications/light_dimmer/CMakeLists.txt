@@ -7,7 +7,7 @@ IF(SQ_ARDUINO)
                        WORKING_DIRECTORY generated #${CMAKE_BINARY_DIR}/generated
                        VERBATIM)
                        
-    ADD_EXECUTABLE(light_dimmer main.cxx
+    ADD_EXECUTABLE(light_dimmer main.cxx dimmerstatemachine.cxx interfacestatemachine.cxx display.cxx
                      ../arduino_demo/LCD03.cpp
                      ${CMAKE_BINARY_DIR}/generated/light_dimmer_automation.c)
     

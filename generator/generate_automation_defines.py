@@ -380,7 +380,7 @@ class AutomationFile ( object ):
                 self.m_branches.append ( (lineNumber, objectPath) )
                 
             elif command == 'typedef':
-                c_type, c_name = rest.rsplit(' ', 1)
+                c_type, c_name = [a.strip() for a in rest.rsplit(' ', 1)]
                 
                 try:
                     self.m_typedefs[c_name] = self.getAutomationType(c_type)

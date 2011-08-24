@@ -8,6 +8,7 @@ typedef enum _InterfaceState
 {
    INTERFACE_NOT_GRASPED = 0,
    INTERFACE_GRASPED = 1,
+   INTERFACE_HOLDING = 2,
 } InterfaceState;
 
 typedef enum _InterfaceMessage
@@ -22,6 +23,7 @@ class InterfaceStateMachine : public StateMachine<InterfaceState, InterfaceMessa
 {
 public:
    static const int ON_OFF_DELAY = 50;
+   static const int DELAY_BEFORE_HOLD = 500;
    static const int LEVEL_DELAY = 1000;
    
 private:

@@ -91,7 +91,7 @@ void DimmerStateMachine::handle ( DimmerMessage _message )
          {
             setState ( DIMMER_DECREASING_ON );
          }
-         else if ( state() == DIMMER_INCREASING_OFF )
+         else if ( state() == DIMMER_INCREASING_ON )
          {
             setState ( DIMMER_DECREASING_ON );
          }

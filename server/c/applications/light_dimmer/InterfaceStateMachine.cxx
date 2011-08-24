@@ -19,12 +19,12 @@ InterfaceStateMachine::InterfaceStateMachine ()
    m_ticksSinceGrasp = 0;
    m_ticksSinceHold = 0;
 }
-   
+
 void InterfaceStateMachine::handle ( InterfaceMessage _message )
 {
    switch ( state() )
    {
-   case INTERFACE_GRASPED:
+   case INTERFACE_HOLDING:
       switch ( _message )
       {
       case INTERFACE_TICK:
@@ -34,6 +34,29 @@ void InterfaceStateMachine::handle ( InterfaceMessage _message )
          {
             Dimmer::instance.handle ( DIMMER_HOLD );
             m_ticksSinceHold = 0;
+         }
+         break;
+         
+      case INTERFACE_RELEASE:
+         m_ticksSinceGrasp = 0;
+         m_ticksSinceHold = 0;
+         setState ( INTERFACE_NOT_GRASPED );
+         sq_interface_grasped_updated ( SQ_FALSE );
+         break;
+         
+      default:
+         break;
+      }
+      break;
+      
+   case INTERFACE_GRASPED:
+      switch ( _message )
+      {
+      case INTERFACE_TICK:
+         m_ticksSinceGrasp ++;
+         if ( m_ticksSinceGrasp > DELAY_BEFORE_HOLD )
+         {
+            setState ( INTERFACE_HOLDING );
          }
          break;
             

@@ -26,13 +26,19 @@ void updateDisplay ()
       PutChar ( '0' + Dimmer::instance.currentLevel() );
    }
    SetCursorPosition ( 4, 20 );
-   if ( Interface::instance.state() == INTERFACE_GRASPED )
+   switch ( Interface::instance.state() )
    {
+   case INTERFACE_GRASPED:
       PutChar ( 'G' );
-   }
-   else
-   {
+      break;
+
+   case INTERFACE_HOLDING:
+      PutChar ( 'H' );
+      break;
+      
+   case INTERFACE_NOT_GRASPED:
       PutChar ( ' ' );
+      break;
    }
 }
 

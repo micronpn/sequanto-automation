@@ -89,27 +89,51 @@ int main ( void )
    
    g_keepRunning = SQ_TRUE;
    
-   //pinMode ( i, INPUT);
-   //digitalWrite ( i, HIGH );
+   pinMode ( 13, OUTPUT);
+   digitalWrite ( 13, HIGH );
 
    sq_init ();   
    
    sq_server_init ( &server, 4321 );
+
+   digitalWrite ( 13, LOW );
    
    Wire.begin();
    
+   digitalWrite ( 13, HIGH );
+   
    initDisplay();
+
+   digitalWrite ( 13, LOW );
    
    reset ();
+   
+      
+   digitalWrite ( 13, HIGH );
    
    lastNow = millis();
    lastKey = 0;
    
+   SQBool led = SQ_FALSE;
    while ( g_keepRunning == SQ_TRUE )
    {
       sq_server_poll ( &server );
       
       now = millis();
+      
+      if ( (now % 50) == 0 )
+      {
+         if ( led == SQ_TRUE )
+         {
+            led = SQ_FALSE;
+         }
+         else
+         {
+            led = SQ_TRUE;
+         }
+         digitalWrite ( 13, led == SQ_TRUE ? HIGH : LOW );
+      }
+      
       if ( lastNow != now )
       {
          diff = now - lastNow;

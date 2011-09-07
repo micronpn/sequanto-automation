@@ -33,6 +33,7 @@ const char * const SQ_WIDGET_TYPE_STATUS_BAR_STRING SQ_CONST_VARIABLE = "StatusB
 const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE = "Slider";
 const char * const SQ_WIDGET_TYPE_SCROLL_AREA_STRING SQ_CONST_VARIABLE = "ScrollArea";
 const char * const SQ_WIDGET_TYPE_TABLE_STRING SQ_CONST_VARIABLE = "Table";
+const char * const SQ_WIDGET_TYPE_TABS_STRING SQ_CONST_VARIABLE = "Tabs";
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
@@ -75,6 +76,9 @@ const char * const SQ_UI_NODE_COLUMN_HEADER_WIDTH SQ_CONST_VARIABLE = "columnHea
 const char * const SQ_UI_NODE_ROW_HEADER SQ_CONST_VARIABLE = "rowHeader";
 const char * const SQ_UI_NODE_COLUMN_HEADER SQ_CONST_VARIABLE = "columnHeader";
 const char * const SQ_UI_NODE_UPDATE SQ_CONST_VARIABLE = "update";
+const char * const SQ_UI_NODE_COUNT SQ_CONST_VARIABLE = "count";
+const char * const SQ_UI_NODE_ACTIVE_TAB SQ_CONST_VARIABLE = "activeTab";
+const char * const SQ_UI_NODE_TAB_NAME SQ_CONST_VARIABLE = "tabName";
 
 const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
@@ -122,6 +126,9 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
    case SQ_WIDGET_TYPE_TABLE:
       return SQ_WIDGET_TYPE_TABLE_STRING;
 
+   case SQ_WIDGET_TYPE_TABS:
+      return SQ_WIDGET_TYPE_TABS_STRING;
+      
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;
    }

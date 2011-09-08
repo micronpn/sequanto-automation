@@ -45,6 +45,8 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_SCROLL_AREA,
       SQ_WIDGET_TYPE_TABLE,
       SQ_WIDGET_TYPE_TABS,
+      SQ_WIDGET_TYPE_TOOL_BAR,
+      SQ_WIDGET_TYPE_PROGRESS_BAR,
       SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
    
@@ -64,6 +66,8 @@ SQ_BEGIN_DECL
    extern const char * const SQ_WIDGET_TYPE_SCROLL_AREA_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_TABLE_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_TABS_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_TOOL_BAR_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_PROGRESS_BAR_STRING SQ_CONST_VARIABLE;
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 

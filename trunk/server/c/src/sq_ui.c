@@ -34,6 +34,8 @@ const char * const SQ_WIDGET_TYPE_SLIDER_STRING SQ_CONST_VARIABLE = "Slider";
 const char * const SQ_WIDGET_TYPE_SCROLL_AREA_STRING SQ_CONST_VARIABLE = "ScrollArea";
 const char * const SQ_WIDGET_TYPE_TABLE_STRING SQ_CONST_VARIABLE = "Table";
 const char * const SQ_WIDGET_TYPE_TABS_STRING SQ_CONST_VARIABLE = "Tabs";
+const char * const SQ_WIDGET_TYPE_TOOL_BAR_STRING SQ_CONST_VARIABLE = "ToolBar";
+const char * const SQ_WIDGET_TYPE_PROGRESS_BAR_STRING SQ_CONST_VARIABLE = "ProgressBar";
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
@@ -128,6 +130,12 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_TABS:
       return SQ_WIDGET_TYPE_TABS_STRING;
+
+   case SQ_WIDGET_TYPE_TOOL_BAR:
+      return SQ_WIDGET_TYPE_TOOL_BAR_STRING;
+
+   case SQ_WIDGET_TYPE_PROGRESS_BAR:
+      return SQ_WIDGET_TYPE_PROGRESS_BAR_STRING;
       
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;

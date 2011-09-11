@@ -36,6 +36,7 @@ const char * const SQ_WIDGET_TYPE_TABLE_STRING SQ_CONST_VARIABLE = "Table";
 const char * const SQ_WIDGET_TYPE_TABS_STRING SQ_CONST_VARIABLE = "Tabs";
 const char * const SQ_WIDGET_TYPE_TOOL_BAR_STRING SQ_CONST_VARIABLE = "ToolBar";
 const char * const SQ_WIDGET_TYPE_PROGRESS_BAR_STRING SQ_CONST_VARIABLE = "ProgressBar";
+const char * const SQ_WIDGET_TYPE_LIST_STRING SQ_CONST_VARIABLE = "List";
 
 const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE = "windows";
 const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE = "activeWindow";
@@ -81,6 +82,9 @@ const char * const SQ_UI_NODE_UPDATE SQ_CONST_VARIABLE = "update";
 const char * const SQ_UI_NODE_COUNT SQ_CONST_VARIABLE = "count";
 const char * const SQ_UI_NODE_ACTIVE_TAB SQ_CONST_VARIABLE = "activeTab";
 const char * const SQ_UI_NODE_TAB_NAME SQ_CONST_VARIABLE = "tabName";
+const char * const SQ_UI_NODE_LINES SQ_CONST_VARIABLE = "lines";
+const char * const SQ_UI_NODE_LINE_TEXT SQ_CONST_VARIABLE = "lineText";
+const char * const SQ_UI_NODE_LINE_HEIGHT SQ_CONST_VARIABLE = "lineHeight";
 
 const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
@@ -136,7 +140,10 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_PROGRESS_BAR:
       return SQ_WIDGET_TYPE_PROGRESS_BAR_STRING;
-      
+
+   case SQ_WIDGET_TYPE_LIST:
+      return SQ_WIDGET_TYPE_LIST_STRING;
+
    default:
       return SQ_WIDGET_TYPE_UNKNOWN_STRING;
    }

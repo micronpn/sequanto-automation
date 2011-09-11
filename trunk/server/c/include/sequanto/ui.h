@@ -47,9 +47,10 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_TABS,
       SQ_WIDGET_TYPE_TOOL_BAR,
       SQ_WIDGET_TYPE_PROGRESS_BAR,
+      SQ_WIDGET_TYPE_LIST,
       SQ_WIDGET_TYPE_LAST
    } SQWidgetType;
-   
+
    extern const char * const SQ_WIDGET_TYPE_UNKNOWN_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_WIDGET_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_WINDOW_STRING SQ_CONST_VARIABLE;
@@ -68,6 +69,7 @@ SQ_BEGIN_DECL
    extern const char * const SQ_WIDGET_TYPE_TABS_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_TOOL_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_PROGRESS_BAR_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_LIST_STRING SQ_CONST_VARIABLE;
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 
@@ -112,6 +114,9 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_NODE_COUNT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_ACTIVE_TAB SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_NODE_TAB_NAME SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_LINES SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_LINE_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_NODE_LINE_HEIGHT SQ_CONST_VARIABLE;
 
 SQ_END_DECL
 

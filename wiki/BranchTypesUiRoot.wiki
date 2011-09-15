@@ -1,4 +1,5 @@
 #summary Root
+#labels Branch-Type-Class
 #sidebar BranchTypesUiSidebar
 
 = Introduction =

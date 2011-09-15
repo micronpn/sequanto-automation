@@ -1,0 +1,1 @@
+#summary Describes how branch types work

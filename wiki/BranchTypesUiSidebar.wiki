@@ -2,6 +2,8 @@
 
  * [BranchTypesUi Introduction]
  * [BranchTypesUiRoot UI Root]
+ * [BranchTypesUiWindow Window class]
+ * [BranchTypesUiScreen Screen node]
  * Widgets
     * [BranchTypesUiWidget Widget base class]
     * [BranchTypesUiButton Button]
@@ -9,6 +11,3 @@
     * [BranchTypesUiCheckBox CheckBox]
     * [BranchTypesUiTextBox TextBox]
     * [BranchTypesUiLabel Label]
- * [BranchTypesUiWindows Windows list]
-    * [BranchTypesUiWindow Window class]
- * [BranchTypesUiScreen Screen node]

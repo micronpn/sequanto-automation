@@ -1,0 +1,6 @@
+#summary Sidebar for the UI branch type.
+
+ * [BranchTypesUi Introduction]
+ * Widgets
+    * [BranchTypesUiWidget Widget base class]
+    * [BranchTypesUiButton Button]

@@ -1,4 +1,5 @@
 #summary Widget
+#labels Branch-Type-Class
 #sidebar BranchTypesUiSidebar
 
 = Introduction =

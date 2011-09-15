@@ -1,0 +1,12 @@
+#summary Root
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Root node of the UI tree.
+
+= Properties =
+
+|| windows || list<Window> || List of windows. ||
+|| activeWindow || string || Name of the active window. ||
+|| screen || Screen || Geometry of the screen ||

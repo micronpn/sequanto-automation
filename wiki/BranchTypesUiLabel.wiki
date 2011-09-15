@@ -1,0 +1,14 @@
+#summary Label
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Static text label.
+
+= Base =
+
+[BranchTypesUiWidget Widget]
+
+= Properties =
+
+|| text || string || Text on label. ||

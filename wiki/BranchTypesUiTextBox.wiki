@@ -1,0 +1,14 @@
+#summary TextBox
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Editable text field, can be multilined.
+
+= Base =
+
+[BranchTypesUiWidget Widget]
+
+= Properties =
+
+|| text || string || Text. ||

@@ -1,6 +1,14 @@
 #summary Sidebar for the UI branch type.
 
  * [BranchTypesUi Introduction]
+ * [BranchTypesUiRoot UI Root]
  * Widgets
     * [BranchTypesUiWidget Widget base class]
     * [BranchTypesUiButton Button]
+    * [BranchTypesUiRadioButton RadioButton]
+    * [BranchTypesUiCheckBox CheckBox]
+    * [BranchTypesUiTextBox TextBox]
+    * [BranchTypesUiLabel Label]
+ * [BranchTypesUiWindows Windows list]
+    * [BranchTypesUiWindow Window class]
+ * [BranchTypesUiScreen Screen node]

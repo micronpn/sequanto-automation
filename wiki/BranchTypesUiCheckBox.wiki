@@ -1,0 +1,15 @@
+#summary RadioButton
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Radio button.
+
+= Base =
+
+[BranchTypesUiWidget Widget]
+
+= Properties =
+
+|| text || string || Text on the check box. ||
+|| checked || boolean || Whether the radio button is checked or not. ||

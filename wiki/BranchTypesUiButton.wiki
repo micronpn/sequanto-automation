@@ -1,0 +1,14 @@
+#summary Button
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Simple push button.
+
+= Base =
+
+[BranchTypesUiWidget Widget]
+
+= Properties =
+
+|| text || string || Text on the button. ||

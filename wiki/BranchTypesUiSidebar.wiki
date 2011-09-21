@@ -5,7 +5,7 @@
  * [BranchTypesUiWindow Window class]
  * [BranchTypesUiScreen Screen node]
  * [BranchTypesUiMouse Mouse node]
- * [BranchTypesUiCommonBase Common base class for all windows and widgets]
+ * [BranchTypesUiCommonBase CommonBase] base class for all windows and widgets
  * Widgets, all sub-classes of [BranchTypesUiWidget Widget]
     * [BranchTypesUiButton Button]
     * [BranchTypesUiCheckBox CheckBox]

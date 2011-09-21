@@ -1,0 +1,20 @@
+#summary Tabs
+#labels Branch-Type-Class
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Tab pages.
+
+= Base =
+
+[BranchTypesUiWidget Widget]
+
+= Properties =
+
+|| count || integer || Number of tab pages. ||
+|| activeTab || string || Name of the currently active tab page, or the empty string if none is active. ||
+
+= Callables =
+
+|| tabName || string ( integer ) || Get the name of the tab page with the given index. ||

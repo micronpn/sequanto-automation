@@ -10,4 +10,5 @@ Root node of the UI tree.
 
 || windows || `list<Window>` || List of windows. ||
 || activeWindow || string || Name of the active window. ||
-|| screen || Screen || Geometry of the screen ||
+|| screen || Screen || Geometry of the screen. ||
+|| mouse || Mouse || Interacting with the mouse cursor. ||

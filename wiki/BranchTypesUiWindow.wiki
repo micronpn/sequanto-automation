@@ -6,11 +6,12 @@
 
 A window on the screen.
 
+= Base =
+
+[BranchTypesUiCommonBase CommonBase]
+
 = Properties =
 
 || screenX || integer || Position of X component the widgets top-left corner on the window. ||
 || screenY || integer || Position of Y component the widgets top-left corner on the window. ||
-|| width || integer || Width of the widget in pixels. ||
-|| height || integer || Height of the widget in pixels. ||
-|| backgroundColor (optional) || string || Name of the color used as background color. ||
-|| children || `list<Widget>` || Sub widgets. ||
+|| backgroundColor (optional, default = "") || string || Name of the color used as background color. ||

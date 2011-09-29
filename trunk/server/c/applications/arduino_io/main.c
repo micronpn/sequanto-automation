@@ -28,6 +28,7 @@ static int s_counters[NUMBER_OF_PINS];
 
 static unsigned int io_direction = 0;	// All input on startup; for safety reasons.
 static unsigned int io_last_read = IO_MASK;	// Pull-up on all; all high on startup.
+static unsigned int io_last_written = 0;	// Pull-up on all; all high on startup.
 static unsigned int io_counter_enable = 0;	// No counters enabled
 static unsigned int io_trig_h2l = IO_MASK;	// default counter edge
 static unsigned int io_trig_l2h = 0;
@@ -44,7 +45,14 @@ void update_direction_mask( void )
 
 SQBool digital_pin_get ( int _pin )
 {
-   return ((io_last_read & PIN_MASK(_pin)) != 0);
+   if ((io_direction& PIN_MASK(_pin)) != 0)
+   {
+      return ((io_last_written & PIN_MASK(_pin)) != 0);
+   }
+   else
+   {
+      return ((io_last_read & PIN_MASK(_pin)) != 0);
+   }
 }
 
 void digital_pin_set ( int _pin, SQBool _value )
@@ -52,6 +60,8 @@ void digital_pin_set ( int _pin, SQBool _value )
    if ((io_direction& PIN_MASK(_pin)) != 0)
    {
       digitalWrite ( _pin, _value == SQ_TRUE ? HIGH : LOW );
+      io_last_written = (io_last_written & (~(PIN_MASK(_pin)))) | (_value >> _pin);
+      sq_digital_pin_updated ( _pin, _value );
    }
    else
    {

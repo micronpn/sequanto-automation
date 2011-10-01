@@ -43,6 +43,8 @@
 #include <sequanto/QtListUpdateProperty.h>
 #include <sequanto/QtListLineHeightMethod.h>
 #include <sequanto/QtListLineTextMethod.h>
+#include <sequanto/QtTabsActiveTabProperty.h>
+#include <sequanto/QtTabsTabNameMethod.h>
 #include <sequanto/QtStatsProperties.h>
 
 #ifdef SQ_QT_USE_CACHE
@@ -314,6 +316,13 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
       _root->AddChild ( new QtListUpdateProperty() );
       _root->AddChild ( new QtListLineHeightMethod() );
       _root->AddChild ( new QtListLineTextMethod() );
+   }
+   else if ( _widget->inherits( QTabWidget::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_TABS) );
+      _root->AddChild ( new QtIntegerProperty(SQ_UI_TABS_COUNT, _widget ) );
+      _root->AddChild ( new QtTabsActiveTabProperty() );
+      _root->AddChild ( new QtTabsTabNameMethod() );
    }
    else
    {

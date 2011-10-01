@@ -55,6 +55,8 @@ IF(SQ_CXX)
                               src/QtListUpdateProperty.cxx
                               src/QtListLineHeightMethod.cxx
                               src/QtListLineTextMethod.cxx
+                              src/QtTabsActiveTabProperty.cxx
+                              src/QtTabsTabNameMethod.cxx
                               src/QtStatsProperties.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
@@ -111,6 +113,8 @@ IF(SQ_CXX)
                     include/sequanto/QtListUpdateProperty.h
                     include/sequanto/QtListLineHeightMethod.h
                     include/sequanto/QtListLineTextMethod.h
+                    include/sequanto/QtTabsActiveTabProperty.h
+                    include/sequanto/QtTabsTabNameMethod.h
                     include/sequanto/QtStatsProperties.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")

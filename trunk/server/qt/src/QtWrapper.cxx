@@ -224,10 +224,11 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    {
       assert ( _widget == _widget->window() );
       
-      //_root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_WINDOW) );
       _root->AddChild ( new QtScreenXProperty( _widget ) );
       _root->AddChild ( new QtScreenYProperty( _widget ) );
       _root->AddChild ( new QtColorProperty(SQ_UI_WINDOW_BACKGROUND_COLOR, _widget, QPalette::Background) );
+      _root->AddChild ( new QtMoveMethod(_widget ) );
+      _root->AddChild ( new QtResizeMethod(_widget ) );
    }
    else if ( _widget->inherits ( QCheckBox::staticMetaObject.className() ) )
    {
@@ -351,9 +352,6 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    _root->AddChild ( new QtBooleanProperty( SQ_UI_COMMON_BASE_ENABLED, _widget ) );
    _root->AddChild ( new QtBooleanProperty( SQ_UI_COMMON_BASE_VISIBLE, _widget ) );
 #endif
-
-   _root->AddChild ( new QtMoveMethod(_widget ) );
-   _root->AddChild ( new QtResizeMethod(_widget ) );
    
    _root->AddChild ( new QtInputMethod() );
    

@@ -10,6 +10,7 @@
     * [BranchTypesUiButton Button]
     * [BranchTypesUiCheckBox CheckBox]
     * [BranchTypesUiLabel Label]
+    * [BranchTypesUiList List]
     * [BranchTypesUiRadioButton RadioButton]
     * [BranchTypesUiSlider Slider]
     * [BranchTypesUiTable Table]

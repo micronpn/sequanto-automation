@@ -22,8 +22,11 @@ int main ( int argc, char * argv[] )
    QApplication application ( argc, argv );
    
    QMainWindow mainWindow;
+   QTabWidget * tabWidget = new QTabWidget();
+   mainWindow.setCentralWidget ( tabWidget );
+
    QTableWidget * tableWidget = new QTableWidget();
-   mainWindow.setCentralWidget ( tableWidget );
+   tabWidget->addTab ( tableWidget, "Table" );
    tableWidget->setRowCount ( ROW_COUNT );
    tableWidget->setColumnCount ( COLUMN_COUNT );
    for ( int row = 0; row < ROW_COUNT; row++ )
@@ -39,7 +42,17 @@ int main ( int argc, char * argv[] )
    tableWidget->setRowHidden ( 5, true );
    tableWidget->setRowHidden ( 6, true );
    tableWidget->setColumnHidden ( 1, true );
-   
+
+   QListWidget * listWidget = new QListWidget();
+   tabWidget->addTab ( listWidget, "List" );
+   QStringList items;
+   items.append ( "Sequanto" );
+   items.append ( "QT" );
+   items.append ( "GUI" );
+   items.append ( "Automation" );
+   items.append ( "using" );
+   items.append ( "SeqZap" );
+   listWidget->addItems ( items );
    mainWindow.show();
    
    QtWrapper::WrapApplication ( ui_root );

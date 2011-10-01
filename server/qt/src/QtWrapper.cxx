@@ -39,6 +39,10 @@
 #include <sequanto/QtTableColumnHeaderWidthProperty.h>
 #include <sequanto/QtTableRowHeaderMethod.h>
 #include <sequanto/QtTableColumnHeaderMethod.h>
+#include <sequanto/QtListLinesProperty.h>
+#include <sequanto/QtListUpdateProperty.h>
+#include <sequanto/QtListLineHeightMethod.h>
+#include <sequanto/QtListLineTextMethod.h>
 #include <sequanto/QtStatsProperties.h>
 
 #ifdef SQ_QT_USE_CACHE
@@ -302,6 +306,14 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
       _root->AddChild ( new QtTableColumnHeaderMethod() );
       
       wrapChildren = false;
+   }
+   else if ( _widget->inherits( QListWidget::staticMetaObject.className() ) )
+   {
+      _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_LIST) );
+      _root->AddChild ( new QtListLinesProperty() );
+      _root->AddChild ( new QtListUpdateProperty() );
+      _root->AddChild ( new QtListLineHeightMethod() );
+      _root->AddChild ( new QtListLineTextMethod() );
    }
    else
    {

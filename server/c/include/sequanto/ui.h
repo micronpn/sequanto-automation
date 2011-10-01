@@ -82,6 +82,10 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_COMMON_BASE_AUTO_GENERATED_NAME SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_COMMON_BASE_ENABLED SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_LABEL_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_LIST_LINES SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_LIST_UPDATE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_LIST_LINE_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_LIST_LINE_HEIGHT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_MOUSE_MOVE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_MOUSE_CLICK SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_RADIO_BUTTON_TEXT SQ_CONST_VARIABLE;

@@ -51,6 +51,10 @@ IF(SQ_CXX)
                               src/QtTableColumnHeaderWidthProperty.cxx
                               src/QtTableRowHeaderMethod.cxx
                               src/QtTableColumnHeaderMethod.cxx
+                              src/QtListLinesProperty.cxx
+                              src/QtListUpdateProperty.cxx
+                              src/QtListLineHeightMethod.cxx
+                              src/QtListLineTextMethod.cxx
                               src/QtStatsProperties.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
@@ -103,6 +107,10 @@ IF(SQ_CXX)
                     include/sequanto/QtTableColumnHeaderWidthProperty.h
                     include/sequanto/QtTableRowHeaderMethod.h
                     include/sequanto/QtTableColumnHeaderMethod.h
+                    include/sequanto/QtListLinesProperty.h
+                    include/sequanto/QtListUpdateProperty.h
+                    include/sequanto/QtListLineHeightMethod.h
+                    include/sequanto/QtListLineTextMethod.h
                     include/sequanto/QtStatsProperties.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")

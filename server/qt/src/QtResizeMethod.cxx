@@ -8,7 +8,7 @@
 using namespace sequanto::automation;
 
 QtResizeMethod::QtResizeMethod( QWidget * _widget )
-   : Node(SQ_UI_NODE_RESIZE),
+   : Node("resize"),
      m_widget ( _widget )
 {
 }

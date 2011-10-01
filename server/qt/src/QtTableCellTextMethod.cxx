@@ -14,7 +14,7 @@
 using namespace sequanto::automation;
 
 QtTableCellTextMethod::QtTableCellTextMethod()
-   : Node(SQ_UI_NODE_CELL_TEXT)
+   : Node(SQ_UI_TABLE_CELL_TEXT)
 {
 }
 

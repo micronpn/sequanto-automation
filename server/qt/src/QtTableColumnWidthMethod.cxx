@@ -12,7 +12,7 @@
 using namespace sequanto::automation;
 
 QtTableColumnWidthMethod::QtTableColumnWidthMethod()
-   : Node(SQ_UI_NODE_COLUMN_WIDTH)
+   : Node(SQ_UI_TABLE_COLUMN_WIDTH)
 {
 }
 

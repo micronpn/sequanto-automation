@@ -9,7 +9,7 @@ using namespace sequanto::automation;
 const std::string QtActiveWindowProperty::NO_ACTIVE_WINDOW ( "" );
 
 QtActiveWindowProperty::QtActiveWindowProperty ()
-   : ReadOnlyStringPropertyNode ( SQ_UI_NODE_ACTIVE_WINDOW ),
+   : ReadOnlyStringPropertyNode ( SQ_UI_ROOT_ACTIVE_WINDOW ),
      m_currentActiveWindow ( "<NULL>" )
 {
 }

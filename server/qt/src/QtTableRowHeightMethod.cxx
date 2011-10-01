@@ -12,7 +12,7 @@
 using namespace sequanto::automation;
 
 QtTableRowHeightMethod::QtTableRowHeightMethod()
-   : Node(SQ_UI_NODE_ROW_HEIGHT)
+   : Node(SQ_UI_TABLE_ROW_HEIGHT)
 {
 }
 

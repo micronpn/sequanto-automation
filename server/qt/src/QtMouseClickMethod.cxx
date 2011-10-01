@@ -9,7 +9,7 @@
 using namespace sequanto::automation;
 
 QtMouseClickMethod::QtMouseClickMethod()
-   : Node(SQ_UI_NODE_CLICK)
+   : Node(SQ_UI_MOUSE_CLICK)
 {
 }
 

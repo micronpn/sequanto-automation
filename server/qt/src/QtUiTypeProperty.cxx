@@ -3,7 +3,7 @@
 using namespace sequanto::automation;
 
 QtUiTypeProperty::QtUiTypeProperty ( SQWidgetType _type )
-   : ReadOnlyPropertyNode(SQ_UI_NODE_TYPE),
+   : ReadOnlyPropertyNode(SQ_UI_WIDGET_TYPE),
      m_type(_type)
 {
 }

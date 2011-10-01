@@ -12,7 +12,7 @@
 using namespace sequanto::automation;
 
 QtTableRowHeaderMethod::QtTableRowHeaderMethod()
-   : Node(SQ_UI_NODE_ROW_HEADER)
+   : Node(SQ_UI_TABLE_ROW_HEADER)
 {
 }
 

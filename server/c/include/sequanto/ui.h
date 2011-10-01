@@ -29,17 +29,16 @@ SQ_BEGIN_DECL
 
    typedef enum
    {
-      SQ_WIDGET_TYPE_UNKNOWN = 0,
+      SQ_WIDGET_TYPE_UNKNOWN,
       SQ_WIDGET_TYPE_WIDGET,
-      SQ_WIDGET_TYPE_WINDOW,
       SQ_WIDGET_TYPE_CONTAINER,
       SQ_WIDGET_TYPE_BUTTON,
-      SQ_WIDGET_TYPE_CHECK_BOX,
       SQ_WIDGET_TYPE_LABEL,
-      SQ_WIDGET_TYPE_MENU_BAR,
-      SQ_WIDGET_TYPE_MENU_ITEM,
+      SQ_WIDGET_TYPE_CHECK_BOX,
       SQ_WIDGET_TYPE_RADIO_BUTTON,
       SQ_WIDGET_TYPE_TEXT_BOX,
+      SQ_WIDGET_TYPE_MENU_BAR,
+      SQ_WIDGET_TYPE_MENU_ITEM,
       SQ_WIDGET_TYPE_STATUS_BAR,
       SQ_WIDGET_TYPE_SLIDER,
       SQ_WIDGET_TYPE_SCROLL_AREA,
@@ -47,13 +46,11 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_TABS,
       SQ_WIDGET_TYPE_TOOL_BAR,
       SQ_WIDGET_TYPE_PROGRESS_BAR,
-      SQ_WIDGET_TYPE_LIST,
-      SQ_WIDGET_TYPE_LAST
+      SQ_WIDGET_TYPE_LIST
    } SQWidgetType;
 
    extern const char * const SQ_WIDGET_TYPE_UNKNOWN_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_WIDGET_STRING SQ_CONST_VARIABLE;
-   extern const char * const SQ_WIDGET_TYPE_WINDOW_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_CONTAINER_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_BUTTON_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_LABEL_STRING SQ_CONST_VARIABLE;
@@ -73,50 +70,53 @@ SQ_BEGIN_DECL
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 
-   extern const char * const SQ_UI_NODE_WINDOWS SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ACTIVE_WINDOW SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_SCREEN SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_MOUSE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_CLICK SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_KEYBOARD SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_INPUT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_CHILDREN SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_TYPE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_X SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_Y SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_WIDTH SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_HEIGHT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ENABLED SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_VISIBLE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_MOVE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_RESIZE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_NATIVE_TYPE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_NATIVE_ID SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_AUTO_GENERATED_NAME SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_BUTTON_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_CHECK_BOX_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_CHECK_BOX_CHECKED SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_NATIVE_TYPE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_NATIVE_ID SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_VISIBLE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_CHILDREN SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_AUTO_GENERATED_NAME SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMMON_BASE_ENABLED SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_LABEL_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_MOUSE_MOVE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_MOUSE_CLICK SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_RADIO_BUTTON_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_RADIO_BUTTON_CHECKED SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_ROOT_WINDOWS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_ROOT_ACTIVE_WINDOW SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_ROOT_SCREEN SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_ROOT_MOUSE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_SCREEN_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_SCREEN_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_SLIDER_VALUE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_SLIDER_MINIMUM SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_SLIDER_MAXIMUM SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_ROWS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_COLUMNS SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_ROW_HEADER_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_COLUMN_HEADER_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_UPDATE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_CELL_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_ROW_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_COLUMN_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_ROW_HEADER SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_COLUMN_HEADER SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABS_COUNT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABS_ACTIVE_TAB SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABS_TAB_NAME SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TEXT_BOX_TEXT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_WIDGET_TYPE SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_WIDGET_X SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_WIDGET_Y SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_WIDGET_INPUT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_X SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WINDOW_SCREEN_Y SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_BACKGROUND_COLOR SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_TEXT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_CHECKED SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_VALUE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_MINIMUM SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_MAXIMUM SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ROWS SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_COLUMNS SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_CELL_TEXT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ROW_HEIGHT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_COLUMN_WIDTH SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ROW_HEADER_HEIGHT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_COLUMN_HEADER_WIDTH SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ROW_HEADER SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_COLUMN_HEADER SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_UPDATE SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_COUNT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_ACTIVE_TAB SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_TAB_NAME SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_LINES SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_LINE_TEXT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_NODE_LINE_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_WINDOW_BACKGROUND_COLOR SQ_CONST_VARIABLE;
+
 
 SQ_END_DECL
 

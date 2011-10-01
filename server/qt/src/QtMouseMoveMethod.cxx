@@ -9,7 +9,7 @@
 using namespace sequanto::automation;
 
 QtMouseMoveMethod::QtMouseMoveMethod()
-   : Node(SQ_UI_NODE_MOVE)
+   : Node(SQ_UI_MOUSE_MOVE)
 {
 }
 

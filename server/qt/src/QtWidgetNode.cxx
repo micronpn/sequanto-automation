@@ -17,7 +17,7 @@ QtWidgetNode::QtWidgetNode( QWidget * _widget )
 
 SQWidgetType QtWidgetNode::type () const
 {
-   QtUiTypeProperty * typeProperty = dynamic_cast<QtUiTypeProperty*>(FindChild(SQ_UI_NODE_TYPE));
+   QtUiTypeProperty * typeProperty = dynamic_cast<QtUiTypeProperty*>(FindChild(SQ_UI_WIDGET_TYPE));
    if ( typeProperty != NULL )
    {
       return typeProperty->type();
@@ -30,7 +30,7 @@ SQWidgetType QtWidgetNode::type () const
 
 void QtWidgetNode::SendChildrenUpdate ()
 {
-   ListNode * childrenNode = dynamic_cast<ListNode*>(this->FindChild ( SQ_UI_NODE_CHILDREN ) );
+   ListNode * childrenNode = dynamic_cast<ListNode*>(this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
    {
       childrenNode->SendUpdate ();
@@ -39,19 +39,19 @@ void QtWidgetNode::SendChildrenUpdate ()
 
 void QtWidgetNode::SendPositionUpdateForAllChildren()
 {
-   PropertyNode * xNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_NODE_X ) );
+   PropertyNode * xNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_WIDGET_X ) );
    if( xNode != NULL )
    {
       xNode->SendUpdate();
    }
    
-   PropertyNode * yNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_NODE_Y ) );
+   PropertyNode * yNode = dynamic_cast<PropertyNode*>( this->FindChild ( SQ_UI_WIDGET_Y ) );
    if( yNode != NULL )
    {
       yNode->SendUpdate();
    }
    
-   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
+   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
    {
       ListNode::Iterator * it = childrenNode->ListChildren();
@@ -91,7 +91,7 @@ void QtWidgetNode::SendUpdateForAllImmediateChildren ()
 
 QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child )
 {
-   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
+   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
    {
       std::string childName ( QtWrapper::GetObjectName(_child) );
@@ -173,7 +173,7 @@ bool QtWidgetNode::RemoveChildWidget ( QWidget * _child )
 
 QtWidgetNode * QtWidgetNode::FindNodeForWidget ( QWidget * _child )
 {
-   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_NODE_CHILDREN ) );
+   ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
    {
       ListNode::Iterator * it = childrenNode->ListChildren();

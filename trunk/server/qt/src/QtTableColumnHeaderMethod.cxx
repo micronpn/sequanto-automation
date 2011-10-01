@@ -12,7 +12,7 @@
 using namespace sequanto::automation;
 
 QtTableColumnHeaderMethod::QtTableColumnHeaderMethod()
-   : Node(SQ_UI_NODE_COLUMN_HEADER)
+   : Node(SQ_UI_TABLE_COLUMN_HEADER)
 {
 }
 

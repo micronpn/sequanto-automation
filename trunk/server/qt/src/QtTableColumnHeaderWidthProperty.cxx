@@ -6,7 +6,7 @@
 using namespace sequanto::automation;
 
 QtTableColumnHeaderWidthProperty::QtTableColumnHeaderWidthProperty()
-   : ReadOnlyIntegerPropertyNode(SQ_UI_NODE_COLUMN_HEADER_WIDTH)
+   : ReadOnlyIntegerPropertyNode(SQ_UI_TABLE_COLUMN_HEADER_WIDTH)
 {
 }
 

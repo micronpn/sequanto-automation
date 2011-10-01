@@ -5,7 +5,7 @@
 using namespace sequanto::automation;
 
 QtTableColumnsProperty::QtTableColumnsProperty ()
-   : ReadOnlyIntegerPropertyNode ( SQ_UI_NODE_COLUMNS )
+   : ReadOnlyIntegerPropertyNode ( SQ_UI_TABLE_COLUMNS )
 {
 }
 

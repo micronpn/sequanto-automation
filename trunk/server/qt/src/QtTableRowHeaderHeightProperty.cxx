@@ -6,7 +6,7 @@
 using namespace sequanto::automation;
 
 QtTableRowHeaderHeightProperty::QtTableRowHeaderHeightProperty()
-   : ReadOnlyIntegerPropertyNode(SQ_UI_NODE_ROW_HEADER_HEIGHT)
+   : ReadOnlyIntegerPropertyNode(SQ_UI_TABLE_ROW_HEADER_HEIGHT)
 {
 }
 

@@ -34,7 +34,7 @@ QtGlobalPositionProperty::~QtGlobalPositionProperty()
 }
 
 QtGlobalXProperty::QtGlobalXProperty ( QWidget * _object )
-   : QtGlobalPositionProperty(SQ_UI_NODE_X, _object)
+   : QtGlobalPositionProperty(SQ_UI_WIDGET_X, _object)
 {
 }
 
@@ -44,7 +44,7 @@ int QtGlobalXProperty::GetValue ( const QPoint & _value )
 }
 
 QtGlobalYProperty::QtGlobalYProperty ( QWidget * _object )
-   : QtGlobalPositionProperty ( SQ_UI_NODE_Y, _object )
+   : QtGlobalPositionProperty ( SQ_UI_WIDGET_Y, _object )
 {
 }
 

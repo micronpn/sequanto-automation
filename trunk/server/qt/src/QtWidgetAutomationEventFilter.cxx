@@ -70,23 +70,23 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
         }
         else
         {
-            dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_X) )->SendUpdate();
-            dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_Y) )->SendUpdate();
+            dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WIDGET_X) )->SendUpdate();
+            dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_WIDGET_Y) )->SendUpdate();
         }
         break;
       
     case QEvent::Resize:
-        dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_WIDTH) )->SendUpdate();
-        dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_HEIGHT) )->SendUpdate();
+        dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_COMMON_BASE_WIDTH) )->SendUpdate();
+        dynamic_cast<IntegerPropertyNode*> ( m_node->FindChild(SQ_UI_COMMON_BASE_HEIGHT) )->SendUpdate();
         break;
 
     case QEvent::EnabledChange:
-       dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_ENABLED) )->SendUpdate();
+       dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_COMMON_BASE_ENABLED) )->SendUpdate();
        break;
 
     case QEvent::Show:
        {
-          BooleanPropertyNode * node = dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) );
+          BooleanPropertyNode * node = dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_COMMON_BASE_VISIBLE) );
           SQValue value;
           sq_value_init ( &value );
           sq_value_boolean ( &value, SQ_TRUE );
@@ -96,7 +96,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
        
     case QEvent::Hide:
        {
-          BooleanPropertyNode * node = dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_NODE_VISIBLE) );
+          BooleanPropertyNode * node = dynamic_cast<BooleanPropertyNode*> ( m_node->FindChild(SQ_UI_COMMON_BASE_VISIBLE) );
           SQValue value;
           sq_value_init ( &value );
           sq_value_boolean ( &value, SQ_FALSE );

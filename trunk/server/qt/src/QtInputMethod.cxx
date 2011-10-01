@@ -9,7 +9,7 @@
 using namespace sequanto::automation;
 
 QtInputMethod::QtInputMethod()
-   : Node(SQ_UI_NODE_INPUT)
+   : Node(SQ_UI_WIDGET_INPUT)
 {
 }
 

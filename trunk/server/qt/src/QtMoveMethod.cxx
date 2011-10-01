@@ -7,7 +7,7 @@
 using namespace sequanto::automation;
 
 QtMoveMethod::QtMoveMethod( QWidget * _widget )
-   : Node(SQ_UI_NODE_MOVE),
+   : Node(SQ_UI_MOUSE_MOVE),
      m_widget ( _widget )
 {
 }

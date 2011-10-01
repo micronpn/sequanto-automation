@@ -5,7 +5,7 @@
 using namespace sequanto::automation;
 
 QtNativeIdProperty::QtNativeIdProperty ()
-   : ReadOnlyPropertyNode(SQ_UI_NODE_NATIVE_ID)
+   : ReadOnlyPropertyNode(SQ_UI_COMMON_BASE_NATIVE_ID)
 {
 }
    

@@ -5,7 +5,7 @@
 using namespace sequanto::automation;
 
 QtTableUpdateProperty::QtTableUpdateProperty ()
-   : ReadOnlyIntegerPropertyNode ( SQ_UI_NODE_UPDATE ),
+   : ReadOnlyIntegerPropertyNode ( SQ_UI_TABLE_UPDATE ),
      m_update ( 0 )
 {
 }

@@ -1,6 +1,7 @@
 #summary Describes the different values that the Widget type property can assume.
+#sidebar BranchTypesUiSidebar
 
-|| `Type` || `Branch Type` ||
+|| *Type* || *Branch Type* ||
 || Unknown ||  ||
 || Widget || [BranchTypesUiWidget Widget] ||
 || Container || [BranchTypesUiWidget Widget] ||

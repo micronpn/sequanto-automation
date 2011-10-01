@@ -1,0 +1,21 @@
+#summary Describes the different values that the Widget type property can assume.
+
+|| `Type` || `Branch Type` ||
+|| Unknown ||  ||
+|| Widget || [BranchTypesUiWidget Widget] ||
+|| Container || [BranchTypesUiWidget Widget] ||
+|| Button || [BranchTypesUiButton Button] ||
+|| Label || [BranchTypesUiLabel Label] ||
+|| CheckBox || [BranchTypesUiCheckBox CheckBox] ||
+|| RadioButton || [BranchTypesUiRadioButton RadioButton] ||
+|| TextBox || [BranchTypesUiTextBox TextBox] ||
+|| MenuBar || [BranchTypesUiMenuBar MenuBar] ||
+|| MenuItem || [BranchTypesUiWidget MenuItem] ||
+|| StatusBar || [BranchTypesUiWidget StatusBar] ||
+|| Slider || [BranchTypesUiSlider Slider] ||
+|| ScrollArea || [BranchTypesUiWidget Widget] ||
+|| Table || [BranchTypesUiTable Table] ||
+|| Tabs || [BranchTypesUiTabs Tabs] ||
+|| ToolBar || [BranchTypesUiWidget Widget] ||
+|| ProgressBar || [BranchTypesUiSlider Slider] ||
+|| List || [BranchTypesUiList List] ||

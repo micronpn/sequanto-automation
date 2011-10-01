@@ -12,7 +12,7 @@ Base class for all widget types.
 
 = Properties =
 
-|| type || string || Type of the widget, one of the SQWidgetType values. ||
+|| type || string || Type of the widget, one of the [BranchTypesUiTypes SQWidgetType] values. ||
 || x || integer || Position of X component the widgets top-left corner on the window. ||
 || y || integer || Position of Y component the widgets top-left corner on the window. ||
 

@@ -10,9 +10,9 @@
 || CheckBox || [BranchTypesUiCheckBox CheckBox] ||
 || RadioButton || [BranchTypesUiRadioButton RadioButton] ||
 || TextBox || [BranchTypesUiTextBox TextBox] ||
-|| MenuBar || [BranchTypesUiMenuBar MenuBar] ||
-|| MenuItem || [BranchTypesUiWidget MenuItem] ||
-|| StatusBar || [BranchTypesUiWidget StatusBar] ||
+|| MenuBar || [BranchTypesUiWidget Widget] ||
+|| MenuItem || [BranchTypesUiMenuItem MenuItem] ||
+|| StatusBar || [BranchTypesUiWidget Widget] ||
 || Slider || [BranchTypesUiSlider Slider] ||
 || ScrollArea || [BranchTypesUiWidget Widget] ||
 || Table || [BranchTypesUiTable Table] ||
@@ -20,3 +20,4 @@
 || ToolBar || [BranchTypesUiWidget Widget] ||
 || ProgressBar || [BranchTypesUiSlider Slider] ||
 || List || [BranchTypesUiList List] ||
+|| ComboBox || [BranchTypesUiComboBox ComboBox] ||

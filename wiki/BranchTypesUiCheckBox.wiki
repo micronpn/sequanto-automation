@@ -1,10 +1,10 @@
-#summary RadioButton
+#summary CheckBox
 #labels Branch-Type-Class
 #sidebar BranchTypesUiSidebar
 
 = Introduction =
 
-Radio button.
+CheckBox
 
 = Base =
 
@@ -13,4 +13,4 @@ Radio button.
 = Properties =
 
 || text || string || Text on the check box. ||
-|| checked || boolean || Whether the radio button is checked or not. ||
+|| checked || boolean || Whether the checkbox is checked or not. ||

@@ -1,0 +1,15 @@
+#summary MenuItem
+#labels Branch-Type-Class
+#sidebar BranchTypesUiSidebar
+
+= Introduction =
+
+Menu item in a menu.
+
+= Base =
+
+[BranchTypesUiWidget Widget]
+
+= Properties =
+
+|| text || string || Text on the menu item. ||

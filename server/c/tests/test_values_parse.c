@@ -46,6 +46,21 @@ START_TEST(test_single_integer)
 }
 END_TEST
 
+START_TEST(test_single_integer_single_digit)
+{
+    init();
+    
+    fail_unless ( sq_values_parse ( values, NUM_VALUES, (SQByte*) "5\r\n" ) == 1 );
+    
+    fail_unless ( values[0].m_type == VALUE_TYPE_INTEGER );
+    fail_unless ( values[0].Value.m_integerValue == 5 );
+    
+    expect_empty ( 1 );
+    
+    done();
+}
+END_TEST
+
 START_TEST(test_single_string)
 {
     init();
@@ -147,6 +162,7 @@ END_TEST
 
 SQ_TEST_SUITE(values_parse_suite, "sq_values_parse");
 SQ_TEST_CASE(test_single_integer);
+SQ_TEST_CASE(test_single_integer_single_digit);
 SQ_TEST_CASE(test_single_string);
 SQ_TEST_CASE(test_single_float);
 SQ_TEST_CASE(test_single_boolean);

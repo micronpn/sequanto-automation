@@ -223,7 +223,7 @@ void sq_automation_call ( const SQInfo * const _info, SQStream * _stream, const 
    
    SQ_UNUSED_PARAMETER(_numberOfValues);
    
-   for ( i = 0; i < NUMBER_OF_PARAMETERS; i++ )
+   for ( i = 0; i < NUMBER_OF_PARAMETERS && i < SQ_MAX_PARAMETERS; i++ )
    {
       if ( _inputValues[i].m_type != sq_automation_get_parameter(callableInfo, i) )
       {

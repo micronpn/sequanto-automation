@@ -132,3 +132,10 @@ int main ( int argc, char * argv[] )
    SQ_UNUSED_PARAMETER(argc);
    SQ_UNUSED_PARAMETER(argv);
 }
+
+int function_with_many_parameters ( int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9,
+                                    int b0, int b1, int b2, int b3, int b4, int b5, int b6, int b7, int b8, int b9 )
+{
+    return a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9
+        +  b0 + b1 + b2 + b3 + b4 + b5 + b6 + b7 + b8 + b9;
+}

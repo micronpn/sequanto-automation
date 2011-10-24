@@ -6,6 +6,16 @@
 
 A simple 2D table with optional row and column headers.
 
+
+||                      || _rowHeaderWidth_ || _columnWidth(0)_  || ... || _columnWidth(column)_  ||
+|| _columnHeaderHeight_ ||                  || *columnHeader(0)* || ... || *columnHeader(column)* ||
+|| _rowHeight(0)_       || *rowHeader(0)*   || cellText(0,0)     || ... || cellText(column,0)     ||
+|| ...                  || ...              ||  ...              ||     || ...                    ||
+|| _rowHeight(row)_     || *rowHeader(row)* || cellText(0,row)   || ... || cellText(column,row)   ||
+
+ * _italic_ values designate sizes (widths and heights).
+ * *bold* values are header texts for either rows or columns.
+
 = Base =
 
 [BranchTypesUiWidget Widget]

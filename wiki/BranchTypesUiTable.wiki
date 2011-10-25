@@ -17,6 +17,8 @@ The table below should give a overview of what the different measurements mean:
  * _italic_ values designate sizes (widths and heights).
  * *bold* values are header texts for either rows or columns.
 
+http://sequanto-automation.googlecode.com/svn/wiki/images/BranchTypesUiTable.png
+
 = Base =
 
 [BranchTypesUiWidget Widget]

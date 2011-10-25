@@ -6,12 +6,13 @@
 
 A simple 2D table with optional row and column headers.
 
+The table below should give a overview of what the different measurements mean:
 
 ||                      || _rowHeaderWidth_ || _columnWidth(0)_  || ... || _columnWidth(column)_  ||
 || _columnHeaderHeight_ ||                  || *columnHeader(0)* || ... || *columnHeader(column)* ||
-|| _rowHeight(0)_       || *rowHeader(0)*   || cellText(0,0)     || ... || cellText(column,0)     ||
+|| _rowHeight(0)_       || *rowHeader(0)*   || cellText(0,0)     || ... || cellText(0,cloumn)     ||
 || ...                  || ...              ||  ...              ||     || ...                    ||
-|| _rowHeight(row)_     || *rowHeader(row)* || cellText(0,row)   || ... || cellText(column,row)   ||
+|| _rowHeight(row)_     || *rowHeader(row)* || cellText(row,0)   || ... || cellText(row,column)   ||
 
  * _italic_ values designate sizes (widths and heights).
  * *bold* values are header texts for either rows or columns.

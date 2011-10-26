@@ -154,6 +154,9 @@ void QtCacheItem::getDirectly ( QWidget * _object, QtCacheItem::Property _proper
    case VISIBLE:
       sq_value_boolean ( &_output, _object->isVisible() );
       break;
+      
+   default:
+      break;
    }
 }
 

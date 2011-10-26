@@ -47,8 +47,8 @@ IF(SQ_CXX)
                               src/QtTableRowHeightMethod.cxx
                               src/QtTableColumnWidthMethod.cxx
                               src/QtTableUpdateProperty.cxx
-                              src/QtTableRowHeaderHeightProperty.cxx
-                              src/QtTableColumnHeaderWidthProperty.cxx
+                              src/QtTableRowHeaderWidthProperty.cxx
+                              src/QtTableColumnHeaderHeightProperty.cxx
                               src/QtTableRowHeaderMethod.cxx
                               src/QtTableColumnHeaderMethod.cxx
                               src/QtListLinesProperty.cxx
@@ -105,8 +105,8 @@ IF(SQ_CXX)
                     include/sequanto/QtTableRowHeightMethod.h
                     include/sequanto/QtTableColumnWidthMethod.h
                     include/sequanto/QtTableUpdateProperty.h
-                    include/sequanto/QtTableRowHeaderHeightProperty.h
-                    include/sequanto/QtTableColumnHeaderWidthProperty.h
+                    include/sequanto/QtTableRowHeaderWidthProperty.h
+                    include/sequanto/QtTableColumnHeaderHeightProperty.h
                     include/sequanto/QtTableRowHeaderMethod.h
                     include/sequanto/QtTableColumnHeaderMethod.h
                     include/sequanto/QtListLinesProperty.h

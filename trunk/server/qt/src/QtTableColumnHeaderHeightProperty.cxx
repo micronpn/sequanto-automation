@@ -1,16 +1,16 @@
-#include <sequanto/QtTableRowHeaderHeightProperty.h>
+#include <sequanto/QtTableColumnHeaderHeightProperty.h>
 #include <sequanto/ui.h>
 #include <sequanto/QtWidgetNode.h>
 #include <cassert>
 
 using namespace sequanto::automation;
 
-QtTableRowHeaderHeightProperty::QtTableRowHeaderHeightProperty()
-   : ReadOnlyIntegerPropertyNode(SQ_UI_TABLE_ROW_HEADER_HEIGHT)
+QtTableColumnHeaderHeightProperty::QtTableColumnHeaderHeightProperty()
+   : ReadOnlyIntegerPropertyNode(SQ_UI_TABLE_COLUMN_HEADER_HEIGHT)
 {
 }
 
-int QtTableRowHeaderHeightProperty::GetValue()
+int QtTableColumnHeaderHeightProperty::GetValue()
 {
    QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(GetParent());
    assert ( widgetNode != NULL );
@@ -18,7 +18,7 @@ int QtTableRowHeaderHeightProperty::GetValue()
    QTableWidget * tableWidget = qobject_cast<QTableWidget*>(widgetNode->widget());
    assert ( tableWidget != NULL );
    
-   QHeaderView * header = tableWidget->horizontalHeader();
+   QHeaderView * header = tableWidget->verticalHeader();
    if ( header == NULL || !header->isVisible() )
    {
       return 0;

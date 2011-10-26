@@ -14,8 +14,8 @@
  * permissions and limitations under the License.
  */
 
-#ifndef SEQUANTO_QT_TABLE_COLUMN_HEADER_WIDTH_PROPERTY_H_
-#define SEQUANTO_QT_TABLE_COLUMN_HEADER_WIDTH_PROPERTY_H_
+#ifndef SEQUANTO_QT_TABLE_ROW_HEADER_WIDTH_METHOD_H_
+#define SEQUANTO_QT_TABLE_ROW_HEADER_WIDTH_METHOD_H_
 
 #include <sequanto/macros.h>
 #include <sequanto/readonlypropertynode.h>
@@ -24,10 +24,10 @@ namespace sequanto
 {
    namespace automation
    {
-      class QtTableColumnHeaderWidthProperty : public ReadOnlyIntegerPropertyNode
+      class QtTableRowHeaderWidthProperty : public ReadOnlyIntegerPropertyNode
       {
       public:
-         QtTableColumnHeaderWidthProperty ();
+         QtTableRowHeaderWidthProperty ();
          
          virtual int GetValue ();
       };

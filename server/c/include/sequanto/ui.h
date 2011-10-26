@@ -46,7 +46,8 @@ SQ_BEGIN_DECL
       SQ_WIDGET_TYPE_TABS,
       SQ_WIDGET_TYPE_TOOL_BAR,
       SQ_WIDGET_TYPE_PROGRESS_BAR,
-      SQ_WIDGET_TYPE_LIST
+      SQ_WIDGET_TYPE_LIST,
+      SQ_WIDGET_TYPE_COMBO_BOX
    } SQWidgetType;
 
    extern const char * const SQ_WIDGET_TYPE_UNKNOWN_STRING SQ_CONST_VARIABLE;
@@ -67,12 +68,14 @@ SQ_BEGIN_DECL
    extern const char * const SQ_WIDGET_TYPE_TOOL_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_PROGRESS_BAR_STRING SQ_CONST_VARIABLE;
    extern const char * const SQ_WIDGET_TYPE_LIST_STRING SQ_CONST_VARIABLE;
+   extern const char * const SQ_WIDGET_TYPE_COMBO_BOX_STRING SQ_CONST_VARIABLE;
 
    SQ_DECL const char * sq_widget_type_to_string ( SQWidgetType _widgetType );
 
    extern const char * const SQ_UI_BUTTON_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_CHECK_BOX_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_CHECK_BOX_CHECKED SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_COMBO_BOX_EDITABLE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_COMMON_BASE_NATIVE_TYPE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_COMMON_BASE_NATIVE_ID SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_COMMON_BASE_WIDTH SQ_CONST_VARIABLE;
@@ -86,6 +89,7 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_LIST_UPDATE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_LIST_LINE_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_LIST_LINE_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_MENU_ITEM_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_MOUSE_MOVE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_MOUSE_CLICK SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_RADIO_BUTTON_TEXT SQ_CONST_VARIABLE;
@@ -101,8 +105,8 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_SLIDER_MAXIMUM SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABLE_ROWS SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABLE_COLUMNS SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_TABLE_ROW_HEADER_HEIGHT SQ_CONST_VARIABLE;
-   extern const char * const SQ_UI_TABLE_COLUMN_HEADER_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_ROW_HEADER_WIDTH SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABLE_COLUMN_HEADER_HEIGHT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABLE_UPDATE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABLE_CELL_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABLE_ROW_HEIGHT SQ_CONST_VARIABLE;
@@ -111,7 +115,10 @@ SQ_BEGIN_DECL
    extern const char * const SQ_UI_TABLE_COLUMN_HEADER SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABS_COUNT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABS_ACTIVE_TAB SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABS_TAB_HEIGHT SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABS_TAB_POSITION SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TABS_TAB_NAME SQ_CONST_VARIABLE;
+   extern const char * const SQ_UI_TABS_TAB_WIDTH SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_TEXT_BOX_TEXT SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WIDGET_TYPE SQ_CONST_VARIABLE;
    extern const char * const SQ_UI_WIDGET_X SQ_CONST_VARIABLE;

@@ -35,8 +35,8 @@
 #include <sequanto/QtTableRowHeightMethod.h>
 #include <sequanto/QtTableColumnWidthMethod.h>
 #include <sequanto/QtTableUpdateProperty.h>
-#include <sequanto/QtTableRowHeaderHeightProperty.h>
-#include <sequanto/QtTableColumnHeaderWidthProperty.h>
+#include <sequanto/QtTableRowHeaderWidthProperty.h>
+#include <sequanto/QtTableColumnHeaderHeightProperty.h>
 #include <sequanto/QtTableRowHeaderMethod.h>
 #include <sequanto/QtTableColumnHeaderMethod.h>
 #include <sequanto/QtListLinesProperty.h>
@@ -303,8 +303,8 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
       _root->AddChild ( new QtTableRowHeightMethod() );
       _root->AddChild ( new QtTableColumnWidthMethod() );
       _root->AddChild ( new QtTableUpdateProperty() );
-      _root->AddChild ( new QtTableRowHeaderHeightProperty() );
-      _root->AddChild ( new QtTableColumnHeaderWidthProperty() );
+      _root->AddChild ( new QtTableRowHeaderWidthProperty() );
+      _root->AddChild ( new QtTableColumnHeaderHeightProperty() );
       _root->AddChild ( new QtTableRowHeaderMethod() );
       _root->AddChild ( new QtTableColumnHeaderMethod() );
       

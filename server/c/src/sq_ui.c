@@ -36,10 +36,12 @@ const char * const SQ_WIDGET_TYPE_TABS_STRING SQ_CONST_VARIABLE = "Tabs";
 const char * const SQ_WIDGET_TYPE_TOOL_BAR_STRING SQ_CONST_VARIABLE = "ToolBar";
 const char * const SQ_WIDGET_TYPE_PROGRESS_BAR_STRING SQ_CONST_VARIABLE = "ProgressBar";
 const char * const SQ_WIDGET_TYPE_LIST_STRING SQ_CONST_VARIABLE = "List";
+const char * const SQ_WIDGET_TYPE_COMBO_BOX_STRING SQ_CONST_VARIABLE = "ComboBox";
 
 const char * const SQ_UI_BUTTON_TEXT SQ_CONST_VARIABLE = "text";
 const char * const SQ_UI_CHECK_BOX_TEXT SQ_CONST_VARIABLE = "text";
 const char * const SQ_UI_CHECK_BOX_CHECKED SQ_CONST_VARIABLE = "checked";
+const char * const SQ_UI_COMBO_BOX_EDITABLE SQ_CONST_VARIABLE = "editable";
 const char * const SQ_UI_COMMON_BASE_NATIVE_TYPE SQ_CONST_VARIABLE = "nativeType";
 const char * const SQ_UI_COMMON_BASE_NATIVE_ID SQ_CONST_VARIABLE = "nativeId";
 const char * const SQ_UI_COMMON_BASE_WIDTH SQ_CONST_VARIABLE = "width";
@@ -53,6 +55,7 @@ const char * const SQ_UI_LIST_LINES SQ_CONST_VARIABLE = "lines";
 const char * const SQ_UI_LIST_UPDATE SQ_CONST_VARIABLE = "update";
 const char * const SQ_UI_LIST_LINE_TEXT SQ_CONST_VARIABLE = "lineText";
 const char * const SQ_UI_LIST_LINE_HEIGHT SQ_CONST_VARIABLE = "lineHeight";
+const char * const SQ_UI_MENU_ITEM_TEXT SQ_CONST_VARIABLE = "text";
 const char * const SQ_UI_MOUSE_MOVE SQ_CONST_VARIABLE = "move";
 const char * const SQ_UI_MOUSE_CLICK SQ_CONST_VARIABLE = "click";
 const char * const SQ_UI_RADIO_BUTTON_TEXT SQ_CONST_VARIABLE = "text";
@@ -68,8 +71,8 @@ const char * const SQ_UI_SLIDER_MINIMUM SQ_CONST_VARIABLE = "minimum";
 const char * const SQ_UI_SLIDER_MAXIMUM SQ_CONST_VARIABLE = "maximum";
 const char * const SQ_UI_TABLE_ROWS SQ_CONST_VARIABLE = "rows";
 const char * const SQ_UI_TABLE_COLUMNS SQ_CONST_VARIABLE = "columns";
-const char * const SQ_UI_TABLE_ROW_HEADER_HEIGHT SQ_CONST_VARIABLE = "rowHeaderHeight";
-const char * const SQ_UI_TABLE_COLUMN_HEADER_WIDTH SQ_CONST_VARIABLE = "columnHeaderWidth";
+const char * const SQ_UI_TABLE_ROW_HEADER_WIDTH SQ_CONST_VARIABLE = "rowHeaderWidth";
+const char * const SQ_UI_TABLE_COLUMN_HEADER_HEIGHT SQ_CONST_VARIABLE = "columnHeaderHeight";
 const char * const SQ_UI_TABLE_UPDATE SQ_CONST_VARIABLE = "update";
 const char * const SQ_UI_TABLE_CELL_TEXT SQ_CONST_VARIABLE = "cellText";
 const char * const SQ_UI_TABLE_ROW_HEIGHT SQ_CONST_VARIABLE = "rowHeight";
@@ -78,7 +81,10 @@ const char * const SQ_UI_TABLE_ROW_HEADER SQ_CONST_VARIABLE = "rowHeader";
 const char * const SQ_UI_TABLE_COLUMN_HEADER SQ_CONST_VARIABLE = "columnHeader";
 const char * const SQ_UI_TABS_COUNT SQ_CONST_VARIABLE = "count";
 const char * const SQ_UI_TABS_ACTIVE_TAB SQ_CONST_VARIABLE = "activeTab";
+const char * const SQ_UI_TABS_TAB_HEIGHT SQ_CONST_VARIABLE = "tabHeight";
+const char * const SQ_UI_TABS_TAB_POSITION SQ_CONST_VARIABLE = "tabPosition";
 const char * const SQ_UI_TABS_TAB_NAME SQ_CONST_VARIABLE = "tabName";
+const char * const SQ_UI_TABS_TAB_WIDTH SQ_CONST_VARIABLE = "tabWidth";
 const char * const SQ_UI_TEXT_BOX_TEXT SQ_CONST_VARIABLE = "text";
 const char * const SQ_UI_WIDGET_TYPE SQ_CONST_VARIABLE = "type";
 const char * const SQ_UI_WIDGET_X SQ_CONST_VARIABLE = "x";
@@ -146,6 +152,9 @@ const char * sq_widget_type_to_string ( SQWidgetType _type )
 
    case SQ_WIDGET_TYPE_LIST:
       return SQ_WIDGET_TYPE_LIST_STRING;
+
+   case SQ_WIDGET_TYPE_COMBO_BOX:
+      return SQ_WIDGET_TYPE_COMBO_BOX_STRING;
 
 
    default:

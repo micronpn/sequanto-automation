@@ -27,8 +27,8 @@ http://sequanto-automation.googlecode.com/svn/wiki/images/BranchTypesUiTable.png
 
 || rows || integer || Number of rows. ||
 || columns || integer || Number of columns. ||
-|| rowHeaderHeight || integer || Get the height of the row header (0 if there is no row header). ||
-|| columnHeaderWidth || integer || Get the width of the column header (0 if theres is no column header). ||
+|| rowHeaderWidth || integer || Get the width of the row header (0 if there is no row header). ||
+|| columnHeaderHeight || integer || Get the height of the column header (0 if theres is no column header). ||
 || update || integer || Simple integer which tracks when the table changed, the value is increased every time the table is changed so the other end of the connection knows that all the callables should be refreshed. ||
 
 = Callables =

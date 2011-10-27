@@ -18,7 +18,7 @@ int QtTableColumnHeaderHeightProperty::GetValue()
    QTableWidget * tableWidget = qobject_cast<QTableWidget*>(widgetNode->widget());
    assert ( tableWidget != NULL );
    
-   QHeaderView * header = tableWidget->verticalHeader();
+   QHeaderView * header = tableWidget->horizontalHeader();
    if ( header == NULL || !header->isVisible() )
    {
       return 0;

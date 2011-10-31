@@ -84,12 +84,12 @@ void QtColorProperty::HandleGet ( SQValue & _outputValue )
 void QtColorProperty::HandleSet ( const SQValue * const _value )
 {
    QString stringValue ( _value->Value.m_stringValue );
-   if ( QColor::isValidColor(stringValue) )
+   QColor value ( stringValue );
+   if ( value.isValid() )
    {
-      QColor value ( stringValue );
-      QPalette palette = m_widget->palette();
-      palette.setColor ( m_role, value );
-      m_widget->setPalette ( palette );
+       QPalette palette = m_widget->palette();
+       palette.setColor ( m_role, value );
+       m_widget->setPalette ( palette );
    }
 }
 

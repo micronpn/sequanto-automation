@@ -6,6 +6,7 @@
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtActiveWindowProperty.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
+#include <sequanto/QtLogging.h>
 #include <sequanto/ui.h>
 #include <cassert>
 

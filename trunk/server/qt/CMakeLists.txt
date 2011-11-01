@@ -57,7 +57,8 @@ IF(SQ_CXX)
                               src/QtListLineTextMethod.cxx
                               src/QtTabsActiveTabProperty.cxx
                               src/QtTabsTabNameMethod.cxx
-                              src/QtStatsProperties.cxx)
+                              src/QtStatsProperties.cxx
+                              src/QtLogging.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
                  ${SequantoAutomation_QT_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
@@ -115,7 +116,8 @@ IF(SQ_CXX)
                     include/sequanto/QtListLineTextMethod.h
                     include/sequanto/QtTabsActiveTabProperty.h
                     include/sequanto/QtTabsTabNameMethod.h
-                    include/sequanto/QtStatsProperties.h)
+                    include/sequanto/QtStatsProperties.h
+                    include/sequanto/QtLogging.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")
      SET(SQ_ALL_SRCS ${SQ_ALL_SRCS} "qt/${QT_SRCS_ALL}" CACHE INTERNAL "All source files")

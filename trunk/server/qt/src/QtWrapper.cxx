@@ -46,6 +46,7 @@
 #include <sequanto/QtTabsActiveTabProperty.h>
 #include <sequanto/QtTabsTabNameMethod.h>
 #include <sequanto/QtStatsProperties.h>
+#include <sequanto/QtLogging.h>
 
 #ifdef SQ_QT_USE_CACHE
 #include <sequanto/QtCachedProperty.h>
@@ -410,6 +411,11 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    stats->AddChild ( new QtStatsGetPropertyAverageDeliveryTime() );
    stats->AddChild ( new QtStatsCacheHits() );
    stats->AddChild ( new QtStatsCacheMisses() );
+   
+   ListNode * logging = new ListNode ( "logging" );
+   _root->AddChild ( logging );
+   logging->AddChild ( new QtLoggingEnabledProperty() );
+   logging->AddChild ( new QtLoggingFilenameProperty() );
 }
 
 bool QtWrapper::IsWindow ( QWidget * _widget )
@@ -443,6 +449,7 @@ bool QtWrapper::UpdateWindows()
 
 bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _activeWindowNode )
 {
+   SQ_QT_LOG_TEXT ( "Updating windows." );
    bool changed = false;
    foreach ( QWidget * widget, QApplication::allWidgets() )
    {
@@ -451,8 +458,11 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
          std::string objectName ( GetObjectName(widget) );
          if ( !_windows->HasChild ( objectName ))
          {
+            SQ_QT_LOG_TEXT ( objectName.c_str() );
+            SQ_QT_LOG_TEXT ( "Name not seen before" );
             if ( QtUnnamedObjectStore::IsKnown ( widget ) )
             {
+               SQ_QT_LOG_TEXT ( "Previously seen as unnamed object, removing old one." );
                std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
                if ( _windows->HasChild(unnamedObjectName) )
                {
@@ -463,12 +473,12 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
             QtWidgetNode * newWindow = new QtWidgetNode ( widget );
             WrapUi ( newWindow, widget );
             _windows->AddChild ( newWindow );
-
+            
             changed = true;
          }
       }
    }
-
+   
    ListNode::Iterator * it = _windows->ListChildren();
    std::vector<std::string> toBeRemoved;
    for ( ; it->HasNext(); it->Next() )
@@ -484,6 +494,8 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
       }
       if ( !found )
       {
+         SQ_QT_LOG_TEXT ( "Found a window to remove" );
+         SQ_QT_LOG_TEXT ( it->GetCurrent()->GetName().c_str() );
          toBeRemoved.push_back ( it->GetCurrent()->GetName() );
       }
    }
@@ -496,6 +508,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
 
    if ( changed )
    {
+       SQ_QT_LOG_TEXT ( "List changed, trying to send update." );
 	   _activeWindowNode->TrySendUpdate ();
    }
    return changed;

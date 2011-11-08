@@ -371,7 +371,12 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
                QWidget * childWidget = qobject_cast<QWidget*>(childObject);
                if ( !IsWindow(childWidget) )
                {
-                  _root->AddChildWidget ( childWidget );
+                   QtWidgetNode::AddChildWidgetResult result =_root->AddChildWidget ( childWidget );
+                   
+                   if ( result == QtWidgetNode::ALREADY_EXISTS_BUT_REMOVED_SINCE_IT_IS_NOT_VISIBLE )
+                   {
+                       _root->AddChildWidget ( childWidget );
+                   }
                }
             }
          }

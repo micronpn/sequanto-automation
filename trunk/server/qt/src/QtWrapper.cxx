@@ -454,8 +454,9 @@ bool QtWrapper::UpdateWindows()
 
 bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _activeWindowNode )
 {
-   SQ_QT_LOG_TEXT ( "Updating windows." );
    bool changed = false;
+   std::map<std::string, QWidget*> windows;
+   std::map<std::string, QWidget*>::iterator windowsIt;
    foreach ( QWidget * widget, QApplication::allWidgets() )
    {
       if ( IsWindow(widget) )
@@ -463,57 +464,98 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
          std::string objectName ( GetObjectName(widget) );
          if ( !_windows->HasChild ( objectName ))
          {
-            SQ_QT_LOG_TEXT ( objectName.c_str() );
-            SQ_QT_LOG_TEXT ( "Name not seen before" );
             if ( QtUnnamedObjectStore::IsKnown ( widget ) )
             {
-               SQ_QT_LOG_TEXT ( "Previously seen as unnamed object, removing old one." );
-               std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
+                std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
                if ( _windows->HasChild(unnamedObjectName) )
                {
                   _windows->RemoveChild ( unnamedObjectName );
                   QtUnnamedObjectStore::Deleted ( widget );
                }
             }
-            QtWidgetNode * newWindow = new QtWidgetNode ( widget );
-            WrapUi ( newWindow, widget );
-            _windows->AddChild ( newWindow );
             
             changed = true;
+         }
+         
+         windowsIt = windows.find(objectName);
+         if ( windowsIt == windows.end() )
+         {
+             windows.insert ( std::make_pair(objectName, widget) );
+         }
+         else
+         {
+             // Two windows with the same name found, we must decide which to keep
+             // If the newest widget is visible we always keep that one
+             if ( widget->isVisible() )
+             {
+                 windows.insert ( std::make_pair(objectName, widget) );
+             }
+             else
+             {
+                 if ( !windowsIt->second->isVisible() )
+                 {
+                     // If the old widget is not visible either, we keep the newest one
+                     windows.insert ( std::make_pair(objectName, widget) );
+                 }
+             }
          }
       }
    }
    
+   /*
+   qDebug() << "UpdateWindows, found windows:";
+   for ( windowsIt = windows.begin(); windowsIt != windows.end(); windowsIt ++ )
+   {
+       qDebug() << "   " << windowsIt->first.c_str() << " visible? " << windowsIt->second->isVisible();
+   }
+   */
+   
+   // Remove old nodes
    ListNode::Iterator * it = _windows->ListChildren();
    std::vector<std::string> toBeRemoved;
    for ( ; it->HasNext(); it->Next() )
    {
-      bool found = false;
-      foreach ( QWidget * widget, QApplication::topLevelWidgets() )
-      {
-         if ( GetObjectName(widget) == it->GetCurrent()->GetName() )
-         {
-            found = true;
-            break;
-         }
-      }
-      if ( !found )
-      {
-         SQ_QT_LOG_TEXT ( "Found a window to remove" );
-         SQ_QT_LOG_TEXT ( it->GetCurrent()->GetName().c_str() );
-         toBeRemoved.push_back ( it->GetCurrent()->GetName() );
-      }
+       windowsIt = windows.find(it->GetCurrent()->GetName());
+       if ( windowsIt == windows.end() )
+       {
+           //qDebug() << "   - Removed (name not found): " << it->GetCurrent()->GetName().c_str();
+           toBeRemoved.push_back ( it->GetCurrent()->GetName() );
+       }
+       else
+       {
+           if ( dynamic_cast<QtWidgetNode*>(it->GetCurrent())->widget() != windowsIt->second )
+           {
+               //qDebug() << "   - Removed (window is not the same as widget): " << it->GetCurrent()->GetName().c_str();
+               toBeRemoved.push_back ( it->GetCurrent()->GetName() );
+           }
+       }
    }
+   
    delete it;
+   it = NULL;
+   
    for ( std::vector<std::string>::const_iterator removeIt = toBeRemoved.begin(); removeIt != toBeRemoved.end(); removeIt++ )
    {
       _windows->RemoveChild ( *removeIt );
       changed = true;
    }
+   
+   for ( windowsIt = windows.begin(); windowsIt != windows.end(); windowsIt++ )
+   {
+       if ( !_windows->HasChild(windowsIt->first) )
+       {
+           //qDebug() << "   + Adding: " << windowsIt->first.c_str();
 
+           QtWidgetNode * newWindow = new QtWidgetNode ( windowsIt->second );
+           WrapUi ( newWindow, windowsIt->second );
+           _windows->AddChild ( newWindow );
+           
+           changed = true;
+       }
+   }
+   
    if ( changed )
    {
-       SQ_QT_LOG_TEXT ( "List changed, trying to send update." );
 	   _activeWindowNode->TrySendUpdate ();
    }
    return changed;

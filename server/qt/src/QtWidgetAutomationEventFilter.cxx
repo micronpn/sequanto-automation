@@ -148,7 +148,11 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
         QtAutomationGetPropertyEvent * event = dynamic_cast<QtAutomationGetPropertyEvent*>(_event);
         event->received();
         
-        if ( event->propertyName() == QtWrapper::screen_pos() )
+        if ( _object == QApplication::activeWindow() && event->propertyName() == SQ_UI_COMMON_BASE_VISIBLE )
+        {
+            event->done ( true );
+        }
+        else if ( event->propertyName() == QtWrapper::screen_pos() )
         {
             QWidget * widget = qobject_cast<QWidget*>(_object);
             event->done ( widget->geometry().topLeft() );

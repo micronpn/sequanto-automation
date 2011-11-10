@@ -152,7 +152,14 @@ void QtCacheItem::getDirectly ( QWidget * _object, QtCacheItem::Property _proper
       break;
       
    case VISIBLE:
-      sq_value_boolean ( &_output, _object->isVisible() );
+      if ( _object == QApplication::activeWindow() )
+      {
+          sq_value_boolean ( &_output, SQ_TRUE );
+      }
+      else
+      {
+          sq_value_boolean ( &_output, _object->isVisible() );
+      }
       break;
       
    default:

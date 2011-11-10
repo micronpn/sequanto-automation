@@ -62,6 +62,8 @@ int main ( int argc, char * argv[] )
    
    ClickHandler handler;
    QMainWindow mainWindow;
+   mainWindow.setObjectName ( "MainWindow" );
+   
    QWidget * widget = new QWidget();
    QLayout * vbox = new QHBoxLayout();
    widget->setLayout ( vbox );

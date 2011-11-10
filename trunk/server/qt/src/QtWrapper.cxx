@@ -67,7 +67,11 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
 {
   if ( _object->thread() == QThread::currentThread() )
   {
-    if ( _propertyName == QtWrapper::screen_pos() )
+    if ( _object == QApplication::activeWindow() && _propertyName == SQ_UI_COMMON_BASE_VISIBLE )
+    {
+      return true;
+    }
+    else if ( _propertyName == QtWrapper::screen_pos() )
     {
        QWidget * widget = qobject_cast<QWidget*>(_object);
        return widget->geometry().topLeft();

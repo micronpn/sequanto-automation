@@ -148,7 +148,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
         QtAutomationGetPropertyEvent * event = dynamic_cast<QtAutomationGetPropertyEvent*>(_event);
         event->received();
         
-        if ( _object == QApplication::activeWindow() && event->propertyName() == SQ_UI_COMMON_BASE_VISIBLE )
+        if ( _object == QApplication::activeWindow() && strcmp(event->propertyName(), SQ_UI_COMMON_BASE_VISIBLE) == 0 )
         {
             event->done ( true );
         }

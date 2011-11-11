@@ -48,8 +48,8 @@ namespace sequanto
          void SendChildrenUpdate ();
 
          void SendPositionUpdateForAllChildren();
-         
          void SendUpdateForAllImmediateChildren ();
+         void SendUpdateForAllChildren ();
          
          typedef enum _AddChildWidgetResult
          {

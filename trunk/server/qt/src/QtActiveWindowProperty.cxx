@@ -26,8 +26,7 @@ const std::string & QtActiveWindowProperty::GetValue()
    {
       if ( !activeWindow->isVisible() )
       {
-          QtWrapper::Log ( QString("WARN: The active window is not visible, forcing it to be visible by calling QWidget::setVisible(true) on it.") );
-          activeWindow->setVisible ( true );
+         QtWrapper::Log ( QString("ERR: The active window is not visible, this is too weird to be true, contact Sequanto..") );
       }
       m_currentActiveWindow = QtWrapper::GetObjectName(activeWindow);
    }
@@ -45,6 +44,7 @@ void QtActiveWindowProperty::TrySendUpdate ()
    if ( m_currentActiveWindow != previousActiveWindow )
    {
       PropertyNode::SendUpdate ();
+      QtWrapper::ActiveWindowChanged();
    }
 }
 

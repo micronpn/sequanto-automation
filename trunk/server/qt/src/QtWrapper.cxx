@@ -565,6 +565,32 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
    return changed;
 }
 
+void QtWrapper::ActiveWindowChanged()
+{
+   ListNode * windowsNode = dynamic_cast<ListNode*>(s_applicationRoot->FindChild ( SQ_UI_ROOT_WINDOWS ));
+   QtActiveWindowProperty * activeWindowProperty = dynamic_cast<QtActiveWindowProperty*>(s_applicationRoot->FindChild ( SQ_UI_ROOT_ACTIVE_WINDOW ));
+   
+   if ( windowsNode != NULL && activeWindowProperty != NULL )
+   {
+       std::string activeWindowName ( activeWindowProperty->GetValue() );
+       
+       //qDebug() << "Active window changed to " << activeWindowName.c_str();
+       
+       QtWidgetNode * activeWindowNode = dynamic_cast<QtWidgetNode*> ( windowsNode->FindChild ( activeWindowName ) );
+       
+       if ( activeWindowNode != NULL )
+       {
+           QWidget * window = activeWindowNode->widget();
+           
+           if ( window != QApplication::activeWindow() )
+           {
+               //qDebug() << "   The found window is not the active window.";
+               UpdateWindows( windowsNode, activeWindowProperty );
+           }
+       }
+   }
+}
+
 void QtWrapper::Log ( const QString & _message )
 {
    std::string message ( ToString(_message) );

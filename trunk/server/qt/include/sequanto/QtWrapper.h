@@ -40,10 +40,12 @@ namespace sequanto
          
          friend class QtApplicationAutomationEventFilter;
          friend class QtWidgetAutomationEventFilter;
+         friend class QtActiveWindowProperty;
          
          static bool UpdateWindows ();
          static bool UpdateWindows ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWinowNode );
          static bool IsWindow ( QWidget * _widget );
+         static void ActiveWindowChanged ();
          
       public:
          static void Wrap ( ListNode * _root, QObject * _object );

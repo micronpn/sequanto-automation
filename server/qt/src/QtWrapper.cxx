@@ -69,6 +69,7 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
   {
     if ( _object == QApplication::activeWindow() && _propertyName == SQ_UI_COMMON_BASE_VISIBLE )
     {
+      //qDebug() << "QtWrapper::GetPropertyValue: The current window is always visible.";
       return true;
     }
     else if ( _propertyName == QtWrapper::screen_pos() )
@@ -458,6 +459,10 @@ bool QtWrapper::UpdateWindows()
 
 bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _activeWindowNode )
 {
+    //QChar zero ( '0' );
+    //qDebug() << "UpdateWindows()";
+    //qDebug() << QString("   Currently, active window is: %1").arg((ulong) QApplication::activeWindow(), 8, 16, zero);
+   
    bool changed = false;
    std::map<std::string, QWidget*> windows;
    std::map<std::string, QWidget*>::iterator windowsIt;
@@ -484,22 +489,44 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
          windowsIt = windows.find(objectName);
          if ( windowsIt == windows.end() )
          {
+             //qDebug() << QString("Found first window named %1 (%2)").arg(objectName.c_str()).arg((ulong) widget, 8, 16, zero);
              windows.insert ( std::make_pair(objectName, widget) );
          }
          else
          {
+             //qDebug() << "Found duplicate of " << objectName.c_str();
+             
              // Two windows with the same name found, we must decide which to keep
-             // If the newest widget is visible we always keep that one
-             if ( widget->isVisible() )
+             
+             // If one of the windows is the active window, we just use that.
+             if ( widget == QApplication::activeWindow() )
              {
+                 //qDebug() << QString("Choosing the new window since it is the active window (%1).").arg((ulong) widget, 8, 16, zero);
+                 windows.erase ( windowsIt );
                  windows.insert ( std::make_pair(objectName, widget) );
              }
-             else
+             else if ( windowsIt->second == QApplication::activeWindow() )
              {
-                 if ( !windowsIt->second->isVisible() )
+                 //qDebug() << QString("Keeping the already existing one because it is the active window (%1).").arg((ulong) windowsIt->second, 8, 16, zero);
+             }
+             else 
+             {
+                 // If the newest window is visible we always keep that one
+                 if ( widget->isVisible() )
                  {
-                     // If the old widget is not visible either, we keep the newest one
+                     //qDebug() << QString("Using the new one (%1) since it is visible.").arg((ulong) widget, 8, 16, zero);
+                     windows.erase ( windowsIt );
                      windows.insert ( std::make_pair(objectName, widget) );
+                 }
+                 else
+                 {
+                     if ( !windowsIt->second->isVisible() )
+                     {
+                         // If the old widget is not visible either, we keep the newest one
+                         //qDebug() << QString("Using the new one (%1) since the old one (%2) is not visible.").arg((ulong) windowsIt->second, 8, 16, zero);
+                         windows.erase ( windowsIt );
+                         windows.insert ( std::make_pair(objectName, widget) );
+                     }
                  }
              }
          }
@@ -507,16 +534,18 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
    }
    
    /*
-   qDebug() << "UpdateWindows, found windows:";
+   qDebug() << "   Found windows:";
    for ( windowsIt = windows.begin(); windowsIt != windows.end(); windowsIt ++ )
    {
-       qDebug() << "   " << windowsIt->first.c_str() << " visible? " << windowsIt->second->isVisible();
+       qDebug() << QString("   %1 visible? %2 (%3)").arg(windowsIt->first.c_str()).arg(windowsIt->second->isVisible()).arg((ulong) windowsIt->second, 8, 16, zero);
    }
    */
    
    // Remove old nodes
-   ListNode::Iterator * it = _windows->ListChildren();
    std::vector<std::string> toBeRemoved;
+   std::vector<std::string> removedBecauseNewWindowAvailable;
+   
+   ListNode::Iterator * it = _windows->ListChildren();
    for ( ; it->HasNext(); it->Next() )
    {
        windowsIt = windows.find(it->GetCurrent()->GetName());
@@ -531,10 +560,10 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
            {
                //qDebug() << "   - Removed (window is not the same as widget): " << it->GetCurrent()->GetName().c_str();
                toBeRemoved.push_back ( it->GetCurrent()->GetName() );
+               removedBecauseNewWindowAvailable.push_back ( it->GetCurrent()->GetName() );
            }
        }
    }
-   
    delete it;
    it = NULL;
    
@@ -549,11 +578,11 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
        if ( !_windows->HasChild(windowsIt->first) )
        {
            //qDebug() << "   + Adding: " << windowsIt->first.c_str();
-
+           
            QtWidgetNode * newWindow = new QtWidgetNode ( windowsIt->second );
            WrapUi ( newWindow, windowsIt->second );
            _windows->AddChild ( newWindow );
-           
+
            changed = true;
        }
    }
@@ -562,8 +591,24 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
    {
 	   _activeWindowNode->TrySendUpdate ();
    }
+   
+   for ( std::vector<std::string>::const_iterator updateIt = removedBecauseNewWindowAvailable.begin(); updateIt != removedBecauseNewWindowAvailable.end(); updateIt++ )
+   {
+       //qDebug() << "   Sending update for " << updateIt->c_str() << " since it was replaced (new window available, old one not visible)";
+       Node * windowChild = _windows->FindChild ( *updateIt );
+       if ( windowChild != NULL )
+       {
+           QtWidgetNode * windowNode = dynamic_cast<QtWidgetNode*> ( windowChild );
+           if ( windowNode != NULL )
+           {
+               //qDebug() << "   Node found.";
+               windowNode->SendUpdateForAllChildren();
+           }
+       }
+   }
    return changed;
 }
+
 
 void QtWrapper::ActiveWindowChanged()
 {

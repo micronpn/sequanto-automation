@@ -67,6 +67,41 @@ void QtWidgetNode::SendPositionUpdateForAllChildren()
    }
 }
 
+void QtWidgetNode::SendUpdateForAllChildren()
+{
+   qDebug() << "SendUpdateForAllChildren " << this->GetFullName().c_str();
+   
+   ListNode::Iterator * it = ListChildren();
+   for ( ; it->HasNext(); it->Next() )
+   {
+       PropertyNode * node = dynamic_cast<PropertyNode*>( it->GetCurrent() );
+       if ( node != NULL )
+       {
+           node->SendUpdate();
+       }
+       else if ( it->GetCurrent()->GetName() == SQ_UI_COMMON_BASE_CHILDREN )
+       {
+           ListNode * childrenNode = dynamic_cast<ListNode*>( it->GetCurrent() );
+           if ( childrenNode != NULL )
+           {
+               ListNode::Iterator * childIt = childrenNode->ListChildren();
+               for ( ; childIt->HasNext(); childIt->Next() )
+               {
+                   QtWidgetNode * node = dynamic_cast<QtWidgetNode*>(childIt->GetCurrent());
+                   if ( node != NULL )
+                   {
+                       node->SendUpdateForAllChildren();
+                   }
+               }
+               delete childIt;
+               childrenNode->SendUpdate();
+           }
+       }
+   }
+   delete it;
+   it = NULL;
+}
+
 void QtWidgetNode::SendUpdateForAllImmediateChildren ()
 {
    ListNode::Iterator * it = ListChildren();

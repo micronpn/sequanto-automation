@@ -44,7 +44,10 @@
 #include <sequanto/QtListLineHeightMethod.h>
 #include <sequanto/QtListLineTextMethod.h>
 #include <sequanto/QtTabsActiveTabProperty.h>
+#include <sequanto/QtTabsTabPositionProperty.h>
+#include <sequanto/QtTabsTabHeightProperty.h>
 #include <sequanto/QtTabsTabNameMethod.h>
+#include <sequanto/QtTabsTabWidthMethod.h>
 #include <sequanto/QtStatsProperties.h>
 #include <sequanto/QtLogging.h>
 
@@ -329,7 +332,10 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
       _root->AddChild ( new QtUiTypeProperty(SQ_WIDGET_TYPE_TABS) );
       _root->AddChild ( new QtIntegerProperty(SQ_UI_TABS_COUNT, _widget ) );
       _root->AddChild ( new QtTabsActiveTabProperty() );
+      _root->AddChild ( new QtTabsTabPositionProperty() );
+      _root->AddChild ( new QtTabsTabHeightProperty() );
       _root->AddChild ( new QtTabsTabNameMethod() );
+      _root->AddChild ( new QtTabsTabWidthMethod() );
    }
    else
    {

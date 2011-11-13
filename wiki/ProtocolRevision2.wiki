@@ -19,7 +19,7 @@ Monitors can be enabled and disabled, a disabled monitor does not send !UPDATE w
 
 Monitors are disabled per default.
 
-== ENABLE and DISABLE requests ==
+=== ENABLE and DISABLE requests ===
 
 These two new request have been added to enable/disable a monitor.
 
@@ -35,7 +35,7 @@ DISABLE /analog_input/value
 
 The server sends an acknowledgement as response to a ENABLE or DISABLE request.
 
-== Changes to the INFO command after the addition of monitors ==
+=== Changes to the INFO command after the addition of monitors ===
 
 A monitor consists of one or more values, which makes them different from properties, which can only contain one value.
 
@@ -49,6 +49,37 @@ This response tells us that the object in question is a monitor, it consists of 
 {{{
 +INFO Monitor Integer Float Disabled
 }}}
+
+
+== {{{ !ADD }} and {{{ !REMOVE }}} asynchronous messages ==
+
+Previously the server could only send an {{{ !UPDATE }}} message to notify the client about a change in the list of children of a node. But that is not an efficient way to synchronize a list of names, since the entire list must be sent for each add/remove of a child node.
+
+In revision 2 we have added !ADD and !REMOVE messages which can be sent when a child node is added or removed, followed by the full name of the added or removed node.
+
+ * node
+    * a
+    * b
+    * c
+
+{{{
+!ADD /node/d
+}}}
+
+ * node
+    * a
+    * b
+    * c
+    * d
+
+{{{
+!REMOVE /node/b
+}}}
+
+ * node
+    * a
+    * c
+    * d
 
 == Parts from revision 1 which have been deprecated in revision 2 ==
 

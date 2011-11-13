@@ -51,7 +51,7 @@ This response tells us that the object in question is a monitor, it consists of 
 }}}
 
 
-== {{{ !ADD }} and {{{ !REMOVE }}} asynchronous messages ==
+== {{{ !ADD }}} and {{{ !REMOVE }}} asynchronous messages ==
 
 Previously the server could only send an {{{ !UPDATE }}} message to notify the client about a change in the list of children of a node. But that is not an efficient way to synchronize a list of names, since the entire list must be sent for each add/remove of a child node.
 

@@ -56,7 +56,10 @@ IF(SQ_CXX)
                               src/QtListLineHeightMethod.cxx
                               src/QtListLineTextMethod.cxx
                               src/QtTabsActiveTabProperty.cxx
+                              src/QtTabsTabPositionProperty.cxx
+                              src/QtTabsTabHeightProperty.cxx
                               src/QtTabsTabNameMethod.cxx
+                              src/QtTabsTabWidthMethod.cxx
                               src/QtStatsProperties.cxx
                               src/QtLogging.cxx)
 
@@ -115,7 +118,10 @@ IF(SQ_CXX)
                     include/sequanto/QtListLineHeightMethod.h
                     include/sequanto/QtListLineTextMethod.h
                     include/sequanto/QtTabsActiveTabProperty.h
+                    include/sequanto/QtTabsTabPositionProperty.h
+                    include/sequanto/QtTabsTabHeightProperty.h
                     include/sequanto/QtTabsTabNameMethod.h
+                    include/sequanto/QtTabsTabWidthMethod.h
                     include/sequanto/QtStatsProperties.h
                     include/sequanto/QtLogging.h)
                   

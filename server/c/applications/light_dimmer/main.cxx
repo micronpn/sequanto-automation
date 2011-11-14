@@ -23,7 +23,7 @@ extern "C"
    
    int dimmer_get_current_level ( void )
    {
-      return Dimmer::instance.currentLevel ();
+      return Dimmer::instance.getCurrentLevelAutomation ();
    }
    
    void dimmer_set_current_level ( int _level )
@@ -39,6 +39,11 @@ extern "C"
    void dimmer_set_saved_level ( int _level )
    {
       Dimmer::instance.setSavedLevel ( _level );
+   }
+   
+   SQBool dimmer_send_output ()
+   {
+      return Dimmer::instance.sendOutput () ? SQ_TRUE : SQ_FALSE;
    }
    
    SQBool interface_get_grasped ( void )

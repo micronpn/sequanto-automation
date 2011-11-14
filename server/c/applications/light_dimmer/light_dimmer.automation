@@ -11,6 +11,7 @@ function /hard_reset hard_reset
 # Dimmer
 property /dimmer/level dimmer_get_current_level dimmer_set_current_level
 property /dimmer/saved_level dimmer_get_saved_level dimmer_set_saved_level
+property /dimmer/send_output dimmer_send_output
 
 # Interface
 property /interface/grasped interface_get_grasped

@@ -17,7 +17,7 @@ InterfaceStateMachine::InterfaceStateMachine ()
    : StateMachine<InterfaceState, InterfaceMessage> ( INTERFACE_NOT_GRASPED )
 {
    m_ticksSinceGrasp = 0;
-   m_ticksSinceHold = 0;
+   //m_ticksSinceHold = 0;
 }
 
 void InterfaceStateMachine::handle ( InterfaceMessage _message )
@@ -29,19 +29,18 @@ void InterfaceStateMachine::handle ( InterfaceMessage _message )
       {
       case INTERFACE_TICK:
          m_ticksSinceGrasp ++;
-         m_ticksSinceHold ++;
-         if ( m_ticksSinceHold > LEVEL_DELAY )
+         //m_ticksSinceHold ++;
+         if ( m_ticksSinceGrasp >= LEVEL_DELAY )
          {
             Dimmer::instance.handle ( DIMMER_HOLD );
-            m_ticksSinceHold = 0;
+            m_ticksSinceGrasp = 0;
          }
          break;
          
       case INTERFACE_RELEASE:
-         m_ticksSinceGrasp = 0;
-         m_ticksSinceHold = 0;
          setState ( INTERFACE_NOT_GRASPED );
-         sq_interface_grasped_updated ( SQ_FALSE );
+         Dimmer::instance.handle ( DIMMER_RELEASE );
+         //sq_interface_grasped_updated ( SQ_FALSE );
          break;
          
       default:
@@ -57,18 +56,15 @@ void InterfaceStateMachine::handle ( InterfaceMessage _message )
          if ( m_ticksSinceGrasp > DELAY_BEFORE_HOLD )
          {
             setState ( INTERFACE_HOLDING );
+            Dimmer::instance.handle ( DIMMER_HOLD );
          }
          break;
             
       case INTERFACE_RELEASE:
-         if ( m_ticksSinceGrasp > ON_OFF_DELAY && m_ticksSinceGrasp < LEVEL_DELAY )
-         {
-            Dimmer::instance.handle( DIMMER_TOUCH );
-         }
-         m_ticksSinceGrasp = 0;
-         m_ticksSinceHold = 0;
+         Dimmer::instance.handle( DIMMER_TOUCH );
+         
          setState ( INTERFACE_NOT_GRASPED );
-         sq_interface_grasped_updated ( SQ_FALSE );
+         //sq_interface_grasped_updated ( SQ_FALSE );
          break;
 
       default:
@@ -76,14 +72,34 @@ void InterfaceStateMachine::handle ( InterfaceMessage _message )
       }
       break;
          
+   case INTERFACE_IGNORING:
+      switch ( _message )
+      {
+      case INTERFACE_TICK:
+         m_ticksSinceGrasp ++;
+         if ( m_ticksSinceGrasp > EPSILON )
+         {
+            setState ( INTERFACE_GRASPED );
+         }
+         break;
+
+      case INTERFACE_RELEASE:
+         setState ( INTERFACE_NOT_GRASPED );
+         break;
+         
+      default:
+         break;
+      }
+      break;
+      
    case INTERFACE_NOT_GRASPED:
       switch ( _message )
       {
       case INTERFACE_GRASP:
          m_ticksSinceGrasp = 0;
-         m_ticksSinceHold = 0;
-         setState ( INTERFACE_GRASPED );
-         sq_interface_grasped_updated ( SQ_TRUE );
+         //m_ticksSinceHold = 0;
+         setState ( INTERFACE_IGNORING );
+         //sq_interface_grasped_updated ( SQ_TRUE );
          break;
             
       default:

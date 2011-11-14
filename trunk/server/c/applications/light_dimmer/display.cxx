@@ -39,6 +39,10 @@ void updateDisplay ()
    case INTERFACE_NOT_GRASPED:
       PutChar ( ' ' );
       break;
+
+   case INTERFACE_IGNORING:
+      PutChar ( 'I' );
+      break;
    }
 }
 

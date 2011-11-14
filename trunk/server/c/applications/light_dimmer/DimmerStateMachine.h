@@ -15,6 +15,7 @@ typedef enum _DimmerState
 typedef enum _DimmerMessage
 {
    DIMMER_HOLD,
+   DIMMER_RELEASE,
    DIMMER_TOUCH,
    DIMMER_RESET,
 } DimmerMessage;
@@ -27,6 +28,8 @@ public:
 private:
    int m_currentLevel;
    int m_savedLevel;
+   bool m_sendOutput;
+   bool m_firstHold;
    
    void setState ( DimmerState _state );
    
@@ -34,9 +37,11 @@ public:
    DimmerStateMachine ();
    
    int currentLevel () const;
+   int getCurrentLevelAutomation ();
    void setCurrentLevel ( int _level );
    int savedLevel () const;
    void setSavedLevel ( int _level );
+   bool sendOutput ();
    
    void handle ( DimmerMessage _message );
 };

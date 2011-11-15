@@ -246,10 +246,9 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
           }
           else
           {
-             switch ( m_node->AddChildWidget ( childWidget ) )
+             switch ( m_node->AddChildWidget ( childWidget, true ) )
              {
              case QtWidgetNode::ADDED:
-                m_node->SendChildrenUpdate();
                 if ( event->iteration() > 0 )
                 {
                    // If iteration is larger than 1 we have seen this
@@ -277,13 +276,19 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
                 
              case QtWidgetNode::ALREADY_EXISTS_BUT_REMOVED_SINCE_IT_IS_NOT_VISIBLE:
                 {
-                   m_node->SendChildrenUpdate();
                    QApplication::postEvent ( _object, new QtAutomationChildAddedEvent( childWidget, event->iteration() + 1 ) );
                 }
                 break;
                 
              case QtWidgetNode::PREVIOUSLY_ADDED:
-                m_node->SendChildrenUpdate();
+                {
+                   QtWidgetNode * node = m_node->FindNodeForWidget ( childWidget );
+                   if ( node != NULL )
+                   {
+                      node->SendRemove ();
+                      node->SendAdd ();
+                   }
+                }
                 break;
                 
              case QtWidgetNode::NOT_ADDED:

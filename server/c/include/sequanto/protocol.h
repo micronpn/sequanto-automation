@@ -93,6 +93,16 @@ SQ_DECL void sq_protocol_write_update_message ( SQStream * _stream, const char *
 SQ_DECL void sq_protocol_write_update_with_value_message ( SQStream * _stream, const char * const _fullname , const SQValue * const _value );
 
 /**
+ * Writes an asynchronous !ADD message for the object with the given full name.
+ */
+SQ_DECL void sq_protocol_write_add_message ( SQStream * _stream, const char * const _fullname );
+
+/**
+ * Writes an asynchronous !REMOVE message for the object with the given full name.
+ */
+SQ_DECL void sq_protocol_write_remove_message ( SQStream * _stream, const char * const _fullname );
+
+/**
  * Write successful response with an integer value.
  */
 SQ_DECL void sq_protocol_write_success_with_integer_message ( SQStream * _stream, int _value );

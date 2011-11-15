@@ -355,6 +355,24 @@ void sq_protocol_write_update_with_value_message( SQStream * _stream, const char
    sq_stream_exit_write ( _stream );
 }
 
+void sq_protocol_write_add_message( SQStream * _stream, const char * const _fullname )
+{
+   sq_stream_enter_write ( _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!ADD ")) );
+   sq_stream_write_string ( _stream, _fullname );
+   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
+}
+
+void sq_protocol_write_remove_message( SQStream * _stream, const char * const _fullname )
+{
+   sq_stream_enter_write ( _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!REMOVE ")) );
+   sq_stream_write_string ( _stream, _fullname );
+   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
+}
+
 void sq_protocol_write_success_with_integer_message ( SQStream * _stream, int _value )
 {
    sq_stream_enter_write ( _stream );

@@ -6,18 +6,19 @@
 
 typedef enum _DimmerState
 {
-   DIMMER_INCREASING_ON = 1,
-   DIMMER_INCREASING_OFF = 2,
-   DIMMER_DECREASING_ON = 4,
-   DIMMER_DECREASING_OFF = 8,
+   DIMMER_UP = 1,
+   DIMMER_DOWN = 2,
+   DIMMER_UP_PASSIVE = 3,
+   DIMMER_DOWN_PASSIVE = 4,
 } DimmerState;
 
 typedef enum _DimmerMessage
 {
-   DIMMER_HOLD,
-   DIMMER_RELEASE,
-   DIMMER_TOUCH,
-   DIMMER_RESET,
+   DIMMER_START_HOLD = 1,
+   DIMMER_HOLD = 2,
+   DIMMER_STOP_HOLD = 3,
+   DIMMER_TOUCH = 4,
+   DIMMER_RESET = 5,
 } DimmerMessage;
 
 class DimmerStateMachine : public StateMachine<DimmerState, DimmerMessage>
@@ -29,7 +30,7 @@ private:
    int m_currentLevel;
    int m_savedLevel;
    bool m_sendOutput;
-   bool m_firstHold;
+   bool m_lightOn;
    
    void setState ( DimmerState _state );
    

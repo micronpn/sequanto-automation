@@ -66,7 +66,7 @@ namespace sequanto
           * 
           * @returns true if the child was added to the root, false otherwise (child already added or name is empty/invalid).
           */
-         AddChildWidgetResult AddChildWidget ( QWidget * _child );
+         AddChildWidgetResult AddChildWidget ( QWidget * _child, bool _sendAdd );
 
          //bool RemoveChildWidget ( QWidget * _child );
 

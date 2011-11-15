@@ -382,11 +382,11 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
                QWidget * childWidget = qobject_cast<QWidget*>(childObject);
                if ( !IsWindow(childWidget) )
                {
-                   QtWidgetNode::AddChildWidgetResult result =_root->AddChildWidget ( childWidget );
+                   QtWidgetNode::AddChildWidgetResult result =_root->AddChildWidget ( childWidget, false );
                    
                    if ( result == QtWidgetNode::ALREADY_EXISTS_BUT_REMOVED_SINCE_IT_IS_NOT_VISIBLE )
                    {
-                       _root->AddChildWidget ( childWidget );
+                       _root->AddChildWidget ( childWidget, false );
                    }
                }
             }
@@ -481,7 +481,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
          {
             if ( QtUnnamedObjectStore::IsKnown ( widget ) )
             {
-                std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
+               std::string unnamedObjectName ( QtUnnamedObjectStore::GetName(widget) );
                if ( _windows->HasChild(unnamedObjectName) )
                {
                   _windows->RemoveChild ( unnamedObjectName );
@@ -588,7 +588,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
            QtWidgetNode * newWindow = new QtWidgetNode ( windowsIt->second );
            WrapUi ( newWindow, windowsIt->second );
            _windows->AddChild ( newWindow );
-
+           newWindow->SendAdd ();
            changed = true;
        }
    }

@@ -124,7 +124,7 @@ void QtWidgetNode::SendUpdateForAllImmediateChildren ()
    delete it;
 }
 
-QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child )
+QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child, bool _sendAdd )
 {
    ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
@@ -146,6 +146,10 @@ QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _chi
             QtWidgetNode * child = new QtWidgetNode ( _child );
             QtWrapper::WrapUi ( child, qobject_cast<QWidget*>(_child) );
             childrenNode->AddChild ( child );
+            if ( _sendAdd )
+            {
+               child->SendAdd ();
+            }
             return QtWidgetNode::ADDED;
          }
          else

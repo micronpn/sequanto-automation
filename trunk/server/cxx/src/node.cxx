@@ -1,5 +1,6 @@
 #include <sequanto/log.h>
 #include <sequanto/server.h>
+#include <sequanto/protocol.h>
 #include <sequanto/node.h>
 #include <stdexcept>
 #include <string>
@@ -125,6 +126,20 @@ void Node::HandleMonitorStateChange ( bool _enable )
 void Node::LogAsync ( const std::string & _message ) const
 {
    sq_log ( _message.c_str() );
+}
+
+void Node::SendAdd ()
+{
+   std::string fullname ( this->GetFullName() );
+   SQServer * server = sq_server_get_instance();
+   sq_protocol_write_add_message ( server->m_stream, fullname.c_str() );
+}
+
+void Node::SendRemove ()
+{
+   std::string fullname ( this->GetFullName() );
+   SQServer * server = sq_server_get_instance();
+   sq_protocol_write_remove_message ( server->m_stream, fullname.c_str() );
 }
 
 Node::~Node()

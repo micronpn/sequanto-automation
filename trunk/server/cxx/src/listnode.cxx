@@ -101,6 +101,7 @@ void ListNode::RemoveChild ( std::string _name )
    NodeMap::iterator it = m_children.find(_name);
    if ( it != m_children.end() )
    {
+      it->second->SendRemove ();
       delete it->second;
       m_children.erase ( it );
    }

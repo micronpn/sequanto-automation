@@ -74,7 +74,17 @@ namespace sequanto
          virtual void HandleMonitorStateChange ( bool _enable );
 
          virtual void LogAsync ( const std::string & _message ) const;
+         
+         /**
+          * Send !ADD message for this node.
+          */
+         virtual void SendAdd ();
 
+         /**
+          * Send !REMOVE message for this node.
+          */
+         virtual void SendRemove ();
+         
          virtual ~Node ();
 
          static bool IsValidName ( const std::string & _name );

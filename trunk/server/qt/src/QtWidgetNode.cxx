@@ -69,8 +69,6 @@ void QtWidgetNode::SendPositionUpdateForAllChildren()
 
 void QtWidgetNode::SendUpdateForAllChildren()
 {
-   qDebug() << "SendUpdateForAllChildren " << this->GetFullName().c_str();
-   
    ListNode::Iterator * it = ListChildren();
    for ( ; it->HasNext(); it->Next() )
    {

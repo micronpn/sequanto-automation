@@ -83,6 +83,24 @@ ELSE(HAVE_ASSERT_H)
 ENDIF(HAVE_ASSERT_H)
 
 
+MACRO(SQ_GENERATE_ARDUINO name)
+  IF(SQ_ARDUINO)
+    ADD_CUSTOM_COMMAND(TARGET ${name}
+      POST_BUILD
+      COMMAND avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 ${name} ${name}.eep
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		VERBATIM)
+    
+    ADD_CUSTOM_COMMAND(TARGET ${name}
+      POST_BUILD
+      COMMAND avr-objcopy -O ihex -R .eeprom ${name} ${name}.hex
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		VERBATIM)
+    
+    # end
+  ENDIF(SQ_ARDUINO)
+ENDMACRO(SQ_GENERATE_ARDUINO)
+
 IF(DOXYGEN_FOUND)
     SET(SQ_GENERATE_DOCUMENTATION OFF CACHE BOOL "Should documentation be generated (only if doxygen is found)")
 ENDIF(DOXYGEN_FOUND)

@@ -28,19 +28,8 @@ IF(SQ_ARDUINO)
 
   # Link arduino_demo with the automation library
   TARGET_LINK_LIBRARIES(arduino_demo SequantoAutomation)
-
-  # Create the upload-able .hex images.
-  ADD_CUSTOM_COMMAND(TARGET arduino_demo
-    POST_BUILD
-    COMMAND avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 arduino_demo arduino_demo.eep
-	 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	 VERBATIM)
-
-  ADD_CUSTOM_COMMAND(TARGET arduino_demo
-    POST_BUILD
-    COMMAND avr-objcopy -O ihex -R .eeprom arduino_demo arduino_demo.hex
-	 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	 VERBATIM)
+  
+  SQ_GENERATE_ARDUINO(arduino_demo)
   
   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include ${CMAKE_BINARY_DIR}/generated/applications/arduino_demo)
   

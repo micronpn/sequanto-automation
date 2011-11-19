@@ -83,6 +83,20 @@ ELSE(HAVE_ASSERT_H)
 ENDIF(HAVE_ASSERT_H)
 
 
+MACRO(SQ_GENERATE automation_name automation_file)
+  SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c GENERATED)
+  
+  ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c
+    MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/${automation_file}
+    COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_CURRENT_SOURCE_DIR}/${automation_file}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/generated
+    VERBATIM)
+  
+  INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated)
+  
+  SET(SQ_GENERATE_${automation_name} ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c)
+ENDMACRO(SQ_GENERATE)
+
 MACRO(SQ_GENERATE_ARDUINO name)
   IF(SQ_ARDUINO)
     ADD_CUSTOM_COMMAND(TARGET ${name}

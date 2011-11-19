@@ -37,7 +37,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(SQ_ARDUINO)
-  SET(C_SRCS ${C_SRCS} src/sq_stream_embedded_serial.c)
+  SET(C_SRCS ${C_SRCS} src/sq_stream_${SQ_ARDUINO_STREAM}.c)
   #SET(C_SRCS ${C_SRCS} src/sq_stream_arduino.c)
 
     SET(SQ_USE_MUTEXES OFF)

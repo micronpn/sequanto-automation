@@ -8,24 +8,12 @@ IF(SQ_ARDUINO)
 	 menu.cpp
 	 LCD03.cpp
 	 tempcontrol.cpp)
-
-  # Create our output directory for the generated automation files.
-  FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/generated/applications/arduino_demo)
-
-  # Add the generated automation .c file
-  SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/applications/arduino_demo/arduino_demo_automation.c GENERATED)
+  
+  SQ_GENERATE(arduino_demo arduino_demo.automation)
   
   # Add the arduino_demo executable, with source files, including the generated one.
-  ADD_EXECUTABLE(arduino_demo ${ARDUINO_DEMO_SRCS}
-    ${CMAKE_BINARY_DIR}/generated/applications/arduino_demo/arduino_demo_automation.c)
-
-  # Add custom pre-build command to generate the automation .c file from the .automation file.
-  ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/applications/arduino_demo/arduino_demo_automation.c
-    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/server/c/applications/arduino_demo/arduino_demo.automation
-    COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_SOURCE_DIR}/server/c/applications/arduino_demo/arduino_demo.automation
-    WORKING_DIRECTORY generated/applications/arduino_demo #${CMAKE_BINARY_DIR}/generated
-    VERBATIM)
-
+  ADD_EXECUTABLE(arduino_demo ${ARDUINO_DEMO_SRCS} ${SQ_GENERATE_arduino_demo})
+  
   # Link arduino_demo with the automation library
   TARGET_LINK_LIBRARIES(arduino_demo SequantoAutomation)
   

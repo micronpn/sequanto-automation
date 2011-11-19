@@ -1,18 +1,12 @@
 IF(SQ_ARDUINO)
-    SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/light_dimmer_automation.c GENERATED)
-
-    ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/light_dimmer_automation.c
-                       MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/server/c/applications/light_dimmer/light_dimmer.automation
-                       COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_SOURCE_DIR}/server/c/applications/light_dimmer/light_dimmer.automation
-                       WORKING_DIRECTORY generated #${CMAKE_BINARY_DIR}/generated
-                       VERBATIM)
+  SQ_GENERATE(light_dimmer light_dimmer.automation)
                        
     ADD_EXECUTABLE(light_dimmer main.cxx dimmerstatemachine.cxx interfacestatemachine.cxx display.cxx
                      ../arduino_demo/LCD03.cpp
-                     ${CMAKE_BINARY_DIR}/generated/light_dimmer_automation.c)
+                     ${SQ_GENERATE_light_dimmer})
     
     TARGET_LINK_LIBRARIES(light_dimmer SequantoAutomation)
-    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated ../arduino_demo)
+    INCLUDE_DIRECTORIES(../arduino_demo)
     
     SQ_GENERATE_ARDUINO(light_dimmer)
     

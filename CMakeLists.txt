@@ -73,6 +73,7 @@ SET(SQ_MAX_PARAMETERS    10       CACHE STRING "The maximum number of parameters
 SET(SQ_SOCKET_TIMEOUT    15000    CACHE STRING "The number of milliseconds to wait for client data before closing the connection")
 SET(SQ_LOGGING_ENABLED   ON       CACHE BOOL "Should logging be enabled")
 SET(SQ_ARDUINO           OFF      CACHE BOOL "Build for arduino")
+SET(SQ_ARDUINO_STREAM    "embedded_serial"       CACHE STRING "The stream module to use on arduino (embedded_serial or arduino).")
 SET(SQ_USE_MUTEXES       ON       CACHE BOOL "Use mutexes (Win32 or *nix)")
 SET(SQ_USE_THREADS       ON       CACHE BOOL "Use threads (Win32 or *nix)")
 SET(SQ_MAX_VALUE_LENGTH  12       CACHE INTEGER "Maximum length of the character buffer used to write integer and float values to a stream.")

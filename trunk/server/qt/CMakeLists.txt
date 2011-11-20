@@ -61,6 +61,7 @@ IF(SQ_CXX)
                               src/QtTabsTabNameMethod.cxx
                               src/QtTabsTabWidthMethod.cxx
                               src/QtStatsProperties.cxx
+                              src/QtDebugging.cxx
                               src/QtLogging.cxx)
 
      SET(QT_SRCS ${QT_SRCS_WITHOUT_MOCK}
@@ -123,6 +124,7 @@ IF(SQ_CXX)
                     include/sequanto/QtTabsTabNameMethod.h
                     include/sequanto/QtTabsTabWidthMethod.h
                     include/sequanto/QtStatsProperties.h
+                    include/sequanto/QtDebugging.h
                     include/sequanto/QtLogging.h)
                   
      STRING(REPLACE ";" ";qt/" QT_SRCS_ALL "${QT_SRCS_WITHOUT_MOCK}")

@@ -73,6 +73,8 @@ namespace sequanto
          static const std::string & global_pos ();
 
          static void Log ( const QString & _message );
+         
+         static ListNode * ApplicationRoot ();
       };
    }
 }

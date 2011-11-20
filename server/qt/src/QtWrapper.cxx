@@ -49,6 +49,7 @@
 #include <sequanto/QtTabsTabNameMethod.h>
 #include <sequanto/QtTabsTabWidthMethod.h>
 #include <sequanto/QtStatsProperties.h>
+#include <sequanto/QtDebugging.h>
 #include <sequanto/QtLogging.h>
 
 #ifdef SQ_QT_USE_CACHE
@@ -397,6 +398,11 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
 
 ListNode * s_applicationRoot;
 
+ListNode * QtWrapper::ApplicationRoot ()
+{
+   return s_applicationRoot;
+}
+
 void QtWrapper::WrapApplication ( ListNode * _root )
 {
     s_applicationRoot = _root;
@@ -432,6 +438,10 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    _root->AddChild ( logging );
    logging->AddChild ( new QtLoggingEnabledProperty() );
    logging->AddChild ( new QtLoggingFilenameProperty() );
+
+   ListNode * debugging = new ListNode ( "debugging" );
+   _root->AddChild ( debugging );
+   debugging->AddChild ( new QtDebuggingVerifyIntegrityMethod() );
 }
 
 bool QtWrapper::IsWindow ( QWidget * _widget )

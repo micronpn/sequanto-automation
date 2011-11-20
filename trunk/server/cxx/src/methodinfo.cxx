@@ -49,3 +49,10 @@ void MethodInfo::AddParameter ( SQValueType _type )
 MethodInfo::~MethodInfo()
 {
 }
+
+const MethodInfo & MethodInfo::voidVoid ()
+{
+   static MethodInfo ret;
+   
+   return ret;
+}

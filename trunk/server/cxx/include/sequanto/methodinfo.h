@@ -47,6 +47,11 @@ namespace sequanto
 
          void SetReturnType ( SQValueType _type );
          void AddParameter ( SQValueType _type );
+         
+         /**
+          * Return a method info which returns void and does not take any parameters.
+          */
+         static const MethodInfo & voidVoid();
       };
    }
 }

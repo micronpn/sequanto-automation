@@ -15,6 +15,8 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+  Modified 28 September 2010 by Mark Sproul
 */
 
 #ifndef HardwareSerial_h
@@ -22,11 +24,11 @@
 
 #include <inttypes.h>
 
-#include "Print.h"
+#include "Stream.h"
 
 struct ring_buffer;
 
-class HardwareSerial : public Print
+class HardwareSerial : public Stream
 {
   private:
     ring_buffer *_rx_buffer;
@@ -47,19 +49,28 @@ class HardwareSerial : public Print
       volatile uint8_t *udr,
       uint8_t rxen, uint8_t txen, uint8_t rxcie, uint8_t udre, uint8_t u2x);
     void begin(long);
-    uint8_t available(void);
-    int read(void);
-    void flush(void);
+    void end();
+    virtual int available(void);
+    virtual int peek(void);
+    virtual int read(void);
+    virtual void flush(void);
     virtual void write(uint8_t);
     using Print::write; // pull in write(str) and write(buf, size) from Print
 };
 
-extern HardwareSerial Serial;
-
-#if defined(__AVR_ATmega1280__)
-extern HardwareSerial Serial1;
-extern HardwareSerial Serial2;
-extern HardwareSerial Serial3;
+#if defined(UBRRH) || defined(UBRR0H)
+  extern HardwareSerial Serial;
+#elif defined(USBCON)
+  #include "usb_api.h"
+#endif
+#if defined(UBRR1H)
+  extern HardwareSerial Serial1;
+#endif
+#if defined(UBRR2H)
+  extern HardwareSerial Serial2;
+#endif
+#if defined(UBRR3H)
+  extern HardwareSerial Serial3;
 #endif
 
 #endif

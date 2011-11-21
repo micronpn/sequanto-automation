@@ -63,8 +63,10 @@ SET(EXTRA_SRCS ${CMAKE_SOURCE_DIR}/arduino/Print.cpp
                ${CMAKE_SOURCE_DIR}/arduino/pins_arduino.c
                ${CMAKE_SOURCE_DIR}/arduino/WInterrupts.c
                ${CMAKE_SOURCE_DIR}/arduino/WMath.cpp
-               ${CMAKE_SOURCE_DIR}/arduino/Wire.cpp
-               ${CMAKE_SOURCE_DIR}/arduino/utility/twi.c)
+               ${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
+               ${CMAKE_SOURCE_DIR}/arduino/WString.cpp
+               ${CMAKE_SOURCE_DIR}/arduino/twi.c
+               ${CMAKE_SOURCE_DIR}/arduino/twowire/Wire.cpp)
 
 IF(SQ_ARDUINO_STREAM STREQUAL "arduino")
   FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "")
@@ -80,7 +82,9 @@ IF(SQ_ARDUINO_STREAM STREQUAL "arduino")
   FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "}\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.h "#endif\n")
   
-  FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "#include <HardwareSerial.h>\n")
+  FILE(WRITE ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "#include <avr/io.h>\n")
+  FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "#include <HardwareSerial.h>\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "extern \"C\" { \n" )
   FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_open(long _baudRate) { Serial.begin(_baudRate); }\n" )
   FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "void arduino_serial_write ( const char * const _buff ) { Serial.write ( _buff ); }\n")
@@ -91,7 +95,6 @@ IF(SQ_ARDUINO_STREAM STREQUAL "arduino")
   FILE(APPEND ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp "}\n")
   
   SET(EXTRA_SRCS ${EXTRA_SRCS}
-                  ${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
                   ${CMAKE_BINARY_DIR}/generated/arduino_serial.cpp)
 ENDIF(SQ_ARDUINO_STREAM STREQUAL "arduino")
 

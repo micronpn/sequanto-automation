@@ -30,6 +30,8 @@
 #cmakedefine SQ_WIN32
 #cmakedefine SQ_UNIX
 #cmakedefine SQ_ARDUINO
+#cmakedefine SQ_ARDUINO_STREAM
+#define SQ_ARDUINO_STREAM_${SQ_ARDUINO_STREAM}
 #cmakedefine SQ_LOGGING_ENABLED
 #cmakedefine SQ_C_SUPPORTS_INLINE
 #cmakedefine SQ_USE_ASSERT

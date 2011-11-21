@@ -112,7 +112,9 @@ MACRO(SQ_GENERATE_ARDUINO name)
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		VERBATIM)
     
-    # end
+    FILE(WRITE ${CMAKE_BINARY_DIR}/upload_${name}.bat "SET PORT=%1\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}.bat "if x%1 == x ( SET PORT=COM8 )\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D \"-Uflash:w:${CMAKE_CURRENT_BINARY_DIR}\\${name}.hex:i\"\n")
   ENDIF(SQ_ARDUINO)
 ENDMACRO(SQ_GENERATE_ARDUINO)
 

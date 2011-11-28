@@ -12,3 +12,8 @@ property /digital/(2..13)/count_on_low2high digital_counter_low2high_get digital
 # property /digital/(0..14)/mode digital_mode_get digital_mode_set
 # property /digital/(0..14)/counter digital_counter_get digital_counter_set
 # property /digital/(0..14)/pin digital_pin_get digital_pin_set
+
+function /analog/use_default_reference analog_in_use_default_reference
+function /analog/use_external_reference analog_in_use_external_reference
+property /analog/(0..5)/raw analog_in_get_raw_value
+property /analog/(0..5)/value analog_in_get_value

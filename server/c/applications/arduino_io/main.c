@@ -160,6 +160,29 @@ void digital_counter_low2high_set ( int _pin, SQBool _value )
 	io_trig_l2h = (io_trig_l2h & ~mask) | ((_value == SQ_TRUE) ? mask : 0);
 }
 
+int analog_in_get_value ( int _pin )
+{
+   unsigned int ret = analogRead(_pin);
+   ret *= 49;
+   ret += 5;
+   ret /= 10;
+   return (int) ret;
+}
+
+int analog_in_get_raw_value ( int _pin )
+{
+   return analogRead(_pin);
+}
+
+void analog_in_use_default_reference ( void  )
+{
+   analogReference ( DEFAULT );
+}
+
+void analog_in_use_external_reference ( void  )
+{
+   analogReference ( EXTERNAL );
+}
 
 int main ( void )
 {

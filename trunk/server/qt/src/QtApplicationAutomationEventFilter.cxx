@@ -7,6 +7,7 @@
 #include <sequanto/QtActiveWindowProperty.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
 #include <sequanto/QtLogging.h>
+#include <sequanto/QtDebugging.h>
 #include <sequanto/ui.h>
 #include <cassert>
 
@@ -77,6 +78,11 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
        else if ( _event->type() == QtAutomationMouseClickEvent::ID )
        {
           dynamic_cast<QtAutomationMouseClickEvent*>(_event)->done();
+       }
+       else if ( _event->type() == QtDebuggingEvent::ID )
+       {
+           dynamic_cast<QtDebuggingEvent*>(_event)->Handle();
+           return true;
        }
        break;
     }

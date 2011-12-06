@@ -441,7 +441,7 @@ void QtWrapper::WrapApplication ( ListNode * _root )
 
    ListNode * debugging = new ListNode ( "debugging" );
    _root->AddChild ( debugging );
-   debugging->AddChild ( new QtDebuggingVerifyIntegrityMethod() );
+   debugging->AddChild ( new QtDebuggingCallMethod(QtDebuggingCallMethod::VERIFY_INTEGRITY) );
 }
 
 bool QtWrapper::IsWindow ( QWidget * _widget )

@@ -18,21 +18,54 @@
 #ifndef SEQUANTO_QT_DEBUGGING_H_
 #define SEQUANTO_QT_DEBUGGING_H_
 
+#include <QObject>
+#include <QtGui>
+
 #include <sequanto/node.h>
+
 
 namespace sequanto
 {
    namespace automation
    {
-      class QtDebuggingVerifyIntegrityMethod : public Node
+      class QtDebuggingEvent;
+       
+      class QtDebuggingCallMethod : public Node
       {
       public:
-         QtDebuggingVerifyIntegrityMethod();
+          typedef enum _Method
+          {
+              VERIFY_INTEGRITY
+          } Method;
+
+      private:
+          Method m_method;
+          
+          static const std::string & MethodName(Method _method);
+          
+      public:
+          QtDebuggingCallMethod( Method _method );
          
          virtual const NodeInfo & Info () const;
          virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output );
          
-         ~QtDebuggingVerifyIntegrityMethod ();
+          static void Handle ( Method _method );
+          
+         ~QtDebuggingCallMethod ();
+      };
+
+
+      class QtDebuggingEvent : public QEvent
+      {
+      private:
+          QtDebuggingCallMethod::Method m_method;
+          
+      public:
+         static const int ID;
+         
+         QtDebuggingEvent ( QtDebuggingCallMethod::Method _method );
+         void Handle ();
+         virtual ~QtDebuggingEvent ();
       };
    }
 }

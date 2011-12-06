@@ -4,25 +4,52 @@
 
 using namespace sequanto::automation;
 
-QtDebuggingVerifyIntegrityMethod::QtDebuggingVerifyIntegrityMethod()
-   : Node("verifyIntegrity")
+QtDebuggingCallMethod::QtDebuggingCallMethod(Method _method)
+    : Node(MethodName(_method)),
+      m_method(_method)
 {
 }
 
-const NodeInfo & QtDebuggingVerifyIntegrityMethod::Info () const
+const std::string & QtDebuggingCallMethod::MethodName(Method _method)
+{
+    static std::string verifyIntegrity ( "verifyIntegrity" );
+    static std::string unknown ( "unknown" );
+    
+    switch ( _method )
+    {
+    case VERIFY_INTEGRITY:
+       return verifyIntegrity;
+
+    default:
+       return unknown;
+    }
+}
+
+const NodeInfo & QtDebuggingCallMethod::Info () const
 {
    return MethodInfo::voidVoid();
 }
 
-void QtDebuggingVerifyIntegrityMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
+void QtDebuggingCallMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
+{
+   QApplication::postEvent ( QApplication::instance(), new QtDebuggingEvent(m_method) );
+}
+
+void QtDebuggingCallMethod::Handle ( Method _method )
+{
+    switch ( _method )
+    {
+    case VERIFY_INTEGRITY:
 {
    ListNode * root = QtWrapper::ApplicationRoot();
    ListNode * windows = dynamic_cast<ListNode*>(root->FindChild ( SQ_UI_ROOT_WINDOWS ));
    QWidgetList allWidgets ( QApplication::allWidgets() );
    Q_FOREACH ( QWidget * widget, allWidgets )
    {
-      if ( widget->isWindow() )
-      {
+       if ( widget->isWindow() && widget == widget->window() &&
+            ( widget->inherits(QMainWindow::staticMetaObject.className()) ||
+              widget->inherits(QDialog::staticMetaObject.className()) ) )
+       {
          std::string name = QtWrapper::GetObjectName( widget );
          QtWidgetNode * node = dynamic_cast<QtWidgetNode*>(windows->FindChild(name));
          if ( node == NULL )
@@ -39,7 +66,26 @@ void QtDebuggingVerifyIntegrityMethod::HandleCall ( size_t _numberOfValues, cons
       }
    }
 }
+   }
+}
 
-QtDebuggingVerifyIntegrityMethod::~QtDebuggingVerifyIntegrityMethod()
+QtDebuggingCallMethod::~QtDebuggingCallMethod()
+{
+}
+
+const int QtDebuggingEvent::ID = QEvent::registerEventType();
+
+QtDebuggingEvent::QtDebuggingEvent ( QtDebuggingCallMethod::Method _method )
+   : QEvent( (QEvent::Type) ID),
+     m_method(_method)
+{
+}
+
+void QtDebuggingEvent::Handle ()
+{
+    //QtDebuggingCallMethod::Handle ( m_method );
+}
+
+QtDebuggingEvent::~QtDebuggingEvent()
 {
 }

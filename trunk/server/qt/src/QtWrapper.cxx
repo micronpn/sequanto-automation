@@ -559,7 +559,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
    
    // Remove old nodes
    std::vector<std::string> toBeRemoved;
-   std::vector<std::string> removedBecauseNewWindowAvailable;
+   //std::vector<std::string> removedBecauseNewWindowAvailable;
    
    ListNode::Iterator * it = _windows->ListChildren();
    for ( ; it->HasNext(); it->Next() )
@@ -576,7 +576,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
            {
                //qDebug() << "   - Removed (window is not the same as widget): " << it->GetCurrent()->GetName().c_str();
                toBeRemoved.push_back ( it->GetCurrent()->GetName() );
-               removedBecauseNewWindowAvailable.push_back ( it->GetCurrent()->GetName() );
+               //removedBecauseNewWindowAvailable.push_back ( it->GetCurrent()->GetName() );
            }
        }
    }
@@ -608,6 +608,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
 	   _activeWindowNode->TrySendUpdate ();
    }
    
+   /*
    for ( std::vector<std::string>::const_iterator updateIt = removedBecauseNewWindowAvailable.begin(); updateIt != removedBecauseNewWindowAvailable.end(); updateIt++ )
    {
        //qDebug() << "   Sending update for " << updateIt->c_str() << " since it was replaced (new window available, old one not visible)";
@@ -622,6 +623,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
            }
        }
    }
+   */
    return changed;
 }
 

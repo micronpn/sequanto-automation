@@ -5,6 +5,7 @@ PROJECT(libSequantoAutomation)
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Sequanto Automation library")
 SET(CPACK_PACKAGE_VERSION "0.6.0")
 SET(CPACK_PACKAGE_VENDOR "Sequanto A/S")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Rasmus Toftdahl Olesen <rasmus@sequanto.com>")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\code.google.com\\\\sequanto-automation\\\\")
 

@@ -57,16 +57,18 @@ SQBool digital_pin_get ( int _pin )
 
 void digital_pin_set ( int _pin, SQBool _value )
 {
-   if ((io_direction& PIN_MASK(_pin)) != 0)
+   //if ((io_direction& PIN_MASK(_pin)) != 0)
    {
       digitalWrite ( _pin, _value == SQ_TRUE ? HIGH : LOW );
       io_last_written = (io_last_written & (~(PIN_MASK(_pin)))) | (_value >> _pin);
       sq_digital_pin_updated ( _pin, _value );
    }
+   /*
    else
    {
       sq_logf ( "Trying to set pin %i, which is not an output pin.", _pin );
    }
+   */
 }
 
 const char * digital_direction_get ( int _pin )

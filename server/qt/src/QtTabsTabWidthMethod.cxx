@@ -28,9 +28,13 @@ const NodeInfo & QtTabsTabWidthMethod::Info () const
 
 void QtTabsTabWidthMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
 {
+   SQ_UNUSED_PARAMETER(_numberOfValues);
+   SQ_UNUSED_PARAMETER(_inputValues);
+   SQ_UNUSED_PARAMETER(_output);
+   
    assert ( _numberOfValues == 1 );
        
-   int index = _inputValues[0].Value.m_integerValue;
+   //int index = _inputValues[0].Value.m_integerValue;
    
    QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(GetParent());
    assert ( widgetNode != NULL );

@@ -32,6 +32,10 @@ const NodeInfo & QtDebuggingCallMethod::Info () const
 
 void QtDebuggingCallMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
 {
+   SQ_UNUSED_PARAMETER(_numberOfValues);
+   SQ_UNUSED_PARAMETER(_inputValues);
+   SQ_UNUSED_PARAMETER(_output);
+
    QApplication::postEvent ( QApplication::instance(), new QtDebuggingEvent(m_method) );
 }
 

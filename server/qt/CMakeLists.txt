@@ -18,6 +18,7 @@ IF(SQ_CXX)
                               src/QtAutomationMouseClickEvent.cxx
                               src/QtAutomationChildAddedEvent.cxx
                               src/QtAutomationWidgetCreatedEvent.cxx
+                              src/QtAutomationStealFocusEvent.cxx
                               src/QtUiTypeProperty.cxx
                               src/QtStringProperty.cxx
                               src/QtIntegerProperty.cxx
@@ -80,6 +81,7 @@ IF(SQ_CXX)
                     include/sequanto/QtAutomationMouseClickEvent.h
                     include/sequanto/QtAutomationChildAddedEvent.h
                     include/sequanto/QtAutomationWidgetCreatedEvent.h
+                    include/sequanto/QtAutomationStealFocusEvent.h
                     include/sequanto/QtUiTypeProperty.h
                     include/sequanto/QtStringProperty.h
                     include/sequanto/QtIntegerProperty.h

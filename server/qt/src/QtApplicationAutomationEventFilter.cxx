@@ -3,6 +3,7 @@
 #include <sequanto/QtAutomationMoveEvent.h>
 #include <sequanto/QtAutomationResizeEvent.h>
 #include <sequanto/QtAutomationWidgetCreatedEvent.h>
+#include <sequanto/QtAutomationStealFocusEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtActiveWindowProperty.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
@@ -83,6 +84,13 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
        {
            dynamic_cast<QtDebuggingEvent*>(_event)->Handle();
            return true;
+       }
+       else if ( _event->type() == QtAutomationStealFocusEvent::ID )
+       {
+          QtAutomationStealFocusEvent * focusEvent = dynamic_cast<QtAutomationStealFocusEvent*>(_event);
+          focusEvent->stealFocus();
+          focusEvent->done();
+          return true;
        }
        break;
     }

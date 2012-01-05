@@ -1,5 +1,6 @@
 #include <sequanto/QtMouseClickMethod.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
+#include <sequanto/QtAutomationStealFocusEvent.h>
 #include <sequanto/methodinfo.h>
 #include <sequanto/ui.h>
 #include <QtGui>
@@ -52,6 +53,14 @@ void QtMouseClickMethod::HandleCall ( size_t _numberOfValues, const SQValue * co
    }
    
    QWidget * window = QApplication::activeWindow();
+   if ( window == NULL || !window->hasFocus() )
+   {
+      QtAutomationStealFocusEvent * event = new QtAutomationStealFocusEvent();
+      QtAutomationStealFocusEvent::wait ( event, QApplication::instance(), TIMEOUT );
+
+      window = QApplication::activeWindow();
+   }
+
    if ( window != NULL )
    {
       QtAutomationMouseClickEvent * event = new QtAutomationMouseClickEvent(x, y, button);

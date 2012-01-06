@@ -11,6 +11,7 @@
 #include <sequanto/QtAutomationResizeEvent.h>
 #include <sequanto/QtAutomationMouseMoveEvent.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
+#include <sequanto/QtAutomationRefreshWindowsEvent.h>
 #include <sequanto/QtUnnamedObjectStore.h>
 #include <sequanto/QtUiTypeProperty.h>
 #include <sequanto/QtStringProperty.h>
@@ -651,6 +652,15 @@ void QtWrapper::ActiveWindowChanged()
                UpdateWindows( windowsNode, activeWindowProperty );
            }
        }
+	   else
+	   {
+		   if ( !activeWindowName.empty() )
+		   {
+			   //qDebug() << "Active window changed to a window which is not known by the sequanto-automation library: " << activeWindowName.c_str();
+
+			   QApplication::postEvent ( QApplication::instance(), new QtAutomationRefreshWindowsEvent() );
+		   }
+	   }
    }
 }
 

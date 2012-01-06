@@ -36,6 +36,7 @@ void QtMouseMoveMethod::HandleCall ( size_t _numberOfValues, const SQValue * con
    int y = _inputValues[1].Value.m_integerValue;
    
    QWidget * window = QApplication::activeWindow();
+/*
    if ( window == NULL || !window->hasFocus() )
    {
       QtAutomationStealFocusEvent * event = new QtAutomationStealFocusEvent();
@@ -43,7 +44,7 @@ void QtMouseMoveMethod::HandleCall ( size_t _numberOfValues, const SQValue * con
 
       window = QApplication::activeWindow();
    }
-   
+*/   
    if ( window != NULL )
    {
       QtAutomationMouseMoveEvent * event = new QtAutomationMouseMoveEvent(x, y);

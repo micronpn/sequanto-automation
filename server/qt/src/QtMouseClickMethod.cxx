@@ -53,6 +53,7 @@ void QtMouseClickMethod::HandleCall ( size_t _numberOfValues, const SQValue * co
    }
    
    QWidget * window = QApplication::activeWindow();
+/*
    if ( window == NULL || !window->hasFocus() )
    {
       QtAutomationStealFocusEvent * event = new QtAutomationStealFocusEvent();
@@ -60,7 +61,7 @@ void QtMouseClickMethod::HandleCall ( size_t _numberOfValues, const SQValue * co
 
       window = QApplication::activeWindow();
    }
-
+*/
    if ( window != NULL )
    {
       QtAutomationMouseClickEvent * event = new QtAutomationMouseClickEvent(x, y, button);

@@ -4,6 +4,7 @@
 #include <sequanto/QtAutomationResizeEvent.h>
 #include <sequanto/QtAutomationWidgetCreatedEvent.h>
 #include <sequanto/QtAutomationStealFocusEvent.h>
+#include <sequanto/QtAutomationRefreshWindowsEvent.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtActiveWindowProperty.h>
 #include <sequanto/QtAutomationMouseClickEvent.h>
@@ -92,6 +93,11 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
           focusEvent->done();
           return true;
        }
+	   else if ( _event->type() == QtAutomationRefreshWindowsEvent::ID )
+	   {
+		   QtWrapper::UpdateWindows();
+		   return true;
+	   }
        break;
     }
     return QObject::eventFilter(_object, _event );

@@ -157,7 +157,7 @@ IF(SQ_CXX)
        FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "SOURCES+=\$\${C_SRCS} \$\${CXX_SRCS} \$\${QT_SRCS}\n")
        FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "HEADERS+=\$\${C_HEADERS} \$\${CXX_HEADERS} \$\${QT_HEADERS}\n")
        FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "INCLUDEPATH+=include\n")
-       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "win32:LIBS+=WS2_32.lib\n")
+       FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "win32:LIBS+=WS2_32.lib kernel32.lib user32.lib\n")
        FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "DEFINES+=SQ_SEQUANTO_AUTOMATION_SOURCE SQ_SEQUANTO_AUTOMATION_SHARED\n")
        
        INSTALL(FILES ${CMAKE_BINARY_DIR}/SequantoAutomation.pro

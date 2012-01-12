@@ -122,6 +122,8 @@ void ListNode::SendUpdate ()
 
 ListNode::~ListNode()
 {
+   Lock lock ( m_mutex );
+   
    for ( NodeMap::iterator it = m_children.begin(); it != m_children.end(); ++it )
    {
       delete it->second;

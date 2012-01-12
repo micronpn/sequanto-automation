@@ -28,6 +28,8 @@ string QtUnnamedObjectStore::CreateName ( const QObject * _object, size_t _num )
 
 const string & QtUnnamedObjectStore::GetName ( const QObject * _object )
 {
+    assert ( _object->thread() == QThread::currentThread() );
+    
    QtUnnamedObjectStore & instance = Instance();
 
    ObjectMap::iterator it = instance.m_map.find ( _object );

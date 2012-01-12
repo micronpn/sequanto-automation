@@ -241,6 +241,8 @@ void QtWidgetNode::WidgetDestroyed()
    // If m_widget is NULL we are in the process of being destroyed (~QtWidgetNode is in progress).
    if ( m_widget != NULL )
    {
+      assert ( m_widget->thread() == QThread::currentThread() );
+      
       QtUnnamedObjectStore::Deleted ( m_widget );
       m_widget = NULL;
       ListNode * parent = dynamic_cast<ListNode*>(this->GetParent());
@@ -257,6 +259,8 @@ QtWidgetNode::~QtWidgetNode()
    // If m_widget is NULL our widget has already been destroyed and we do not need to do anything to un-register ourselves from the widget.
    if ( m_widget != NULL )
    {
+      assert ( m_widget->thread() == QThread::currentThread() );
+      
       QWidget * widget = m_widget;
       m_widget = NULL;
 

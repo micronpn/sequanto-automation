@@ -44,7 +44,6 @@ namespace sequanto
          
          static bool UpdateWindows ();
          static bool UpdateWindows ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWinowNode );
-         static bool IsWindow ( QWidget * _widget );
          static void ActiveWindowChanged ();
          
       public:
@@ -66,7 +65,8 @@ namespace sequanto
 
          static std::string ToString ( const QString & _value );
          static std::string GetObjectName ( QObject * _object );
-
+         static bool IsWindow ( QWidget * _widget );
+         
          static QVariant GetPropertyValue ( QObject * _object, const std::string & _propertyName );
 
          static const std::string & screen_pos ();

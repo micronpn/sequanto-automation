@@ -19,6 +19,7 @@
 #define SEQUANTO_QT_ACTIVE_WINDOW_PROPERTY_H_
 
 #include <sequanto/readonlypropertynode.h>
+#include <sequanto/mutex.h>
 
 namespace sequanto
 {
@@ -27,6 +28,7 @@ namespace sequanto
       class QtActiveWindowProperty : public ReadOnlyStringPropertyNode
       {
       private:
+         Mutex m_lock;
          std::string m_currentActiveWindow;
 
       public:

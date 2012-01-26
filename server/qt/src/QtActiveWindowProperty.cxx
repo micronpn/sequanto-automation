@@ -1,8 +1,11 @@
 #include <sequanto/QtActiveWindowProperty.h>
 #include <sequanto/QtWrapper.h>
+#include <sequanto/QtAutomationRefreshWindowsEvent.h>
+#include <sequanto/lock.h>
 #include <sequanto/ui.h>
 #include <QtGui>
 #include <stdexcept>
+#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -16,35 +19,37 @@ QtActiveWindowProperty::QtActiveWindowProperty ()
 
 const std::string & QtActiveWindowProperty::GetValue()
 {
-   QWidget * activeWindow = QApplication::activeWindow();
+   QVariant activeWindow = QtWrapper::GetPropertyValue ( QApplication::instance(), QtWrapper::active_window() );
    
-   if ( activeWindow == NULL )
    {
-      m_currentActiveWindow = NO_ACTIVE_WINDOW;
-   }
-   else
-   {
-      if ( !activeWindow->isVisible() )
-      {
-         QtWrapper::Log ( QString("ERR: The active window is not visible, this is too weird to be true, contact Sequanto..") );
-      }
-      m_currentActiveWindow = QtWrapper::GetObjectName(activeWindow);
-   }
-   
-   return m_currentActiveWindow;
+       Lock lock ( m_lock );
+       
+       m_currentActiveWindow = QtWrapper::ToString ( activeWindow.toString() );
+       return m_currentActiveWindow;
+   }   
 }
 
 void QtActiveWindowProperty::TrySendUpdate ()
 {
-   std::string previousActiveWindow ( m_currentActiveWindow );
-   
+    std::string previousActiveWindow;
+    
+    {
+        Lock lock ( m_lock );
+
+        previousActiveWindow = ( m_currentActiveWindow );
+    }
+    
    // Calling GetValue updates m_currentActiveWindow
    GetValue();
    
-   if ( m_currentActiveWindow != previousActiveWindow )
    {
-      PropertyNode::SendUpdate ();
-      QtWrapper::ActiveWindowChanged();
+       Lock lock ( m_lock );
+       
+       if ( m_currentActiveWindow != previousActiveWindow )
+       {
+           PropertyNode::SendUpdate ();
+           QtWrapper::ActiveWindowChanged();
+       }
    }
 }
 

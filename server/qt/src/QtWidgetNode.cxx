@@ -11,6 +11,8 @@ QtWidgetNode::QtWidgetNode( QWidget * _widget )
     : ListNode(QtWrapper::GetObjectName(_widget) ),
       m_widget(_widget)
 {
+   assert ( _widget->thread() == QThread::currentThread() );
+   
    m_eventFilter = new QtWidgetAutomationEventFilter(this);
    m_widget->installEventFilter( m_eventFilter );
 }
@@ -124,6 +126,9 @@ void QtWidgetNode::SendUpdateForAllImmediateChildren ()
 
 QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child, bool _sendAdd )
 {
+   assert ( m_widget->thread() == QThread::currentThread() );
+   assert ( !QtWrapper::IsWindow(_child) );
+    
    ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
    {
@@ -242,13 +247,13 @@ void QtWidgetNode::WidgetDestroyed()
    if ( m_widget != NULL )
    {
       assert ( m_widget->thread() == QThread::currentThread() );
-      
+
       QtUnnamedObjectStore::Deleted ( m_widget );
       m_widget = NULL;
       ListNode * parent = dynamic_cast<ListNode*>(this->GetParent());
       if ( parent != NULL )
       {
-         parent->RemoveChild ( GetName() );
+         parent->RemoveChild ( this );
          parent->SendUpdate ();
       }
    }

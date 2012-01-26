@@ -105,9 +105,7 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
            if ( event->propertyName() == QtWrapper::active_window() )
            {
                event->received();
-               qDebug() << "Reacting to get property event for: " << event->propertyName();
                event->done ( QtWrapper::GetPropertyValue(this->parent(), event->propertyName()) );
-               qDebug() << "Done reacting";
                return true;
            }
        }

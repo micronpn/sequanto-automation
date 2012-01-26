@@ -41,32 +41,46 @@ void QtDebuggingCallMethod::HandleCall ( size_t _numberOfValues, const SQValue *
 
 void verifyWidget ( QWidget * _widget, QtWidgetNode * _node )
 {
-   Q_FOREACH ( QObject * child, _widget->children() )
-   {
-      QWidget * childWidget = qobject_cast<QWidget*>(child);
-      if ( childWidget != NULL )
-      {
-         QtWidgetNode * childNode = _node->FindNodeForWidget ( childWidget );
-         if ( childNode == NULL )
-         {
-            if ( QtWrapper::IsWindow(childWidget) )
+    try
+    {
+        Q_FOREACH ( QObject * child, _widget->children() )
+        {
+            QWidget * childWidget = qobject_cast<QWidget*>(child);
+            if ( childWidget != NULL )
             {
-               // TODO: Check if the window is known by QtWrapper.
+                QtWidgetNode * childNode = _node->FindNodeForWidget ( childWidget );
+                if ( childNode == NULL )
+                {
+                    if ( QtWrapper::IsWindow(childWidget) )
+                    {
+                        // TODO: Check if the window is known by QtWrapper.
+                    }
+                    else
+                    {
+                        QtWrapper::Log(QString("INTEGRITY ERROR: Could not find child widget for %1 widget on parent %2.").arg(QtWrapper::GetObjectName(child).c_str()).arg(_node->GetFullName().c_str()) );
+                    }
+                }
+                else
+                {
+                    if ( QtWrapper::IsWindow(childWidget) )
+                    {
+                        QtWrapper::Log(QString("INTEGRITY ERROR: Child widget %1 is a window.").arg(childNode->GetFullName().c_str()) );
+                    }
+                }
             }
-            else
-            {
-               QtWrapper::Log(QString("INTEGRITY ERROR: Could not find child widget for %1 widget on parent %2.").arg(QtWrapper::GetObjectName(child).c_str()).arg(_node->GetFullName().c_str()) );
-            }
-         }
-         else
-         {
-            if ( QtWrapper::IsWindow(childWidget) )
-            {
-               QtWrapper::Log(QString("INTEGRITY ERROR: Child widget %1 is a window.").arg(childNode->GetFullName().c_str()) );
-            }
-         }
-      }
-   }
+        }
+    }
+    catch ( const std::exception & ex )
+    {
+        qDebug() << "Exception thrown in verifyWidget";
+        qDebug() << ex.what();
+        qDebug() << "While handling " << _node->GetFullName().c_str();
+    }
+    catch (...)
+    {
+        qDebug() << "UNKNOWN Exception thrown in verifyWidget";
+        qDebug() << "While handling " << _node->GetFullName().c_str();
+    }
 }
 
 void QtDebuggingCallMethod::Handle ( Method _method )

@@ -47,8 +47,10 @@ namespace sequanto
          virtual const NodeInfo & Info () const;
          
          void AddChild ( Node * _child );
+         void RemoveChild ( Node * _child );
          void RemoveChild ( std::string _name );
          bool HasChild ( std::string _name );
+
          
          /**
           * Send a !UPDATE message to the client to notify that this list has changed.

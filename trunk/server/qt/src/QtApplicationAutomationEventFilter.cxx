@@ -51,6 +51,7 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
           QWidget * widget = qobject_cast<QWidget*> ( _object );
           if ( QtWrapper::IsWindow(widget) )
           {
+             assert ( widget->thread() == QThread::currentThread() );
              std::string name ( QtWrapper::GetObjectName(widget) );
              if ( m_windowsNode->HasChild(name ) )
              {
@@ -98,6 +99,18 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
 		   QtWrapper::UpdateWindows();
 		   return true;
 	   }
+	   else if ( _event->type() == QtAutomationGetPropertyEvent::ID )
+       {
+           QtAutomationGetPropertyEvent * event = dynamic_cast<QtAutomationGetPropertyEvent*>(_event);
+           if ( event->propertyName() == QtWrapper::active_window() )
+           {
+               event->received();
+               qDebug() << "Reacting to get property event for: " << event->propertyName();
+               event->done ( QtWrapper::GetPropertyValue(this->parent(), event->propertyName()) );
+               qDebug() << "Done reacting";
+               return true;
+           }
+       }
        break;
     }
     return QObject::eventFilter(_object, _event );

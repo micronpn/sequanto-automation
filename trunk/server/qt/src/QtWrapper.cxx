@@ -94,6 +94,18 @@ QVariant QtWrapper::GetPropertyValue ( QObject * _object, const std::string & _p
 
        return pos;
     }
+    else if ( _propertyName == QtWrapper::active_window() )
+    {
+        QWidget * activeWindow = QApplication::activeWindow();
+        if ( activeWindow == NULL )
+        {
+            return QtActiveWindowProperty::NO_ACTIVE_WINDOW.c_str();
+        }
+        else
+        {
+            return GetObjectName ( activeWindow ).c_str();
+        }
+    }
     else
     {
       return _object->property(_propertyName.c_str());
@@ -119,6 +131,11 @@ const std::string & QtWrapper::global_pos ()
   return GLOBAL_POS;
 }
 
+const std::string & QtWrapper::active_window ()
+{
+  static std::string ACTIVE_WINDOW ( "__sq_active_window" );
+  return ACTIVE_WINDOW;
+}
 
 std::string QtWrapper::ToString ( const QString & _string )
 {
@@ -128,6 +145,8 @@ std::string QtWrapper::ToString ( const QString & _string )
 
 std::string QtWrapper::GetObjectName ( QObject * _object )
 {
+   assert ( _object->thread() == QThread::currentThread() );
+   
    QString objectName ( _object->objectName() );
    if ( objectName.isEmpty() )
 	{
@@ -146,6 +165,8 @@ std::string QtWrapper::GetObjectName ( QObject * _object )
 
 void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
 {
+   assert ( _object->thread() == QThread::currentThread() );
+   
    std::string name ( GetObjectName(_object) );
    _root->AddChild ( new ConstantStringNode("name", name ) );
    _root->AddChild ( new ConstantStringNode("className", _object->metaObject()->className() ) );
@@ -483,8 +504,16 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
    bool changed = false;
    std::map<std::string, QWidget*> windows;
    std::map<std::string, QWidget*>::iterator windowsIt;
+   bool checkedThread = false;
    foreach ( QWidget * widget, QApplication::allWidgets() )
    {
+      if ( !checkedThread )
+      {
+          assert ( widget->thread() == QThread::currentThread() );
+          
+          checkedThread = true;
+      }
+      
       if ( IsWindow(widget) )
       {
          std::string objectName ( GetObjectName(widget) );

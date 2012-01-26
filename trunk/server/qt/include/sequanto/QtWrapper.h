@@ -71,6 +71,7 @@ namespace sequanto
 
          static const std::string & screen_pos ();
          static const std::string & global_pos ();
+         static const std::string & active_window ();
 
          static void Log ( const QString & _message );
          

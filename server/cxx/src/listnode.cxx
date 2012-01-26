@@ -107,6 +107,19 @@ void ListNode::RemoveChild ( std::string _name )
    }
 }
 
+void ListNode::RemoveChild ( Node * _child )
+{
+   Lock lock ( m_mutex );
+   for ( NodeMap::iterator it = m_children.begin(); it != m_children.end(); ++it )
+   {
+      if ( it->second == _child )
+      {
+          m_children.erase ( it );
+          break;
+      }
+   }
+}
+
 bool ListNode::HasChild ( std::string _name )
 {
    Lock lock ( m_mutex );

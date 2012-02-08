@@ -87,7 +87,14 @@ for fn in os.listdir ( wiki_dir ):
                                 
                                 sq_widget_nodes_variables += '   extern const char * const SQ_UI_%s_%s SQ_CONST_VARIABLE;\n' % (klass_capped, node_capped)
                                 sq_widget_nodes_const += 'const char * const SQ_UI_%s_%s SQ_CONST_VARIABLE = "%s";\n' % (klass_capped, node_capped, node)
-
+                        
+                        elif current == 'Monitors':
+                            for m in FIRST_TABLE_CELL_RE.finditer ( part.strip() ):
+                                node = m.group(1)
+                                node_capped = get_capped_name ( node )
+                                
+                                sq_widget_nodes_variables += '   extern const char * const SQ_UI_%s_%s SQ_CONST_VARIABLE;\n' % (klass_capped, node_capped)
+                                sq_widget_nodes_const += 'const char * const SQ_UI_%s_%s SQ_CONST_VARIABLE = "%s";\n' % (klass_capped, node_capped, node)
 
 # remove the comma from the last entry
 sq_widget_types = sq_widget_types[:-2]

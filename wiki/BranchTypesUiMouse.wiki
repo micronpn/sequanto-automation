@@ -13,4 +13,4 @@ The mouse node provides handles for clicking and moving the mouse.
 
 = Monitors =
 
-|| capture || integer integer integer || Captures the clicks of the mouse ( x, y, button ) in the application so they can be captured by a recording tool. ||
+|| capture (optional) || integer integer integer || Captures the clicks of the mouse ( x, y, button ) in the application so they can be captured by a recording tool. Only exists if the application supports capture. ||

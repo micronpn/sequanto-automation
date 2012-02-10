@@ -355,6 +355,17 @@ void sq_protocol_write_update_with_value_message( SQStream * _stream, const char
    sq_stream_exit_write ( _stream );
 }
 
+void sq_protocol_write_update_with_values_message( SQStream * _stream, const char * const _fullname, const SQValue * const _values, size_t _numberOfValues )
+{
+   sq_stream_enter_write ( _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!UPDATE ")) );
+   sq_stream_write_string ( _stream, _fullname );
+   sq_stream_write_byte ( _stream, ' ' );
+   sq_values_write ( _values, _numberOfValues, _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
+}
+
 void sq_protocol_write_add_message( SQStream * _stream, const char * const _fullname )
 {
    sq_stream_enter_write ( _stream );

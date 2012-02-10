@@ -93,6 +93,11 @@ SQ_DECL void sq_protocol_write_update_message ( SQStream * _stream, const char *
 SQ_DECL void sq_protocol_write_update_with_value_message ( SQStream * _stream, const char * const _fullname , const SQValue * const _value );
 
 /**
+ * Writes an asynchronous !UPDATE message for the object with the given full name with the given values (usually this is done for monitors).
+ */
+SQ_DECL void sq_protocol_write_update_with_values_message ( SQStream * _stream, const char * const _fullname , const SQValue * const _values, size_t _numberOfValues );
+
+/**
  * Writes an asynchronous !ADD message for the object with the given full name.
  */
 SQ_DECL void sq_protocol_write_add_message ( SQStream * _stream, const char * const _fullname );

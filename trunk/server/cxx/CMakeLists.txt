@@ -8,6 +8,7 @@ IF(SQ_CXX)
                src/readonlypropertynode.cxx
                src/readwritepropertynode.cxx
                src/constantnode.cxx
+               src/monitornode.cxx
                src/mutex.cxx
                src/lock.cxx)
 
@@ -20,6 +21,7 @@ IF(SQ_CXX)
                   include/sequanto/readonlypropertynode.h
                   include/sequanto/readwritepropertynode.h
                   include/sequanto/constantnode.h
+                  include/sequanto/monitornode.h
                   include/sequanto/mutex.h
                   include/sequanto/lock.h)
 

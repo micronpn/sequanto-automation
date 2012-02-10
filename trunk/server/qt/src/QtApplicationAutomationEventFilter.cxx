@@ -17,10 +17,11 @@
 
 using namespace sequanto::automation;
 
-QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent )
+QtApplicationAutomationEventFilter::QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent, MonitorNode * _mouseCapture )
     : QObject(_parent),
       m_windowsNode ( _windowsNode ),
-      m_activeWindowNode ( _activeWindowNode )
+      m_activeWindowNode ( _activeWindowNode ),
+      m_mouseCapture ( _mouseCapture )
 {
 }
 
@@ -57,6 +58,24 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
              {
                 m_windowsNode->RemoveChild ( name );
                 m_windowsNode->SendUpdate();
+             }
+          }
+       }
+       break;
+
+    case QEvent::MouseButtonRelease:
+       {
+          static SQValue values[3];
+          QMouseEvent * event = dynamic_cast<QMouseEvent*> ( _event );
+          if ( event->button() == Qt::LeftButton )
+          {
+             if ( m_mouseCapture->IsMonitorEnabled () )
+             {
+                sq_value_integer ( &values[0], event->globalX() );
+                sq_value_integer ( &values[1], event->globalY() );
+                sq_value_integer ( &values[2], 0 );
+
+                m_mouseCapture->SendUpdate ( values, 3 );
              }
           }
        }

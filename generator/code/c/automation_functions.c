@@ -157,7 +157,7 @@ SQBool sq_automation_handle_disable_if_branch ( SQStream * _stream, const char *
    const SQBranch * const branch = sq_automation_find_branch ( _name );
    if ( branch != NULL )
    {
-      ret = branch->enable_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      ret = branch->disable_handler ( _stream, sq_automation_branch_name(branch, _name) );
       return ret;
 
    }

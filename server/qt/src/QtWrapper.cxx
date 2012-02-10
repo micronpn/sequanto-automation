@@ -2,6 +2,7 @@
 
 #include <sequanto/ui.h>
 #include <sequanto/log.h>
+#include <sequanto/monitornode.h>
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtWrapper.h>
 #include <sequanto/QtWidgetAutomationEventFilter.h>
@@ -446,8 +447,10 @@ void QtWrapper::WrapApplication ( ListNode * _root )
    _root->AddChild ( mouse );
    mouse->AddChild ( new QtMouseMoveMethod() );
    mouse->AddChild ( new QtMouseClickMethod() );
+   MonitorNode * mouseCaptureNode = new MonitorNode ( SQ_UI_MOUSE_CAPTURE, VALUE_TYPE_INTEGER, VALUE_TYPE_INTEGER, VALUE_TYPE_INTEGER );
+   mouse->AddChild ( mouseCaptureNode );
 
-   QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance()) );
+   QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance(), mouseCaptureNode) );
 
    ListNode * stats = new ListNode ( "stats" );
    _root->AddChild ( stats );

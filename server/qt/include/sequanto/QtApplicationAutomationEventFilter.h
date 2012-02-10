@@ -21,6 +21,7 @@
 #include <string>
 #include <map>
 #include <sequanto/tree.h>
+#include <sequanto/monitornode.h>
 
 #include <QObject>
 #include <QtGui>
@@ -38,9 +39,10 @@ namespace sequanto
       private:
          ListNode * m_windowsNode;
          QtActiveWindowProperty * m_activeWindowNode;
+         MonitorNode * m_mouseCapture;
 
       public:
-         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent );
+         QtApplicationAutomationEventFilter ( ListNode * _windowsNode, QtActiveWindowProperty * _activeWindowNode, QObject * _parent, MonitorNode * _mouseCapture );
 
          virtual bool eventFilter ( QObject * _object, QEvent * _event );
          

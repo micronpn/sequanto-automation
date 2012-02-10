@@ -124,6 +124,11 @@ void Node::HandleMonitorStateChange ( bool _enable )
    SQ_UNUSED_PARAMETER(_enable);
 }
 
+bool Node::IsMonitorEnabled () const
+{
+   return false;
+}
+
 void Node::LogAsync ( const std::string & _message ) const
 {
    sq_log ( _message.c_str() );

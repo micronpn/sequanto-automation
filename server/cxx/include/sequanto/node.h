@@ -64,6 +64,7 @@ namespace sequanto
          virtual const std::string & GetName () const;
          virtual const std::string & GetFullName ();
          virtual const NodeInfo & Info () const = 0;
+         virtual bool IsMonitorEnabled () const;
 
          virtual Node * FindChild ( const std::string & _name ) const;
          virtual Iterator * ListChildren () const;

@@ -92,6 +92,15 @@ SQBool Tree::HandleInfo(SQStream * _stream, const char * _path)
          sq_stream_write_byte ( _stream, ' ' );
          sq_protocol_write_type ( _stream, nodeInfo.GetParameterType(i) );
       }
+      sq_stream_write_byte ( _stream, ' ' );
+      if ( node->IsMonitorEnabled() )
+      {
+         sq_stream_write_string ( _stream, "Enabled" );
+      }
+      else
+      {
+         sq_stream_write_string ( _stream, "Disabled" );
+      }
       break;
 
    default:

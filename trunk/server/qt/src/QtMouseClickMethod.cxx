@@ -4,7 +4,6 @@
 #include <sequanto/methodinfo.h>
 #include <sequanto/ui.h>
 #include <QtGui>
-#include <cassert>
 #include <stdexcept>
 
 using namespace sequanto::automation;
@@ -30,7 +29,7 @@ void QtMouseClickMethod::HandleCall ( size_t _numberOfValues, const SQValue * co
 {
    SQ_UNUSED_PARAMETER(_output);
       
-   assert ( _numberOfValues == 3 );
+   Q_ASSERT ( _numberOfValues == 3 );
        
    int x = _inputValues[0].Value.m_integerValue;
    int y = _inputValues[1].Value.m_integerValue;

@@ -3,7 +3,6 @@
 #include <sequanto/QtUnnamedObjectStore.h>
 #include <sequanto/QtUiTypeProperty.h>
 #include <sequanto/ui.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -11,7 +10,7 @@ QtWidgetNode::QtWidgetNode( QWidget * _widget )
     : ListNode(QtWrapper::GetObjectName(_widget) ),
       m_widget(_widget)
 {
-   assert ( _widget->thread() == QThread::currentThread() );
+   Q_ASSERT ( _widget->thread() == QThread::currentThread() );
    
    m_eventFilter = new QtWidgetAutomationEventFilter(this);
    m_widget->installEventFilter( m_eventFilter );
@@ -126,8 +125,8 @@ void QtWidgetNode::SendUpdateForAllImmediateChildren ()
 
 QtWidgetNode::AddChildWidgetResult QtWidgetNode::AddChildWidget ( QWidget * _child, bool _sendAdd )
 {
-   assert ( m_widget->thread() == QThread::currentThread() );
-   assert ( !QtWrapper::IsWindow(_child) );
+   Q_ASSERT ( m_widget->thread() == QThread::currentThread() );
+   Q_ASSERT ( !QtWrapper::IsWindow(_child) );
     
    ListNode * childrenNode = dynamic_cast<ListNode*>( this->FindChild ( SQ_UI_COMMON_BASE_CHILDREN ) );
    if ( childrenNode != NULL )
@@ -246,7 +245,7 @@ void QtWidgetNode::WidgetDestroyed()
    // If m_widget is NULL we are in the process of being destroyed (~QtWidgetNode is in progress).
    if ( m_widget != NULL )
    {
-      assert ( m_widget->thread() == QThread::currentThread() );
+      Q_ASSERT ( m_widget->thread() == QThread::currentThread() );
 
       QtUnnamedObjectStore::Deleted ( m_widget );
       m_widget = NULL;
@@ -264,7 +263,7 @@ QtWidgetNode::~QtWidgetNode()
    // If m_widget is NULL our widget has already been destroyed and we do not need to do anything to un-register ourselves from the widget.
    if ( m_widget != NULL )
    {
-      assert ( m_widget->thread() == QThread::currentThread() );
+      Q_ASSERT ( m_widget->thread() == QThread::currentThread() );
       
       QWidget * widget = m_widget;
       m_widget = NULL;

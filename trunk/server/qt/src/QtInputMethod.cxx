@@ -3,7 +3,6 @@
 #include <sequanto/ui.h>
 #include <sequanto/QtWidgetNode.h>
 
-#include <cassert>
 #include <QtGui>
 
 using namespace sequanto::automation;
@@ -27,7 +26,7 @@ void QtInputMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _
 {
    SQ_UNUSED_PARAMETER(_output);
       
-   assert ( _numberOfValues == 1 );
+   Q_ASSERT ( _numberOfValues == 1 );
 
    std::string text ( _inputValues[0].Value.m_stringValue );
        

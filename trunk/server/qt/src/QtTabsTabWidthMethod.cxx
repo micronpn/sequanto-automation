@@ -4,7 +4,6 @@
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtWrapper.h>
 
-#include <cassert>
 #include <stdexcept>
 #include <QtGui>
 
@@ -32,15 +31,15 @@ void QtTabsTabWidthMethod::HandleCall ( size_t _numberOfValues, const SQValue * 
    SQ_UNUSED_PARAMETER(_inputValues);
    SQ_UNUSED_PARAMETER(_output);
    
-   assert ( _numberOfValues == 1 );
+   Q_ASSERT ( _numberOfValues == 1 );
        
    //int index = _inputValues[0].Value.m_integerValue;
    
    QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(GetParent());
-   assert ( widgetNode != NULL );
+   Q_ASSERT ( widgetNode != NULL );
    
    QTabWidget * tabWidget = qobject_cast<QTabWidget*>(widgetNode->widget());
-   assert ( tabWidget != NULL );
+   Q_ASSERT ( tabWidget != NULL );
    
    sq_value_integer ( &_output, 60 );
 }

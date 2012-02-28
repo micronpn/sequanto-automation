@@ -2,7 +2,6 @@
 #include <sequanto/methodinfo.h>
 #include <sequanto/ui.h>
 #include <sequanto/QtAutomationMoveEvent.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -25,7 +24,7 @@ const NodeInfo & QtMoveMethod::Info () const
 
 void QtMoveMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
 {
-   assert ( _numberOfValues == 2 );
+   Q_ASSERT ( _numberOfValues == 2 );
        
    int x = _inputValues[0].Value.m_integerValue;
    int y = _inputValues[1].Value.m_integerValue;

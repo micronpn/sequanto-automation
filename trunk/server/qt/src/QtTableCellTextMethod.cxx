@@ -7,7 +7,6 @@
 #include <sequanto/QtWrapper.h>
 
 //#include <sequanto/QtAutomationTableCellTextEvent.h>
-#include <cassert>
 #include <stdexcept>
 #include <QtGui>
 
@@ -34,16 +33,16 @@ void QtTableCellTextMethod::HandleCall ( size_t _numberOfValues, const SQValue *
 {
    SQ_UNUSED_PARAMETER(_output);
    
-   assert ( _numberOfValues == 2 );
+   Q_ASSERT ( _numberOfValues == 2 );
        
    int row = _inputValues[0].Value.m_integerValue;
    int column = _inputValues[1].Value.m_integerValue;
    
    QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(GetParent());
-   assert ( widgetNode != NULL );
+   Q_ASSERT ( widgetNode != NULL );
    
    QTableWidget * tableWidget = qobject_cast<QTableWidget*>(widgetNode->widget());
-   assert ( tableWidget != NULL );
+   Q_ASSERT ( tableWidget != NULL );
    
    row = QtTableRowsProperty::TranslateRow ( tableWidget, row );
    column = QtTableColumnsProperty::TranslateColumn ( tableWidget, column );

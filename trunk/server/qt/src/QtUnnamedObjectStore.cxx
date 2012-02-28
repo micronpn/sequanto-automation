@@ -1,7 +1,6 @@
 #include <sequanto/QtUnnamedObjectStore.h>
 #include <iostream>
 #include <sstream>
-#include <cassert>
 
 using namespace std;
 using namespace sequanto::automation;
@@ -28,7 +27,7 @@ string QtUnnamedObjectStore::CreateName ( const QObject * _object, size_t _num )
 
 const string & QtUnnamedObjectStore::GetName ( const QObject * _object )
 {
-    assert ( _object->thread() == QThread::currentThread() );
+    Q_ASSERT ( _object->thread() == QThread::currentThread() );
     
    QtUnnamedObjectStore & instance = Instance();
 
@@ -37,7 +36,7 @@ const string & QtUnnamedObjectStore::GetName ( const QObject * _object )
    {
      string name ( CreateName ( _object, instance.m_nextNameId++ ) );
      pair<ObjectMap::iterator, bool> foundIt = instance.m_map.insert ( make_pair ( _object, name ) );
-     assert ( foundIt.second );
+     Q_ASSERT ( foundIt.second );
      it = foundIt.first;
    }
    return it->second;

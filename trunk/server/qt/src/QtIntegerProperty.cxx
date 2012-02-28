@@ -1,6 +1,5 @@
 #include <sequanto/QtIntegerProperty.h>
 #include <sequanto/QtWrapper.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -25,7 +24,7 @@ void QtIntegerProperty::PropertyChanged ()
 
 int QtIntegerProperty::GetValue ()
 {
-   assert ( m_object != NULL );
+   Q_ASSERT ( m_object != NULL );
      
    QVariant value = QtWrapper::GetPropertyValue ( m_object, QtPropertyName() );
    if ( value.isValid() )

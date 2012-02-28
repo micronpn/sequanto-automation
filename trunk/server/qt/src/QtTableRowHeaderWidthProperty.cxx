@@ -1,7 +1,6 @@
 #include <sequanto/QtTableRowHeaderWidthProperty.h>
 #include <sequanto/ui.h>
 #include <sequanto/QtWidgetNode.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -13,10 +12,10 @@ QtTableRowHeaderWidthProperty::QtTableRowHeaderWidthProperty()
 int QtTableRowHeaderWidthProperty::GetValue()
 {
    QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(GetParent());
-   assert ( widgetNode != NULL );
+   Q_ASSERT ( widgetNode != NULL );
    
    QTableWidget * tableWidget = qobject_cast<QTableWidget*>(widgetNode->widget());
-   assert ( tableWidget != NULL );
+   Q_ASSERT ( tableWidget != NULL );
    
    QHeaderView * header = tableWidget->verticalHeader();
    if ( header == NULL || !header->isVisible() )

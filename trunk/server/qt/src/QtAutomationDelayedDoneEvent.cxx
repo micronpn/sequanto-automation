@@ -1,5 +1,4 @@
 #include <sequanto/QtAutomationDelayedDoneEvent.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -32,9 +31,9 @@ bool QtAutomationDelayedDoneEvent::wait ( QtAutomationDelayedDoneEvent * _event,
    QSharedPointer<QMutex> doneLock ( _event->m_doneLock );
    QSharedPointer<QWaitCondition> waitCondition ( _event->m_waitCondition );
    
-   assert ( !lock.isNull() );
-   assert ( !doneLock.isNull() );
-   assert ( !waitCondition.isNull() );
+   Q_ASSERT ( !lock.isNull() );
+   Q_ASSERT ( !doneLock.isNull() );
+   Q_ASSERT ( !waitCondition.isNull() );
    
    doneLock->lock();
    lock->lock();

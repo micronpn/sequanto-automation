@@ -5,7 +5,6 @@
 #include <sequanto/ui.h>
 #include <QtGui>
 #include <stdexcept>
-#include <cassert>
 
 using namespace sequanto::automation;
 

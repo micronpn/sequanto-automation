@@ -1,5 +1,4 @@
 #include <sequanto/QtUpdateCacheEvent.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -13,7 +12,7 @@ QtUpdateCacheEvent::QtUpdateCacheEvent ( QtCacheItem * _cacheItem )
 
 void QtUpdateCacheEvent::wait ( QObject * _object )
 {
-   assert ( _object == m_cacheItem->m_object );
+   Q_ASSERT ( _object == m_cacheItem->m_object );
    
    if ( _object->thread() == QThread::currentThread() )
    {

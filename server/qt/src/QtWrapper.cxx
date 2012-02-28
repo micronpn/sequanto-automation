@@ -58,7 +58,6 @@
 #include <sequanto/QtCachedProperty.h>
 #endif
 
-#include <cassert>
 #include <vector>
 #include <stdexcept>
 #include <iostream>
@@ -146,7 +145,7 @@ std::string QtWrapper::ToString ( const QString & _string )
 
 std::string QtWrapper::GetObjectName ( QObject * _object )
 {
-   assert ( _object->thread() == QThread::currentThread() );
+   Q_ASSERT ( _object->thread() == QThread::currentThread() );
    
    QString objectName ( _object->objectName() );
    if ( objectName.isEmpty() )
@@ -166,7 +165,7 @@ std::string QtWrapper::GetObjectName ( QObject * _object )
 
 void QtWrapper::Wrap ( ListNode * _root, QObject * _object )
 {
-   assert ( _object->thread() == QThread::currentThread() );
+   Q_ASSERT ( _object->thread() == QThread::currentThread() );
    
    std::string name ( GetObjectName(_object) );
    _root->AddChild ( new ConstantStringNode("name", name ) );
@@ -255,7 +254,7 @@ void QtWrapper::WrapUi ( QtWidgetNode * _root, QWidget * _widget )
    bool wrapChildren = true;
    if ( QtWrapper::IsWindow(_widget) )
    {
-      assert ( _widget == _widget->window() );
+      Q_ASSERT ( _widget == _widget->window() );
       
       _root->AddChild ( new QtScreenXProperty( _widget ) );
       _root->AddChild ( new QtScreenYProperty( _widget ) );
@@ -512,7 +511,7 @@ bool QtWrapper::UpdateWindows( ListNode * _windows, QtActiveWindowProperty * _ac
    {
       if ( !checkedThread )
       {
-          assert ( widget->thread() == QThread::currentThread() );
+          Q_ASSERT ( widget->thread() == QThread::currentThread() );
           
           checkedThread = true;
       }

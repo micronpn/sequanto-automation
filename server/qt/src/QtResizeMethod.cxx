@@ -3,8 +3,6 @@
 #include <sequanto/ui.h>
 #include <sequanto/QtAutomationResizeEvent.h>
 
-#include <cassert>
-
 using namespace sequanto::automation;
 
 QtResizeMethod::QtResizeMethod( QWidget * _widget )
@@ -26,7 +24,7 @@ const NodeInfo & QtResizeMethod::Info () const
 
 void QtResizeMethod::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output )
 {
-   assert ( _numberOfValues == 2 );
+   Q_ASSERT ( _numberOfValues == 2 );
        
    int width = _inputValues[0].Value.m_integerValue;
    int height = _inputValues[1].Value.m_integerValue;

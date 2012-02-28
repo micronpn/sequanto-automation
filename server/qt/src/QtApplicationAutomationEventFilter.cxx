@@ -11,7 +11,6 @@
 #include <sequanto/QtLogging.h>
 #include <sequanto/QtDebugging.h>
 #include <sequanto/ui.h>
-#include <cassert>
 
 #include <sequanto/QtWrapper.h>
 
@@ -52,7 +51,7 @@ bool QtApplicationAutomationEventFilter::eventFilter ( QObject * _object, QEvent
           QWidget * widget = qobject_cast<QWidget*> ( _object );
           if ( QtWrapper::IsWindow(widget) )
           {
-             assert ( widget->thread() == QThread::currentThread() );
+             Q_ASSERT ( widget->thread() == QThread::currentThread() );
              std::string name ( QtWrapper::GetObjectName(widget) );
              if ( m_windowsNode->HasChild(name ) )
              {

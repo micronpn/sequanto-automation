@@ -9,7 +9,6 @@
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtColorProperty.h>
 #include <sequanto/ui.h>
-#include <cassert>
 
 #include <sequanto/QtWrapper.h>
 
@@ -183,7 +182,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     {
        QtAutomationMouseMoveEvent * event = dynamic_cast<QtAutomationMouseMoveEvent*>(_event);
        
-       assert ( event != NULL );
+       Q_ASSERT ( event != NULL );
        
        if ( event->iteration() == 0 )
        {
@@ -209,7 +208,7 @@ bool QtWidgetAutomationEventFilter::eventFilter ( QObject * _object, QEvent * _e
     {
        QtAutomationMouseClickEvent * event = dynamic_cast<QtAutomationMouseClickEvent*>(_event);
        
-       assert ( event != NULL );
+       Q_ASSERT ( event != NULL );
        
        if ( event->iteration() == 0 )
        {

@@ -5,7 +5,6 @@
 #include <sequanto/QtWidgetNode.h>
 #include <sequanto/QtWrapper.h>
 
-#include <cassert>
 #include <stdexcept>
 #include <QtGui>
 
@@ -31,15 +30,15 @@ void QtTableColumnWidthMethod::HandleCall ( size_t _numberOfValues, const SQValu
 {
    SQ_UNUSED_PARAMETER(_output);
    
-   assert ( _numberOfValues == 1 );
+   Q_ASSERT ( _numberOfValues == 1 );
        
    int column = _inputValues[0].Value.m_integerValue;
    
    QtWidgetNode * widgetNode = dynamic_cast<QtWidgetNode*>(GetParent());
-   assert ( widgetNode != NULL );
+   Q_ASSERT ( widgetNode != NULL );
    
    QTableWidget * tableWidget = qobject_cast<QTableWidget*>(widgetNode->widget());
-   assert ( tableWidget != NULL );
+   Q_ASSERT ( tableWidget != NULL );
 
    column = QtTableColumnsProperty::TranslateColumn(tableWidget, column);
    

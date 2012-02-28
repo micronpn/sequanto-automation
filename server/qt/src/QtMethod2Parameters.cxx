@@ -1,5 +1,4 @@
 #include <sequanto/QtMethod2Parameters.h>
-#include <cassert>
 
 using namespace sequanto::automation;
 
@@ -10,7 +9,7 @@ QtMethod2Parameters::QtMethod2Parameters ( const std::string & _name, QObject * 
 {
    QMetaMethod method = _object->metaObject()->method(_methodIndex);
 
-   assert ( method.methodType() == QMetaMethod::Method );
+   Q_ASSERT ( method.methodType() == QMetaMethod::Method );
 
    QList<QByteArray> parameterTypes ( method.parameterTypes() );
    for ( int i = 0; i < parameterTypes.size(); i++ )

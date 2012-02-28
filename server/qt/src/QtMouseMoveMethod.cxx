@@ -3,7 +3,6 @@
 #include <sequanto/ui.h>
 #include <sequanto/QtAutomationMouseMoveEvent.h>
 #include <sequanto/QtAutomationStealFocusEvent.h>
-#include <cassert>
 #include <stdexcept>
 #include <QtGui>
 
@@ -30,7 +29,7 @@ void QtMouseMoveMethod::HandleCall ( size_t _numberOfValues, const SQValue * con
 {
    SQ_UNUSED_PARAMETER(_output);
    
-   assert ( _numberOfValues == 2 );
+   Q_ASSERT ( _numberOfValues == 2 );
    
    int x = _inputValues[0].Value.m_integerValue;
    int y = _inputValues[1].Value.m_integerValue;

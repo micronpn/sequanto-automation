@@ -620,6 +620,9 @@ class AutomationFile ( object ):
     def writeSuccessMessageWithValue ( self, fp, c_type, automation_type, value ):
         if automation_type == 'byte_array':
             fp.write ( '   sq_protocol_write_success_with_byte_array_message ( _stream, %s->m_start, %s->m_start + %s->m_length );\n' % (value, value, value) )
+            if 'const' not in c_type:
+                fp.write ( '   sq_byte_array_free ( %s, SQ_TRUE );\n' % value )
+        
         elif c_type == 'SQStringOut':
             fp.write ( '   sq_protocol_write_success_with_string_out_message ( _stream, &%s );\n' % value )
         elif automation_type == 'float' and c_type != 'float':
@@ -628,7 +631,9 @@ class AutomationFile ( object ):
             if c_type == 'SQStringOut *':
                 automation_type = 'string_out'
             fp.write ( '   sq_protocol_write_success_with_%s_message ( _stream, %s );\n' % (automation_type, value) )
-    
+            if c_type == 'char *':
+                fp.write ( '   free ( %s );\n' % value )
+        
     def generate ( self ):
         print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
         

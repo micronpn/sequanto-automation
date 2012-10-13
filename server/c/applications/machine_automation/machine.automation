@@ -4,6 +4,7 @@ import main.c
 import files.c
 import memory.c
 import process.c
+import windows.c
 
 typedef int size_t
 
@@ -34,3 +35,13 @@ function /process/id process_id
 function /process/name process_name
 function /process/filename process_filename
 function /process/memory process_memory
+
+#property /screen/width screen_width
+#property /screen/height screen_height
+
+function /windows/desktop windows_desktop
+function /windows/ref windows_ref
+function /windows/unref windows_unref
+function /windows/name windows_name
+function /windows/children windows_children
+function /windows/child windows_child

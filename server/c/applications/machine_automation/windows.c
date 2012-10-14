@@ -15,7 +15,7 @@ int windows_desktops ( void )
 
 SQByteArray * windows_desktop ( int _desktop )
 {
-   return sq_byte_array_create_prealloc ( 0 );
+   return NULL;
 }
 
 void windows_ref ( SQByteArray * _pointer )
@@ -55,6 +55,16 @@ char * windows_name ( SQByteArray * _pointer )
     return strdup("");
 }
 
+char * windows_role ( SQByteArray * _pointer )
+{
+    return strdup("");
+}
+
+char * windows_text ( SQByteArray * _pointer )
+{
+    return strdup("");
+}
+
 long windows_children ( SQByteArray * _pointer )
 {
    return 0;
@@ -62,5 +72,6 @@ long windows_children ( SQByteArray * _pointer )
 
 SQByteArray * windows_child ( SQByteArray * _pointer, long _childNum )
 {
-   return sq_byte_array_create_prealloc ( 0 );
+   return NULL;
 }
+

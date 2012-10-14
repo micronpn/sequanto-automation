@@ -90,6 +90,21 @@ char * windows_name ( const SQByteArray * _pointer )
    return windows_bstr_to_utf8 ( buffer );
 }
 
+char * windows_role ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   VARIANT roleVar;
+   char * buffer = malloc(100);
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   if ( SUCCEEDED(IAccessible_get_accRole ( accessible, s_childIdSelf, &roleVar ) ) )
+   {
+       GetRoleText ( roleVar.lVal, buffer, 100 );
+   }   
+   return buffer;
+}
+
 static IAccessible * windows_get_child ( IAccessible * _accessible, long _childId )
 {
    VARIANT childNum;

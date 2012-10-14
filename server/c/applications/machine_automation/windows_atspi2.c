@@ -172,6 +172,71 @@ int windows_height ( SQByteArray * _pointer )
    return height;
 }
 
+char * windows_role ( SQByteArray * _pointer )
+{  
+   GError * error = NULL;
+   char * role = NULL;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   role = atspi_accessible_get_role_name (accessibleObject, &error);
+   if ( error != NULL )
+   {
+       g_error_free(error);
+   }
+   if ( role != NULL )
+   {
+       return role;
+   }
+   else
+   {
+       return strdup("");
+   }
+}
+
+char * windows_text ( SQByteArray * _pointer )
+{  
+   GError * error = NULL;
+   char * text = NULL;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_TEXT(accessibleObject) )
+   {
+       AtspiText * textObj = ATSPI_TEXT(accessibleObject);
+       gint count = atspi_text_get_character_count ( textObj, &error );
+       if ( error != NULL )
+       {
+           g_error_free(error);
+           return strdup("ERROR");
+       }
+
+       text = atspi_text_get_text (textObj, 0, count, &error);
+       if ( error != NULL )
+       {
+           g_error_free(error);
+           return strdup("ERROR");
+       }
+       else
+       {
+           return text;
+       }
+   }
+   else if ( ATSPI_IS_VALUE(accessibleObject) )
+   {
+       AtspiValue * valueObj = ATSPI_VALUE(accessibleObject);
+       
+       gdouble current = atspi_value_get_current_value ( valueObj, &error );
+       
+       if ( error != NULL )
+       {
+           g_error_free(error);
+           return strdup("ERROR");
+       }
+       else
+       {
+           return g_strdup_printf("%f", current);
+       }
+   }
+   return strdup("");
+}
+
 long windows_children ( SQByteArray * _pointer )
 {
    GError * error = NULL;

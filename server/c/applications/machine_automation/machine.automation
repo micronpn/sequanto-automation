@@ -36,10 +36,11 @@ function /process/name process_name
 function /process/filename process_filename
 function /process/memory process_memory
 
-function /windows/desktop windows_desktops
+property /windows/desktops windows_desktops
 function /windows/desktop windows_desktop
 function /windows/ref windows_ref
 function /windows/unref windows_unref
 function /windows/name windows_name
 function /windows/children windows_children
 function /windows/child windows_child
+

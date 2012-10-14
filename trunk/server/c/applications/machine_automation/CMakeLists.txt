@@ -1,13 +1,36 @@
 IF(NOT SQ_ARDUINO)
-  IF(SQ_WIN32)
-    SQ_GENERATE(machine machine.automation)
-    SET(SOURCES main.c files.c memory.c process.c ${SQ_GENERATE_machine})
-    
+  SQ_GENERATE(machine machine.automation)
+  SET(SOURCES main.c files.c memory.c process.c ${SQ_GENERATE_machine})
+
+  IF(SQ_WIN32)  
     LIST(APPEND SOURCES windows_win32_oleacc.c)
+  ELSE(SQ_WIN32)
+    INCLUDE(FindPkgConfig)
     
-    ADD_EXECUTABLE(machine_automation ${SOURCES})
-    TARGET_LINK_LIBRARIES(machine_automation SequantoAutomation)
+    PKG_CHECK_MODULES(cspi1 cspi-1.0)
+    
+    IF(cspi1_FOUND)
+      INCLUDE_DIRECTORIES(${cspi1_INCLUDE_DIRS})
+      LINK_DIRECTORIES(${cspi1_LIBRARY_DIRS})
+      SET(CFLAGS ${CFLAGS} ${cspi1_CFLAGS})
+      SET(LDFLAGS ${LDFLAGS} ${cspi1_LDFLAGS})
+      LIST(APPEND SOURCES windows_cspi1.0.c)
+    ELSE(cspi1_FOUND)
+      LIST(APPEND SOURCES windows.c)
+    ENDIF(cspi1_FOUND)
+  ENDIF(SQ_WIN32)
+  
+  ADD_EXECUTABLE(machine_automation ${SOURCES})
+  TARGET_LINK_LIBRARIES(machine_automation SequantoAutomation)
+  
+  IF(SQ_WIN32)  
     TARGET_LINK_LIBRARIES(machine_automation psapi)
     TARGET_LINK_LIBRARIES(machine_automation oleacc)
+  ELSE(SQ_WIN32)
+    IF(cspi1_FOUND)
+      TARGET_LINK_LIBRARIES(machine_automation ${cspi1_LIBRARIES})
+    ENDIF(cspi1_FOUND)
   ENDIF(SQ_WIN32)
+  
+  ADD_CUSTOM_TARGET(runserver ./machine_automation DEPENDS machine_automation)
 ENDIF(NOT SQ_ARDUINO)

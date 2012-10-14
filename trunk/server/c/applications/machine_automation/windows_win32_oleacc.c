@@ -50,6 +50,11 @@ SQByteArray * windows_from_accessible ( const IAccessible * _accessibleObject )
    return ret;
 }
 
+int windows_desktops ( void )
+{
+    return 1;
+}
+
 SQByteArray * windows_desktop ( int _desktop )
 {
    HWND desktopHandle;

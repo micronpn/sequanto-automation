@@ -48,11 +48,15 @@ int main ( int argc, char * argv[] )
       portNumber = atoi ( argv[argc - 1] );
    }
    
+   windows_init_subsystem ();
+   
    sq_server_init ( &server, portNumber );
    
    sq_server_poll ( &server );
 
    sq_server_join ( &server );
+
+   windows_deinit_subsystem ();
 
    sq_shutdown ();
 }

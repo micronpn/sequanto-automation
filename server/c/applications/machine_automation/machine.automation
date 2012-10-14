@@ -36,9 +36,7 @@ function /process/name process_name
 function /process/filename process_filename
 function /process/memory process_memory
 
-#property /screen/width screen_width
-#property /screen/height screen_height
-
+function /windows/desktop windows_desktops
 function /windows/desktop windows_desktop
 function /windows/ref windows_ref
 function /windows/unref windows_unref

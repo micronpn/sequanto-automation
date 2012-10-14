@@ -48,4 +48,5 @@ function /windows/x windows_x
 function /windows/y windows_y
 function /windows/width windows_width
 function /windows/height windows_height
-
+function /windows/role windows_role
+function /windows/text windows_text

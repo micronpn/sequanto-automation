@@ -26,11 +26,33 @@ void windows_unref ( SQByteArray * _pointer )
 {
 }
 
-static char EMPTY[] = "";
+int windows_process_id ( SQByteArray * _pointer )
+{
+}
+
+int windows_x ( SQByteArray * _pointer )
+{
+    return -1;
+}
+
+int windows_y ( SQByteArray * _pointer )
+{
+    return -1;
+}
+
+int windows_width ( SQByteArray * _pointer )
+{
+    return 0;
+}
+
+int windows_height ( SQByteArray * _pointer )
+{
+    return 0;
+}
 
 char * windows_name ( SQByteArray * _pointer )
 {
-   return EMPTY;
+    return strdup("");
 }
 
 long windows_children ( SQByteArray * _pointer )

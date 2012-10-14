@@ -67,6 +67,111 @@ char * windows_name ( SQByteArray * _pointer )
    }
 }
 
+int windows_process_id ( SQByteArray * _pointer )
+{
+   GError * error = NULL;
+   gint processId;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   processId = atspi_accessible_get_process_id ( accessibleObject, &error );
+   if ( error != NULL )
+   {
+       g_error_free(error);
+       return -1;
+   }
+   else
+   {
+       return processId;
+   }
+}
+
+int windows_x ( SQByteArray * _pointer )
+{
+   GError * error = NULL;
+   int x = -1;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_COMPONENT(accessibleObject) )
+   {
+       AtspiComponent * component = ATSPI_COMPONENT(accessibleObject);
+       AtspiPoint *position = atspi_component_get_position (component, ATSPI_COORD_TYPE_SCREEN, &error);
+       if ( error != NULL )
+       {
+           g_error_free(error);
+       }
+       if ( position != NULL )
+       {
+           x = position->x;
+           g_free ( position );
+       }
+   }
+   return x;
+}
+
+int windows_y ( SQByteArray * _pointer )
+{
+   GError * error = NULL;
+   int y = -1;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_COMPONENT(accessibleObject) )
+   {
+       AtspiComponent * component = ATSPI_COMPONENT(accessibleObject);
+       AtspiPoint *position = atspi_component_get_position (component, ATSPI_COORD_TYPE_SCREEN, &error);
+       if ( error != NULL )
+       {
+           g_error_free(error);
+       }
+       if ( position != NULL )
+       {
+           y = position->y;
+           g_free ( position );
+       }
+   }
+   return y;
+}
+
+int windows_width ( SQByteArray * _pointer )
+{
+   GError * error = NULL;
+   int width = -1;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_COMPONENT(accessibleObject) )
+   {
+       AtspiComponent * component = ATSPI_COMPONENT(accessibleObject);
+       AtspiPoint * size = atspi_component_get_size (component, &error);
+       if ( error != NULL )
+       {
+           g_error_free(error);
+       }
+       if ( size != NULL )
+       {
+           width = size->x;
+           g_free ( size );
+       }
+   }
+   return width;
+}
+
+int windows_height ( SQByteArray * _pointer )
+{  
+   GError * error = NULL;
+   int height = -1;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_COMPONENT(accessibleObject) )
+   {
+       AtspiComponent * component = ATSPI_COMPONENT(accessibleObject);
+       AtspiPoint * size = atspi_component_get_size (component, &error);
+       if ( error != NULL )
+       {
+           g_error_free(error);
+       }
+       if ( size != NULL )
+       {
+           height = size->y;
+           g_free ( size );
+       }
+   }
+   return height;
+}
+
 long windows_children ( SQByteArray * _pointer )
 {
    GError * error = NULL;
@@ -96,7 +201,7 @@ SQByteArray * windows_child ( SQByteArray * _parent, long _index )
    if ( error != NULL )
    {
        g_error_free(error);
-       return sq_byte_array_create_prealloc ( 0 );
+       return NULL;
    }
    else
    {

@@ -105,6 +105,84 @@ char * windows_role ( const SQByteArray * _pointer )
    return buffer;
 }
 
+int windows_process_id ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   return 0;
+}
+
+int windows_x ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   VARIANT roleVar;
+   long x = -1, y = -1, width = 0, height = 0;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
+   
+   return x;
+}
+
+int windows_y ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   VARIANT roleVar;
+   long x = -1, y = -1, width = 0, height = 0;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
+   
+   return y;
+}
+
+int windows_width ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   VARIANT roleVar;
+   long x = -1, y = -1, width = 0, height = 0;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
+   
+   return width;
+}
+
+int windows_height ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   VARIANT roleVar;
+   long x = -1, y = -1, width = 0, height = 0;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
+   
+   return height;
+}
+
+char * windows_text ( const SQByteArray * _pointer )
+{
+   IAccessible * accessible;
+   BSTR buffer;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   if ( SUCCEEDED(IAccessible_get_accValue ( accessible, s_childIdSelf, &buffer ) ) )
+   {
+      return windows_bstr_to_utf8 ( buffer );
+   }
+   else
+   {
+      return strdup("");
+   }
+}
+
 static IAccessible * windows_get_child ( IAccessible * _accessible, long _childId )
 {
    VARIANT childNum;

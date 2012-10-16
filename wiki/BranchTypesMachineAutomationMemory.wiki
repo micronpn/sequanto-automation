@@ -1,0 +1,14 @@
+#summary Memory
+#labels Branch-Type-Class
+#sidebar BranchTypesMachineAutomationSidebar
+
+= Introduction =
+
+
+
+= Properties =
+
+|| total_physical || int || ||
+|| available_physical || int || ||
+|| total_virtual || int || ||
+|| available_virtual || int || ||

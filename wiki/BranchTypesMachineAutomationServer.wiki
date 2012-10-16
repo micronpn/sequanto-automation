@@ -1,0 +1,18 @@
+#summary Server
+#labels Branch-Type-Class
+#sidebar BranchTypesMachineAutomationSidebar
+
+= Introduction =
+
+Information about the actual machine automation server.
+
+
+= Properties =
+
+|| process_id || int || Process ID of the running machine automation server. ||
+|| version || string || Version of the machine automation server. ||
+
+
+= Callables =
+
+|| quit (optional) || void() || Stop the machine automation server. ||

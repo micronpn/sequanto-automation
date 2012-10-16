@@ -1,0 +1,8 @@
+#summary Sidebar for the Machine Automation branch type.
+
+ * [BranchTypesMachineAutomationRoot Root Root]
+    * [BranchTypesMachineAutomationServer Server class]
+    * [BranchTypesMachineAutomationProcess Process class]
+    * [BranchTypesMachineAutomationFiles Files class]
+    * [BranchTypesMachineAutomationMemory Memory class]
+    * [BranchTypesMachineAutomationWindows Windows class]

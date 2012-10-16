@@ -1,0 +1,26 @@
+#summary Files
+#labels Branch-Type-Class
+#sidebar BranchTypesMachineAutomationSidebar
+
+= Introduction =
+
+Information about the files on the machine.
+
+= Properties =
+
+|| separator || string || The string used to separate path elements. ||
+
+
+= Callables =
+
+|| number_of_directories || int ( string ) || Number of directories in the given path to a directory. ||
+|| number_of_files || int ( string ) || Number of files in the given path to a directory. ||
+|| directory_name || string ( string int ) || Get the name of directory number "index" in the given path to a directory. ||
+|| file_name || string ( string int ) || Get the name of file number "index" in the given path to a directory. ||
+|| size || int ( string ) || Get the size  ( in bytes ) of the given file. ||
+|| read || byte-array ( string ) || Get the entire contents of the given file. ||
+|| write || void ( string byte-array ) || Write the given data as the file "path". ||
+|| create_directory || void ( string ) || Create the given directory. ||
+|| remove_directory || void ( string ) || Remove the given directory path. ||
+|| remove_file || void ( string ) || Remove the give file. ||
+

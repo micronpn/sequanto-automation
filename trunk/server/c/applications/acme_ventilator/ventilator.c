@@ -38,7 +38,7 @@ void ventilator_second_tick ( void )
       break;
       
    case VENTILATOR_MODE_AT_NIGHT:
-      if ( hour < 7 && hour > 23 )
+      if ( hour < 7 || hour >= 23 )
       {
          ventilator_ventilating_set ( SQ_TRUE );
       }
@@ -60,7 +60,7 @@ void ventilator_second_tick ( void )
       break;
       
    case VENTILATOR_MODE_ONLY_WEEKDAYS:
-      if ( weekday > 2 )
+      if ( weekday < 5 )
       {
          ventilator_ventilating_set ( SQ_TRUE );
       }

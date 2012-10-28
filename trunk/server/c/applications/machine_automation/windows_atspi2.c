@@ -237,6 +237,57 @@ char * windows_text ( SQByteArray * _pointer )
    return strdup("");
 }
 
+
+int windows_actions ( SQByteArray * _pointer )
+{
+   GError * error = NULL;
+   gint count = 0;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_ACTION(accessibleObject) )
+   {
+       AtspiAction * actionObj = ATSPI_ACTION(accessibleObject);
+       count = atspi_action_get_n_actions ( actionObj, &error );
+       if ( error != NULL )
+       {
+           g_error_free(error);
+       }
+   }
+   return count;
+}
+
+char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
+{
+   GError * error = NULL;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_ACTION(accessibleObject) )
+   {
+       AtspiAction * actionObj = ATSPI_ACTION(accessibleObject);
+       gchar * name = atspi_action_get_name ( actionObj, _actionIndex, &error );
+       if ( error != NULL )
+       {
+           g_error_free(error);
+           return strdup("ERROR");
+       }
+       return name;
+   }
+   return strdup("UNKNOWN");
+}
+
+void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
+{
+   GError * error = NULL;
+   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( ATSPI_IS_ACTION(accessibleObject) )
+   {
+       AtspiAction * actionObj = ATSPI_ACTION(accessibleObject);
+       atspi_action_do_action ( actionObj, _actionIndex, &error );
+       if ( error != NULL )
+       {
+           g_error_free(error);
+       }
+   }
+}
+
 long windows_children ( SQByteArray * _pointer )
 {
    GError * error = NULL;

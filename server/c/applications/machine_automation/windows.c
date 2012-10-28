@@ -65,6 +65,20 @@ char * windows_text ( SQByteArray * _pointer )
     return strdup("");
 }
 
+int windows_actions ( SQByteArray * _pointer )
+{
+    return 0;
+}
+
+char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
+{
+    return strdup("");
+}
+
+void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
+{
+}
+
 long windows_children ( SQByteArray * _pointer )
 {
    return 0;

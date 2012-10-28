@@ -35,6 +35,8 @@ function /process/id process_id
 function /process/name process_name
 function /process/filename process_filename
 function /process/memory process_memory
+function /process/owner process_owner
+function /process/cmdline process_cmdline
 
 property /windows/desktops windows_desktops
 function /windows/desktop windows_desktop
@@ -50,3 +52,7 @@ function /windows/width windows_width
 function /windows/height windows_height
 function /windows/role windows_role
 function /windows/text windows_text
+function /windows/actions windows_actions
+function /windows/action_name windows_action_name
+function /windows/action_do windows_action_do
+

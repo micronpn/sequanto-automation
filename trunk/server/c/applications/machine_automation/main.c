@@ -2,8 +2,8 @@
 #include <sequanto/thread.h>
 
 #include "config.h"
-
 #include "machine_automation.h"
+#include "common.h"
 
 #ifdef SQ_WIN32
 #include <windows.h>

@@ -3,13 +3,15 @@ IF(NOT SQ_ARDUINO)
   SET(SOURCES main.c files.c memory.c process.c ${SQ_GENERATE_machine})
 
   IF(SQ_WIN32)  
-    LIST(APPEND SOURCES windows_win32_oleacc.c)
+    LIST(APPEND SOURCES process_win32.c windows_win32_oleacc.c)
   ELSE(SQ_WIN32)
     INCLUDE(FindPkgConfig)
 
     PKG_CHECK_MODULES(CSPI1 cspi-1.0)
     PKG_CHECK_MODULES(ATSPI2 glib-2.0 atspi-2)
-        
+    
+    LIST(APPEND SOURCES process_linux.c)
+    
     IF(ATSPI2_FOUND)
       INCLUDE_DIRECTORIES(${ATSPI2_INCLUDE_DIRS})
       LINK_DIRECTORIES(${ATSPI2_LIBRARY_DIRS})

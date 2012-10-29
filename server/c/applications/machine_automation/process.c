@@ -27,7 +27,7 @@ void process_resize_internal_buffer ( size_t _newSize )
    free ( g_processes );
    
    g_numberOfProcesses = _newSize;
-   g_processes = malloc ( g_numberOfProcesses * sizeof(struct Process) );
+   g_processes = (struct Process *) malloc ( g_numberOfProcesses * sizeof(struct Process) );
 
    for ( i = 0; i < g_numberOfProcesses; i++ )
    {
@@ -36,6 +36,8 @@ void process_resize_internal_buffer ( size_t _newSize )
        g_processes[i].m_owner = -1;
        g_processes[i].m_memoryUsage = 0;
    }
+
+   sq_process_count_updated ( g_numberOfProcesses );
 }
 
 int process_count ()

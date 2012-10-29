@@ -13,17 +13,15 @@ void process_refresh_internal ()
    DWORD i;
    char szProcessName[MAX_PATH];
    PROCESS_MEMORY_COUNTERS processMemoryCounters;
+   DWORD numberOfProcesses;
 
-   EnumProcesses ( processIds, sizeof(processIds), &g_numberOfProcesses );
-   g_numberOfProcesses /= sizeof(DWORD);
-   g_processes = malloc ( g_numberOfProcesses * sizeof(struct Process) );
-   
-   for ( i = 0; i < g_numberOfProcesses; i++ )
+   EnumProcesses ( processIds, sizeof(processIds), &numberOfProcesses );
+
+   process_resize_internal_buffer(numberOfProcesses);
+
+   for ( i = 0; i < numberOfProcesses; i++ )
    {
       g_processes[i].m_id = processIds[i];
-      g_processes[i].m_name = NULL;
-      g_processes[i].m_filename = NULL;
-      g_processes[i].m_memoryUsage = 0;
 
       hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processIds[i] );
       
@@ -54,6 +52,4 @@ void process_refresh_internal ()
       }
       CloseHandle ( hProcess );
    }
-
-   sq_process_count_updated ( g_numberOfProcesses );
 }

@@ -1,9 +1,9 @@
-#include <sequanto/automation.h>
-
 #define COBJMACROS
 #include <ObjBase.h>
 #include <OAIdl.h>
 #include <OleAcc.h>
+
+#include <sequanto/automation.h>
 
 static VARIANT s_childIdSelf;
 
@@ -27,7 +27,7 @@ char * windows_bstr_to_utf8 ( BSTR _buffer )
    
    length = WideCharToMultiByte ( CP_UTF8, 0, _buffer, -1, NULL, 0, NULL, NULL );
    
-   ret = malloc ( length );
+   ret = (char*) malloc ( length );
    
    WideCharToMultiByte ( CP_UTF8, 0, _buffer, -1, ret, length, NULL, NULL );
    
@@ -77,7 +77,6 @@ void windows_unref ( const SQByteArray * _pointer )
    IAccessible_Release ( accessible );
 }
 
-
 char * windows_name ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
@@ -94,7 +93,7 @@ char * windows_role ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
    VARIANT roleVar;
-   char * buffer = malloc(100);
+   char * buffer = (char*) malloc(100);
    
    accessible = windows_to_accessible ( _pointer );
 
@@ -271,4 +270,23 @@ SQByteArray * windows_child ( const SQByteArray * _pointer, long _child )
    {
       return sq_byte_array_create_prealloc ( 0 );
    }
+}
+
+int windows_actions ( SQByteArray * _pointer )
+{
+    return 1;
+}
+
+char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
+{
+    return strdup("invoke");
+}
+
+void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
+{
+   IAccessible * accessible;
+   
+   accessible = windows_to_accessible ( _pointer );
+
+   IAccessible_accDoDefaultAction( accessible, s_childIdSelf );
 }

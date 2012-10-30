@@ -186,7 +186,6 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
    char buffer[SQ_MAX_VALUE_LENGTH];
 #ifdef HAVE_SNPRINTF
 #  ifdef HAVE_SNPRINTF_S
-   
    int i;
    SNPRINTF_S_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, SQ_MAX_VALUE_LENGTH, "%f", _value );
    for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
@@ -196,7 +195,6 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
    return SQ_TRUE;
 
 #  else
-
    int i;
    SNPRINTF_FUNCTION ( buffer, SQ_MAX_VALUE_LENGTH - 1, "%f", (double) _value );
    for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
@@ -207,14 +205,29 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 
 #  endif
 #else
+#  ifdef HAVE_DTOSTRF
+   int i;
+   dtostrf ( _value, 3, 2, buffer );
+   for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
+   {
+      WRITE_BYTE_OR_FAIL ( buffer[i] );
+   }
+   return SQ_TRUE;
+#  else
    int i = 0, tempValue;
-
+   
+   if ( _value == NAN || _value == INFINITY )
+   {
+      WRITE_BYTE_OR_FAIL('0');
+      return SQ_TRUE;
+   }
+   
    if ( _value < 0.0f )
    {
       WRITE_BYTE_OR_FAIL ( '-' );
       _value = -_value;
    }
-
+   
    tempValue = (int) _value;
    while ( tempValue != 0 && i < SQ_MAX_VALUE_LENGTH )
    {
@@ -252,6 +265,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
       }
    }
    return SQ_TRUE;
+#  endif
 #endif
 }
 

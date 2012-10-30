@@ -24,6 +24,7 @@
 #cmakedefine HAVE_UNDERSCORE_SNPRINTF
 #cmakedefine HAVE_SNPRINTF_S
 #cmakedefine HAVE_UNDERSCORE_SNPRINTF_S
+#cmakedefine HAVE_DTOSTRF
 #cmakedefine HAVE_WINSOCK2_H
 #cmakedefine HAVE_SYS_SOCKET_H
 #cmakedefine HAVE_INT64_T

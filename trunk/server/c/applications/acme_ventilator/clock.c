@@ -41,15 +41,15 @@ SQBool clock_update( void )
                {
                   clockDayOfWeek = 0;
                }
-					sq_clock_weekday_updated( clockDayOfWeek );
+					//sq_clock_weekday_updated( clockDayOfWeek );
             }
-				sq_clock_hour_updated( clockHour );
+				//sq_clock_hour_updated( clockHour );
          }
-			sq_clock_minute_updated( clockMinute );
+			//sq_clock_minute_updated( clockMinute );
       }
 		if ((clockSecond % 10) == 0)
       {
-         sq_clock_second_updated( clockSecond);
+         //sq_clock_second_updated( clockSecond);
       }
    }
    return updated;
@@ -71,7 +71,7 @@ void clock_set_weekday ( int _weekday )
    if (_weekday != clockDayOfWeek)
    {
       clockDayOfWeek = _weekday;
-      sq_clock_weekday_updated( clockDayOfWeek);
+      //sq_clock_weekday_updated( clockDayOfWeek);
    }
 }
 
@@ -85,7 +85,7 @@ void clock_set_hour ( int _hour )
    if (_hour != clockHour)
    {
       clockHour = _hour;
-      sq_clock_hour_updated( clockHour);
+      //sq_clock_hour_updated( clockHour);
    }
 }
 
@@ -99,7 +99,7 @@ void clock_set_minute ( int _minute )
    if (_minute != clockMinute)
    {
       clockMinute = _minute;
-      sq_clock_minute_updated( clockMinute);
+      //sq_clock_minute_updated( clockMinute);
    }
 }
 
@@ -114,6 +114,6 @@ void clock_set_second ( int _second )
    if (_second != clockSecond)
    {
       clockSecond = _second;
-      sq_clock_second_updated( clockSecond);
+      //sq_clock_second_updated( clockSecond);
    }
 }

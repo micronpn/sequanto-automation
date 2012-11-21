@@ -19,17 +19,29 @@ const char * main_serial_number ( void )
    return sq_get_constant_string(SERIAL_NUMBER);
 }
 
+int s_alarms;
+int alarms_get ( void )
+{
+   return s_alarms;
+}
+void alarms_set ( int _alarms )
+{
+   s_alarms = _alarms;
+}
+
 int main(int _argc, char * _argv[] )
 {
    unsigned long lastTick = 0;
    SQServer server;
    
    lastTick = millis();
+   
+   display_setup();
    ventilator_setup();
    clock_setup();
-
-   sq_init ();
+   temperature_setup ();
    
+   sq_init ();
    sq_server_init ( &server, 4321 );
    
    while ( SQ_TRUE )
@@ -39,6 +51,7 @@ int main(int _argc, char * _argv[] )
 		if ( (millis() - lastTick) >= 1000)
 		{
 			ventilator_second_tick();
+         display_update();
 			lastTick += 1000;
 		}
 	}

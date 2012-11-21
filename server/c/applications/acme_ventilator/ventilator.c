@@ -3,6 +3,9 @@
 const int VENTILATOR_PIN = 13;
 static SQBool s_ventilating = SQ_TRUE;
 
+const int CRITICAL = 0xF0;
+const int HARDWARE = 0xF1;
+
 static enum VentilatorMode
 {
    VENTILATOR_MODE_OFF = 0,
@@ -26,50 +29,61 @@ void ventilator_second_tick ( void )
    int weekday = clock_get_weekday();
    int hour = clock_get_hour();
    int minute = clock_get_minute();
-   
-   switch ( s_mode )
+   float outside = temperature_outside_get();
+   float critical = temperature_setpoint_critical_get();
+   int alarms = 0;
+   if ( outside > critical )
    {
-   case VENTILATOR_MODE_OFF:
-      ventilator_ventilating_set ( SQ_FALSE );
-      break;
-      
-   case VENTILATOR_MODE_ALWAYS_ON:
+      alarms |= CRITICAL;
       ventilator_ventilating_set ( SQ_TRUE );
-      break;
-      
-   case VENTILATOR_MODE_AT_NIGHT:
-      if ( hour < 7 || hour >= 23 )
-      {
-         ventilator_ventilating_set ( SQ_TRUE );
-      }
-      else
-      {
-         ventilator_ventilating_set ( SQ_FALSE );
-      }
-      break;
-      
-   case VENTILATOR_MODE_15_MINUTES_EACH_HOUR:
-      if ( minute < 15 )
-      {
-         ventilator_ventilating_set ( SQ_TRUE );
-      }
-      else
-      {
-         ventilator_ventilating_set ( SQ_FALSE );
-      }
-      break;
-      
-   case VENTILATOR_MODE_ONLY_WEEKDAYS:
-      if ( weekday < 5 )
-      {
-         ventilator_ventilating_set ( SQ_TRUE );
-      }
-      else
-      {
-         ventilator_ventilating_set ( SQ_FALSE );
-      }
-      break;
    }
+   else
+   {
+      switch ( s_mode )
+      {
+      case VENTILATOR_MODE_OFF:
+         ventilator_ventilating_set ( SQ_FALSE );
+         break;
+         
+      case VENTILATOR_MODE_ALWAYS_ON:
+         ventilator_ventilating_set ( SQ_TRUE );
+         break;
+         
+      case VENTILATOR_MODE_AT_NIGHT:
+         if ( hour < 7 || hour >= 23 )
+         {
+            ventilator_ventilating_set ( SQ_TRUE );
+         }
+         else
+         {
+            ventilator_ventilating_set ( SQ_FALSE );
+         }
+         break;
+         
+      case VENTILATOR_MODE_15_MINUTES_EACH_HOUR:
+         if ( minute < 15 )
+         {
+            ventilator_ventilating_set ( SQ_TRUE );
+         }
+         else
+         {
+            ventilator_ventilating_set ( SQ_FALSE );
+         }
+         break;
+      
+      case VENTILATOR_MODE_ONLY_WEEKDAYS:
+         if ( weekday < 5 )
+         {
+            ventilator_ventilating_set ( SQ_TRUE );
+         }
+         else
+         {
+            ventilator_ventilating_set ( SQ_FALSE );
+         }
+         break;
+      }
+   }
+   alarms_set ( alarms );
 }
 
 void ventilator_mode_set ( int _mode )
@@ -78,7 +92,7 @@ void ventilator_mode_set ( int _mode )
    {
       s_mode = _mode;
       
-      sq_ventilator_mode_updated ( s_mode );
+      //sq_ventilator_mode_updated ( s_mode );
    }
 }
 
@@ -103,7 +117,7 @@ static void ventilator_ventilating_set ( SQBool _value )
          digitalWrite ( VENTILATOR_PIN, LOW );
       }
       
-      sq_ventilator_ventilating_updated ( s_ventilating );
+      //sq_ventilator_ventilating_updated ( s_ventilating );
    }
 }
 

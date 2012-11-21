@@ -61,7 +61,7 @@ void digital_pin_set ( int _pin, SQBool _value )
    {
       digitalWrite ( _pin, _value == SQ_TRUE ? HIGH : LOW );
       io_last_written = (io_last_written & (~(PIN_MASK(_pin)))) | (_value >> _pin);
-      sq_digital_pin_updated ( _pin, _value );
+      //sq_digital_pin_updated ( _pin, _value );
    }
    /*
    else
@@ -108,7 +108,7 @@ void digital_direction_set ( int _pin, const char * _mode )
       pinMode ( _pin, INPUT );
       /* Set pull-up resistor. */
       digitalWrite ( _pin, HIGH );
-      sq_digital_pin_updated ( _pin, digital_pin_get(_pin) );
+      //sq_digital_pin_updated ( _pin, digital_pin_get(_pin) );
       break;
 
    case DIGITAL_PIN_OUTPUT:
@@ -218,7 +218,7 @@ int main ( void )
 		{
 			if ( ( changed & PIN_MASK(i) ) != 0 )
 			{
-				sq_digital_pin_updated ( i, digital_pin_get(i) );
+				//sq_digital_pin_updated ( i, digital_pin_get(i) );
 			}
 			if ( ( trigged & PIN_MASK(i) ) != 0 )
 			{

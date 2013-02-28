@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-PROJECT(libSequantoAutomation)
+PROJECT(libSequantoAutomation C)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Sequanto Automation library")
 SET(CPACK_PACKAGE_VERSION "0.7.2")
@@ -44,11 +44,13 @@ CHECK_FUNCTION_EXISTS(dtostrf HAVE_DTOSTRF)
 INCLUDE(CheckSymbolExists)
 CHECK_SYMBOL_EXISTS(int64_t "stdint.h" HAVE_INT64_T)
 
-INCLUDE(CheckCXXSourceCompiles)
-CHECK_CXX_SOURCE_COMPILES("#include <string>\n int main () { std::string s; };" STL_SUPPORTED)
+IF(CMAKE_CXX_COMPILER)
+  INCLUDE(CheckCXXSourceCompiles)
+  CHECK_CXX_SOURCE_COMPILES("#include <string>\n int main () { std::string s; };" STL_SUPPORTED)
+ENDIF(CMAKE_CXX_COMPILER)
 
 INCLUDE(CheckCSourceCompiles)
-CHECK_CXX_SOURCE_COMPILES("inline int c() {} int main () { c(); };" SQ_C_SUPPORTS_INLINE)
+CHECK_C_SOURCE_COMPILES("inline int c() {} int main () { c(); };" SQ_C_SUPPORTS_INLINE)
 
 CHECK_INCLUDE_FILE(assert.h HAVE_ASSERT_H)
 

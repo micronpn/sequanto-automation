@@ -2,6 +2,8 @@
 #include <cspi/spi.h>
 #include <memory.h>
 
+#include "config.h"
+
 void windows_init_subsystem ()
 {
     SPI_init();
@@ -145,9 +147,10 @@ char * windows_text ( SQByteArray * _pointer )
    {
        AccessibleValue * valueObj = Accessible_getValue(accessibleObject);
        
-       gdouble current = AccessibleValue_getCurrentValue ( valueObj );
-       
-       return g_strdup_printf("%f", current);
+       double current = AccessibleValue_getCurrentValue ( valueObj );
+       text = malloc(SQ_MAX_VALUE_LENGTH);
+       SNPRINTF_FUNCTION ( text, SQ_MAX_VALUE_LENGTH, "%f", current );
+       return text;
    }
    return strdup("");
 }
@@ -162,4 +165,38 @@ SQByteArray * windows_child ( SQByteArray * _parent, long _index )
 {
    Accessible * accessibleObject = windows_to_accessible(_parent);
    return windows_from_accessible ( Accessible_getChildAtIndex ( accessibleObject, _index ) );
+}
+
+int windows_actions ( SQByteArray * _pointer )
+{
+   long count = 0;
+   Accessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( Accessible_isAction(accessibleObject) )
+   {
+       AccessibleAction * actionObj = Accessible_getAction(accessibleObject);
+       count = (int) AccessibleAction_getNActions ( actionObj );
+   }
+   return count;
+}
+
+char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
+{
+   Accessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( Accessible_isAction(accessibleObject) )
+   {
+       AccessibleAction * actionObj = Accessible_getAction(accessibleObject);
+       char * name = AccessibleAction_getName ( actionObj, _actionIndex );
+       return windows_string ( name );
+   }
+   return strdup("UNKNOWN");
+}
+
+void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
+{
+   Accessible * accessibleObject = windows_to_accessible(_pointer);
+   if ( Accessible_isAction(accessibleObject) )
+   {
+       AccessibleAction * actionObj = Accessible_getAction(accessibleObject);
+       AccessibleAction_doAction ( actionObj, _actionIndex );
+   }
 }

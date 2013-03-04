@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-PROJECT(libSequantoAutomation C)
+PROJECT(libSequantoAutomation C CXX)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Sequanto Automation library")
 SET(CPACK_PACKAGE_VERSION "0.7.2")

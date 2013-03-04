@@ -18,7 +18,7 @@
 #include <string.h>
 
 #include <avr/interrupt.h>
-#include <Wiring.h>
+#include <wiring.h>
 
 #include "config.h"
 

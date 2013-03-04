@@ -1,7 +1,7 @@
 IF(SQ_ARDUINO)
   SQ_GENERATE(light_dimmer light_dimmer.automation)
                        
-    ADD_EXECUTABLE(light_dimmer main.cxx dimmerstatemachine.cxx interfacestatemachine.cxx display.cxx
+    ADD_EXECUTABLE(light_dimmer main.cxx DimmerStateMachine.cxx InterfaceStateMachine.cxx display.cxx
                      ../arduino_demo/LCD03.cpp
                      ${SQ_GENERATE_light_dimmer})
     

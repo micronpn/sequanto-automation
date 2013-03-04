@@ -56,6 +56,7 @@ SET(SQ_ARDUINO           ON      CACHE BOOL "")
 
 SET(EXTRA_SRCS ${CMAKE_SOURCE_DIR}/arduino/Print.cpp
                ${CMAKE_SOURCE_DIR}/arduino/wiring.c
+               ${CMAKE_SOURCE_DIR}/arduino/new.cpp
                ${CMAKE_SOURCE_DIR}/arduino/wiring_digital.c
                ${CMAKE_SOURCE_DIR}/arduino/wiring_analog.c
                ${CMAKE_SOURCE_DIR}/arduino/wiring_pulse.c

@@ -60,10 +60,10 @@ SET(EXTRA_SRCS ${CMAKE_SOURCE_DIR}/arduino/Print.cpp
                ${CMAKE_SOURCE_DIR}/arduino/wiring_analog.c
                ${CMAKE_SOURCE_DIR}/arduino/wiring_pulse.c
                ${CMAKE_SOURCE_DIR}/arduino/wiring_shift.c
-               ${CMAKE_SOURCE_DIR}/arduino/pins_arduino.c
                ${CMAKE_SOURCE_DIR}/arduino/WInterrupts.c
                ${CMAKE_SOURCE_DIR}/arduino/WMath.cpp
                ${CMAKE_SOURCE_DIR}/arduino/HardwareSerial.cpp
+               ${CMAKE_SOURCE_DIR}/arduino/Stream.cpp
                ${CMAKE_SOURCE_DIR}/arduino/WString.cpp
                ${CMAKE_SOURCE_DIR}/arduino/twi.c
                ${CMAKE_SOURCE_DIR}/arduino/twowire/Wire.cpp)

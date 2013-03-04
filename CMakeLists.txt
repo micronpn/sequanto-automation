@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+        CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 PROJECT(libSequantoAutomation C)
 
@@ -117,9 +117,13 @@ MACRO(SQ_GENERATE_ARDUINO name)
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		VERBATIM)
     
-    FILE(WRITE ${CMAKE_BINARY_DIR}/upload_${name}.bat "SET PORT=%1\n")
-    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}.bat "if x%1 == x ( SET PORT=COM8 )\n")
-    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D \"-Uflash:w:${CMAKE_CURRENT_BINARY_DIR}\\${name}.hex:i\"\n")
+    FILE(WRITE ${CMAKE_BINARY_DIR}/upload_${name}_duemilanove.bat "SET PORT=%1\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}_duemilanove.bat "if x%1 == x ( SET PORT=COM8 )\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}_duemilanove.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D \"-Uflash:w:${CMAKE_CURRENT_BINARY_DIR}\\${name}.hex:i\"\n")
+
+    FILE(WRITE ${CMAKE_BINARY_DIR}/upload_${name}_uno.bat "SET PORT=%1\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}_uno.bat "if x%1 == x ( SET PORT=COM9 )\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}_uno.bat "avrdude -v -carduino -pm328p -b115200 -P\\\\.\\%PORT% -D \"-Uflash:w:${CMAKE_CURRENT_BINARY_DIR}\\${name}.hex:i\"\n")
   ENDIF(SQ_ARDUINO)
 ENDMACRO(SQ_GENERATE_ARDUINO)
 

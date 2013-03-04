@@ -50,7 +50,7 @@ SQStream * sq_stream_open ( int _portNumber )
    SQ_CIRCULAR_BUFFER_INIT(ret->m_in, INTERNAL_BUFFER);
    SQ_CIRCULAR_BUFFER_INIT(ret->m_out, INTERNAL_BUFFER);
    
-   unsigned long baud = 57600;
+   unsigned long baud = 115200;
    //unsigned long baud = 9600;
    
    uint8_t use2x = 0;
@@ -157,8 +157,11 @@ SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
 
 ISR(USART_RX_vect)
 {
-    uint8_t data = UDR0;
-    SQ_CIRCULAR_BUFFER_PUSH ( s_embeddedSerialStream->m_in,  data );
+   if ( s_embeddedSerialStream != NULL )
+   {
+      uint8_t data = UDR0;
+      SQ_CIRCULAR_BUFFER_PUSH ( s_embeddedSerialStream->m_in,  data );
+   }
 }
 
 /**
@@ -166,15 +169,18 @@ ISR(USART_RX_vect)
  */
 ISR(USART_UDRE_vect)
 {
-	if ( SQ_CIRCULAR_BUFFER_AVAILABLE(s_embeddedSerialStream->m_out) != 0 )
-	{
-		UDR0 = SQ_CIRCULAR_BUFFER_POP(s_embeddedSerialStream->m_out);
-	}
-	else
-	{
-		// Buffer is empty, disable the interrupt
-		UCSR0B &= ~(1<<UDRIE0);
-	}
+   if ( s_embeddedSerialStream != NULL )
+   {
+      if ( SQ_CIRCULAR_BUFFER_AVAILABLE(s_embeddedSerialStream->m_out) != 0 )
+      {
+         UDR0 = SQ_CIRCULAR_BUFFER_POP(s_embeddedSerialStream->m_out);
+      }
+      else
+      {
+         // Buffer is empty, disable the interrupt
+         UCSR0B &= ~(1<<UDRIE0);
+      }
+   }
 }
 
 void sq_stream_enter_write ( SQStream * _stream )

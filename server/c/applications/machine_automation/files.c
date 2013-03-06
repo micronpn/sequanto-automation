@@ -127,22 +127,19 @@ const char * files_separator ()
    return PATH_SEP;
 }
 
-static char * found_filename = NULL;
-
-void files_info ( const char * _path, int * _numberOfDirectories, int * _numberOfFiles, int _directoryIndex, int _fileIndex )
+char * files_info ( const char * _path, int * _numberOfDirectories, int * _numberOfFiles, int _directoryIndex, int _fileIndex )
 {
    DIR * dir;
    struct dirent * entry;
+   char * found_filename = NULL;
+   size_t pathLen = strlen(_path);
+   char * actual_dir = malloc ( 1 + pathLen + 1 );
+   actual_dir[0] = '/';
+   memcpy ( actual_dir + 1, _path, pathLen + 1 );
    *_numberOfDirectories = 0;
    *_numberOfFiles = 0;
    
-   if ( found_filename != NULL )
-   {
-      free ( found_filename );
-   }
-   found_filename = NULL;
-
-   dir = opendir ( _path );
+   dir = opendir ( actual_dir );
    if ( dir != NULL )
    {
        while ( entry = readdir ( dir ) )
@@ -171,6 +168,8 @@ void files_info ( const char * _path, int * _numberOfDirectories, int * _numberO
       }
       closedir ( dir );
    }
+   free ( actual_dir );
+   return found_filename;
 }
 
 size_t files_size ( const char * _path )
@@ -184,11 +183,6 @@ size_t files_size ( const char * _path )
     {
         return 0;
     }
-}
-
-void files_list ( const char * _path )
-{
-   
 }
 
 void files_create_directory ( const char * _path )

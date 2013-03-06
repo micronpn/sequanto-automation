@@ -42,19 +42,20 @@ void process_refresh_internal ()
         process_resize_internal_buffer ( num );
         for ( i = 0; i < num; i++ )
         {
-            g_processes[i].m_id = atoi(names[i]->d_name);
-            sprintf ( exeLink, "/proc/%i/exe", g_processes[i].m_id );
+            struct Process * process = process_get_process_internal ( i );
+            process->m_id = atoi(names[i]->d_name);
+            sprintf ( exeLink, "/proc/%i/exe", process->m_id );
             ssize_t len = readlink ( exeLink, exe,1024 );
             if ( len != -1 )
             {
                 exe[len] = '\0';
-                g_processes[i].m_filename = strdup(exe);
+                process->m_filename = strdup(exe);
             }
             
-            sprintf ( exeLink, "/proc/%i", g_processes[i].m_id );
+            sprintf ( exeLink, "/proc/%i", process->m_id );
             struct stat statBuf;
             stat ( exeLink, &statBuf );
-            g_processes[i].m_owner = statBuf.st_uid;
+            process->m_owner = statBuf.st_uid;
         }
     }
     free ( names );

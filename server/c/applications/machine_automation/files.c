@@ -8,15 +8,29 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-static char * found_filename = NULL;
-
-void files_info ( const char * _path, int * _numberOfDirectories, int * _numberOfFiles, int _directoryIndex, int _fileIndex )
+char * files_info ( const char * _path, int * _numberOfDirectories, int * _numberOfFiles, int _directoryIndex, int _fileIndex )
 {
    char * pathWithWildcard;
    WIN32_FIND_DATA item;
    HANDLE findHandle;
-   size_t pathlen = strlen(_path);
-   pathWithWildcard = malloc ( pathlen + 3 );
+   size_t pathlen;
+   char * found_filename;
+
+   if ( strcmp(_path, "") == 0 )
+   {
+      *_numberOfDirectories = 1;
+      *_numberOfFiles = 0;
+      if ( _directoryIndex == 0 )
+      {
+         return strdup("C:");
+      }
+      else
+      {
+         return NULL;
+      }
+   }
+   pathlen = strlen(_path);
+   pathWithWildcard = (char*) malloc ( pathlen + 3 );
    strcpy_s ( pathWithWildcard, pathlen + 3, _path );
    pathWithWildcard[pathlen] = '\\';
    pathWithWildcard[pathlen + 1] = '*';
@@ -25,12 +39,6 @@ void files_info ( const char * _path, int * _numberOfDirectories, int * _numberO
 
    *_numberOfDirectories = 0;
    *_numberOfFiles = 0;
-
-   if ( found_filename != NULL )
-   {
-      free ( found_filename );
-   }
-   found_filename = NULL;
 
    if ( findHandle != INVALID_HANDLE_VALUE )
    {
@@ -43,6 +51,8 @@ void files_info ( const char * _path, int * _numberOfDirectories, int * _numberO
                if ( *_numberOfDirectories == _directoryIndex )
                {
                   found_filename = _strdup ( item.cFileName );
+                  FindClose ( findHandle );
+                  return found_filename;
                }
                *_numberOfDirectories = *_numberOfDirectories + 1;
             }
@@ -51,6 +61,8 @@ void files_info ( const char * _path, int * _numberOfDirectories, int * _numberO
                if ( *_numberOfFiles == _fileIndex )
                {
                   found_filename = _strdup ( item.cFileName );
+                  FindClose ( findHandle );
+                  return found_filename;
                }
                *_numberOfFiles = *_numberOfFiles + 1;
             }
@@ -60,6 +72,7 @@ void files_info ( const char * _path, int * _numberOfDirectories, int * _numberO
       FindClose ( findHandle );
    }
    free ( pathWithWildcard );
+   return NULL;
 }
 
 static char PATH_SEP[] = "\\";
@@ -217,7 +230,7 @@ char * files_filename ( const char * _path, int _index )
 {
    int numberOfDirectories, numberOfFiles;
    
-   files_info ( _path, &numberOfDirectories, &numberOfFiles, -1, _index );
+   char * found_filename = files_info ( _path, &numberOfDirectories, &numberOfFiles, -1, _index );
    
    return found_filename;
 }
@@ -226,7 +239,7 @@ char * files_directoryname ( const char * _path, int _index )
 {
    int numberOfDirectories, numberOfFiles;
    
-   files_info ( _path, &numberOfDirectories, &numberOfFiles, _index, -1 );
+   char * found_filename = files_info ( _path, &numberOfDirectories, &numberOfFiles, _index, -1 );
    
    return found_filename;
 }

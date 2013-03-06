@@ -7,7 +7,7 @@
 
 static char EMPTY[] = "";
 static int g_numberOfProcesses = 0;
-struct Process * g_processes = NULL;
+static struct Process * g_processes = NULL;
 
 void process_resize_internal_buffer ( size_t _newSize )
 {
@@ -31,13 +31,27 @@ void process_resize_internal_buffer ( size_t _newSize )
 
    for ( i = 0; i < g_numberOfProcesses; i++ )
    {
+       g_processes[i].m_id = -1;
        g_processes[i].m_name = NULL;
        g_processes[i].m_filename = NULL;
+       g_processes[i].m_cmdline = NULL;
        g_processes[i].m_owner = -1;
        g_processes[i].m_memoryUsage = 0;
    }
 
    sq_process_count_updated ( g_numberOfProcesses );
+}
+
+struct Process * process_get_process_internal ( size_t _index )
+{
+   if ( _index < g_numberOfProcesses )
+   {
+      return &g_processes[_index];
+   }
+   else
+   {
+      return NULL;
+   }
 }
 
 int process_count ()

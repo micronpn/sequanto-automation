@@ -16,6 +16,6 @@ The process information is only updated/fetched when refresh is called, otherwis
 = Callables =
 
 || refresh || void() || Refresh the cached process list. ||
-|| id || int(int index) || Get the ID of the process with the given index. ||
-|| name || string(int index) || Get the name of the process with the given index. ||
-|| filename || string(int index) || Get the filename of the process with the given index. ||
+|| id || int(int) || Get the ID of the process with the given index. ||
+|| name || string(int) || Get the name of the process with the given index. ||
+|| filename || string(int) || Get the filename of the process with the given index. ||

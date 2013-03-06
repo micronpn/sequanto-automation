@@ -37,3 +37,6 @@ to keep the window in memory forever.
 || height || int ( byte-array ) || Get height of the window. ||
 || children || int ( byte-array ) || Get the number of child-windows for a given window. ||
 || child || byte-array ( byte-array int ) || Get a reference to the child-window with the given index. ||
+|| actions || int ( byte-array ) || Get the number of actions of the window. ||
+|| action_name || string ( byte-array int ) || Get the name of the action with the given index. ||
+|| action_do || void ( byte-array int ) || Execute the action with the given index. ||

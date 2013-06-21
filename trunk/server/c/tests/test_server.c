@@ -75,6 +75,13 @@ void sq_parser_disable ( SQParser * _parser, SQStream * _stream, const char * co
     SQ_UNUSED_PARAMETER(_objectPath);
 }
 
+void sq_parser_dump ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+{
+    SQ_UNUSED_PARAMETER(_parser);
+    SQ_UNUSED_PARAMETER(_stream);
+    SQ_UNUSED_PARAMETER(_objectPath);
+}
+
 START_TEST(test_server_init)
 {
     SQServer server;

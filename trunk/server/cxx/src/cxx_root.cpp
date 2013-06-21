@@ -91,4 +91,14 @@ extern "C"
          sq_protocol_write_failure_with_text_message ( _stream, COULD_NOT_FIND_GIVEN_OBJECT );
       }
    }
+
+   void sq_parser_dump ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+   {
+      SQ_UNUSED_PARAMETER(_parser);
+      
+      if ( s_tree.HandleDump ( _stream, _objectPath ) == SQ_FALSE )
+      {
+         sq_protocol_write_failure_with_text_message ( _stream, COULD_NOT_FIND_GIVEN_OBJECT );
+      }
+   }
 }

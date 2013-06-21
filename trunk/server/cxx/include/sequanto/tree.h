@@ -48,9 +48,12 @@ namespace sequanto
          SQBool HandleGet ( SQStream * _stream, const char * _path );
          SQBool HandleSet ( SQStream * _stream, const char * _path, const SQValue * const _value );
          SQBool HandleCall ( SQStream * _stream, const char * _path, const SQValue * const _values, int _numberOfValues );
+         SQBool HandleDump ( SQStream * _stream, const char * _path );
          void SetRoot ( Node * _root );
 
+         static void WriteValue ( SQStream * _stream, const SQValue & _value );
          static void WriteOkValue ( SQStream * _stream, const SQValue & _value );
+         static void WriteNodeInfo ( SQStream * _stream, const Node & _node );
       };
    }
 }

@@ -6,7 +6,7 @@
 #include "common.h"
 
 static char EMPTY[] = "";
-static int g_numberOfProcesses = 0;
+static size_t g_numberOfProcesses = 0;
 static struct Process * g_processes = NULL;
 
 void process_resize_internal_buffer ( size_t _newSize )

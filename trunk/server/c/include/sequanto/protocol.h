@@ -137,6 +137,15 @@ SQ_DECL void sq_protocol_write_success_with_float_message ( SQStream * _stream, 
  */
 SQ_DECL void sq_protocol_write_success_with_byte_array_message ( SQStream * _stream, SQByte * _start, SQByte * _end );
 
+SQ_DECL void sq_protocol_treedump_write_start (  SQStream * _stream );
+
+SQ_DECL void sq_protocol_treedump_write_list_begin (  SQStream * _stream, const char * const _name );
+SQ_DECL void sq_protocol_treedump_write_list_end (  SQStream * _stream );
+
+SQ_DECL void sq_protocol_treedump_write_other_begin (  SQStream * _stream, const char * const _name );
+SQ_DECL void sq_protocol_treedump_write_other_values (  SQStream * _stream );
+SQ_DECL void sq_protocol_treedump_write_other_end (  SQStream * _stream );
+
 /**
  * @}
  */

@@ -57,6 +57,8 @@ namespace sequanto
           */
          virtual void SendUpdate ();
          
+         virtual void HandleDump ( SQStream * _stream );
+         
          virtual ~ListNode ();
       };
    }

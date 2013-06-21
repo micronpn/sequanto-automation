@@ -192,6 +192,11 @@ extern "C"
       return ui_tree.HandleCall ( _stream, _objectPath, _values, _numberOfValues );
    }
 
+   SQBool sq_handle_branch_dump_ui ( SQStream * _stream, const char * _objectPath )
+   {
+      return ui_tree.HandleDump ( _stream, _objectPath );
+   }
+
    void create_window ()
    {
       create_window_using_commander ();

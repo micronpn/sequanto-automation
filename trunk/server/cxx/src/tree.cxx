@@ -50,62 +50,12 @@ SQBool Tree::HandleInfo(SQStream * _stream, const char * _path)
    {
       return SQ_FALSE;
    }
-   const NodeInfo & nodeInfo = node->Info();
-
+ 
    sq_stream_enter_write ( _stream );
    sq_stream_write_string ( _stream, "+INFO " );
-   switch ( nodeInfo.GetType() )
-   {
-   case NodeInfo::SQ_NODE_TYPE_CALLABLE:
-      sq_stream_write_string ( _stream, "Callable " );
-      sq_protocol_write_type ( _stream, nodeInfo.GetReturnType() );
-      for ( size_t i = 0; i < nodeInfo.GetNumberOfParameters(); i++ )
-      {
-         sq_stream_write_byte ( _stream, ' ' );
-         sq_protocol_write_type ( _stream, nodeInfo.GetParameterType(i) );
-      }
-      break;
-
-   case NodeInfo::SQ_NODE_TYPE_LIST:
-      sq_stream_write_string ( _stream, "List" );
-      break;
-
-   case NodeInfo::SQ_NODE_TYPE_READABLE_PROPERTY:
-      sq_stream_write_string ( _stream, "ReadableProperty " );
-      sq_protocol_write_type ( _stream, nodeInfo.GetReturnType() );
-      break;
-
-   case NodeInfo::SQ_NODE_TYPE_WRITABLE_PROPERTY:
-      sq_stream_write_string ( _stream, "WritableProperty " );
-      sq_protocol_write_type ( _stream, nodeInfo.GetReturnType() );
-      break;
-
-   case NodeInfo::SQ_NODE_TYPE_READ_WRITE_PROPERTY:
-      sq_stream_write_string ( _stream, "ReadWriteProperty " );
-      sq_protocol_write_type ( _stream, nodeInfo.GetReturnType() );
-      break;
-
-   case NodeInfo::SQ_NODE_TYPE_MONITOR:
-      sq_stream_write_string ( _stream, "Monitor" );
-      for ( size_t i = 0; i < nodeInfo.GetNumberOfParameters(); i++ )
-      {
-         sq_stream_write_byte ( _stream, ' ' );
-         sq_protocol_write_type ( _stream, nodeInfo.GetParameterType(i) );
-      }
-      sq_stream_write_byte ( _stream, ' ' );
-      if ( node->IsMonitorEnabled() )
-      {
-         sq_stream_write_string ( _stream, "Enabled" );
-      }
-      else
-      {
-         sq_stream_write_string ( _stream, "Disabled" );
-      }
-      break;
-
-   default:
-      throw runtime_error ( "SequantoAutomation_CXX: Unsupported NodeType." );
-   }
+   
+   WriteNodeInfo ( _stream, *node );
+   
    sq_stream_write_string ( _stream, "\r\n" );
    sq_stream_exit_write ( _stream );
    return SQ_TRUE;
@@ -297,12 +247,94 @@ SQBool Tree::HandleCall ( SQStream * _stream, const char * _path, const SQValue 
    return SQ_TRUE;
 }
 
+SQBool Tree::HandleDump ( SQStream * _stream, const char * _path )
+{
+   Node * node = FindNode ( _path );
+   if ( node == NULL )
+   {
+      return SQ_FALSE;
+   }
+   const NodeInfo & nodeInfo = node->Info();
+   if ( nodeInfo.GetType() == NodeInfo::SQ_NODE_TYPE_LIST )
+   {
+      node->HandleDump ( _stream );
+   }
+   else
+   {
+      sq_protocol_write_failure_with_text_message ( _stream, "The given path does not point to a list" );
+   }
+   return SQ_TRUE;
+}
+
 void Tree::SetRoot ( Node * _root )
 {
    m_root = _root;
 }
 
+void Tree::WriteValue(SQStream *_stream, const SQValue &_value)
+{
+   sq_value_write ( &_value, _stream );
+}
+
 void Tree::WriteOkValue(SQStream *_stream, const SQValue &_value)
 {
    sq_protocol_write_success_with_values_message ( _stream, &_value, 1 );
+}
+
+void Tree::WriteNodeInfo(SQStream *_stream, const Node & _node )
+{
+   const NodeInfo & info = _node.Info();
+
+   switch ( info.GetType() )
+   {
+   case NodeInfo::SQ_NODE_TYPE_CALLABLE:
+      sq_stream_write_string ( _stream, "Callable " );
+      sq_protocol_write_type ( _stream, info.GetReturnType() );
+      for ( size_t i = 0; i < info.GetNumberOfParameters(); i++ )
+      {
+         sq_stream_write_byte ( _stream, ' ' );
+         sq_protocol_write_type ( _stream, info.GetParameterType(i) );
+      }
+      break;
+
+   case NodeInfo::SQ_NODE_TYPE_LIST:
+      sq_stream_write_string ( _stream, "List" );
+      break;
+
+   case NodeInfo::SQ_NODE_TYPE_READABLE_PROPERTY:
+      sq_stream_write_string ( _stream, "ReadableProperty " );
+      sq_protocol_write_type ( _stream, info.GetReturnType() );
+      break;
+
+   case NodeInfo::SQ_NODE_TYPE_WRITABLE_PROPERTY:
+      sq_stream_write_string ( _stream, "WritableProperty " );
+      sq_protocol_write_type ( _stream, info.GetReturnType() );
+      break;
+
+   case NodeInfo::SQ_NODE_TYPE_READ_WRITE_PROPERTY:
+      sq_stream_write_string ( _stream, "ReadWriteProperty " );
+      sq_protocol_write_type ( _stream, info.GetReturnType() );
+      break;
+
+   case NodeInfo::SQ_NODE_TYPE_MONITOR:
+      sq_stream_write_string ( _stream, "Monitor" );
+      for ( size_t i = 0; i < info.GetNumberOfParameters(); i++ )
+      {
+         sq_stream_write_byte ( _stream, ' ' );
+         sq_protocol_write_type ( _stream, info.GetParameterType(i) );
+      }
+      sq_stream_write_byte ( _stream, ' ' );
+      if ( _node.IsMonitorEnabled() )
+      {
+         sq_stream_write_string ( _stream, "Enabled" );
+      }
+      else
+      {
+         sq_stream_write_string ( _stream, "Disabled" );
+      }
+      break;
+
+   default:
+      throw runtime_error ( "SequantoAutomation_CXX: Unsupported NodeType." );
+   }
 }

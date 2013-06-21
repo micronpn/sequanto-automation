@@ -451,3 +451,36 @@ void sq_protocol_write_success_with_byte_array_message ( SQStream * _stream, SQB
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
    sq_stream_exit_write ( _stream );
 }
+
+void sq_protocol_treedump_write_start (  SQStream * _stream )
+{
+   sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+DUMP ")) );
+}
+
+void sq_protocol_treedump_write_list_begin (  SQStream * _stream, const char * const _name )
+{
+   sq_stream_write_string ( _stream, _name );
+   sq_stream_write_byte ( _stream, '{' );
+}
+
+void sq_protocol_treedump_write_list_end (  SQStream * _stream )
+{
+   sq_stream_write_byte ( _stream, '}' );
+}
+
+
+void sq_protocol_treedump_write_other_begin (  SQStream * _stream, const char * const _name )
+{
+   sq_stream_write_string ( _stream, _name );
+   sq_stream_write_byte ( _stream, ':' );
+}
+
+void sq_protocol_treedump_write_other_values (  SQStream * _stream )
+{
+   sq_stream_write_byte ( _stream, '=' );
+}
+
+void sq_protocol_treedump_write_other_end (  SQStream * _stream )
+{
+   sq_stream_write_byte ( _stream, ',' );
+}

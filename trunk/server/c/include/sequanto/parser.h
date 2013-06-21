@@ -117,6 +117,10 @@ void sq_parser_enable ( SQParser * _parser, SQStream * _stream, const char * con
  * @see sq_parser_info
  */
 void sq_parser_disable ( SQParser * _parser, SQStream * _stream, const char * const _objectPath );
+/**
+ * @see sq_parser_dump
+ */
+void sq_parser_dump ( SQParser * _parser, SQStream * _stream, const char * const _objectPath );
 
 /*@}*/
 

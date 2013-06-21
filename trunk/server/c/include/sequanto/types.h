@@ -64,9 +64,29 @@ typedef struct _SQByteArray
    size_t m_length;
 } SQByteArray;
 
+/**
+ * Create a byte-array which points to the given data - the data will NOT be copied.
+ */
 SQ_DECL SQByteArray * sq_byte_array_create ( SQByte * _start, size_t _length );
+
+/**
+ * Create a byte-array which points to the given data - the data WILL be copied.
+ */
+SQ_DECL SQByteArray * sq_byte_array_create_copy ( SQByte * _start, size_t _length );
+
+/**
+ * Create a byte-array with pre-allocated space for _length bytes.
+ */
 SQ_DECL SQByteArray * sq_byte_array_create_prealloc ( size_t _length );
+
+/**
+ * Do a full clone of the given byte-array.
+ */
 SQ_DECL SQByteArray * sq_byte_array_clone ( SQByteArray * _array );
+
+/**
+ * Free the given byte-array, including the data if _alsoFreeData is SQ_TRUE.
+ */
 SQ_DECL void sq_byte_array_free ( SQByteArray * _array, SQBool _alsoFreeData );
 
 #ifdef SQ_ARDUINO

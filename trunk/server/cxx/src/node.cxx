@@ -2,6 +2,7 @@
 #include <sequanto/server.h>
 #include <sequanto/protocol.h>
 #include <sequanto/node.h>
+#include <sequanto/tree.h>
 #include <stdexcept>
 #include <string>
 
@@ -122,6 +123,22 @@ void Node::HandleCall ( size_t _numberOfValues, const SQValue * const _inputValu
 void Node::HandleMonitorStateChange ( bool _enable )
 {
    SQ_UNUSED_PARAMETER(_enable);
+}
+
+void Node::HandleDump ( SQStream * _stream )
+{
+   sq_protocol_treedump_write_other_begin ( _stream, m_name.c_str() );
+   Tree::WriteNodeInfo ( _stream, *this );
+   if ( (this->Info().GetType() & NodeInfo::SQ_NODE_TYPE_ANY_READABLE_PROPERTY) != 0 )
+   {
+      sq_protocol_treedump_write_other_values ( _stream );
+      SQValue value;
+      sq_value_init ( &value );
+      this->HandleGet(value);
+      Tree::WriteValue ( _stream, value );
+      sq_value_free ( &value );
+   }
+   sq_protocol_treedump_write_other_end ( _stream );
 }
 
 bool Node::IsMonitorEnabled () const

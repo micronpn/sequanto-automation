@@ -58,6 +58,11 @@ extern "C"
    {
       return tree.HandleCall ( _stream, _objectPath, _values, _numberOfValues );
    }
+
+   SQBool sq_handle_branch_dump_cxx ( SQStream * _stream, const char * _objectPath )
+   {
+      return tree.HandleDump ( _stream, _objectPath );
+   }
 }
 
 

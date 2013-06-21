@@ -133,6 +133,25 @@ void ListNode::SendUpdate ()
    sq_protocol_write_update_message ( server->m_stream, fullname.c_str() );
 }
 
+void ListNode::HandleDump ( SQStream * _stream )
+{
+   Lock lock ( m_mutex );
+
+   if ( m_parent == NULL )
+   {
+      sq_protocol_treedump_write_list_begin ( _stream, "" );
+   }
+   else
+   {
+      sq_protocol_treedump_write_list_begin ( _stream, m_name.c_str() );
+   }
+   for ( NodeMap::const_iterator it = m_children.begin(); it != m_children.end(); it++ )
+   {
+      it->second->HandleDump ( _stream );
+   }
+   sq_protocol_treedump_write_list_end ( _stream );
+}
+
 ListNode::~ListNode()
 {
    Lock lock ( m_mutex );

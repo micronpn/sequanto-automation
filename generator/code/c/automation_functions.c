@@ -5,6 +5,7 @@ static const char OBJECT_IS_NOT_A_PROPERTY[] SQ_CONST_VARIABLE = "Object is not 
 static const char OBJECT_IS_NOT_A_LIST[] SQ_CONST_VARIABLE = "Object is not a list.";
 static const char OBJECT_IS_NOT_A_CALLABLE[] SQ_CONST_VARIABLE = "Object is not a callable.";
 static const char OBJECT_IS_NOT_A_MONITOR[] SQ_CONST_VARIABLE = "Object is not a monitor.";
+static const char PLUS_INFO_SPACE[] SQ_CONST_VARIABLE = "+INFO ";
 
 #ifdef SQ_ARDUINO
 static SQInfo bufferedInfo;
@@ -176,6 +177,19 @@ SQBool sq_automation_handle_call_if_branch ( SQStream * _stream, const char * co
    return SQ_FALSE;
 }
 
+SQBool sq_automation_handle_dump_if_branch ( SQStream * _stream, const char * const _name )
+{
+   SQBool ret = SQ_FALSE;
+   const SQBranch * const branch = sq_automation_find_branch ( _name );
+   if ( branch != NULL )
+   {
+      ret = branch->dump_handler ( _stream, sq_automation_branch_name(branch, _name) );
+      return ret;
+
+   }
+   return SQ_FALSE;
+}
+
 const SQInfo * sq_automation_find_info ( const char * const _name, int * _foundIndex )
 {
    int i;
@@ -198,7 +212,7 @@ void sq_automation_property_get ( const SQInfo * const _info, SQStream * _stream
 {
    const SQPropertyInfo * const propertyInfo = sq_get_property_info(_info->index);
    
-   propertyInfo->get(_stream);
+   propertyInfo->get(_stream, SQ_FALSE);
 }
 
 void sq_automation_property_set ( const SQInfo * const _info, SQStream * _stream, const SQValue * const _value )
@@ -330,38 +344,21 @@ void sq_parser_property_set ( SQParser * _parser, SQStream * _stream, const char
    sq_automation_property_set ( info, _stream, _value );
 }
 
-void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+void sq_parser_write_info_internal ( SQStream * _stream, const SQInfo * _info )
 {
    int i;
    const SQCallableInfo * callableInfo;
    const SQPropertyInfo * propertyInfo;
    const SQMonitorInfo * monitorInfo;
-   const SQInfo * info;
-
-   SQ_UNUSED_PARAMETER(_parser);
    
-   if ( sq_automation_handle_info_if_branch ( _stream, _objectPath ) == SQ_TRUE )
-   {
-      return;
-   }
-   
-   info = sq_automation_find_info ( _objectPath, NULL );
-   if ( info == NULL )
-   {
-      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
-      return;
-   }
-
-   sq_stream_enter_write ( _stream );
-   switch ( info->type )
+   switch ( _info->type )
    {
    case INFO_TYPE_LIST:
-      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO List")) );
+      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("List")) );
       break;
 
    case INFO_TYPE_PROPERTY:
-      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO ")) );
-      propertyInfo = sq_get_property_info(info->index);
+      propertyInfo = sq_get_property_info(_info->index);
       if ( propertyInfo->get != NULL )
       {
           if ( propertyInfo->set != NULL )
@@ -381,8 +378,8 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
       break;
 
    case INFO_TYPE_CALLABLE:
-      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO Callable ")) );
-      callableInfo = sq_get_callable_info(info->index);
+      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("Callable ")) );
+      callableInfo = sq_get_callable_info(_info->index);
       sq_protocol_write_type ( _stream, callableInfo->returnType );
       for ( i = 0; i < NUMBER_OF_PARAMETERS && sq_automation_get_parameter(callableInfo, i) != VALUE_TYPE_NO_VALUE; i++ )
       {
@@ -392,8 +389,8 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
       break;
       
    case INFO_TYPE_MONITOR:
-      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+INFO Monitor")) );
-      monitorInfo = sq_get_monitor_info(info->index);
+      sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("Monitor")) );
+      monitorInfo = sq_get_monitor_info(_info->index);
       for ( i = 0; i < NUMBER_OF_MONITOR_VALUES && sq_automation_get_monitor_value_type(monitorInfo, i) != VALUE_TYPE_NO_VALUE; i++ )
       {
          sq_stream_write_byte ( _stream, ' ' );
@@ -411,10 +408,125 @@ void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const
       
    default:
       sq_stream_write_string ( _stream, "- \"Internal-Error: unknown type " );
-      sq_protocol_write_integer ( _stream, info->type );
+      sq_protocol_write_integer ( _stream, _info->type );
       sq_stream_write_string ( _stream, "\"" );
       break;
    }
+}
+
+void sq_parser_info ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+{
+   const SQInfo * info;
+
+   SQ_UNUSED_PARAMETER(_parser);
+   
+   if ( sq_automation_handle_info_if_branch ( _stream, _objectPath ) == SQ_TRUE )
+   {
+      return;
+   }
+   
+   info = sq_automation_find_info ( _objectPath, NULL );
+   if ( info == NULL )
+   {
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
+      return;
+   }
+   
+   sq_stream_enter_write ( _stream );
+   sq_stream_write_string ( _stream, sq_get_constant_string(PLUS_INFO_SPACE) );
+   sq_parser_write_info_internal ( _stream, info );
+   sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+   sq_stream_exit_write ( _stream );
+}
+
+void sq_parser_dump_internal ( SQStream * _stream, const SQInfo * _info, int _infoFoundAt, size_t _nameStartsAt )
+{
+   int i;
+   size_t pathLength;
+   const SQPropertyInfo * propertyInfo;
+   
+   pathLength = strlen(_info->name);
+   
+   switch ( _info->type )
+   {
+   case INFO_TYPE_LIST:
+      sq_protocol_treedump_write_list_begin ( _stream, _info->name + _nameStartsAt );
+      //sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+      for ( i = _infoFoundAt + 1; i < NUMBER_OF_INFO; i++ )
+      {
+         if ( SQ_CONSTANT_STRNCMP(_info->name, SQ_STRING_CONSTANT_FROM_ARRAY(&INFO_LIST[i].name), pathLength ) == 0 )
+         {
+            if ( SQ_CONSTANT_STRCHR(SQ_STRING_CONSTANT_FROM_ARRAY(&INFO_LIST[i].name) + pathLength + 1, '/' ) == NULL &&
+                 ( pathLength == 1 || SQ_STRING_CONSTANT_FROM_ARRAY(&INFO_LIST[i].name)[pathLength] == '/' ) )
+            {
+               if ( pathLength == 1 )
+               {
+                  sq_parser_dump_internal ( _stream, &INFO_LIST[i], i, pathLength );
+               }
+               else
+               {
+                  sq_parser_dump_internal ( _stream, &INFO_LIST[i], i, pathLength + 1 );
+               }
+            }
+         }
+         else
+         {
+            break;
+         }
+      }
+      sq_protocol_treedump_write_list_end ( _stream );
+      break;
+      
+   case INFO_TYPE_BRANCH:
+      sq_stream_write_string ( _stream, _info->name + _nameStartsAt );
+      sq_automation_handle_dump_if_branch ( _stream, _info->name );
+      break;
+      
+   default:
+      sq_protocol_treedump_write_other_begin ( _stream, _info->name + _nameStartsAt );
+      sq_parser_write_info_internal ( _stream, _info );
+      if ( _info->type == INFO_TYPE_PROPERTY )
+      {
+         propertyInfo = sq_get_property_info(_info->index);
+         if ( propertyInfo->get != NULL )
+         {
+            sq_protocol_treedump_write_other_values ( _stream );
+            propertyInfo->get( _stream, SQ_TRUE );
+         }
+      }
+      sq_protocol_treedump_write_other_end ( _stream );
+      break;
+   }
+   //sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+}
+
+void sq_parser_dump ( SQParser * _parser, SQStream * _stream, const char * const _objectPath )
+{
+   int foundInfo;
+   const SQInfo * info;
+   
+   SQ_UNUSED_PARAMETER(_parser);
+   
+   if ( sq_automation_handle_dump_if_branch ( _stream, _objectPath ) == SQ_TRUE )
+   {
+      return;
+   }
+   
+   info = sq_automation_find_info ( _objectPath, &foundInfo );
+   if ( info == NULL )
+   {
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(COULD_NOT_FIND_GIVEN_OBJECT) );
+      return;
+   }
+   if ( info->type != INFO_TYPE_LIST )
+   {
+      sq_protocol_write_failure_with_text_message ( _stream, sq_get_constant_string(OBJECT_IS_NOT_A_LIST) );
+      return;
+   }
+   
+   sq_stream_enter_write ( _stream );
+   sq_protocol_treedump_write_start ( _stream );
+   sq_parser_dump_internal ( _stream, info, foundInfo, strlen(info->name) );
    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
    sq_stream_exit_write ( _stream );
 }

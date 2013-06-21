@@ -301,6 +301,9 @@ class Branch ( object ):
     def callHandlerFunction ( self ):
         return 'sq_handle_branch_call_%s' % (self.objectPath[1:].replace ( '/', '_' ))
 
+    @property
+    def dumpHandlerFunction ( self ):
+        return 'sq_handle_branch_dump_%s' % (self.objectPath[1:].replace ( '/', '_' ))
     
     def __init__ ( self, _index, _objectPath ):
         self.m_index = _index
@@ -633,7 +636,24 @@ class AutomationFile ( object ):
             fp.write ( '   sq_protocol_write_success_with_%s_message ( _stream, %s );\n' % (automation_type, value) )
             if c_type == 'char *':
                 fp.write ( '   free ( %s );\n' % value )
+
+    def writeValue ( self, fp, c_type, automation_type, value ):
+        if automation_type == 'byte_array':
+            fp.write ( '   sq_protocol_write_byte_array ( _stream, %s->m_start, %s->m_start + %s->m_length );\n' % (value, value, value) )
+            if 'const' not in c_type:
+                fp.write ( '   sq_byte_array_free ( %s, SQ_TRUE );\n' % value )
         
+        elif c_type == 'SQStringOut':
+            fp.write ( '   sq_protocol_write_string_out ( _stream, &%s );\n' % value )
+        elif automation_type == 'float' and c_type != 'float':
+            fp.write ( '   sq_protocol_write_float ( _stream, (float) %s );\n' % value )
+        else:
+            if c_type == 'SQStringOut *':
+                automation_type = 'string_out'
+            fp.write ( '   sq_protocol_write_%s ( _stream, %s );\n' % (automation_type, value) )
+            if c_type == 'char *':
+                fp.write ( '   free ( %s );\n' % value )
+    
     def generate ( self ):
         print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
         
@@ -702,6 +722,7 @@ class AutomationFile ( object ):
         fp.write ( 'typedef SQBool (*SQBranchEnableHandler) ( SQStream * _stream, const char * _objectPath );\n' )
         fp.write ( 'typedef SQBool (*SQBranchDisableHandler) ( SQStream * _stream, const char * _objectPath );\n' )
         fp.write ( 'typedef SQBool (*SQBranchCallHandler) ( SQStream * _stream, const char * _objectPath, const SQValue * const _values, int _numberOfValues );\n' )
+        fp.write ( 'typedef SQBool (*SQBranchDumpHandler) ( SQStream * _stream, const char * _objectPath );\n' )
         fp.write ( '\n' )
         fp.write ( 'typedef struct _SQBranch\n' )
         fp.write ( '{\n' )
@@ -714,15 +735,16 @@ class AutomationFile ( object ):
         fp.write ( '    SQBranchEnableHandler enable_handler;\n' )
         fp.write ( '    SQBranchDisableHandler disable_handler;\n' )
         fp.write ( '    SQBranchCallHandler call_handler;\n' )
+        fp.write ( '    SQBranchDumpHandler dump_handler;\n' )
         
         fp.write ( '} SQBranch;\n' )
         fp.write ( '\n' )
         fp.write ( 'static const SQBranch BRANCH_LIST[] SQ_CONST_VARIABLE = {\n' )
         if len(self.m_foundBranches) > 0:
             for branch in self.m_foundBranches:
-                fp.write ( '    { %s, %i, %s, %s, %s, %s, %s, %s, %s },\n' % (branch.generatedName, len(branch.objectPath), branch.infoHandlerFunction, branch.listHandlerFunction,
-                                                                  branch.getHandlerFunction, branch.setHandlerFunction, branch.enableHandlerFunction, branch.disableHandlerFunction,
-                                                                  branch.callHandlerFunction) )
+                fp.write ( '    { %s, %i, %s, %s, %s, %s, %s, %s, %s, %s },\n' % (branch.generatedName, len(branch.objectPath), branch.infoHandlerFunction, branch.listHandlerFunction,
+                                                                                  branch.getHandlerFunction, branch.setHandlerFunction, branch.enableHandlerFunction, branch.disableHandlerFunction,
+                                                                                  branch.callHandlerFunction, branch.dumpHandlerFunction) )
         else:
             fp.write ( '    { NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL },\n' )
         fp.write ( '};\n' )
@@ -804,7 +826,7 @@ class AutomationFile ( object ):
                 else:
                     fp.write ( '%s %s ( void );\n' % (self.getRecognizedCType(property.type), property.getFunction.name) )
             
-                fp.write ( 'void sq_generated_property_%s%s ( SQStream * _stream )\n' % (property.getFunction.name, property.additionalSmartName) )
+                fp.write ( 'void sq_generated_property_%s%s ( SQStream * _stream, SQBool _justValue )\n' % (property.getFunction.name, property.additionalSmartName) )
                 fp.write ( '{\n' )
                 if property.smart:
                     fp.write ( '   %s value = %s( %s );\n' % (self.getRecognizedCType(property.type), property.getFunction.name, ', '.join(property.smartValues)) )
@@ -814,9 +836,15 @@ class AutomationFile ( object ):
 
 
                 assert property.automationType == self.getAutomationType(property.type)
-
+                
+                fp.write ( '   if ( _justValue == SQ_TRUE )\n' )
+                fp.write ( '   {      \n' )
+                self.writeValue ( fp, property.type, property.automationType, 'value' )
+                fp.write ( '   }\n' )
+                fp.write ( '   else\n' )
+                fp.write ( '   {\n      ' )
                 self.writeSuccessMessageWithValue ( fp, property.type, property.automationType, 'value' )
-
+                fp.write ( '   }\n' )
                 fp.write ( '}\n' )
                 fp.write ( '\n' )
             
@@ -835,7 +863,7 @@ class AutomationFile ( object ):
                 fp.write ( '}\n' )
                 fp.write ( '\n' )
         
-        fp.write ( 'typedef void (*SQPropertyGetFunction) ( SQStream * _stream );\n' )
+        fp.write ( 'typedef void (*SQPropertyGetFunction) ( SQStream * _stream, SQBool _justValue );\n' )
         fp.write ( 'typedef void (*SQPropertySetFunction) ( const SQValue * const _value );\n' )
         fp.write ( 'typedef struct _SQPropertyInfo { SQPropertyGetFunction get; SQPropertySetFunction set; SQValueType type; } SQPropertyInfo;\n' )
         fp.write ( 'static const SQPropertyInfo PROPERTY_LIST[] SQ_CONST_VARIABLE = {\n' )
@@ -1079,6 +1107,7 @@ class AutomationFile ( object ):
             fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.disableHandlerFunction) )
             fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.enableHandlerFunction) )
             fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath, const SQValue * const _values, int _numberOfValues );\n' % (branch.callHandlerFunction) )
+            fp.write ( 'SQBool %s ( SQStream * _stream, const char * _objectPath );\n' % (branch.dumpHandlerFunction) )
         
         fp.write ( '#ifdef __cplusplus\n' )
         fp.write ( '}\n' )

@@ -19,7 +19,7 @@ static SQByte firmware[] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x8
 
 SQByteArray * get_firmware ( void )
 {
-   return sq_byte_array_create ( firmware, sizeof(firmware) );
+   return sq_byte_array_create_copy ( firmware, sizeof(firmware) );
 }
 
 /*

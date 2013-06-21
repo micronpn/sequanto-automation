@@ -54,6 +54,11 @@ extern "C"
       return ui_tree.HandleCall ( _stream, _objectPath, _values, _numberOfValues );
    }
 
+   SQBool sq_handle_branch_dump_ui ( SQStream * _stream, const char * _objectPath )
+   {
+      return ui_tree.HandleDump ( _stream, _objectPath );
+   }
+
    SQBool sq_handle_branch_info_qt ( SQStream * _stream, const char * _objectPath )
    {
       return qt_tree.HandleInfo ( _stream, _objectPath );
@@ -87,6 +92,11 @@ extern "C"
    SQBool sq_handle_branch_call_qt ( SQStream * _stream, const char * _objectPath, const SQValue * const _values, int _numberOfValues )
    {
       return qt_tree.HandleCall ( _stream, _objectPath, _values, _numberOfValues );
+   }
+
+   SQBool sq_handle_branch_dump_qt ( SQStream * _stream, const char * _objectPath )
+   {
+      return qt_tree.HandleDump ( _stream, _objectPath );
    }
 
    const char * firmware_version ()

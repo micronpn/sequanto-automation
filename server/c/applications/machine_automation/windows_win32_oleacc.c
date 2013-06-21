@@ -116,7 +116,7 @@ int windows_process_id ( const SQByteArray * _pointer )
 int windows_x ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
-   VARIANT roleVar;
+   //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
    
    accessible = windows_to_accessible ( _pointer );
@@ -129,7 +129,7 @@ int windows_x ( const SQByteArray * _pointer )
 int windows_y ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
-   VARIANT roleVar;
+   //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
    
    accessible = windows_to_accessible ( _pointer );
@@ -142,7 +142,7 @@ int windows_y ( const SQByteArray * _pointer )
 int windows_width ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
-   VARIANT roleVar;
+   //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
    
    accessible = windows_to_accessible ( _pointer );
@@ -155,7 +155,7 @@ int windows_width ( const SQByteArray * _pointer )
 int windows_height ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
-   VARIANT roleVar;
+   //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
    
    accessible = windows_to_accessible ( _pointer );

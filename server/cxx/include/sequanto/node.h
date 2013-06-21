@@ -73,7 +73,8 @@ namespace sequanto
          virtual void HandleSet ( const SQValue * const _value );
          virtual void HandleCall ( size_t _numberOfValues, const SQValue * const _inputValues, SQValue & _output );
          virtual void HandleMonitorStateChange ( bool _enable );
-
+         virtual void HandleDump ( SQStream * _stream );
+         
          virtual void LogAsync ( const std::string & _message ) const;
          
          /**

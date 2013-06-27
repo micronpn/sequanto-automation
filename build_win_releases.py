@@ -5,16 +5,28 @@ from os import path
 import shutil
 
 DEVENV_8 = path.join ( os.getenv('ProgramFiles'), 'Microsoft Visual Studio 8', 'Common7', 'IDE', 'devenv.exe' )
-VCEXPRESS_9 = path.join ( os.getenv('ProgramFiles'), 'Microsoft Visual Studio 9.0', 'Common7', 'IDE', 'VCExpress.exe' )
+DEVENV_9 = path.join ( os.getenv('ProgramFiles'), 'Microsoft Visual Studio 9.0', 'Common7', 'IDE', 'devenv.exe' )
+DEVENV_11 = path.join ( os.getenv('ProgramFiles'), 'Microsoft Visual Studio 11.0', 'Common7', 'IDE', 'devenv.exe' )
+CMAKE = path.join ( os.getenv('ProgramFiles'), 'CMake 2.8', 'bin', 'cmake.exe' )
 
 if not path.exists(DEVENV_8):
-    print 'Can not find VS8 devenv.exe file'
+    print 'Can not find VS8 (2005) devenv.exe file'
     print 'Looked at: %s' % DEVENV_8
     sys.exit(-1)
 
-if not path.exists(VCEXPRESS_9):
-    print 'Can not find VC Express 9 devenv.exe file'
-    print 'Looked at: %s' % VCEXPRESS_9
+if not path.exists(DEVENV_9):
+    print 'Can not find VS9 (2008) devenv.exe file'
+    print 'Looked at: %s' % DEVENV_9
+    sys.exit(-1)
+
+if not path.exists(DEVENV_11):
+    print 'Can not find VS11 (2012) devenv.exe file'
+    print 'Looked at: %s' % DEVENV_12
+    sys.exit(-1)
+
+if not path.exists(CMAKE):
+    print 'Can not find cmake.exe'
+    print 'Looked at: %s' % CMAKE
     sys.exit(-1)
 
 BUILD_DIR = 'releases'
@@ -37,19 +49,19 @@ CONFIGURATIONS = [
 #    ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'vs2008-win32',
-     'devenv': VCEXPRESS_9,
+     'devenv': DEVENV_9,
      'configuration': 'Release',
      'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'vs2008-win32-debug',
-     'devenv': VCEXPRESS_9,
+     'devenv': DEVENV_9,
      'configuration': 'Debug',
      'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'qmake',
-     'devenv': VCEXPRESS_9,
+     'devenv': DEVENV_9,
      'configuration': 'Release',
      'defines': ['SQ_GENERATE_QMAKE:BOOL=ON', 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
     ,
@@ -77,11 +89,12 @@ for conf in CONFIGURATIONS:
     
     os.makedirs ( build_dir )
     
-    args = ['cmake',
+    args = [CMAKE,
            '-G', conf['generator'],
            '-D', 'SQ_GENERATE_DOCUMENTATION:BOOL=ON',
            '-D', 'SQ_QT4:BOOL=ON', 
            '-D', 'CPACK_BINARY_ZIP:BOOL=ON',
+           '-D', 'CPACK_BINARY_NSIS:BOOL=OFF',
            '-D', 'CPACK_SYSTEM_NAME:STRING=' + conf['name']]
     if 'defines' in conf:
         assert type(conf['defines']) == list
@@ -104,7 +117,7 @@ for conf in CONFIGURATIONS:
            '/build', conf['configuration'],
            '/project', 'PACKAGE'], cwd = build_dir )
     
-    run ( ['copy', 'libSequantoAutomation*.exe', '..'], cwd = build_dir, shell = True )
+    #run ( ['copy', 'libSequantoAutomation*.exe', '..'], cwd = build_dir, shell = True )
     run ( ['copy', 'libSequantoAutomation*.zip', '..'], cwd = build_dir, shell = True )
     
     if '--debug' not in sys.argv:

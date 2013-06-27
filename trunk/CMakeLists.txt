@@ -65,7 +65,8 @@ IF(SQ_QT4)
   INCLUDE(FindQt4)
   FIND_PACKAGE(Qt4)
 
-  SET(SQ_QT_USE_CACHE       OFF       CACHE BOOL "Use QtCache class to avoid using the UI thread as much in QT")
+  SET(SQ_QT_USE_CACHE                OFF       CACHE BOOL "Use QtCache class to avoid using the UI thread as much in QT")
+  SET(SQ_QT_WINDOWS_AUTOMATION       OFF       CACHE BOOL "Use the windows automation bridge to talk to automate QT")
 ENDIF(SQ_QT4)
 
 INCLUDE(FindDoxygen)
@@ -132,6 +133,10 @@ IF(DOXYGEN_FOUND)
 ENDIF(DOXYGEN_FOUND)
 
 IF(SQ_GENERATE_DOCUMENTATION)
+  IF(NOT DOXYGEN_FOUND)
+    MESSAGE(FATAL_ERROR "Doxygen HAS to be found when SQ_GENERATE_DOCUMENTATION is true.")
+  ENDIF(NOT DOXYGEN_FOUND)
+  
   SET(DOXY_OUTPUT "${CMAKE_BINARY_DIR}/documentation")
   
   CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/Doxyfile.in

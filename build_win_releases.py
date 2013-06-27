@@ -31,43 +31,79 @@ if not path.exists(CMAKE):
 
 BUILD_DIR = 'releases'
 CONFIGURATIONS = [
+    # Visual Studio 2005
     {'generator': 'Visual Studio 8 2005',
-     'name': 'vs2005-win32',
+     'name': 'vs2005-win32-no-qt',
      'devenv': DEVENV_8,
      'configuration': 'Release',
-     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=OFF']}
+    ,
+    {'generator': 'Visual Studio 8 2005',
+     'name': 'vs2005-win32-qt',
+     'devenv': DEVENV_8,
+     'configuration': 'Release',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 8 2005',
      'name': 'vs2005-win32-debug',
      'devenv': DEVENV_8,
      'configuration': 'Debug',
-     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
     ,
-#    {'generator': 'Visual Studio 8 2005 Win64',
-#     'name': 'vs2005-win64',
-#     'devenv': DEVENV_8}
-#    ,
+
+    # Visual Studio 2008
     {'generator': 'Visual Studio 9 2008',
-     'name': 'vs2008-win32',
+     'name': 'vs2008-win32-no-qt',
      'devenv': DEVENV_9,
      'configuration': 'Release',
-     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=OFF']}
+    ,
+    {'generator': 'Visual Studio 9 2008',
+     'name': 'vs2008-win32-qt',
+     'devenv': DEVENV_9,
+     'configuration': 'Release',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'vs2008-win32-debug',
      'devenv': DEVENV_9,
      'configuration': 'Debug',
-     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
     ,
     {'generator': 'Visual Studio 9 2008',
      'name': 'qmake',
      'devenv': DEVENV_9,
      'configuration': 'Release',
-     'defines': ['SQ_GENERATE_QMAKE:BOOL=ON', 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON']}
+     'defines': ['SQ_GENERATE_QMAKE:BOOL=ON',
+                 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
     ,
-#    {'generator': 'Visual Studio 9 2008 Win64',
-#     'name': 'vs2008-win64'}
-#    ,
+
+    # Visual Studio 2012
+    {'generator': 'Visual Studio 11',
+     'name': 'vs2012-win32-no-qt',
+     'devenv': DEVENV_11,
+     'configuration': 'Release',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=OFF']}
+    ,
+    {'generator': 'Visual Studio 11',
+     'name': 'vs2012-win32-qt',
+     'devenv': DEVENV_11,
+     'configuration': 'Release',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
+    ,
+    {'generator': 'Visual Studio 11',
+     'name': 'vs2012-win32-debug',
+     'devenv': DEVENV_11,
+     'configuration': 'Debug',
+     'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
+    ,
 ]
 
 def run ( args, cwd = None, shell = False ):
@@ -86,39 +122,39 @@ for conf in CONFIGURATIONS:
     build_dir = path.join ( BUILD_DIR, conf['name'] )
     if path.exists(build_dir):
         shutil.rmtree(build_dir)
-    
+
     os.makedirs ( build_dir )
-    
+
     args = [CMAKE,
-           '-G', conf['generator'],
-           '-D', 'SQ_GENERATE_DOCUMENTATION:BOOL=ON',
-           '-D', 'SQ_QT4:BOOL=ON', 
-           '-D', 'CPACK_BINARY_ZIP:BOOL=ON',
-           '-D', 'CPACK_BINARY_NSIS:BOOL=OFF',
-           '-D', 'CPACK_SYSTEM_NAME:STRING=' + conf['name']]
+            '-G', conf['generator'],
+            '-D', 'SQ_GENERATE_DOCUMENTATION:BOOL=ON',
+            '-D', 'CPACK_BINARY_ZIP:BOOL=ON',
+            '-D', 'CPACK_BINARY_NSIS:BOOL=OFF',
+            '-D', 'CPACK_SYSTEM_NAME:STRING=' + conf['name']]
+    
     if 'defines' in conf:
         assert type(conf['defines']) == list
         for define in conf['defines']:
             args.append ( '-D' )
             args.append ( define )
-    
+
     args.append ( '../..' )
-    
+
     run ( args, cwd = build_dir )
-    
+
     run ( [conf['devenv'],
            'libSequantoAutomation.sln',
            '/out', '..\\build-%s.log' % conf['name'],
            '/build', conf['configuration']], cwd = build_dir )
-    
+
     run ( [conf['devenv'],
            'libSequantoAutomation.sln',
            '/out', '..\\package-%s.log' % conf['name'],
            '/build', conf['configuration'],
            '/project', 'PACKAGE'], cwd = build_dir )
-    
+
     #run ( ['copy', 'libSequantoAutomation*.exe', '..'], cwd = build_dir, shell = True )
     run ( ['copy', 'libSequantoAutomation*.zip', '..'], cwd = build_dir, shell = True )
-    
+
     if '--debug' not in sys.argv:
         shutil.rmtree(build_dir)

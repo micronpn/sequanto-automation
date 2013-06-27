@@ -25,7 +25,7 @@ int server_process_id ()
 
 const char * server_version ( void )
 {
-   static char buff[] = SVN_REVISION;
+   static char buff[] = SQ_SVN_REVISION;
    
    return buff;
 }

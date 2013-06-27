@@ -8,7 +8,7 @@
 
 const char * automation_server_version ()
 {
-    return SVN_REVISION;
+    return SQ_SVN_REVISION;
 }
 
 #define MAX_FILE_SIZE 1024

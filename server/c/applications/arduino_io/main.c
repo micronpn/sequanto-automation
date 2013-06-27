@@ -14,7 +14,7 @@ static char buff[10];
 
 const char * sequanto_automation_version ( void )
 {
-   sq_get_constant_string_copy ( SQ_STRING_CONSTANT(SVN_REVISION), buff );
+   sq_get_constant_string_copy ( SQ_STRING_CONSTANT(SQ_SVN_REVISION), buff );
    return buff;
 }
 

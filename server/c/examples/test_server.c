@@ -2,6 +2,7 @@
 #include <sequanto/thread.h>
 #include <string.h>
 #include "test_server_automation.h"
+#include "config.h"
 
 static int julemand;
 
@@ -104,7 +105,7 @@ const char * firmware_version ( void )
 #ifdef SQ_DISABLE_AUTOMATION_INTERFACE
    return NULL;
 #else
-   return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
+   return sq_get_constant_string(SQ_STRING_CONSTANT(SQ_SVN_REVISION));
 #endif
 }
 

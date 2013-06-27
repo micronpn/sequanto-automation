@@ -17,10 +17,8 @@ Subversion_WC_INFO(${CMAKE_SOURCE_DIR} SVN)
 FIND_PROGRAM(SVNVERSION_COMMAND svnversion)
 EXECUTE_PROCESS(COMMAND ${SVNVERSION_COMMAND}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                OUTPUT_VARIABLE SVNVERSION
+                OUTPUT_VARIABLE SQ_SVN_REVISION
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-ADD_DEFINITIONS(-DSVN_REVISION="${SVNVERSION}")
 
 INCLUDE(FindPythonInterp)
 
@@ -102,6 +100,7 @@ MACRO(SQ_GENERATE automation_name automation_file)
   INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated)
   
   SET(SQ_GENERATE_${automation_name} ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c)
+  SET(SQ_GENERATE_${automation_name}_HEADER ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.h)
 ENDMACRO(SQ_GENERATE)
 
 MACRO(SQ_GENERATE_ARDUINO name)
@@ -165,7 +164,11 @@ IF(SQ_GENERATE_QMAKE)
   FILE(WRITE ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# put custom qmake directives in the custom.pro file\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "include(custom.pro)\n\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/custom.pro "# empty by default\n")
-
+  
+  IF(SQ_QT_MACHINE_AUTOMATION)
+    FILE(WRITE ${CMAKE_BINARY_DIR}/machine-automation.pro "# put custom qmake directives in the custom.pro file\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "include(custom.pro)\n\n")
+  ENDIF(SQ_QT_MACHINE_AUTOMATION)
 ELSE(SQ_GENERATE_QMAKE)
   SET(SQ_INSTALL_BINARY ON)
   SET(SQ_INSTALL_SOURCE OFF)

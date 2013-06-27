@@ -31,6 +31,35 @@ if not path.exists(CMAKE):
 
 BUILD_DIR = 'releases'
 CONFIGURATIONS = [
+    #
+    # Specials go first
+    #
+
+    # QMake machine automation
+    {'generator': 'Visual Studio 9 2008',
+     'name': 'qmake-machine-automation',
+     'devenv': DEVENV_9,
+     'configuration': 'Release',
+     'defines': ['SQ_GENERATE_QMAKE:BOOL=ON',
+                 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON',
+                 'SQ_QT_MACHINE_AUTOMATION:BOOL=ON']}
+    ,
+
+    # Regular QMake
+    {'generator': 'Visual Studio 9 2008',
+     'name': 'qmake',
+     'devenv': DEVENV_9,
+     'configuration': 'Release',
+     'defines': ['SQ_GENERATE_QMAKE:BOOL=ON',
+                 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
+                 'SQ_QT4:BOOL=ON']}
+    ,
+    
+    #
+    # Normal VS win32 configurations
+    #
+    
     # Visual Studio 2005
     {'generator': 'Visual Studio 8 2005',
      'name': 'vs2005-win32-no-qt',
@@ -72,14 +101,6 @@ CONFIGURATIONS = [
      'devenv': DEVENV_9,
      'configuration': 'Debug',
      'defines': ['SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
-                 'SQ_QT4:BOOL=ON']}
-    ,
-    {'generator': 'Visual Studio 9 2008',
-     'name': 'qmake',
-     'devenv': DEVENV_9,
-     'configuration': 'Release',
-     'defines': ['SQ_GENERATE_QMAKE:BOOL=ON',
-                 'SQ_BUILD_SHARED_LIBRARIES:BOOL=ON',
                  'SQ_QT4:BOOL=ON']}
     ,
 

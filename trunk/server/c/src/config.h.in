@@ -12,6 +12,8 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#define SQ_SVN_REVISION "${SQ_SVN_REVISION}"
+
 #cmakedefine SQ_USE_BSD_SOCKETS
 #cmakedefine SQ_USE_WINSOCK
 #cmakedefine SQ_USE_MUTEXES

@@ -91,6 +91,13 @@ IF(SQ_GENERATE_QMAKE)
   FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "C_SRCS=${C_SRCS_REPLACED}\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "C_HEADERS=${C_HEADERS_REPLACED}\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "\n")
+
+  IF(SQ_QT_MACHINE_AUTOMATION)
+    FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "# C files\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "C_SRCS=${C_SRCS_REPLACED}\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "C_HEADERS=${C_HEADERS_REPLACED}\n")
+    FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "\n")
+  ENDIF(SQ_QT_MACHINE_AUTOMATION)
 ENDIF(SQ_GENERATE_QMAKE)
 
 ADD_SUBDIRECTORY(tests)

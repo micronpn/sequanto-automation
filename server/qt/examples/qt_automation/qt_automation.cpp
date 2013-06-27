@@ -7,6 +7,8 @@
 #include <sequanto/tree.h>
 #include <sequanto/QtWrapper.h>
 
+#include "config.h"
+
 #include "qt_automation_automation.h"
 
 #include "mainwin.h"
@@ -101,7 +103,7 @@ extern "C"
 
    const char * firmware_version ()
    {
-      return SVN_REVISION;
+      return SQ_SVN_REVISION;
    }
 }
 

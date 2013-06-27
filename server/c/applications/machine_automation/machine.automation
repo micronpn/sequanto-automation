@@ -1,6 +1,6 @@
 name machine
 
-import main.c
+import server.c
 import files.c
 import memory.c
 import process.c

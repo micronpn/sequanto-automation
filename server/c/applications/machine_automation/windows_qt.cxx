@@ -7,7 +7,7 @@ QWidget * screen;
 char * ToString ( const QString & _string )
 {
    QByteArray value ( _string.toUtf8() );
-   return value.data();
+   return strdup(value.data());
 }
 
 extern "C"
@@ -220,6 +220,7 @@ long windows_children ( SQByteArray * _pointer )
             QWidget * childWidget = qobject_cast<QWidget*>(childObject);
          }
       }
+      return ret;
    }
 }
 

@@ -36,9 +36,10 @@ IF(SQ_BUILD_SHARED_LIBRARIES)
   IF(SQ_QT4)
     IF(SQ_QT_MACHINE_AUTOMATION)
     ELSE(SQ_QT_MACHINE_AUTOMATION)
-      ADD_LIBRARY(SequantoAutomation_SHARED ${SequantoAutomation_SHARED_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
-        ${SequantoAutomation_SHARED_WIDGET_AUTOMATION_EVENT_FILTER_MOC}
-        ${SequantoAutomation_SHARED_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC})
+      ADD_LIBRARY(SequantoAutomation_SHARED ${SQ_ALL_SRCS}
+                                            ${SequantoAutomation_SHARED_APPLICATION_AUTOMATION_EVENT_FILTER_MOC}
+                                            ${SequantoAutomation_SHARED_WIDGET_AUTOMATION_EVENT_FILTER_MOC}
+                                            ${SequantoAutomation_SHARED_PROPERTY_CHANGED_NOTIFICATION_ADAPTER_MOC})
     ENDIF(SQ_QT_MACHINE_AUTOMATION)
   ELSE(SQ_QT4)
     ADD_LIBRARY(SequantoAutomation_SHARED SHARED ${SQ_ALL_SRCS})

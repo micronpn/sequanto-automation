@@ -13,6 +13,7 @@ IF(SQ_CXX)
     
     IF(SQ_QT_MACHINE_AUTOMATION)
       ADD_EXECUTABLE(qt_automation_example ${qt_automation_UIS_H} ${qt_automation_MAINWIN_MOC} qt_automation/mainwin.cpp qt_automation/qt_machine_automation.cpp)
+      TARGET_LINK_LIBRARIES(qt_automation_example SequantoAutomation)
       TARGET_LINK_LIBRARIES(qt_automation_example machine_automation)
       TARGET_LINK_LIBRARIES(qt_automation_example ${QT_LIBRARIES})
       

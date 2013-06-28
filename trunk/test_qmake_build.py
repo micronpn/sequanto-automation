@@ -43,7 +43,7 @@ call ( CMAKE + ' -DSQ_GENERATE_QMAKE:BOOL=ON -DSQ_BUILD_SHARED_LIBRARIES:BOOL=ON
 call ( MAKE + ' package' )
 os.makedirs ( path.join(DIR, 'qmake_test' ) )
 os.chdir ( path.join(DIR, 'qmake_test' ) )
-call ( UNZIP + '..\*.zip' )
+call ( UNZIP + ' ..\*.zip' )
 filename = os.listdir('.')[-1]
 call ( MV + ' ' + filename + ' machine-automation' )
 os.chdir ( path.join(DIR, 'qmake_test', 'machine-automation' ) )
@@ -57,7 +57,7 @@ call ( CMAKE + ' -DSQ_GENERATE_QMAKE:BOOL=ON -DSQ_BUILD_SHARED_LIBRARIES:BOOL=ON
 call ( MAKE + ' package' )
 os.makedirs ( path.join(DIR, 'qmake_test' ) )
 os.chdir ( path.join(DIR, 'qmake_test' ) )
-call ( UNZIP + '..\*.zip' )
+call ( UNZIP + ' ..\*.zip' )
 filename = os.listdir('.')[-1]
 call ( MV + ' ' + filename + ' SequantoAutomation' )
 os.chdir ( path.join(DIR, 'qmake_test', 'SequantoAutomation' ) )

@@ -1,3 +1,4 @@
+#include "config.h"
 #include "acme_ventilator.h"
 
 char s_responseBuffer[40];

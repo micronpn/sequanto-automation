@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <sequanto/automation.h>
 #include <avr/io.h>
 #include <Wire.h>
@@ -16,7 +18,7 @@ extern "C"
 {
    const char * sequanto_automation_version ( void )
    {
-      static char buff[20] = SVN_REVISION;
+      static char buff[20] = SQ_SVN_REVISION;
       /*   sq_get_constant_string_copy ( SQ_STRING_CONSTANT(SVN_REVISION), buff );*/
       return buff;
    }

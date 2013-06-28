@@ -32,7 +32,7 @@ public:
       if ( _event->type() == CREATE_WINDOW_EVENT )
       {
          QMainWindow * window = new QMainWindow();
-         QString name ( QString::QString("Window_%1").arg(m_nextWindowNumber) );
+         QString name = QString("Window_%1").arg(m_nextWindowNumber);
          //window->setObjectName ( name );
          window->setWindowTitle ( name );
          window->show();
@@ -61,7 +61,7 @@ public:
          if ( topLevelWidgets.size() > 0 )
          {
             QMainWindow * window = qobject_cast<QMainWindow*>(topLevelWidgets[0]);
-            QPushButton * button = new QPushButton( QString::QString("button_%1").arg(m_nextButtonNumber) );
+            QPushButton * button = new QPushButton( QString("button_%1").arg(m_nextButtonNumber) );
             //button->setObjectName ( QString::QString("button_%1").arg(m_nextButtonNumber) );
             window->centralWidget()->layout()->addWidget ( button );
             m_nextButtonNumber ++;
@@ -87,7 +87,7 @@ public:
       else if ( _event->type() == OPEN_DIALOG_EVENT )
       {
          QDialog * dialog = new QDialog();
-         QString name ( QString::QString("Dialog_%1").arg(m_nextWindowNumber) );
+         QString name ( QString("Dialog_%1").arg(m_nextWindowNumber) );
          dialog->setObjectName ( name );
          dialog->setWindowTitle ( name );
          dialog->show();
@@ -101,7 +101,7 @@ public:
          {
             QMainWindow * window = qobject_cast<QMainWindow*>(topLevelWidgets[0]);
             QDialog * dialog = new QDialog(window);
-            QString name ( QString::QString("ChildDialog_%1").arg(m_nextWindowNumber) );
+            QString name ( QString("ChildDialog_%1").arg(m_nextWindowNumber) );
             dialog->setObjectName ( name );
             dialog->setWindowTitle ( name );
             dialog->show();

@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <sequanto/automation.h>
 #include <avr/io.h>
 

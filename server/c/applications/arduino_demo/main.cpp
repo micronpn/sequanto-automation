@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "common.h"
 #include "Wire.h"
 
@@ -16,7 +18,7 @@ extern "C"
 {
    const char * svn_revision ( void )
    {
-      return sq_get_constant_string(SQ_STRING_CONSTANT(SVN_REVISION));
+      return sq_get_constant_string(SQ_STRING_CONSTANT(SQ_SVN_REVISION));
    }
 }
 

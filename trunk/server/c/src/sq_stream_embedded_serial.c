@@ -50,8 +50,8 @@ SQStream * sq_stream_open ( int _portNumber )
    SQ_CIRCULAR_BUFFER_INIT(ret->m_in, INTERNAL_BUFFER);
    SQ_CIRCULAR_BUFFER_INIT(ret->m_out, INTERNAL_BUFFER);
    
-   unsigned long baud = 115200;
-   //unsigned long baud = 9600;
+   //unsigned long baud = 115200;
+   unsigned long baud = 9600;
    
    uint8_t use2x = 0;
    uint16_t ubbr =  (F_CPU + 8UL * baud) / (16UL * baud) - 1UL;

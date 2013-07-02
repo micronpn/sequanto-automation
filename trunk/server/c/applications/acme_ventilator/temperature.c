@@ -18,7 +18,7 @@ int temperature_outside_raw_get ( void )
 float temperature_outside_get ( void )
 {
    int raw = temperature_outside_raw_get ();
-   float percentage = (((float) raw) / 1023.0f) * 100.0f - 50.0f;
+   float percentage = (((float) raw) / 1053.0f) * 100.0f - 50.0f;
    return percentage;
 }
 

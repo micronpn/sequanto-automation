@@ -20,7 +20,7 @@ void display_send ()
 
 void display_set_line ( int _line, const char * _data )
 {
-   //PutString ( _line, 1, _data );
+   PutString ( _line, 1, _data );
    if ( send_display == SQ_TRUE )
    {
       switch ( _line )
@@ -47,7 +47,9 @@ void display_set_line ( int _line, const char * _data )
 
 void display_update ( void )
 {
-   //Cls();
+   Cls();
+   DisplayCommand(4);
+   DisplayCommand(19);
    
    int minute = clock_get_minute();
    int hour = clock_get_hour();

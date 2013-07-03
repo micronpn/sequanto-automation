@@ -75,7 +75,11 @@ char * windows_name ( SQByteArray * _pointer )
    }
    else
    {
+#if(QT_NO_ACCESSIBILITY)
+      return ToString( widget->objectName() );
+#else
       return ToString( widget->accessibleName() );
+#endif
    }
 }
 

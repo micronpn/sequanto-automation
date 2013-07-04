@@ -29,8 +29,6 @@ extern "C" void windows_init_if_not_already ()
 {
    if ( !initialized )
    {
-      //desktop = QApplication::desktop();
-      //QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance(), mouseCaptureNode) );
       QApplication::instance()->installEventFilter ( new QtApplicationMachineAutomationEventFilter(QApplication::instance()) );
       
       initialized = true;
@@ -54,8 +52,6 @@ int windows_desktops ()
 
 SQByteArray * windows_desktop ( int _desktop )
 {
-   windows_init_if_not_already ();
-   
    QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::DESKTOP0, NULL, -1);
    QVariant value = event->wait(QApplication::instance());
    

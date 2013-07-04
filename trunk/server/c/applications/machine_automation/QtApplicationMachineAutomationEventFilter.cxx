@@ -32,7 +32,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
             switch ( event->command() )
             {
             case QtMachineAutomationEvent::NAME:
-#if(QT_NO_ACCESSIBILITY)
+#ifdef QT_NO_ACCESSIBILITY
                event->done ( widget->objectName() );
 #else
                if ( widget->accessibleName().isEmpty() )

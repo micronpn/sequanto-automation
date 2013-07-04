@@ -55,3 +55,29 @@ float QtMachineAutomationEvent::averageDeliveryTime()
 QtMachineAutomationEvent::~QtMachineAutomationEvent()
 {
 }
+
+const int QtMachineAutomationMouseEvent::ID = QEvent::registerEventType();
+
+QtMachineAutomationMouseEvent::QtMachineAutomationMouseEvent ( int _x, int _y, int _button )
+   : QEvent ( (QEvent::Type) ID),
+     m_position(_x, _y)
+{
+   switch ( _button )
+   {
+   case 0:
+      m_button = Qt::LeftButton;
+      break;
+
+   case 1:
+      m_button = Qt::RightButton;
+      break;
+
+   case 2:
+      m_button = Qt::MidButton;
+      break;
+   }
+}
+
+QtMachineAutomationMouseEvent::~QtMachineAutomationMouseEvent()
+{
+}

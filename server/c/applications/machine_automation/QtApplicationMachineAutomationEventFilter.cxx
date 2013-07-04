@@ -20,7 +20,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
       QtMachineAutomationEvent * event = dynamic_cast<QtMachineAutomationEvent*>(_event);
       event->received();
 
-      if ( event->command()  == QtMachineAutomationEvent::DESKTOP0 )
+      if ( event->command() == QtMachineAutomationEvent::DESKTOP0 )
       {
          event->done ( ToByteArray(QApplication::desktop()) );
       }
@@ -320,7 +320,19 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
       }
       return true;
    }
-
+   else if ( _event->type() == QtMachineAutomationMouseEvent::ID )
+   {
+      QtMachineAutomationMouseEvent * event = dynamic_cast<QtMachineAutomationMouseEvent*>(_event);
+      QWidget * receiver = QApplication::widgetAt(event->position());
+      if ( receiver != NULL )
+      {
+         QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
+         
+         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+      }
+      return true;
+   }
    return QObject::eventFilter(_object, _event );
 }
 

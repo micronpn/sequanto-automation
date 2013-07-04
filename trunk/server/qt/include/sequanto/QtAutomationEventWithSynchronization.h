@@ -20,7 +20,6 @@
 
 #include <QObject>
 #include <QtGui>
-#include <sequanto/QtAutomationDelayedDoneEvent.h>
 #include <sequanto/system.h>
 
 namespace sequanto

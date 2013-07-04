@@ -1,8 +1,14 @@
 #include <sequanto/automation.h>
 #include <memory.h>
 #include <QtGui>
+#include "QtApplicationMachineAutomationEventFilter.h"
+#include "QtMachineAutomationEvent.h"
 
-QWidget * screen;
+using namespace sequanto::automation;
+
+bool initialized = false;
+QWidget * screen = NULL;
+QDesktopWidget * desktop = NULL;
 
 char * ToString ( const QString & _string )
 {
@@ -10,39 +16,36 @@ char * ToString ( const QString & _string )
    return strdup(value.data());
 }
 
-extern "C"
+SQByteArray * ToByteArray ( const QByteArray & _byteArray )
 {
+   //assert ( _byteArray.length() == sizeof(QWidget*) );
 
-void windows_init_subsystem ()
-{
-   screen = QApplication::desktop()->screen();
+   SQByteArray * ret = sq_byte_array_create_prealloc ( _byteArray.length() );
+   memcpy ( ret->m_start, _byteArray.constData(), _byteArray.length() );
+   return ret;
 }
 
-void windows_deinit_subsystem ()
+extern "C" void windows_init_if_not_already ()
 {
+   if ( !initialized )
+   {
+      //desktop = QApplication::desktop();
+      //QApplication::instance()->installEventFilter ( new QtApplicationAutomationEventFilter(windows, activeWindow, QApplication::instance(), mouseCaptureNode) );
+      QApplication::instance()->installEventFilter ( new QtApplicationMachineAutomationEventFilter(QApplication::instance()) );
+      
+      initialized = true;
+   }
 }
 
 QWidget * windows_to_widget ( const SQByteArray * _pointer )
 {
    QWidget * widget = NULL;
    memcpy ( &widget, _pointer->m_start, sizeof(QWidget*) );
-   
-   if ( QApplication::allWidgets().contains(widget) )
-   {
-      return widget;
-   }
-   else
-   {
-      return NULL;
-   }
+   return widget;
 }
 
-SQByteArray * windows_from_widget ( const QWidget * _widget )
+extern "C"
 {
-   SQByteArray * ret = sq_byte_array_create_prealloc ( sizeof(QWidget*) );
-   memcpy ( ret->m_start, &_widget, sizeof(QWidget*) );
-   return ret;
-}
 
 int windows_desktops ()
 {
@@ -51,11 +54,12 @@ int windows_desktops ()
 
 SQByteArray * windows_desktop ( int _desktop )
 {
-   if ( screen == NULL )
-   {
-      screen = QApplication::desktop()->screen();
-   }
-   return windows_from_widget ( screen );
+   windows_init_if_not_already ();
+   
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::DESKTOP0, NULL, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   return ToByteArray (value.toByteArray() );
 }
 
 void windows_ref ( SQByteArray * _pointer )
@@ -69,17 +73,16 @@ void windows_unref ( SQByteArray * _pointer )
 char * windows_name ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::NAME, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
       return strdup("");
    }
    else
    {
-#if(QT_NO_ACCESSIBILITY)
-      return ToString( widget->objectName() );
-#else
-      return ToString( widget->accessibleName() );
-#endif
+      return ToString(value.toString());
    }
 }
 
@@ -91,163 +94,167 @@ int windows_process_id ( SQByteArray * _pointer )
 int windows_x ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::X, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
       return -1;
    }
    else
    {
-      return widget->x();
+      return value.toInt();
    }
 }
 
 int windows_y ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::Y, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
       return -1;
    }
    else
    {
-      return widget->y();
+      return value.toInt();
    }
 }
 
 int windows_width ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::WIDTH, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
       return -1;
    }
    else
    {
-      return widget->width();
+      return value.toInt();
    }
 }
 
 int windows_height ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::HEIGHT, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
       return -1;
    }
    else
    {
-      return widget->height();
+      return value.toInt();
    }
 }
 
 char * windows_role ( SQByteArray * _pointer )
-{  
+{
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ROLE, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
-      return strdup("");     
+      return strdup("");
    }
    else
    {
-      return ToString(widget->windowRole());
+      return ToString(value.toString());
    }
 }
 
 char * windows_text ( SQByteArray * _pointer )
 {  
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::TEXT, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
-      return strdup("");     
+      return strdup("");
    }
    else
    {
-      return strdup("");
+      return ToString(value.toString());
    }
 }
 
 int windows_actions ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTIONS, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
-      return 0;     
+      return -1;
    }
    else
    {
-      return widget->actions().length();
+      return value.toInt();
    }
 }
 
 char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget != NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTION_NAME, widget, _actionIndex);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
-      if ( _actionIndex < widget->actions().length() )
-      {
-         return ToString(widget->actions().at(_actionIndex)->text());
-      }
+      return strdup("");;
    }
-   return strdup("UNKNOWN");
+   else
+   {
+      return ToString(value.toString());
+   }
 }
 
 void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget != NULL )
-   {
-      if ( _actionIndex < widget->actions().length() )
-      {
-         widget->actions().at(_actionIndex)->trigger();
-      }
-   }
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTION_DO, widget, _actionIndex);
+   event->wait(QApplication::instance());
 }
 
 long windows_children ( SQByteArray * _pointer )
 {
    QWidget * widget = windows_to_widget(_pointer);
-   if ( widget == NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CHILDREN, widget, -1);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
       return 0;
    }
    else
    {
-      int ret = 0;
-      QObjectList list ( widget->children() );
-      for ( int i = 0; i < list.count(); i++ )
-      {
-         QObject * childObject = list.at ( i );
-         if ( childObject->isWidgetType() )
-         {
-            ret++;
-            QWidget * childWidget = qobject_cast<QWidget*>(childObject);
-         }
-      }
-      return ret;
+      return value.toInt();
    }
 }
 
 SQByteArray * windows_child ( SQByteArray * _parent, long _index )
 {
    QWidget * widget = windows_to_widget(_parent);
-   if ( widget != NULL )
+   QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CHILD, widget, _index);
+   QVariant value = event->wait(QApplication::instance());
+   
+   if ( value.isNull() )
    {
-      int ret = 0;
-      QObjectList list ( widget->children() );
-      for ( int i = 0; i < list.count(); i++ )
-      {
-         QObject * childObject = list.at ( i );
-         if ( childObject->isWidgetType() )
-         {
-            ret++;
-            if ( ret == _index )
-            {
-               return windows_from_widget(qobject_cast<QWidget*>(childObject));
-            }
-         }
-      }
+      return NULL;
    }
-   return NULL;
+   else
+   {
+      return ToByteArray (value.toByteArray() );
+   }
 }
 }

@@ -43,7 +43,10 @@ void MainWin::on_listView_currentItemChanged( QListWidgetItem * _current, QListW
 {
    SQ_UNUSED_PARAMETER(_previous);
    
-   std::cout << _current->text().toStdString() << std::endl;
+   QString text ( _current->text() );
+      qDebug() << text;
+
+   //std::cout << _current->text().toStdString() << std::endl;
 }
 
 void MainWin::on_m_updateButton_clicked()

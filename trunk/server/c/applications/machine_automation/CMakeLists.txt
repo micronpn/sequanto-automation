@@ -1,10 +1,20 @@
 IF(NOT SQ_ARDUINO)
   SQ_GENERATE(machine machine.automation)
   SET(SOURCES_WITHOUT_GENERATED files.c memory.c process.c server.c)
-  
+
   IF(SQ_WIN32)  
     IF(SQ_QT_MACHINE_AUTOMATION)
       LIST(APPEND SOURCES_WITHOUT_GENERATED process_win32.c windows_qt.cxx)
+      
+      QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_MACHINE_AUTOMATION_EVENT_FILTER_MOC QtApplicationMachineAutomationEventFilter.h)
+                                                                                               
+      LIST(APPEND SOURCES_WITHOUT_GENERATED QtApplicationMachineAutomationEventFilter.cxx)
+      LIST(APPEND SOURCES_WITHOUT_GENERATED ${SequantoAutomation_QT_APPLICATION_MACHINE_AUTOMATION_EVENT_FILTER_MOC})
+      
+      INCLUDE_DIRECTORIES(../../../qt/include)
+      
+      LIST(APPEND SOURCES_WITHOUT_GENERATED QtMachineAutomationEvent.cxx)
+      
     ELSE(SQ_QT_MACHINE_AUTOMATION)
       LIST(APPEND SOURCES_WITHOUT_GENERATED process_win32.c windows_win32_oleacc.c)
     ENDIF(SQ_QT_MACHINE_AUTOMATION)
@@ -18,6 +28,16 @@ IF(NOT SQ_ARDUINO)
 
     IF(SQ_QT_MACHINE_AUTOMATION)
       LIST(APPEND SOURCES_WITHOUT_GENERATED windows_qt.cxx)
+
+      QT4_WRAP_CPP(SequantoAutomation_QT_APPLICATION_MACHINE_AUTOMATION_EVENT_FILTER_MOC QtApplicationMachineAutomationEventFilter.h)
+      
+      LIST(APPEND SOURCES_WITHOUT_GENERATED QtApplicationMachineAutomationEventFilter.cxx)
+      LIST(APPEND SOURCES_WITHOUT_GENERATED ${SequantoAutomation_QT_APPLICATION_MACHINE_AUTOMATION_EVENT_FILTER_MOC})
+      
+      INCLUDE_DIRECTORIES(../../../qt/include)
+      
+      LIST(APPEND SOURCES_WITHOUT_GENERATED QtMachineAutomationEvent.cxx)
+      
     ELSE(SQ_QT_MACHINE_AUTOMATION)
       IF(ATSPI2_FOUND)
         INCLUDE_DIRECTORIES(${ATSPI2_INCLUDE_DIRS})

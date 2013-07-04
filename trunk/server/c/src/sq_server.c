@@ -64,11 +64,19 @@ void sq_server_internal_handle_byte ( SQServer * _server, SQByte _byte )
     sq_parser_input_byte ( &_server->m_parser, _server->m_stream, _byte );
 }
 
+#ifdef SQ_QT_MACHINE_AUTOMATION
+extern void windows_init_if_not_already ( void );
+#endif
+
 void sq_server_poll ( SQServer * _server )
 {
    SQByte byte;
-
+   
    assert ( _server != NULL );
+   
+#ifdef SQ_QT_MACHINE_AUTOMATION
+   windows_init_if_not_already ();
+#endif
    
    sq_stream_poll ( _server->m_stream );
 

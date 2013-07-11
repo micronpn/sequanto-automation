@@ -44,7 +44,7 @@ void process_resize_internal_buffer ( size_t _newSize )
 
 struct Process * process_get_process_internal ( size_t _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       return &g_processes[_index];
    }
@@ -61,7 +61,7 @@ int process_count ()
 
 int process_id ( int _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       return g_processes[_index].m_id;
    }
@@ -73,7 +73,7 @@ int process_id ( int _index )
 
 const char * process_name ( int _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       if ( g_processes[_index].m_name == NULL )
       {
@@ -92,7 +92,7 @@ const char * process_name ( int _index )
 
 const char * process_filename ( int _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       if ( g_processes[_index].m_filename == NULL )
       {
@@ -111,7 +111,7 @@ const char * process_filename ( int _index )
 
 int process_owner ( int _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       return g_processes[_index].m_owner;
    }
@@ -123,7 +123,7 @@ int process_owner ( int _index )
 
 const char * process_cmdline ( int _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       if ( g_processes[_index].m_cmdline == NULL )
       {
@@ -142,7 +142,7 @@ const char * process_cmdline ( int _index )
 
 int process_memory ( int _index )
 {
-   if ( _index < g_numberOfProcesses )
+   if ( ((size_t) _index) < g_numberOfProcesses )
    {
       return g_processes[_index].m_memoryUsage;
    }

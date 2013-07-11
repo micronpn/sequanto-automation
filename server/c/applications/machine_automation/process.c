@@ -61,53 +61,95 @@ int process_count ()
 
 int process_id ( int _index )
 {
-   return g_processes[_index].m_id;
+   if ( _index < g_numberOfProcesses )
+   {
+      return g_processes[_index].m_id;
+   }
+   else
+   {
+      return -1;
+   }
 }
 
 const char * process_name ( int _index )
 {
-   if ( g_processes[_index].m_name == NULL )
+   if ( _index < g_numberOfProcesses )
    {
-      return EMPTY;
+      if ( g_processes[_index].m_name == NULL )
+      {
+         return EMPTY;
+      }
+      else
+      {
+         return g_processes[_index].m_name;
+      }
    }
    else
    {
-      return g_processes[_index].m_name;
+       return EMPTY;
    }
 }
 
 const char * process_filename ( int _index )
 {
-   if ( g_processes[_index].m_filename == NULL )
+   if ( _index < g_numberOfProcesses )
    {
-      return EMPTY;
+      if ( g_processes[_index].m_filename == NULL )
+      {
+         return EMPTY;
+      }
+      else
+      {
+         return g_processes[_index].m_filename;
+      }
    }
    else
    {
-      return g_processes[_index].m_filename;
+       return EMPTY;
    }
 }
 
 int process_owner ( int _index )
 {
-    return g_processes[_index].m_owner;
+   if ( _index < g_numberOfProcesses )
+   {
+      return g_processes[_index].m_owner;
+   }
+   else
+   {
+      return -1;
+   }
 }
 
 const char * process_cmdline ( int _index )
 {
-   if ( g_processes[_index].m_cmdline == NULL )
+   if ( _index < g_numberOfProcesses )
    {
-      return EMPTY;
+      if ( g_processes[_index].m_cmdline == NULL )
+      {
+         return EMPTY;
+      }
+      else
+      {
+         return g_processes[_index].m_cmdline;
+      }
    }
    else
    {
-      return g_processes[_index].m_cmdline;
+       return EMPTY;
    }
 }
 
 int process_memory ( int _index )
 {
-   return g_processes[_index].m_memoryUsage;
+   if ( _index < g_numberOfProcesses )
+   {
+      return g_processes[_index].m_memoryUsage;
+   }
+   else
+   {
+      return -1;
+   }
 }
 
 void process_refresh ()

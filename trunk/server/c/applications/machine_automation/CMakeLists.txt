@@ -74,7 +74,7 @@ IF(NOT SQ_ARDUINO)
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "        src/memory.c \\\n")
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "        src/server.c \\\n")
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "        src/machine_automation.c\n")
-      FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "linux:MACHINE_AUTOMATION_SRCS+=src/process_linux.c\n")
+      FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "unix:MACHINE_AUTOMATION_SRCS+=src/process_linux.c\n")
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "win32:MACHINE_AUTOMATION_SRCS+=src/process_win32.c\n")
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "MACHINE_AUTOMATION_HEADERS=src/common.h \\\n")
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "        src/QtApplicationMachineAutomationEventFilter.h \\\n")
@@ -93,7 +93,7 @@ IF(NOT SQ_ARDUINO)
         DESTINATION .)
       INSTALL(FILES ${CMAKE_BINARY_DIR}/custom.pro
         DESTINATION .)
-      INSTALL(FILES ${SOURCES} common.h ${SQ_GENERATE_machine_HEADER} QtApplicationMachineAutomationEventFilter.h QtMachineAutomationEvent.h
+      INSTALL(FILES ${SOURCES} process_linux.c process_win32.c common.h ${SQ_GENERATE_machine_HEADER} QtApplicationMachineAutomationEventFilter.h QtMachineAutomationEvent.h
               DESTINATION src)
       INSTALL(FILES ${SOURCES} ../../../qt/include/sequanto/QtAutomationEventWithSynchronization.h
               DESTINATION include/sequanto)

@@ -57,6 +57,4 @@ function /windows/actions windows_actions
 function /windows/action_name windows_action_name
 function /windows/action_do windows_action_do
 
-function /mouse/move mouse_move
-function /mouse/click mouse_click
 function /mouse/click_at mouse_click_at

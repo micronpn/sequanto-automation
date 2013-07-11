@@ -311,6 +311,10 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                }
                event->done ( QVariant() );
                break;
+               
+            default:
+                event->done ( QVariant() );
+                break;
             }
          }
          else

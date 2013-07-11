@@ -52,6 +52,8 @@ extern "C"
 
    SQByteArray * windows_desktop ( int _desktop )
    {
+      SQ_UNUSED_PARAMETER(_desktop);
+       
       QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::DESKTOP0, NULL, -1);
       QVariant value = event->wait(QApplication::instance());
 
@@ -60,10 +62,12 @@ extern "C"
 
    void windows_ref ( SQByteArray * _pointer )
    {
+      SQ_UNUSED_PARAMETER(_pointer);
    }
 
    void windows_unref ( SQByteArray * _pointer )
    {
+      SQ_UNUSED_PARAMETER(_pointer);
    }
 
    char * windows_name ( SQByteArray * _pointer )
@@ -84,6 +88,8 @@ extern "C"
 
    int windows_process_id ( SQByteArray * _pointer )
    {
+      SQ_UNUSED_PARAMETER(_pointer);
+      
       return QApplication::applicationPid();
    }
 
@@ -253,16 +259,7 @@ extern "C"
          return ToByteArray (value.toByteArray() );
       }
    }
-
-   void mouse_move ( int _x, int _y )
-   {
-      //QApplication::postEvent ( QApplication::instance(), new QMouseEvent( QEvent::MouseMove, event->position(), Qt::NoButton, Qt::NoButton, Qt::NoModifier ) );
-   }
-
-   void mouse_click ( int _button )
-   {
-   }
-
+   
    void mouse_click_at ( int _x, int _y, int _button )
    {
       QtMachineAutomationMouseEvent * event = new QtMachineAutomationMouseEvent(_x, _y, _button);   

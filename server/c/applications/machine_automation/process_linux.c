@@ -4,6 +4,8 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #include "common.h"
 
@@ -32,6 +34,11 @@ void process_refresh_internal ()
     int num = scandir ( "/proc", &names, &process_is_int, NULL );
     char exeLink[100];
     char exe[1024];
+    char cmdLineFile[100];
+    char cmdLine[1024];
+    size_t cmdLineLength;
+    size_t j;
+    FILE * fp;
     
     if ( num == -1 )
     {
@@ -40,7 +47,7 @@ void process_refresh_internal ()
     else
     {
         process_resize_internal_buffer ( num );
-        for ( i = 0; i < num; i++ )
+        for ( i = 0; i < ((size_t) num); i++ )
         {
             struct Process * process = process_get_process_internal ( i );
             process->m_id = atoi(names[i]->d_name);
@@ -56,6 +63,21 @@ void process_refresh_internal ()
             struct stat statBuf;
             stat ( exeLink, &statBuf );
             process->m_owner = statBuf.st_uid;
+
+            sprintf ( cmdLineFile, "/proc/%i/cmdline", process->m_id );
+            fp = fopen ( cmdLineFile, "rb" );
+            cmdLineLength = fread ( &cmdLine, 1, 1024, fp );
+            fclose ( fp );
+            
+            for ( j = 0; j < cmdLineLength; j++ )
+            {
+               if ( cmdLine[j] == '\0' )
+               {
+                   cmdLine[j] = ' ';
+               }
+            }
+            cmdLine[cmdLineLength] = '\0';
+            process->m_cmdline = strdup ( cmdLine );
         }
     }
     free ( names );
@@ -68,4 +90,6 @@ int process_exec ( const char * _commandLine )
     char * commandLine = malloc ( lengthOfCommandLine + 6 );
     memcpy ( commandLine, "sh -c ", 5 );
     memcpy ( commandLine + 5, _commandLine, lengthOfCommandLine + 1 );
+    
+    return -1;
 }

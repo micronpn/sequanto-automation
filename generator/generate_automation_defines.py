@@ -746,7 +746,7 @@ class AutomationFile ( object ):
                                                                                   branch.getHandlerFunction, branch.setHandlerFunction, branch.enableHandlerFunction, branch.disableHandlerFunction,
                                                                                   branch.callHandlerFunction, branch.dumpHandlerFunction) )
         else:
-            fp.write ( '    { NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL },\n' )
+            fp.write ( '    { NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },\n' )
         fp.write ( '};\n' )
 
         for lineNumber, name in self.m_enums:

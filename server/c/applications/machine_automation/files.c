@@ -142,7 +142,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
    dir = opendir ( actual_dir );
    if ( dir != NULL )
    {
-       while ( entry = readdir ( dir ) )
+       while ( (entry = readdir ( dir )) )
        {
            if ( strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0 )
            {

@@ -255,7 +255,14 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                   QWidgetList list;
                   if ( widget == QApplication::desktop() )
                   {
-                     list = QApplication::topLevelWidgets();
+                     QWidgetList topLevel ( QApplication::topLevelWidgets() );
+                     for ( QWidgetList::const_iterator it = topLevel.constBegin(); it != topLevel.constEnd(); it++ )
+                     {
+                         if ( (*it)->isVisible() )
+                         {
+                             list.append ( *it );
+                         }
+                     }
                   }
                   else
                   {
@@ -263,7 +270,11 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                      {
                         if ( (*it)->isWidgetType() )
                         {
-                           list.append ( qobject_cast<QWidget*>(*it) );
+                           QWidget * childWidget = qobject_cast<QWidget*>(*it);
+                           if ( childWidget->isVisible() )
+                           {
+                               list.append ( childWidget );
+                           }
                         }
                      }
                   }

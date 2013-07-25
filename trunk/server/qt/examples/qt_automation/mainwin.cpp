@@ -8,6 +8,21 @@ MainWin::MainWin ( QWidget * _parent )
    : QMainWindow ( _parent )
 {
    ui.setupUi ( this );
+   for ( int row = 0; row < ui.m_tableWidget->rowCount(); row++ )
+   {
+      for ( int column = 0; column < ui.m_tableWidget->columnCount(); column++ )
+      {
+         QTableWidgetItem * item = ui.m_tableWidget->item(row,column);
+         if ( item == NULL )
+         {
+            ui.m_tableWidget->setItem(row, column, new QTableWidgetItem(QString("%1,%2").arg(row).arg(column)) );
+         }
+         else
+         {
+            item->setText(QString("%1,%2").arg(row).arg(column) );
+         }
+      }
+   }
 }
 
 void MainWin::on_exitButton_clicked()

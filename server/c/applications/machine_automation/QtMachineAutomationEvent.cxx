@@ -19,7 +19,12 @@ QtMachineAutomationEvent::QtMachineAutomationEvent ( QtMachineAutomationEvent::C
    }
 }
 
-QWidget * QtMachineAutomationEvent::widget()
+bool QtMachineAutomationEvent::normal() const
+{
+   return m_object.size() == sizeof(QWidget*);
+}
+
+QWidget * QtMachineAutomationEvent::widget() const
 {
    if ( m_object.isEmpty() )
    {
@@ -36,6 +41,13 @@ QWidget * QtMachineAutomationEvent::widget()
    {
       return NULL;
    }
+}
+
+QByteArray QtMachineAutomationEvent::extra() const
+{
+   QByteArray ret;
+   ret.setRawData ( m_object.constData() + sizeof(QWidget*), m_object.length() - sizeof(QWidget*) );
+   return ret;
 }
 
 void QtMachineAutomationEvent::received()

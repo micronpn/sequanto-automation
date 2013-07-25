@@ -60,11 +60,13 @@ namespace sequanto
 
          QtMachineAutomationEvent ( Command _command, SQByteArray * _object, int _index );
 
-         inline Command command () { return m_command; }
-         inline int index() { return m_index; }
-         inline const QByteArray & object() { return m_object; }
+         inline Command command () const { return m_command; }
+         inline int index() const { return m_index; }
+         inline const QByteArray & object() const { return m_object; }
          
-         QWidget * widget();
+         bool normal() const;
+         QWidget * widget() const;
+         QByteArray extra() const;
          
          void received ();
 

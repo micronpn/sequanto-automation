@@ -293,7 +293,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                            index = -1;
                         }
                      }
-                     if ( index == -1 )
+                     if ( index != -1 )
                      {
                         event->done ( QVariant() );
                      }

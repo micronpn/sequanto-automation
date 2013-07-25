@@ -252,7 +252,7 @@ extern "C"
 
       if ( value.isNull() )
       {
-         return NULL;
+         return sq_byte_array_create_prealloc(0);
       }
       else
       {

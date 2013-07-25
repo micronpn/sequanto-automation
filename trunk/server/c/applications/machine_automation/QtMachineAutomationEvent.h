@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include <QtGui>
+#include <sequanto/value.h>
 #include <sequanto/QtAutomationEventWithSynchronization.h>
 
 namespace sequanto
@@ -48,7 +49,7 @@ namespace sequanto
 
       protected:
          Command m_command;
-         QWidget * m_widget;
+         QByteArray m_object;
          int m_index;
 
          static int s_eventsPosted;
@@ -57,12 +58,14 @@ namespace sequanto
       public:
          static const int ID;
 
-         QtMachineAutomationEvent ( Command _command, QWidget * _widget, int _index );
+         QtMachineAutomationEvent ( Command _command, SQByteArray * _object, int _index );
 
          inline Command command () { return m_command; }
          inline int index() { return m_index; }
+         inline const QByteArray & object() { return m_object; }
+         
          QWidget * widget();
-
+         
          void received ();
 
          virtual ~QtMachineAutomationEvent ();

@@ -132,6 +132,10 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                {
                   event->done ( "toolbar" );
                }
+               else if ( qobject_cast<QTableView*>(widget) != NULL )
+               {
+                  event->done("table");
+               }
                /*
                else if ( qobject_cast<*>(widget) != NULL )
                {
@@ -213,6 +217,11 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                else if ( qobject_cast<QTabWidget*>(widget) != NULL )
                {
                   event->done ( QString(qobject_cast<QTabWidget*>(widget)->count()) );
+               }
+               else if ( qobject_cast<QTableWidget*>(widget) != NULL )
+               {
+                  QTableWidget * table = qobject_cast<QTableWidget*>(widget);
+                  event->done ( QString("%0x%1").arg( table->rowCount() ).arg ( table->columnCount() ) );
                }
                else
                {

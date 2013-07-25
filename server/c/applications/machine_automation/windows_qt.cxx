@@ -35,11 +35,11 @@ extern "C" void windows_init_if_not_already ()
    }
 }
 
-QWidget * windows_to_widget ( const SQByteArray * _pointer )
+QByteArray FromByteArray ( const SQByteArray * _pointer )
 {
-   QWidget * widget = NULL;
-   memcpy ( &widget, _pointer->m_start, sizeof(QWidget*) );
-   return widget;
+   QByteArray ret;
+   ret.setRawData ( (const char*) _pointer->m_start, _pointer->m_length );
+   return ret;
 }
 
 extern "C"
@@ -72,8 +72,7 @@ extern "C"
 
    char * windows_name ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::NAME, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::NAME, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -95,8 +94,7 @@ extern "C"
 
    int windows_x ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::X, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::X, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -111,8 +109,7 @@ extern "C"
 
    int windows_y ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::Y, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::Y, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -127,8 +124,7 @@ extern "C"
 
    int windows_width ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::WIDTH, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::WIDTH, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -143,8 +139,7 @@ extern "C"
 
    int windows_height ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::HEIGHT, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::HEIGHT, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -159,8 +154,7 @@ extern "C"
 
    char * windows_role ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ROLE, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ROLE, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -175,8 +169,7 @@ extern "C"
 
    char * windows_text ( SQByteArray * _pointer )
    {  
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::TEXT, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::TEXT, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -191,8 +184,7 @@ extern "C"
 
    int windows_actions ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTIONS, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTIONS, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -207,8 +199,7 @@ extern "C"
 
    char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTION_NAME, widget, _actionIndex);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTION_NAME, _pointer, _actionIndex);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -223,15 +214,13 @@ extern "C"
 
    void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTION_DO, widget, _actionIndex);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::ACTION_DO, _pointer, _actionIndex);
       event->wait(QApplication::instance());
    }
 
    long windows_children ( SQByteArray * _pointer )
    {
-      QWidget * widget = windows_to_widget(_pointer);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CHILDREN, widget, -1);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CHILDREN, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )
@@ -246,8 +235,7 @@ extern "C"
 
    SQByteArray * windows_child ( SQByteArray * _parent, long _index )
    {
-      QWidget * widget = windows_to_widget(_parent);
-      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CHILD, widget, _index);
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CHILD, _parent, _index);
       QVariant value = event->wait(QApplication::instance());
 
       if ( value.isNull() )

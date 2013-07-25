@@ -8,19 +8,29 @@ const int QtMachineAutomationEvent::ID = QEvent::registerEventType();
 int QtMachineAutomationEvent::s_eventsPosted = 0;
 int QtMachineAutomationEvent::s_totalDeliveryTime = 0;
 
-QtMachineAutomationEvent::QtMachineAutomationEvent ( QtMachineAutomationEvent::Command _command, QWidget * _widget, int _index )
+QtMachineAutomationEvent::QtMachineAutomationEvent ( QtMachineAutomationEvent::Command _command, SQByteArray * _object, int _index )
    : QtAutomationEventWithSynchronization<QVariant> ( (QEvent::Type) ID)
 {
-   m_widget = _widget;
    m_command = _command;
    m_index = _index;
+   if ( _object != NULL )
+   {
+      m_object.setRawData ( (const char*) _object->m_start, _object->m_length );
+   }
 }
 
 QWidget * QtMachineAutomationEvent::widget()
 {
-   if ( QApplication::allWidgets().contains(m_widget) == QBool(true) )
+   if ( m_object.isEmpty() )
    {
-      return m_widget;
+      return NULL;
+   }
+
+   QWidget * widget = NULL;
+   memcpy ( &widget, m_object.constData(), sizeof(QWidget*) );
+   if ( QApplication::allWidgets().contains(widget) == QBool(true) )
+   {
+      return widget;
    }
    else
    {

@@ -334,6 +334,17 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                      if ( !rect.isNull() )
                      {
                         pos = rect.topLeft();
+                        pos += widget->mapToGlobal(pos);
+                        QHeaderView * view = tableWidget->verticalHeader();
+                        if ( view != NULL )
+                        {
+                            pos.setX ( pos.x() + view->width() );
+                        }
+                        view = tableWidget->horizontalHeader();
+                        if ( view != NULL )
+                        {
+                            pos.setY ( pos.y() + view->height() );
+                        }
                      }
                   }
                   if ( event->command() == QtMachineAutomationEvent::X )

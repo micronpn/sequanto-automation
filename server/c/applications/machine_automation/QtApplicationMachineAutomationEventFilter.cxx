@@ -398,13 +398,33 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                         switch ( extra.length() )
                         {
                         case 0:
-                           event->done(tableWidget->rowCount());
+                           {
+                              int visibleRows = 0;
+                              for ( int i = 0; i < tableWidget->rowCount(); i++ )
+                              {
+                                 if ( !tableWidget->isRowHidden(i) )
+                                 {
+                                    visibleRows++;
+                                 }
+                              }
+                              event->done(visibleRows);
+                           }
                            break;
 
                         case 1:
-                           event->done(tableWidget->columnCount());
+                           {
+                              int visibleColumns = 0;
+                              for ( int i = 0; i < tableWidget->columnCount(); i++ )
+                              {
+                                 if ( !tableWidget->isColumnHidden(i) )
+                                 {
+                                    visibleColumns++;
+                                 }
+                              }
+                              event->done(visibleColumns);
+                           }
                            break;
-
+                           
                         default:
                            event->done(0);
                            break;
@@ -413,8 +433,67 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                      else
                      {
                         QByteArray obj ( event->object() );
-                        obj.append ( (char) event->index() );
-                        event->done ( obj );
+                        QByteArray extra ( event->extra() );
+                        switch ( extra.length() )
+                        {
+                        case 0:
+                           {
+                              int visibleRows = 0;
+                              for ( int i = 0; i < tableWidget->rowCount(); i++ )
+                              {
+                                 if ( !tableWidget->isRowHidden(i) )
+                                 {
+                                    if ( visibleRows == event->index() )
+                                    {
+                                       obj.append ( (char) i );
+                                       visibleRows = -1;
+                                       break;
+                                    }
+                                    visibleRows++;
+                                 }
+                              }
+                              if ( visibleRows == -1 )
+                              {
+                                  event->done(obj);
+                              }
+                              else
+                              {
+                                  event->done(QVariant());
+                              }
+                           }
+                           break;
+
+                        case 1:
+                           {
+                              int visibleColumns = 0;
+                              for ( int i = 0; i < tableWidget->columnCount(); i++ )
+                              {
+                                 if ( !tableWidget->isColumnHidden(i) )
+                                 {
+                                    if ( visibleColumns == event->index() )
+                                    {
+                                       obj.append ( (char) i );
+                                       visibleColumns = -1;
+                                       break;
+                                    }
+                                    visibleColumns++;
+                                 }
+                              }
+                              if ( visibleColumns == -1 )
+                              {
+                                  event->done(obj);
+                              }
+                              else
+                              {
+                                  event->done(QVariant());
+                              }
+                           }
+                           break;
+                           
+                        default:
+                           event->done(QVariant());
+                           break;
+                        }
                      }
                   }
                   else

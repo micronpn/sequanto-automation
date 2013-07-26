@@ -22,6 +22,7 @@ MainWin::MainWin ( QWidget * _parent )
             item->setText(QString("%1,%2").arg(row).arg(column) );
          }
       }
+      ui.m_tableWidget->setColumnHidden ( 1, true );
    }
 }
 

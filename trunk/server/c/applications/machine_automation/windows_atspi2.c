@@ -29,6 +29,21 @@ SQByteArray * windows_from_accessible ( const AtspiAccessible * _accessibleObjec
    return ret;
 }
 
+char * windows_report_error ( GError * _error )
+{
+    char * ret;
+    if ( _error->message != NULL )
+    {
+        ret = strdup(_error->message);
+    }
+    else
+    {
+        ret = strdup("ERROR");
+    }
+    g_error_free(_error);
+    return ret;
+}
+
 int windows_desktops ()
 {
     return atspi_get_desktop_count();
@@ -58,8 +73,7 @@ char * windows_name ( SQByteArray * _pointer )
    name = atspi_accessible_get_name ( accessibleObject, &error );
    if ( error != NULL )
    {
-       g_error_free(error);
-       return strdup("ERROR");
+       return windows_report_error(error);
    }
    else
    {
@@ -180,7 +194,7 @@ char * windows_role ( SQByteArray * _pointer )
    role = atspi_accessible_get_role_name (accessibleObject, &error);
    if ( error != NULL )
    {
-       g_error_free(error);
+       return windows_report_error(error);
    }
    if ( role != NULL )
    {
@@ -203,15 +217,13 @@ char * windows_text ( SQByteArray * _pointer )
        gint count = atspi_text_get_character_count ( textObj, &error );
        if ( error != NULL )
        {
-           g_error_free(error);
-           return strdup("ERROR");
+           return windows_report_error ( error );
        }
 
        text = atspi_text_get_text (textObj, 0, count, &error);
        if ( error != NULL )
        {
-           g_error_free(error);
-           return strdup("ERROR");
+           return windows_report_error(error);
        }
        else
        {
@@ -226,8 +238,7 @@ char * windows_text ( SQByteArray * _pointer )
        
        if ( error != NULL )
        {
-           g_error_free(error);
-           return strdup("ERROR");
+           return windows_report_error(error);
        }
        else
        {
@@ -265,8 +276,7 @@ char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
        gchar * name = atspi_action_get_name ( actionObj, _actionIndex, &error );
        if ( error != NULL )
        {
-           g_error_free(error);
-           return strdup("ERROR");
+           return windows_report_error(error);
        }
        return name;
    }

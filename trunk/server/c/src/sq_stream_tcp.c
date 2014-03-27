@@ -150,7 +150,7 @@ void sq_stream_internal_reader ( SQThread * _thread, void * _data )
 
 void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
 {
-    SQThread * clientThread;
+    SQThread * clientThread = NULL;
     SQStream * stream = (SQStream*) _data;
     int newClient;
 
@@ -176,6 +176,11 @@ void sq_stream_internal_polling_thread ( SQThread * _thread, void * _data )
               close ( newClient );
 #endif
            }
+        }
+        if ( clientThread != NULL )
+        {
+            sq_thread_join ( clientThread );
+            sq_thread_destroy ( clientThread );
         }
     }
 }

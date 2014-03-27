@@ -1,5 +1,6 @@
 #include "QtApplicationMachineAutomationEventFilter.h"
 #include "QtMachineAutomationEvent.h"
+#include "machine_automation.h"
 
 using namespace sequanto::automation;
 
@@ -594,6 +595,39 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
          QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
       }
       return true;
+   }
+   else if ( _event->type() == QEvent::MouseButtonRelease )
+   {
+       QMouseEvent * event = dynamic_cast<QMouseEvent*>(_event);
+       int x = event->x();
+       int y = event->y();
+       int button = event->button();
+
+       //sq_mouse_capture_click_updated(x, y, button);
+       
+       if ( _object->isWidgetType() )
+       {
+           QString path;
+           QWidget * widget = qobject_cast<QWidget*>(_object);
+           while ( widget != 0 )
+           {
+               if ( path.length() != 0 )
+               {
+                   path = "/" + path;
+               }
+               if ( widget->objectName().length() == 0 )
+               {
+                   path = "*" + path;
+               }
+               else
+               {
+                   path = widget->objectName() + path;
+               }
+               widget = qobject_cast<QWidget*>(widget->parent());
+           }
+           QByteArray pathValue ( path.toUtf8() );
+           sq_windows_capture_click_updated(pathValue.data());
+       }
    }
    return QObject::eventFilter(_object, _event );
 }

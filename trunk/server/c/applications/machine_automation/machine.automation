@@ -56,5 +56,7 @@ function /windows/text windows_text
 function /windows/actions windows_actions
 function /windows/action_name windows_action_name
 function /windows/action_do windows_action_do
+monitor /windows/capture_click const char *
 
 function /mouse/click_at mouse_click_at
+#monitor /mouse/capture_click int int int

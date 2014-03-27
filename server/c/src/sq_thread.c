@@ -132,6 +132,11 @@ void sq_thread_join ( SQThread * _thread )
    pthread_join ( _thread->m_thread, NULL );
 }
 
+void sq_thread_destroy ( SQThread * _thread )
+{
+    free ( _thread );
+}
+
 #endif
 
 #else

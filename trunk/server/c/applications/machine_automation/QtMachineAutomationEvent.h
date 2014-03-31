@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QtGui>
 #include <sequanto/value.h>
-#include <sequanto/QtAutomationEventWithSynchronization.h>
+#include "QtAutomationEventWithSynchronization.h"
 
 namespace sequanto
 {

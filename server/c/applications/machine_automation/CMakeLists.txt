@@ -55,6 +55,9 @@ IF(NOT SQ_ARDUINO)
   SET(SOURCES ${SOURCES_WITHOUT_GENERATED} ${SQ_GENERATE_machine})
     
   IF(SQ_QT_MACHINE_AUTOMATION)
+    FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+    INCLUDE(${QT_USE_FILE})
+    
     ADD_LIBRARY(machine_automation ${SOURCES})
     IF(NOT QT4_FOUND)
       ERROR("QT4 must be found for the SQ_QT_MACHINE_AUTOMATION flag to be set.")
@@ -63,6 +66,17 @@ IF(NOT SQ_ARDUINO)
     INCLUDE(${QT_USE_FILE})
     
     TARGET_LINK_LIBRARIES(machine_automation ${QT_LIBRARIES})
+
+    QT4_WRAP_CPP(qt_automation_MAINWIN_MOC qt_automation/mainwin.h)
+    QT4_WRAP_UI(qt_automation_UIS_H qt_automation/mainwin.ui)
+#    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+    
+    ADD_EXECUTABLE(qt_automation_example ${qt_automation_UIS_H} ${qt_automation_MAINWIN_MOC} qt_automation/mainwin.cpp qt_automation/qt_machine_automation.cpp)
+    TARGET_LINK_LIBRARIES(qt_automation_example SequantoAutomation)
+    TARGET_LINK_LIBRARIES(qt_automation_example machine_automation)
+    TARGET_LINK_LIBRARIES(qt_automation_example ${QT_LIBRARIES})
+    
     IF(SQ_GENERATE_QMAKE)
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "# Machine Automation files\n")
       FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "MACHINE_AUTOMATION_SRCS=${SOURCES_REPLACED} \\\n")
@@ -93,10 +107,8 @@ IF(NOT SQ_ARDUINO)
         DESTINATION .)
       INSTALL(FILES ${CMAKE_BINARY_DIR}/custom.pro
         DESTINATION .)
-      INSTALL(FILES ${SOURCES} process_linux.c process_win32.c common.h ${SQ_GENERATE_machine_HEADER} QtApplicationMachineAutomationEventFilter.h QtMachineAutomationEvent.h
+      INSTALL(FILES ${SOURCES} process_linux.c process_win32.c common.h ${SQ_GENERATE_machine_HEADER} QtApplicationMachineAutomationEventFilter.h QtMachineAutomationEvent.h QtAutomationEventWithSynchronization.h
               DESTINATION src)
-      INSTALL(FILES ${SOURCES} ../../../qt/include/sequanto/QtAutomationEventWithSynchronization.h
-              DESTINATION include/sequanto)
     ENDIF(SQ_GENERATE_QMAKE)
   ELSE(SQ_QT_MACHINE_AUTOMATION)
     ADD_EXECUTABLE(machine_automation main.c ${SOURCES})

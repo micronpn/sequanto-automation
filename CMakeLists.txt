@@ -62,9 +62,9 @@ SET(SQ_QT4   OFF       CACHE BOOL "Build QT4 wrapper functionality")
 IF(SQ_QT4)
   INCLUDE(FindQt4)
   FIND_PACKAGE(Qt4)
-
-  SET(SQ_QT_USE_CACHE                OFF       CACHE BOOL "Use QtCache class to avoid using the UI thread as much in QT")
-  SET(SQ_QT_WINDOWS_AUTOMATION       OFF       CACHE BOOL "Use the windows automation bridge to talk to automate QT")
+  
+  SET(SQ_QT_MACHINE_AUTOMATION       OFF       CACHE BOOL "Use the machine automation bridge to automate QT.")
+  SET(SQ_GENERATE_QMAKE              OFF       CACHE BOOL "Generate Qmake build files for the machine automation bridge.")
 ENDIF(SQ_QT4)
 
 INCLUDE(FindDoxygen)

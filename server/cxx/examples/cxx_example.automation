@@ -1,4 +1,0 @@
-name cxx_example
-import cxx_example.cpp
-function /c/test_me/(1..10)/(1..10) test_me
-branch /cxx

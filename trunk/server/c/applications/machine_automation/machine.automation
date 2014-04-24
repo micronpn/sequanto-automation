@@ -6,6 +6,7 @@ import memory.c
 import process.c
 import windows.c
 import mouse.c
+import windows_capture_screen.c
 
 typedef int size_t
 
@@ -57,6 +58,7 @@ function /windows/actions windows_actions
 function /windows/action_name windows_action_name
 function /windows/action_do windows_action_do
 monitor /windows/capture_click const char *
+function /windows/capture_screen windows_capture_screen
 
 function /mouse/click_at mouse_click_at
 #monitor /mouse/capture_click int int int

@@ -40,4 +40,4 @@ to keep the window in memory forever.
 || actions || int ( byte-array ) || Get the number of actions of the window. ||
 || action_name || string ( byte-array int ) || Get the name of the action with the given index. ||
 || action_do || void ( byte-array int ) || Execute the action with the given index. ||
-|| capture_screen (optional) || byte-array () || Capture the current screen of the machine and return it in a "recognized" format (BMP, PNG, TGA, etc.) ||
+|| capture_screen (optional) || byte-array ( int ) || Capture the screen with the given index and return it in a "recognized" format (BMP, PNG, TGA, etc.) ||

@@ -38,6 +38,9 @@ CHECK_FUNCTION_EXISTS(_snprintf HAVE_UNDERSCORE_SNPRINTF)
 CHECK_FUNCTION_EXISTS(snprintf_s HAVE_SNPRINTF_S)
 CHECK_FUNCTION_EXISTS(_snprintf_s HAVE_UNDERSCORE_SNPRINTF_S)
 CHECK_FUNCTION_EXISTS(dtostrf HAVE_DTOSTRF)
+IF(SQ_ARDUINO)
+        SET(HAVE_SNPRINTF FALSE)
+ENDIF(SQ_ARDUINO)
 
 INCLUDE(CheckSymbolExists)
 CHECK_SYMBOL_EXISTS(int64_t "stdint.h" HAVE_INT64_T)
@@ -62,7 +65,7 @@ SET(SQ_QT4   OFF       CACHE BOOL "Build QT4 wrapper functionality")
 IF(SQ_QT4)
   INCLUDE(FindQt4)
   FIND_PACKAGE(Qt4)
-  
+
   SET(SQ_QT_MACHINE_AUTOMATION       OFF       CACHE BOOL "Use the machine automation bridge to automate QT.")
   SET(SQ_GENERATE_QMAKE              OFF       CACHE BOOL "Generate Qmake build files for the machine automation bridge.")
 ENDIF(SQ_QT4)
@@ -90,15 +93,15 @@ ENDIF(HAVE_ASSERT_H)
 
 MACRO(SQ_GENERATE automation_name automation_file)
   SET_SOURCE_FILES_PROPERTIES(${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c GENERATED)
-  
+
   ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c
     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/${automation_file}
     COMMAND ${PYTHON_EXECUTABLE} ${GENERATE_AUTOMATION_DEFINES} ${CMAKE_CURRENT_SOURCE_DIR}/${automation_file}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/generated
     VERBATIM)
-  
+
   INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/generated)
-  
+
   SET(SQ_GENERATE_${automation_name} ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.c)
   SET(SQ_GENERATE_${automation_name}_HEADER ${CMAKE_BINARY_DIR}/generated/${automation_name}_automation.h)
 ENDMACRO(SQ_GENERATE)
@@ -108,15 +111,15 @@ MACRO(SQ_GENERATE_ARDUINO name)
     ADD_CUSTOM_COMMAND(TARGET ${name}
       POST_BUILD
       COMMAND avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 ${name} ${name}.eep
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		VERBATIM)
-    
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      VERBATIM)
+
     ADD_CUSTOM_COMMAND(TARGET ${name}
       POST_BUILD
       COMMAND avr-objcopy -O ihex -R .eeprom ${name} ${name}.hex
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		VERBATIM)
-    
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      VERBATIM)
+
     FILE(WRITE ${CMAKE_BINARY_DIR}/upload_${name}_duemilanove.bat "SET PORT=%1\n")
     FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}_duemilanove.bat "if x%1 == x ( SET PORT=COM8 )\n")
     FILE(APPEND ${CMAKE_BINARY_DIR}/upload_${name}_duemilanove.bat "avrdude -v -cstk500v1 -pm328p -b57600 -P\\\\.\\%PORT% -D \"-Uflash:w:${CMAKE_CURRENT_BINARY_DIR}\\${name}.hex:i\"\n")
@@ -135,24 +138,24 @@ IF(SQ_GENERATE_DOCUMENTATION)
   IF(NOT DOXYGEN_FOUND)
     MESSAGE(FATAL_ERROR "Doxygen HAS to be found when SQ_GENERATE_DOCUMENTATION is true.")
   ENDIF(NOT DOXYGEN_FOUND)
-  
+
   SET(DOXY_OUTPUT "${CMAKE_BINARY_DIR}/documentation")
-  
+
   CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/Doxyfile.in
                  ${CMAKE_BINARY_DIR}/Doxyfile
                  @ONLY )
   FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/documentation)
   ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile)
-  
+
   FIND_PROGRAM(DOXYGEN2GWIKI_EXECUTABLE doxygen2gwiki
                DOC "Finding doxygen2gwiki (Doxygen to google code wiki converter")
 
   FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/documentation/wiki)
-  
+
   ADD_CUSTOM_TARGET(gwiki ${PYTHON_EXECUTABLE} ${DOXYGEN2GWIKI_EXECUTABLE} --skip-svn --docs xml --output wiki --prefix API --label C-API --project sequanto-automation --html html
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/documentation)
   ADD_DEPENDENCIES(gwiki doc)
-  
+
   INSTALL(DIRECTORY ${CMAKE_BINARY_DIR}/documentation/html/
           DESTINATION docs/api)
 ENDIF(SQ_GENERATE_DOCUMENTATION)
@@ -160,11 +163,11 @@ ENDIF(SQ_GENERATE_DOCUMENTATION)
 IF(SQ_GENERATE_QMAKE)
   SET(SQ_INSTALL_BINARY OFF)
   SET(SQ_INSTALL_SOURCE ON)
-  
+
   FILE(WRITE ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "# put custom qmake directives in the custom.pro file\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/SequantoAutomation.pro "include(custom.pro)\n\n")
   FILE(APPEND ${CMAKE_BINARY_DIR}/custom.pro "# empty by default\n")
-  
+
   IF(SQ_QT_MACHINE_AUTOMATION)
     FILE(WRITE ${CMAKE_BINARY_DIR}/machine-automation.pro "# put custom qmake directives in the custom.pro file\n")
     FILE(APPEND ${CMAKE_BINARY_DIR}/machine-automation.pro "include(custom.pro)\n\n")

@@ -244,7 +244,7 @@ extern "C"
       }
       else
       {
-         return ToByteArray (value.toByteArray() );
+         return ToByteArray ( value.toByteArray() );
       }
    }
    
@@ -252,5 +252,20 @@ extern "C"
    {
       QtMachineAutomationMouseEvent * event = new QtMachineAutomationMouseEvent(_x, _y, _button);   
       QApplication::postEvent ( QApplication::instance(), event );
+   }
+
+   SQByteArray * windows_capture_screen ( int _desktop )
+   {
+      QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CAPTURE_SCREEN, NULL, _desktop);
+      QVariant value = event->wait(QApplication::instance());
+      
+      if ( value.isNull() )
+      {
+         return sq_byte_array_create_prealloc(0);
+      }
+      else
+      {
+         return ToByteArray ( value.toByteArray() );
+      }
    }
 }

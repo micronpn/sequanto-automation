@@ -45,6 +45,7 @@ namespace sequanto
             ACTION_DO,
             CHILDREN,
             CHILD,
+            CAPTURE_SCREEN,
          };
 
       protected:

@@ -56,6 +56,16 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
       {
          event->done ( ToByteArray(QApplication::desktop()) );
       }
+      else if ( event->command() == QtMachineAutomationEvent::CAPTURE_SCREEN )
+      {
+          QDesktopWidget * desktop = QApplication::desktop();
+          QPixmap capture = QPixmap::grabWindow ( desktop->winId() );
+          QByteArray pixmapArray;
+          QBuffer buffer ( &pixmapArray );
+          buffer.open ( QIODevice::WriteOnly );
+          capture.save ( &buffer, "PNG" );
+          event->done ( pixmapArray );
+      }
       else
       {
          QWidget * widget = event->widget();  
@@ -589,10 +599,18 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
       QWidget * receiver = QApplication::widgetAt(event->position());
       if ( receiver != NULL )
       {
-         QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
-
-         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
-         QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+          QWidget * activeModalWidget = QApplication::activeModalWidget();
+          if ( activeModalWidget == NULL || activeModalWidget->isAncestorOf(receiver) )
+          {
+              QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
+              
+              QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+              QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+          }
+          else
+          {
+              qDebug() << "A modal widget is open, and the widget is not inside the modal widget.";
+          }
       }
       return true;
    }

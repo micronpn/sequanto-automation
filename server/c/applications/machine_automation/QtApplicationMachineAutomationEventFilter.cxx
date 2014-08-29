@@ -616,10 +616,10 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
    }
    else if ( _event->type() == QEvent::MouseButtonRelease )
    {
-       QMouseEvent * event = dynamic_cast<QMouseEvent*>(_event);
-       int x = event->x();
-       int y = event->y();
-       int button = event->button();
+       //QMouseEvent * event = dynamic_cast<QMouseEvent*>(_event);
+       //int x = event->x();
+       //int y = event->y();
+       //int button = event->button();
 
        //sq_mouse_capture_click_updated(x, y, button);
        

@@ -13,12 +13,13 @@
 #define _CONFIG_H_
 
 #define SQ_SVN_REVISION "${SQ_SVN_REVISION}"
+#define CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}"
+#define CPACK_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}"
 
 #cmakedefine SQ_USE_BSD_SOCKETS
 #cmakedefine SQ_USE_WINSOCK
 #cmakedefine SQ_USE_MUTEXES
 #cmakedefine SQ_USE_THREADS
-
 #cmakedefine HAVE_STDLIB_H
 #cmakedefine HAVE_STDIO_H
 #cmakedefine HAVE_STDINT_H

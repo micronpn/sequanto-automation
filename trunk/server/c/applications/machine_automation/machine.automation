@@ -11,6 +11,8 @@ import windows_capture_screen.c
 typedef int size_t
 
 property /server/version server_version
+property /server/vendor server_vendor
+property /server/revision server_revision
 function /server/quit server_quit
 property /server/process_id server_process_id
 

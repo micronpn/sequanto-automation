@@ -1,6 +1,0 @@
-IF(!SQ_ARDUINO)
-  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/server/c/include ${CMAKE_BINARY_DIR}/generated/)
-  ADD_DEFINITIONS(-DSQ_DISABLE_AUTOMATION_INTERFACE)
-  ADD_EXECUTABLE(test_server_disabled ../test_server.c ../type_tests.c)
-  ADD_DEPENDENCIES(test_server_disabled test_server)
-ENDIF(!SQ_ARDUINO)

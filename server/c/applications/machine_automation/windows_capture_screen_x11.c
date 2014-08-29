@@ -21,6 +21,12 @@ SQByteArray * windows_capture_screen ( int _desktop )
     int screen_height = 100;
     int border;
     int depth;
+
+    if(display == NULL)
+    {
+        sq_log("Could not open X11 display.");
+        return;
+    }
     
     XGetGeometry(display, root, &moreRoot, &screen_x, &screen_y, &screen_width, &screen_height, &border, &depth );
     

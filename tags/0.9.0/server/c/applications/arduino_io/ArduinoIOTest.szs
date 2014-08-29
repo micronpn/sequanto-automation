@@ -1,0 +1,1795 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--SeqZap Script File-->
+<filedata formatversion="0.4" SeqZapVersion="0.55.184.15019">
+   <revision>37</revision>
+   <type>Normal</type>
+   <namespace>ArduinoIOTest</namespace>
+   <id>FD26A012-2FA7-4E31-B6BA-1BFAB805A3FF</id>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WORKBENCH - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <workbench>
+      <tool>
+         <name>port</name>
+         <type>Stream.SerialPort</type>
+         <setupmethod>Setup SerialPort</setupmethod>
+         <ToolData>
+            <Port type="String">"COM4"</Port>
+            <BaudRate type="Integer">57600</BaudRate>
+            <Parity type="Enum - System.IO.Ports.Parity">None</Parity>
+            <DataBits type="Integer">8</DataBits>
+            <StopBits type="Enum - System.IO.Ports.StopBits">One</StopBits>
+            <ReadTimeout type="Integer">1000</ReadTimeout>
+            <WriteTimeout type="Integer">1000</WriteTimeout>
+            <Handshake type="Enum - System.IO.Ports.Handshake">None</Handshake>
+            <Open type="Bool">true</Open>
+         </ToolData>
+      </tool>
+      <tool>
+         <name>io</name>
+         <type>AutomationToolBox.AutomationConnection</type>
+         <setupmethod>Setup</setupmethod>
+         <ToolData>
+            <Stream type="parameter">0</Stream>
+            <BrowseEntireTreeOnSetup type="Bool">true</BrowseEntireTreeOnSetup>
+            <IgnoreExtraMessages type="Bool">true</IgnoreExtraMessages>
+         </ToolData>
+         <parameter>
+            <name>Stream</name>
+            <type>Stream.Stream</type>
+            <assignment>port</assignment>
+         </parameter>
+         <extension>
+            <name>Shortcut</name>
+            <plugin>WorkbenchToolToolBarPlugin</plugin>
+            <parameters>
+               <PrimitiveDictionary>
+                  <item>
+                     <key>
+                        <string>Toolbar</string>
+                     </key>
+                     <value>
+                        <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d9p1:type="q1:string" xmlns:d9p1="http://www.w3.org/2001/XMLSchema-instance" />
+                     </value>
+                  </item>
+                  <item>
+                     <key>
+                        <string>Location</string>
+                     </key>
+                     <value>
+                        <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d9p1:type="q1:string" xmlns:d9p1="http://www.w3.org/2001/XMLSchema-instance" />
+                     </value>
+                  </item>
+                  <item>
+                     <key>
+                        <string>MergeIndex</string>
+                     </key>
+                     <value>
+                        <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d9p1:type="q1:int" xmlns:d9p1="http://www.w3.org/2001/XMLSchema-instance">-1</anyType>
+                     </value>
+                  </item>
+                  <item>
+                     <key>
+                        <string>Text</string>
+                     </key>
+                     <value>
+                        <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d9p1:type="q1:string" xmlns:d9p1="http://www.w3.org/2001/XMLSchema-instance" />
+                     </value>
+                  </item>
+               </PrimitiveDictionary>
+            </parameters>
+         </extension>
+      </tool>
+   </workbench>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCEDURE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <procedure id="C944381D-FD63-4121-9B74-F707321BB41A">
+      <name>Setup IO</name>
+      <id>C944381D-FD63-4121-9B74-F707321BB41A</id>
+      <hasverdict>True</hasverdict>
+      <profile>Procedure</profile>
+      <devstate>Stub</devstate>
+      <extension>
+         <name>Shortcut</name>
+         <plugin>ProcedureOrTestSuiteExecutionToolbarPlugin</plugin>
+         <parameters>
+            <PrimitiveDictionary>
+               <item>
+                  <key>
+                     <string>Partner</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Toolbar</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Location</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>MergeIndex</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:int" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance">-1</anyType>
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Text</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+            </PrimitiveDictionary>
+         </parameters>
+      </extension>
+      <steps>
+         <step type="ZapToolAction" index="0">
+            <name>action</name>
+            <id>A03826B6-2653-49DC-8C75-1EB90FBC3DA7</id>
+            <comment>Set Pin 4 to Input</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/4/direction"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">String</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>String</type>
+               <assignment>"Input"</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="1">
+            <name>action</name>
+            <id>8A3ED643-2FD2-48DB-A07B-D6646E9B79D3</id>
+            <comment>Set Pin 8 to Output</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/8/direction"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">String</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>String</type>
+               <assignment>"Output"</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="2">
+            <name>action</name>
+            <id>0536057D-F527-433E-9B5D-24700F44346C</id>
+            <comment>Set Pin 5 to Output</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/direction"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">String</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>String</type>
+               <assignment>"Output"</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="3">
+            <name>action</name>
+            <id>DC155480-45D1-4B6B-909B-367C0D239CA9</id>
+            <comment>Set Pin 11 to Input</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/direction"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">String</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>String</type>
+               <assignment>"Input"</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="4">
+            <name>action</name>
+            <id>52252296-F028-453D-9B0B-464074ADC071</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="5">
+            <name>action</name>
+            <id>B405C569-CAE1-4B61-833E-7B98660295BD</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_high2low"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="6">
+            <name>action</name>
+            <id>2FC04B8A-5C55-4746-8BF8-F832E899AC62</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_low2high"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+      </steps>
+   </procedure>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCEDURE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <procedure id="2B7C487C-1154-4099-A6A5-C2725955496D">
+      <name>Test Input and Output</name>
+      <id>2B7C487C-1154-4099-A6A5-C2725955496D</id>
+      <hasverdict>True</hasverdict>
+      <profile>Procedure</profile>
+      <flags>SkipRestOnFail</flags>
+      <devstate>Stub</devstate>
+      <extension>
+         <name>Shortcut</name>
+         <plugin>ProcedureOrTestSuiteExecutionToolbarPlugin</plugin>
+         <parameters>
+            <PrimitiveDictionary>
+               <item>
+                  <key>
+                     <string>Partner</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Toolbar</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Location</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>MergeIndex</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:int" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance">-1</anyType>
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Text</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+            </PrimitiveDictionary>
+         </parameters>
+      </extension>
+      <steps>
+         <step type="TestStep" index="0">
+            <id>644C0A5E-D351-4C2C-B9B8-35CF55D4943A</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>1</number>
+            <description>Set Pin 8 High</description>
+         </step>
+         <step type="ZapToolAction" index="1">
+            <name>action</name>
+            <id>614EB36D-FCBC-4E5D-825E-89CD43FB32D7</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/8/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="2">
+            <id>0D92D41B-A4E3-43E2-B066-966FB44A1DB0</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>2</number>
+            <description>Expect Pin 4 to be High</description>
+         </step>
+         <step type="Variable" index="3">
+            <name>pin4</name>
+            <id>2D8F3293-ABFE-4828-866C-B46C96DCF2CD</id>
+            <type>Bool</type>
+            <lifetime>Local</lifetime>
+            <assignment>true</assignment>
+         </step>
+         <step type="ZapToolAction" index="4">
+            <name>action</name>
+            <id>6CADF7F1-7115-48A6-B5D0-3CC848A90D1D</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/4/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <flags>Output</flags>
+               <assignment>pin4</assignment>
+            </parameter>
+         </step>
+         <step type="Expect" index="5">
+            <id>285B493D-2D9E-4F08-858B-8EBD3A439F68</id>
+            <expression>pin4 == true</expression>
+            <type>Standalone</type>
+            <action>Fail</action>
+            <failid>ExpectFailed</failid>
+         </step>
+         <step type="TestStep" index="6">
+            <id>5D95F502-8808-4BBC-9B5B-DD6564026266</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>3</number>
+            <description>Set Pin 8 Low</description>
+         </step>
+         <step type="ZapToolAction" index="7">
+            <name>action</name>
+            <id>42BA6DF2-DA5F-43CC-B76F-8BAB6590BC98</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/8/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="8">
+            <id>BAEAE2A7-7413-425B-A2C1-B35A8CBD5DB0</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>4</number>
+            <description>Expect Pin 4 to be Low</description>
+         </step>
+         <step type="ZapToolAction" index="9">
+            <name>action</name>
+            <id>FA94BE92-ACF8-456E-9599-C68514CC42D7</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/4/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <flags>Output</flags>
+               <assignment>pin4</assignment>
+            </parameter>
+         </step>
+         <step type="Expect" index="10">
+            <id>45E3E62E-99F4-4ACA-86A0-8B0EACF01186</id>
+            <expression>pin4 == false</expression>
+            <type>Standalone</type>
+            <action>Fail</action>
+            <failid>ExpectFailed</failid>
+         </step>
+      </steps>
+   </procedure>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCEDURE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <procedure id="9C7D570D-F17B-4A4C-9FB7-09EB9A1B414A">
+      <name>Test Counter</name>
+      <id>9C7D570D-F17B-4A4C-9FB7-09EB9A1B414A</id>
+      <hasverdict>True</hasverdict>
+      <profile>Procedure</profile>
+      <devstate>Stub</devstate>
+      <extension>
+         <name>Shortcut</name>
+         <plugin>ProcedureOrTestSuiteExecutionToolbarPlugin</plugin>
+         <parameters>
+            <PrimitiveDictionary>
+               <item>
+                  <key>
+                     <string>Partner</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Toolbar</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Location</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>MergeIndex</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:int" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance">-1</anyType>
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Text</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+            </PrimitiveDictionary>
+         </parameters>
+      </extension>
+      <steps>
+         <step type="TestStep" index="0">
+            <id>97BDEEE8-E981-4FF9-BEEE-F95BD4A1AA79</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>1</number>
+            <description>Set output high and setup counter</description>
+         </step>
+         <step type="ZapToolAction" index="1">
+            <name>action</name>
+            <id>F9CB1843-BC96-4320-8A01-26DF13421B18</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="2">
+            <name>action</name>
+            <id>7F26DED7-5E34-43AF-904B-E1C6DD67EC6B</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <assignment>0</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="3">
+            <name>action</name>
+            <id>02676E16-A53C-4E45-ACBF-28A0E517E4CB</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="4">
+            <name>action</name>
+            <id>60DA3E5A-2778-4BB9-86F2-B21F4A4B742C</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_high2low"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="5">
+            <name>action</name>
+            <id>76212F58-78C4-4519-BBD7-4429429050F1</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_low2high"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="6">
+            <id>91E3DE93-57B9-42ED-A536-CE215ED615EF</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>2</number>
+            <description>Toggle output a few times</description>
+         </step>
+         <step type="ProcedureCall" index="7">
+            <id>C9B177AE-421C-4AB9-A242-4341537BE5E9</id>
+            <target>Procedure</target>
+            <calltype>ReferenceDirect</calltype>
+            <reference>ArduinoIOTest.TogglePin5</reference>
+            <parameter>
+               <name>count</name>
+               <type>Integer</type>
+               <assignment>4</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="8">
+            <id>DAC373CA-24DA-4799-B5D7-32BCD9C1B408</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>3</number>
+            <description>Read counter; expect zero</description>
+         </step>
+         <step type="Variable" index="9">
+            <name>counter</name>
+            <id>D933FF45-E2F1-4CEB-B4CB-2FD905D4FEBE</id>
+            <type>Integer</type>
+            <lifetime>Local</lifetime>
+            <assignment>0</assignment>
+         </step>
+         <step type="ZapToolAction" index="10">
+            <name>action</name>
+            <id>4F27D57D-30B7-4077-A1A6-43818B624A49</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="11">
+            <id>676F7CCA-4AB0-4906-895A-E8D7C1B4F3D9</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="12">
+            <id>BBD21DF1-F681-42AB-89C1-B3356B1367E0</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>4</number>
+            <description>Enable counter</description>
+         </step>
+         <step type="ZapToolAction" index="13">
+            <name>action</name>
+            <id>3BCE1F3A-FF87-4FB1-9F58-015EA9E17472</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="14">
+            <id>5A8B59D8-C5B1-4594-9E53-00CFE3D4207C</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>5</number>
+            <description>Toggle 17 times</description>
+         </step>
+         <step type="ProcedureCall" index="15">
+            <id>BC61C474-4379-4CDF-9F98-FBC594A4FBD8</id>
+            <target>Procedure</target>
+            <calltype>ReferenceDirect</calltype>
+            <reference>ArduinoIOTest.TogglePin5</reference>
+            <parameter>
+               <name>count</name>
+               <type>Integer</type>
+               <assignment>17</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="16">
+            <id>CF11ABBE-251F-4C4C-B3BD-296D413B5F67</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>6</number>
+            <description>Read counter; expect toggles counted</description>
+         </step>
+         <step type="ZapToolAction" index="17">
+            <name>action</name>
+            <id>CF1B383F-C141-4125-8AD0-CB3DEEB99B58</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="18">
+            <id>6C121340-E7FA-4CCB-8F62-268D35BB0A0F</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>17</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="19">
+            <id>77C2FD56-E7B0-4CB9-8E7A-0790BBD1B5A7</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>7</number>
+            <description>Disable counter</description>
+         </step>
+         <step type="ZapToolAction" index="20">
+            <name>action</name>
+            <id>000696C9-FD5B-4A54-8868-D2086D2A0352</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="21">
+            <id>DBDDB2AD-70AB-4D04-BB55-A7E9E9199A85</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>8</number>
+            <description>Toggle output a few times</description>
+         </step>
+         <step type="ProcedureCall" index="22">
+            <id>2F607D69-4D6D-40B9-B331-AA241779F99E</id>
+            <target>Procedure</target>
+            <calltype>ReferenceDirect</calltype>
+            <reference>ArduinoIOTest.TogglePin5</reference>
+            <parameter>
+               <name>count</name>
+               <type>Integer</type>
+               <assignment>4</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="23">
+            <id>3794A92D-3980-4766-902B-BB2095C2448D</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>9</number>
+            <description>Read counter; expect same as before</description>
+         </step>
+         <step type="ZapToolAction" index="24">
+            <name>action</name>
+            <id>1042D8FF-8FEB-4909-9CE4-F7878225AFC3</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="25">
+            <id>2812A815-E0C5-4F94-96BD-F503C0D2CF64</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>17</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+      </steps>
+   </procedure>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCEDURE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <procedure id="AF117380-D674-436E-859B-A0AD027DB42E">
+      <name>Test Counter Trigger Edge</name>
+      <id>AF117380-D674-436E-859B-A0AD027DB42E</id>
+      <hasverdict>True</hasverdict>
+      <profile>Procedure</profile>
+      <flags>SkipRestOnFail</flags>
+      <devstate>Stub</devstate>
+      <extension>
+         <name>Shortcut</name>
+         <plugin>ProcedureOrTestSuiteExecutionToolbarPlugin</plugin>
+         <parameters>
+            <PrimitiveDictionary>
+               <item>
+                  <key>
+                     <string>Partner</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Toolbar</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Location</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>MergeIndex</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:int" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance">-1</anyType>
+                  </value>
+               </item>
+               <item>
+                  <key>
+                     <string>Text</string>
+                  </key>
+                  <value>
+                     <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d8p1:type="q1:string" xmlns:d8p1="http://www.w3.org/2001/XMLSchema-instance" />
+                  </value>
+               </item>
+            </PrimitiveDictionary>
+         </parameters>
+      </extension>
+      <steps>
+         <step type="TestStep" index="0">
+            <id>B2C3B37A-2DCE-472E-AA91-62F110681423</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>1</number>
+            <description>Set output high and setup counter</description>
+         </step>
+         <step type="ZapToolAction" index="1">
+            <name>action</name>
+            <id>F80C9C39-0DBE-4420-A39E-ED9AF85ADD78</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="2">
+            <name>action</name>
+            <id>DC631AFB-EAEF-448F-816D-A45219A04753</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <assignment>0</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="3">
+            <name>action</name>
+            <id>6065A73B-0AD7-4D01-88E9-30846AE12DC0</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="4">
+            <name>action</name>
+            <id>F121130F-9107-4566-AFDF-6BC906F96285</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_high2low"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="5">
+            <name>action</name>
+            <id>84F9818F-69BB-432A-96FA-669E2B06CEC1</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_low2high"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="6">
+            <id>F9952E85-3FC2-4E38-98B9-8E19A7738410</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>2</number>
+            <description>Read counter; expect zero</description>
+         </step>
+         <step type="Variable" index="7">
+            <name>counter</name>
+            <id>79B401D8-4DF3-4129-B5CA-06D5AFF59B8A</id>
+            <type>Integer</type>
+            <lifetime>Local</lifetime>
+            <assignment>0</assignment>
+         </step>
+         <step type="ZapToolAction" index="8">
+            <name>action</name>
+            <id>8FE9BD73-E1E2-4161-A9E5-DB0EB12DDDD7</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="9">
+            <id>B998A127-3DC5-466E-8E7A-FE45E632B4E4</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="10">
+            <id>3F4FE96C-5B21-46DF-91DD-179BFC1810B0</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>3</number>
+            <description>High to Low</description>
+         </step>
+         <step type="ZapToolAction" index="11">
+            <name>action</name>
+            <id>C4A0C140-D7DE-40E5-9F89-D0AA8D5510B3</id>
+            <comment>Set Low</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="12">
+            <id>D1AEF9F5-8AE0-41DB-80DA-2767A49DB361</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>4</number>
+            <description>Read counter; expect 1</description>
+         </step>
+         <step type="ZapToolAction" index="13">
+            <name>action</name>
+            <id>0FF03F74-6209-4A51-BB30-65DB1680B77F</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="14">
+            <id>AB7FBA21-EB42-43C3-B1D3-D0A382C0323B</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>1</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="15">
+            <id>39D5E3A0-32E0-43FE-BE3E-5152602C1167</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>5</number>
+            <description>Low to High</description>
+         </step>
+         <step type="ZapToolAction" index="16">
+            <name>action</name>
+            <id>4CE9A669-BC87-4604-8191-24C9E8309DD0</id>
+            <comment>Set High</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="17">
+            <id>294C0A5E-C831-488F-B87E-03A6854D7666</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>6</number>
+            <description>Read counter; expect same value</description>
+         </step>
+         <step type="ZapToolAction" index="18">
+            <name>action</name>
+            <id>9DF784F7-DA66-49D1-B7C7-4351F1A471E4</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="19">
+            <id>D2E52534-3E20-4200-AC90-57616E19A9CF</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>1</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="20">
+            <id>E1624BFC-5028-4A09-ADCC-7BBDD7BF60FD</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>7</number>
+            <description>High to Low</description>
+         </step>
+         <step type="ZapToolAction" index="21">
+            <name>action</name>
+            <id>8FEEEC29-A9C6-4F72-B868-22CE1AFC3C55</id>
+            <comment>Set Low</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="22">
+            <id>8245631B-63DB-4C6B-8F40-0937A2FD4F56</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>8</number>
+            <description>Read counter; expect 2</description>
+         </step>
+         <step type="ZapToolAction" index="23">
+            <name>action</name>
+            <id>F1A29686-15A3-48A2-88D6-4A0B1EB522DF</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="24">
+            <id>42BE8A3B-1A0F-4D33-8DB4-80EB5B9CF639</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>2</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="25">
+            <id>F6F8C654-21B4-4628-A208-E906EB7AEF71</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>9</number>
+            <description>Change to Low to High edge</description>
+         </step>
+         <step type="ZapToolAction" index="26">
+            <name>action</name>
+            <id>11D5EB5C-072F-43F1-96A4-700D5D5BE807</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_high2low"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="27">
+            <name>action</name>
+            <id>3F7ECDAA-FCA8-46FF-AFF6-A036F30288D1</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_low2high"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="28">
+            <id>6749BCBD-936D-4412-89F7-30672366EB76</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>10</number>
+            <description>Low to High</description>
+         </step>
+         <step type="ZapToolAction" index="29">
+            <name>action</name>
+            <id>2CCADF77-B0C4-4D02-8002-8387339C29DD</id>
+            <comment>Set High</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="30">
+            <id>0C257177-C7A9-4816-96F9-7DDF6DC99A74</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>11</number>
+            <description>Read counter; expect 3</description>
+         </step>
+         <step type="ZapToolAction" index="31">
+            <name>action</name>
+            <id>286BDAAE-23A1-446E-A7C1-1A35894A1834</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="32">
+            <id>ABBFA07C-F302-4DF0-86A2-32E24970950C</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>3</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="33">
+            <id>53347FA9-D464-4C02-AF68-37B84570F4BE</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>12</number>
+            <description>High to Low</description>
+         </step>
+         <step type="ZapToolAction" index="34">
+            <name>action</name>
+            <id>0B1BCB96-0C02-4866-8B68-07E64F89C3FF</id>
+            <comment>Set Low</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="35">
+            <id>53CB7E4F-3207-4690-8A3C-582A9FC17AEF</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>13</number>
+            <description>Read counter; expect same value</description>
+         </step>
+         <step type="ZapToolAction" index="36">
+            <name>action</name>
+            <id>0CABF30F-C44F-4645-BABC-F3A2356BDC38</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="37">
+            <id>FB0D8C5E-61B3-4F94-BFFB-18A661D13B9A</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>3</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="38">
+            <id>F5040BCC-0781-47A7-9B27-21856B36D10C</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>14</number>
+            <description>Low to High</description>
+         </step>
+         <step type="ZapToolAction" index="39">
+            <name>action</name>
+            <id>801224A1-4A52-489E-9F77-3C5E34E4622A</id>
+            <comment>Set High</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="40">
+            <id>ABD0A7F4-8881-4588-9CA9-C2705C6DCB3E</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>15</number>
+            <description>Read counter; expect 4</description>
+         </step>
+         <step type="ZapToolAction" index="41">
+            <name>action</name>
+            <id>15D4D797-0327-44BC-971F-F498F8A868C5</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+               <assignment>counter</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="42">
+            <id>280D5305-EF3A-4912-9E77-145D1A239EBC</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>4</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+         <step type="TestStep" index="43">
+            <id>A6838856-0DF7-4D8B-85CA-5B9BBF2DDB72</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>16</number>
+            <description>Disable counter ad test not counting</description>
+         </step>
+         <step type="ZapToolAction" index="44">
+            <name>action</name>
+            <id>CAB1743A-FD71-4EDC-AEEC-895108EE0D9F</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="ProcedureCall" index="45">
+            <id>02675F93-C759-432A-AAE5-A32294AE8996</id>
+            <target>Procedure</target>
+            <calltype>ReferenceDirect</calltype>
+            <reference>ArduinoIOTest.TogglePin5</reference>
+            <parameter>
+               <name>count</name>
+               <type>Integer</type>
+               <assignment>3</assignment>
+            </parameter>
+         </step>
+         <step type="ExpectNumeric" index="46">
+            <id>EC4C90E7-5994-41B6-9910-8F04C3E04DA5</id>
+            <action>Fail</action>
+            <type>Equals</type>
+            <source>
+               <type>Variable</type>
+               <value>counter</value>
+            </source>
+            <firstExpectValue>
+               <type>Constant</type>
+               <value>4</value>
+            </firstExpectValue>
+            <secondExpectValue>
+               <type>Constant</type>
+               <value>0</value>
+            </secondExpectValue>
+         </step>
+      </steps>
+   </procedure>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCEDURE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <procedure id="92FACF4B-C74B-4F42-B881-F2ABA9396055">
+      <name>Try Counter</name>
+      <id>92FACF4B-C74B-4F42-B881-F2ABA9396055</id>
+      <hasverdict>True</hasverdict>
+      <profile>Procedure</profile>
+      <devstate>Stub</devstate>
+      <steps>
+         <step type="TestStep" index="0">
+            <id>6801FFFC-2AF4-4709-837C-2D80F79B4896</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>1</number>
+            <description>Set output high and setup counter</description>
+         </step>
+         <step type="ZapToolAction" index="1">
+            <name>action</name>
+            <id>B5F15E0C-3875-478D-A1B6-49E8FA5C7124</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="2">
+            <name>action</name>
+            <id>E24D311F-AFFD-4478-9AC3-A02795E302BB</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <assignment>0</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="3">
+            <name>action</name>
+            <id>9F5C6D89-1654-4B9D-98A3-A0A05E794C52</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter_enabled"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="4">
+            <name>action</name>
+            <id>D6E296A9-AA17-48F0-852C-D4E25E12DFD2</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_high2low"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="5">
+            <name>action</name>
+            <id>9F96DCCA-BCAE-4235-A86F-3AB6BCC62A1F</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/count_on_low2high"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="TestStep" index="6">
+            <id>91FD2453-B622-445B-A9F9-9EC720BE1E0C</id>
+            <flags>SkipDuringSingleStep</flags>
+            <number>2</number>
+            <description>Toggle pin and read counter</description>
+         </step>
+         <step type="Variable" index="7">
+            <name>i</name>
+            <id>761ABBF4-D462-4F3C-B94D-F3BC71053CD4</id>
+            <type>Integer</type>
+            <lifetime>Local</lifetime>
+            <assignment>0</assignment>
+         </step>
+         <step type="LoopWhile" index="8">
+            <id>154EB2E2-E1F7-4F11-AB46-82B49619DD49</id>
+            <expression>i &lt; 5</expression>
+         </step>
+         <step type="LogComment" index="9">
+            <id>36971843-FA72-4A09-B994-53697EB65357</id>
+            <expression>"Low"</expression>
+         </step>
+         <step type="ZapToolAction" index="10">
+            <name>action</name>
+            <id>3F403F04-0CA4-4BC8-9E2B-F7ADC8504CB0</id>
+            <comment>Set Low...</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="11">
+            <name>action</name>
+            <id>15C58408-5D25-43C8-80CD-701A17F1EB0C</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+            </parameter>
+         </step>
+         <step type="LogComment" index="12">
+            <id>E1305613-BA5F-4E75-9022-4280A9EB8F9A</id>
+            <expression>"High"</expression>
+         </step>
+         <step type="ZapToolAction" index="13">
+            <name>action</name>
+            <id>FBE0C4C8-5DC3-470B-87FC-CAFE9FB6F5C1</id>
+            <comment>... and High again</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="14">
+            <name>action</name>
+            <id>1F2C9FDC-A56A-436B-A3CF-0CFF303C5361</id>
+            <ToolID>AutomationToolBox.AutomationConnection.Get Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/11/counter"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Integer</ExpectedType>
+               <UseCachedValue type="Bool">false</UseCachedValue>
+               <OutputParameters type="parameter">0</OutputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Integer</type>
+               <flags>Output</flags>
+            </parameter>
+         </step>
+         <step type="Expression" index="15">
+            <id>7A35BCFB-4E86-4128-A0AA-3DFCD9A8C97E</id>
+            <expression>i++</expression>
+         </step>
+         <step type="EndBlock" index="16">
+            <id>C9A3F648-5924-4243-AC6F-B5CB25D99B8E</id>
+         </step>
+      </steps>
+   </procedure>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCEDURE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <procedure id="0568D04A-833B-4D58-BEB2-9C911F579174">
+      <name>TogglePin5</name>
+      <id>0568D04A-833B-4D58-BEB2-9C911F579174</id>
+      <hasverdict>True</hasverdict>
+      <profile>Procedure</profile>
+      <prototype>
+         <id>90AA923E-1C26-49F6-A30C-70AAB12B641F</id>
+         <parameter>
+            <name>count</name>
+            <type>Integer</type>
+         </parameter>
+      </prototype>
+      <flags>DisableLogging</flags>
+      <devstate>Stub</devstate>
+      <steps>
+         <step type="Variable" index="0">
+            <name>i</name>
+            <id>6A178DC8-D1BC-4B73-AAB0-9D22ABA4A8AC</id>
+            <type>Integer</type>
+            <lifetime>Local</lifetime>
+            <assignment>0</assignment>
+         </step>
+         <step type="LoopWhile" index="1">
+            <id>4AE4B0A0-A28E-4262-B096-7738FD9B26F0</id>
+            <expression>i &lt; count</expression>
+         </step>
+         <step type="ZapToolAction" index="2">
+            <name>action</name>
+            <id>92186027-6B35-4C3B-B81D-935377705714</id>
+            <comment>Set Low...</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>false</assignment>
+            </parameter>
+         </step>
+         <step type="ZapToolAction" index="3">
+            <name>action</name>
+            <id>6EC27825-3DBA-433A-8E40-858ABDF6A76A</id>
+            <comment>... and High again</comment>
+            <commentlocation>Right</commentlocation>
+            <ToolID>AutomationToolBox.AutomationConnection.Set Property</ToolID>
+            <InstanceRefType>ByVariable</InstanceRefType>
+            <InstanceReference>ArduinoIOTest.io</InstanceReference>
+            <ToolData>
+               <Object type="String">"/digital/5/pin"</Object>
+               <ExpectedType type="Enum - Sequanto.Automation.DataType">Boolean</ExpectedType>
+               <InputParameters type="parameter">0</InputParameters>
+            </ToolData>
+            <parameter>
+               <name>Value</name>
+               <type>Bool</type>
+               <assignment>true</assignment>
+            </parameter>
+         </step>
+         <step type="Expression" index="4">
+            <id>0CDA366D-58CA-47F5-B28D-E3DC8FA94E8F</id>
+            <expression>i++</expression>
+         </step>
+         <step type="EndBlock" index="5">
+            <id>40079860-BC80-4A7B-BEC4-5AAA353D3D4E</id>
+         </step>
+      </steps>
+   </procedure>
+</filedata>

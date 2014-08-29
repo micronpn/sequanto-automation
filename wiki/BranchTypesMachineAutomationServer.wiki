@@ -11,7 +11,8 @@ Information about the actual machine automation server.
 
 || process_id || int || Process ID of the running machine automation server. ||
 || version || string || Version of the machine automation server. ||
-
+|| vendor  || string || The vendor of the machine automation server. ||
+|| revision || string || The SCM (or something like it) revision of the machine automation server. ||
 
 = Callables =
 

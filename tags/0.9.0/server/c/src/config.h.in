@@ -1,0 +1,100 @@
+/*
+ * config.h
+ *
+ *  Created on: 27/09/2009
+ *      Author: Rasmus T. Olesen <rasmus@sequanto.com>
+ */
+
+#ifdef SQ_USE_ALTERNATIVE_CONFIG_H
+#include "config_alternative.h"
+#else
+
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+#define SQ_SVN_REVISION "${SQ_SVN_REVISION}"
+#define CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}"
+#define CPACK_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}"
+
+#cmakedefine SQ_USE_BSD_SOCKETS
+#cmakedefine SQ_USE_WINSOCK
+#cmakedefine SQ_USE_MUTEXES
+#cmakedefine SQ_USE_THREADS
+#cmakedefine HAVE_STDLIB_H
+#cmakedefine HAVE_STDIO_H
+#cmakedefine HAVE_STDINT_H
+#cmakedefine HAVE_SNPRINTF
+#cmakedefine HAVE_UNDERSCORE_SNPRINTF
+#cmakedefine HAVE_SNPRINTF_S
+#cmakedefine HAVE_UNDERSCORE_SNPRINTF_S
+#cmakedefine HAVE_DTOSTRF
+#cmakedefine HAVE_WINSOCK2_H
+#cmakedefine HAVE_SYS_SOCKET_H
+#cmakedefine HAVE_INT64_T
+#cmakedefine SQ_WIN32
+#cmakedefine SQ_UNIX
+#cmakedefine SQ_ARDUINO
+#cmakedefine SQ_ARDUINO_STREAM
+#define SQ_ARDUINO_STREAM_${SQ_ARDUINO_STREAM}
+#cmakedefine SQ_LOGGING_ENABLED
+#cmakedefine SQ_C_SUPPORTS_INLINE
+#cmakedefine SQ_USE_ASSERT
+#cmakedefine SQ_BUILD_SHARED_LIBRARIES
+
+#define SQ_MAX_STRING_LENGTH ${SQ_MAX_STRING_LENGTH}
+#define SQ_MAX_OBJECT_LENGTH ${SQ_MAX_OBJECT_LENGTH}
+#define SQ_MAX_PARAMETERS ${SQ_MAX_PARAMETERS}
+#define SQ_SOCKET_TIMEOUT ${SQ_SOCKET_TIMEOUT}
+#define SQ_MAX_VALUE_LENGTH ${SQ_MAX_VALUE_LENGTH}
+
+#ifdef SQ_LOGGING_ENABLED
+
+#include <stdio.h>
+
+#define SQ_LOG0(format) printf ( format );
+#define SQ_LOG1(format, arg1) printf ( format, arg1 );
+#define SQ_LOG2(format, arg1, arg2) printf ( format, arg1, arg2 );
+#define SQ_LOG3(format, arg1, arg2, arg3) printf ( format, arg1, arg2, arg3 );
+
+#else
+
+#define SQ_LOG0(format)
+#define SQ_LOG1(format, arg1)
+#define SQ_LOG2(format, arg1, arg2)
+#define SQ_LOG3(format, arg1, arg2, arg3)
+
+#endif
+
+#ifdef HAVE_SNPRINTF
+#define SNPRINTF_FUNCTION snprintf
+#else
+#ifdef HAVE_UNDERSCORE_SNPRINTF
+#define SNPRINTF_FUNCTION _snprintf
+#define HAVE_SNPRINTF
+#endif
+#endif
+
+#ifdef HAVE_SNPRINTF_S
+#define SNPRINTF_S_FUNCTION snprintf_s
+#else
+#ifdef HAVE_UNDERSCORE_SNPRINTF_S
+#define SNPRINTF_S_FUNCTION _snprintf_s
+#define HAVE_SNPRINTF_S
+#endif
+#endif
+
+#ifdef SQ_C_SUPPORTS_INLINE
+#define SQ_INLINE inline
+#else
+#define SQ_INLINE 
+#endif
+
+#ifdef SQ_USE_ASSERT
+#define SQ_ASSERT assert
+#else
+#define SQ_ASSERT while(0) 
+#endif
+
+#endif /* _CONFIG_H_ */
+
+#endif /* SQ_USE_ALTERNATIVE_CONFIG_H */

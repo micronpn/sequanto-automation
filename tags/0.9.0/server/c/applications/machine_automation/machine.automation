@@ -1,0 +1,66 @@
+name machine
+
+import server.c
+import files.c
+import memory.c
+import process.c
+import windows.c
+import mouse.c
+import windows_capture_screen.c
+
+typedef int size_t
+
+property /server/version server_version
+property /server/vendor server_vendor
+property /server/revision server_revision
+function /server/quit server_quit
+property /server/process_id server_process_id
+
+property /files/separator files_separator
+function /files/number_of_directories files_number_of_directories
+function /files/number_of_files files_number_of_files
+function /files/file_name files_filename
+function /files/directory_name files_directoryname
+function /files/size files_size
+function /files/read files_read
+function /files/write files_write
+function /files/create_directory files_create_directory
+function /files/remove_directory files_remove_directory
+function /files/remove_file files_remove_file
+
+property /memory/total_physical memory_total_physical
+property /memory/available_physical memory_available_physical
+property /memory/total_virtual memory_total_virtual
+property /memory/available_virtual memory_available_virtual
+
+property /process/count process_count
+function /process/refresh process_refresh
+function /process/id process_id
+function /process/name process_name
+function /process/filename process_filename
+function /process/memory process_memory
+function /process/owner process_owner
+function /process/cmdline process_cmdline
+
+property /windows/desktops windows_desktops
+function /windows/desktop windows_desktop
+function /windows/ref windows_ref
+function /windows/unref windows_unref
+function /windows/name windows_name
+function /windows/process_id windows_process_id
+function /windows/children windows_children
+function /windows/child windows_child
+function /windows/x windows_x
+function /windows/y windows_y
+function /windows/width windows_width
+function /windows/height windows_height
+function /windows/role windows_role
+function /windows/text windows_text
+function /windows/actions windows_actions
+function /windows/action_name windows_action_name
+function /windows/action_do windows_action_do
+monitor /windows/capture_click const char *
+function /windows/capture_screen windows_capture_screen
+
+function /mouse/click_at mouse_click_at
+#monitor /mouse/capture_click int int int

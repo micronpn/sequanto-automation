@@ -1,0 +1,29 @@
+name arduino_demo
+
+import main.cpp
+import clock.cpp
+import tempcontrol.cpp
+
+# DUT data
+function /svn_revision svn_revision
+#function /get_name get_name
+
+# Clock
+function /clock/now clock_now
+function /clock/nowtext clock_nowtext
+property /clock/weekday get_weekday set_weekday
+property /clock/hour get_hour set_hour
+property /clock/minute get_minute set_minute
+property /clock/second get_second set_second
+
+# Temperature
+property /temp/current get_currenttemp set_currenttemp
+property /temp/heater get_heaterstate set_heaterstate
+function /temp/readtemp read_temperature
+function /temp/readvoltage read_voltage
+property /temp/setpoint get_tempsetpoint set_tempsetpoint
+property /temp/day/temp get_daytemp set_daytemp
+property /temp/day/clock get_dayclock set_dayclock
+property /temp/night/used get_nighttempused set_nighttempused
+property /temp/night/temp get_nighttemp set_nighttemp
+property /temp/night/clock get_nightclock set_nightclock

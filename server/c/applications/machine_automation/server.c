@@ -23,9 +23,23 @@ int server_process_id ()
 
 #endif
 
-const char * server_version ( void )
+const char * server_revision ( void )
 {
    static char buff[] = SQ_SVN_REVISION;
+   
+   return buff;
+}
+
+const char * server_version ( void )
+{
+   static char buff[] = CPACK_PACKAGE_VERSION;
+   
+   return buff;
+}
+
+const char * server_vendor ( void )
+{
+   static char buff[] = CPACK_PACKAGE_VENDOR;
    
    return buff;
 }

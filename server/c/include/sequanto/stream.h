@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -30,7 +30,7 @@ typedef void (*SQStreamDataReceivedFunction) ( SQStream * _stream, void * _data,
  * Open a stream listening for connections on the given port number
  * (if using TCP) or just listening for data on the serial port with
  * number _portNumber.
- * 
+ *
  * Although you may register a callback function using
  * sq_stream_set_data_received_handler it will only be called if
  * sq_stream_poll is called periodically.
@@ -40,7 +40,7 @@ SQ_DECL SQStream * sq_stream_open ( int _portNumber );
 /**
  * Register a function that should be called when data is received
  * from the stream.
- * 
+ *
  * @param _stream The stream to subscribe to.
  * @param _handler The handler to be called when data is available.
  * @param _data _data Extra data that will be supplied to the handler when it is invoked.
@@ -80,7 +80,7 @@ SQ_DECL SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte );
  * call sq_stream_enter_write and sq_stream_exit_write before and
  * after a write operation which might consist of more than one call
  * to the various sq_stream_write_* functions.
- * 
+ *
  * @see sq_stream_enter_write
  */
 SQ_DECL void sq_stream_enter_write ( SQStream * _stream );
@@ -92,7 +92,7 @@ SQ_DECL void sq_stream_exit_write ( SQStream * _stream );
 
 /**
  * Make the current thread wait for the listning thread of this stream to end.
- * 
+ *
  * Only available for platforms with thread support.
  */
 SQ_DECL void sq_stream_join ( SQStream * _stream );

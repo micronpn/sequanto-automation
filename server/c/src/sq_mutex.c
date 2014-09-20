@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -39,7 +39,7 @@ SQMutex * sq_mutex_create ( void )
 
 void sq_mutex_enter ( SQMutex * _mutex )
 {
-   EnterCriticalSection ( &_mutex->m_criticalSection );
+    EnterCriticalSection ( &_mutex->m_criticalSection );
 }
 
 void sq_mutex_leave ( SQMutex * _mutex )
@@ -71,7 +71,7 @@ SQMutex * sq_mutex_create ()
     pthread_mutexattr_t attr;
     pthread_mutexattr_init ( &attr );
     pthread_mutexattr_settype ( &attr, PTHREAD_MUTEX_RECURSIVE_NP );
-    
+
     mutex = malloc(sizeof(SQMutex));
     pthread_mutex_init ( &mutex->m_mutex, &attr );
 
@@ -97,11 +97,11 @@ void sq_mutex_destroy ( SQMutex * _mutex )
 
 #endif
 
-#else 
+#else
 
 typedef struct _SQMutex
 {
-   unsigned char unused_parameter;
+    unsigned char unused_parameter;
 } _SQMutex;
 
 SQMutex * sq_mutex_create ()

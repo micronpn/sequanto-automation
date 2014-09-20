@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -30,7 +30,7 @@ int sq_circular_buffer_available ( int _size, int _readPosition, int _writePosit
     {
         return _size;
     }
-    
+
     if ( _readPosition > _writePosition )
     {
         return _size - _readPosition + _writePosition;
@@ -43,14 +43,14 @@ int sq_circular_buffer_available ( int _size, int _readPosition, int _writePosit
 
 SQBool sq_circular_buffer_empty ( int _readPosition, int _writePosition )
 {
-	if ( _readPosition == _writePosition )
-	{
-		return SQ_TRUE;
-	}
-	else
-	{
-		return SQ_FALSE;
-	}
+    if ( _readPosition == _writePosition )
+    {
+        return SQ_TRUE;
+    }
+    else
+    {
+        return SQ_FALSE;
+    }
 }
 
 SQBool sq_circular_buffer_full ( int _readPosition )
@@ -71,14 +71,14 @@ void sq_circular_buffer_push ( int _size, volatile int * _readPosition, volatile
     {
         *_readPosition = *_writePosition;
     }
-    
+
     _data[*_writePosition] = _value;
     *_writePosition = *_writePosition + 1;
     if ( *_writePosition >= _size )
     {
         *_writePosition = 0;
     }
-    
+
     if ( *_writePosition == *_readPosition )
     {
         *_readPosition = -1;
@@ -93,7 +93,7 @@ SQByte sq_circular_buffer_pop ( int _size, volatile int * _readPosition, volatil
     {
         *_readPosition = *_writePosition;
     }
-    
+
     ret = _data[*_readPosition];
     *_readPosition = *_readPosition + 1;
     if ( *_readPosition >= _size )

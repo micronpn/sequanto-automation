@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -32,21 +32,21 @@ typedef struct _SQStream
 
 SQStream * sq_stream_open ( int _portNumber )
 {
-   SQStream * ret = (SQStream*) malloc ( sizeof(SQStream) );
-   ret->m_handler = NULL;
-   ret->m_handlerData = NULL;
-   return ret;
+    SQStream * ret = (SQStream*) malloc ( sizeof(SQStream) );
+    ret->m_handler = NULL;
+    ret->m_handlerData = NULL;
+    return ret;
 }
 
 void sq_stream_close ( SQStream * _stream )
 {
-   free ( _stream );
+    free ( _stream );
 }
 
 void sq_stream_set_data_received_handler ( SQStream * _stream, SQStreamDataReceivedFunction _handler, void * _data )
 {
-   _stream->m_handler = _handler;
-   _stream->m_handlerData = _data;
+    _stream->m_handler = _handler;
+    _stream->m_handlerData = _data;
 }
 
 void sq_stream_poll( SQStream * _stream )
@@ -67,11 +67,11 @@ SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
 
 SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 {
-	while (pString->HasMore(pString))
-	{
-		arduino_serial_write_byte( pString->GetNext(pString) );
-	}
-	return SQ_TRUE;
+    while (pString->HasMore(pString))
+    {
+        arduino_serial_write_byte( pString->GetNext(pString) );
+    }
+    return SQ_TRUE;
 }
 
 SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )

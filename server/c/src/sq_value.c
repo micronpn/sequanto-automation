@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -24,184 +24,184 @@
 
 void sq_value_init ( SQValue * _value )
 {
-   _value->m_type = VALUE_TYPE_NO_VALUE;
+    _value->m_type = VALUE_TYPE_NO_VALUE;
 }
 
 void sq_value_integer ( SQValue * _value, int _initialValue)
 {
-   _value->m_type = VALUE_TYPE_INTEGER;
-   _value->Value.m_integerValue = _initialValue;
+    _value->m_type = VALUE_TYPE_INTEGER;
+    _value->Value.m_integerValue = _initialValue;
 }
 
 void sq_value_float ( SQValue * _value, float _initialValue)
 {
-   _value->m_type = VALUE_TYPE_FLOAT;
-   _value->Value.m_floatValue = _initialValue;
+    _value->m_type = VALUE_TYPE_FLOAT;
+    _value->Value.m_floatValue = _initialValue;
 }
 
 void sq_value_boolean ( SQValue * _value, SQBool _initialValue)
 {
-   _value->m_type = VALUE_TYPE_BOOLEAN;
-   _value->Value.m_booleanValue = _initialValue;
+    _value->m_type = VALUE_TYPE_BOOLEAN;
+    _value->Value.m_booleanValue = _initialValue;
 }
 
 void sq_value_string ( SQValue * _value, char * _initialValue)
 {
-   _value->m_type = VALUE_TYPE_STRING;
-   _value->Value.m_stringValue = _initialValue;
+    _value->m_type = VALUE_TYPE_STRING;
+    _value->Value.m_stringValue = _initialValue;
 }
 
 static const char EMPTY_STRING[] SQ_CONST_VARIABLE = "";
 
 void sq_value_string_empty ( SQValue * _value )
 {
-   _value->m_type = VALUE_TYPE_CONST_STRING;
-   _value->Value.m_constStringValue = EMPTY_STRING;
+    _value->m_type = VALUE_TYPE_CONST_STRING;
+    _value->Value.m_constStringValue = EMPTY_STRING;
 }
 
 void sq_value_const_string ( SQValue * _value, const char * _initialValue)
 {
-   _value->m_type = VALUE_TYPE_CONST_STRING;
-   _value->Value.m_constStringValue = _initialValue;
+    _value->m_type = VALUE_TYPE_CONST_STRING;
+    _value->Value.m_constStringValue = _initialValue;
 }
 
 #ifdef SQ_ARDUINO
 char * strdup ( const char * _value )
 {
-  char * ret;
-  size_t length = strlen(_value);
-  ret = (char*) malloc(length + 1);
-  memcpy ( ret, _value, length + 1 );
-  return ret;
+    char * ret;
+    size_t length = strlen(_value);
+    ret = (char*) malloc(length + 1);
+    memcpy ( ret, _value, length + 1 );
+    return ret;
 }
 #endif
 
 void sq_value_string_copy ( SQValue * _value, const char * const _initialValue)
 {
-   _value->m_type = VALUE_TYPE_STRING;
+    _value->m_type = VALUE_TYPE_STRING;
 #ifdef SQ_WIN32
-   _value->Value.m_stringValue = _strdup(_initialValue);
+    _value->Value.m_stringValue = _strdup(_initialValue);
 #else
-   _value->Value.m_stringValue = strdup(_initialValue);
+    _value->Value.m_stringValue = strdup(_initialValue);
 #endif
 }
 
 void sq_value_byte_array ( SQValue * _value, SQByteArray * _initialValue )
 {
-   _value->m_type = VALUE_TYPE_BYTE_ARRAY;
-   _value->Value.m_byteArrayValue = _initialValue;
+    _value->m_type = VALUE_TYPE_BYTE_ARRAY;
+    _value->Value.m_byteArrayValue = _initialValue;
 }
 
 void sq_value_const_byte_array ( SQValue * _value, SQByte * _initialValue, size_t _byteArrayLength)
 {
-   _value->m_type = VALUE_TYPE_CONST_BYTE_ARRAY;
-   _value->Value.m_byteArrayValue = sq_byte_array_create ( _initialValue, _byteArrayLength );
+    _value->m_type = VALUE_TYPE_CONST_BYTE_ARRAY;
+    _value->Value.m_byteArrayValue = sq_byte_array_create ( _initialValue, _byteArrayLength );
 }
 
 void sq_value_null ( SQValue * _value )
 {
-   _value->m_type = VALUE_TYPE_NULL;
+    _value->m_type = VALUE_TYPE_NULL;
 }
 
 SQBool sq_value_write ( const SQValue * const _value, SQStream * _stream )
 {
-   switch ( _value->m_type )
-   {
-   case VALUE_TYPE_INTEGER:
-      return sq_protocol_write_integer ( _stream, _value->Value.m_integerValue );
+    switch ( _value->m_type )
+    {
+    case VALUE_TYPE_INTEGER:
+        return sq_protocol_write_integer ( _stream, _value->Value.m_integerValue );
 
-   case VALUE_TYPE_STRING:
-      return sq_protocol_write_string ( _stream, _value->Value.m_stringValue );
+    case VALUE_TYPE_STRING:
+        return sq_protocol_write_string ( _stream, _value->Value.m_stringValue );
 
-   case VALUE_TYPE_CONST_STRING:
-      return sq_protocol_write_string ( _stream, _value->Value.m_constStringValue );
+    case VALUE_TYPE_CONST_STRING:
+        return sq_protocol_write_string ( _stream, _value->Value.m_constStringValue );
 
-   case VALUE_TYPE_BOOLEAN:
-      return sq_protocol_write_boolean ( _stream, _value->Value.m_booleanValue );
+    case VALUE_TYPE_BOOLEAN:
+        return sq_protocol_write_boolean ( _stream, _value->Value.m_booleanValue );
 
-   case VALUE_TYPE_BYTE_ARRAY:
-   case VALUE_TYPE_CONST_BYTE_ARRAY:      
-      return sq_protocol_write_byte_array ( _stream, _value->Value.m_byteArrayValue->m_start, _value->Value.m_byteArrayValue->m_start + _value->Value.m_byteArrayValue->m_length );
-      
-   case VALUE_TYPE_FLOAT:
-      return sq_protocol_write_float ( _stream, _value->Value.m_floatValue );
+    case VALUE_TYPE_BYTE_ARRAY:
+    case VALUE_TYPE_CONST_BYTE_ARRAY:
+        return sq_protocol_write_byte_array ( _stream, _value->Value.m_byteArrayValue->m_start, _value->Value.m_byteArrayValue->m_start + _value->Value.m_byteArrayValue->m_length );
 
-   case VALUE_TYPE_NULL:
-      return sq_protocol_write_null ( _stream );
+    case VALUE_TYPE_FLOAT:
+        return sq_protocol_write_float ( _stream, _value->Value.m_floatValue );
 
-   default:
-      return SQ_FALSE;
-   }
+    case VALUE_TYPE_NULL:
+        return sq_protocol_write_null ( _stream );
+
+    default:
+        return SQ_FALSE;
+    }
 }
 
 void sq_value_free ( SQValue * _value )
 {
-  switch ( _value->m_type )
-  {
-  case VALUE_TYPE_STRING:
-    free ( _value->Value.m_stringValue );
-    _value->Value.m_stringValue = NULL;
-    break;
-    
-  case VALUE_TYPE_CONST_STRING:
-    _value->Value.m_constStringValue = NULL;
-    break;
-      
-  case VALUE_TYPE_BYTE_ARRAY:
-     sq_byte_array_free ( _value->Value.m_byteArrayValue, SQ_TRUE );
-     _value->Value.m_byteArrayValue = NULL;
-     break;
+    switch ( _value->m_type )
+    {
+    case VALUE_TYPE_STRING:
+        free ( _value->Value.m_stringValue );
+        _value->Value.m_stringValue = NULL;
+        break;
 
-  case VALUE_TYPE_CONST_BYTE_ARRAY:
-     sq_byte_array_free ( _value->Value.m_byteArrayValue, SQ_FALSE );
-     _value->Value.m_byteArrayValue = NULL;
-     break;
+    case VALUE_TYPE_CONST_STRING:
+        _value->Value.m_constStringValue = NULL;
+        break;
 
-  default:
-    break;
-  }
-  _value->m_type = VALUE_TYPE_NO_VALUE;
+    case VALUE_TYPE_BYTE_ARRAY:
+        sq_byte_array_free ( _value->Value.m_byteArrayValue, SQ_TRUE );
+        _value->Value.m_byteArrayValue = NULL;
+        break;
+
+    case VALUE_TYPE_CONST_BYTE_ARRAY:
+        sq_byte_array_free ( _value->Value.m_byteArrayValue, SQ_FALSE );
+        _value->Value.m_byteArrayValue = NULL;
+        break;
+
+    default:
+        break;
+    }
+    _value->m_type = VALUE_TYPE_NO_VALUE;
 }
 
 SQBool sq_values_write ( const SQValue * const _start, size_t _numberOfValues, SQStream * _stream )
 {
-   const SQValue * it = _start;
-   for ( ; it != _start + _numberOfValues; it++ )
-   {
-      if ( it != _start )
-      {
-         if ( sq_stream_write_byte ( _stream, ' ' ) == SQ_FALSE ) return SQ_FALSE;
-      }
-      if ( sq_value_write ( it, _stream ) == SQ_FALSE ) return SQ_FALSE;
-   }
-   return SQ_TRUE;
+    const SQValue * it = _start;
+    for ( ; it != _start + _numberOfValues; it++ )
+    {
+        if ( it != _start )
+        {
+            if ( sq_stream_write_byte ( _stream, ' ' ) == SQ_FALSE ) return SQ_FALSE;
+        }
+        if ( sq_value_write ( it, _stream ) == SQ_FALSE ) return SQ_FALSE;
+    }
+    return SQ_TRUE;
 }
 
 #define READ_OR_FAIL(_buffer) { _buffer++; if ( *_buffer == '\0' ) return NULL; }
 
 SQByte * sq_parse_identifier ( SQValue * _value, SQByte * _buffer )
 {
-   if ( *_buffer == 't' )
-   {
-      sq_value_boolean ( _value, SQ_TRUE );
-   }
-   else if ( *_buffer == 'f' )
-   {
-      sq_value_boolean ( _value, SQ_FALSE );
-   }
-   else if ( *_buffer == 'n' )
-   {
-      sq_value_null ( _value );
-   }
-   else
-   {
-      return NULL;
-   }
-   while ( *_buffer >= 'a' && *_buffer <= 'z' )
-   {
-      READ_OR_FAIL ( _buffer );
-   }
-   return _buffer;
+    if ( *_buffer == 't' )
+    {
+        sq_value_boolean ( _value, SQ_TRUE );
+    }
+    else if ( *_buffer == 'f' )
+    {
+        sq_value_boolean ( _value, SQ_FALSE );
+    }
+    else if ( *_buffer == 'n' )
+    {
+        sq_value_null ( _value );
+    }
+    else
+    {
+        return NULL;
+    }
+    while ( *_buffer >= 'a' && *_buffer <= 'z' )
+    {
+        READ_OR_FAIL ( _buffer );
+    }
+    return _buffer;
 }
 
 static SQ_INLINE SQByte sq_parse_decode_hex_character ( SQByte _character )
@@ -236,16 +236,16 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
         numBytes ++;
         _buffer ++;
     }
-    
+
     /* If numBytes is even then we have received only "half" of the last byte. */
     if ( (numBytes & 1) != 0 )
     {
         SQ_LOG0("Received an un-even number of hexadecimal characters when parsing byte array.");
         return NULL;
     }
-    
+
     numBytes = numBytes / 2;
-    
+
     bytes = malloc ( numBytes );
     for ( ; start != _buffer; start += 2 )
     {
@@ -253,223 +253,223 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
         i++;
     }
     sq_value_byte_array ( _value, sq_byte_array_create(bytes, numBytes) );
-    
+
     return _buffer;
 }
 
 SQByte * sq_parse_integer_or_float ( SQValue * _value, SQByte * _buffer )
 {
-   SQBool negate = SQ_FALSE;
-   int value = 0;
-   float floatValue = 0;
+    SQBool negate = SQ_FALSE;
+    int value = 0;
+    float floatValue = 0;
 
-   if ( *_buffer == '-' )
-   {
-      negate = SQ_TRUE;
+    if ( *_buffer == '-' )
+    {
+        negate = SQ_TRUE;
 
-      READ_OR_FAIL ( _buffer );
-   }
+        READ_OR_FAIL ( _buffer );
+    }
 
-   while ( (*_buffer >= '0' && *_buffer <= '9') )
-   {
-      value = value * 10 + (*_buffer - '0');
+    while ( (*_buffer >= '0' && *_buffer <= '9') )
+    {
+        value = value * 10 + (*_buffer - '0');
 
-      READ_OR_FAIL( _buffer );
-   }
-   if ( *_buffer == '.' )
-   {
-      READ_OR_FAIL ( _buffer );
+        READ_OR_FAIL( _buffer );
+    }
+    if ( *_buffer == '.' )
+    {
+        READ_OR_FAIL ( _buffer );
 
-      floatValue = (float) value;
-      value = 10;
-      while ( *_buffer >= '0' && *_buffer <= '9' )
-      {
-         floatValue = floatValue + ((float) (*_buffer - '0')) / ((float) value);
+        floatValue = (float) value;
+        value = 10;
+        while ( *_buffer >= '0' && *_buffer <= '9' )
+        {
+            floatValue = floatValue + ((float) (*_buffer - '0')) / ((float) value);
 
-         READ_OR_FAIL(_buffer);
-         value = value * 10;
-      }
-      if ( negate == SQ_TRUE )
-      {
-         floatValue = -floatValue;
-      }
-     sq_value_float ( _value, floatValue );
-   }
-   else
-   {
-      if ( negate == SQ_TRUE )
-      {
-         value = -value;
-      }
-      sq_value_integer ( _value, value );
-   }
-   return _buffer;
+            READ_OR_FAIL(_buffer);
+            value = value * 10;
+        }
+        if ( negate == SQ_TRUE )
+        {
+            floatValue = -floatValue;
+        }
+        sq_value_float ( _value, floatValue );
+    }
+    else
+    {
+        if ( negate == SQ_TRUE )
+        {
+            value = -value;
+        }
+        sq_value_integer ( _value, value );
+    }
+    return _buffer;
 }
 
 SQByte * sq_parse_string ( SQValue * _value, SQByte * _buffer )
 {
-   size_t i = 0;
-   SQBool escaped = SQ_FALSE;
+    size_t i = 0;
+    SQBool escaped = SQ_FALSE;
 
-   char parsedString[SQ_MAX_STRING_LENGTH];
-   memset ( &parsedString, 0, SQ_MAX_STRING_LENGTH );
+    char parsedString[SQ_MAX_STRING_LENGTH];
+    memset ( &parsedString, 0, SQ_MAX_STRING_LENGTH );
 
-   READ_OR_FAIL(_buffer);
-   while ( (*_buffer != '"' || escaped == SQ_TRUE) )
-   {
-      if ( escaped == SQ_TRUE )
-      {
-         if ( *_buffer == 'r' )
-         {
-            parsedString[i] = '\r';
-         }
-         else if ( *_buffer == 'n' )
-         {
-            parsedString[i] = '\n';
-         }
-         else
-         {
+    READ_OR_FAIL(_buffer);
+    while ( (*_buffer != '"' || escaped == SQ_TRUE) )
+    {
+        if ( escaped == SQ_TRUE )
+        {
+            if ( *_buffer == 'r' )
+            {
+                parsedString[i] = '\r';
+            }
+            else if ( *_buffer == 'n' )
+            {
+                parsedString[i] = '\n';
+            }
+            else
+            {
+                parsedString[i] = *_buffer;
+            }
+            i++;
+            escaped = SQ_FALSE;
+        }
+        else if ( *_buffer == '\\' )
+        {
+            escaped = SQ_TRUE;
+        }
+        else
+        {
             parsedString[i] = *_buffer;
-         }
-         i++;
-         escaped = SQ_FALSE;
-      }
-      else if ( *_buffer == '\\' )
-      {
-         escaped = SQ_TRUE;
-      }
-      else
-      {
-         parsedString[i] = *_buffer;
-         i++;
-      }
-      READ_OR_FAIL(_buffer);
-   }
-   sq_value_string_copy ( _value, (const char * const) &parsedString );
-   return _buffer;
+            i++;
+        }
+        READ_OR_FAIL(_buffer);
+    }
+    sq_value_string_copy ( _value, (const char * const) &parsedString );
+    return _buffer;
 }
 
 #undef READ_OR_FAIL
 
 size_t sq_values_parse ( SQValue * _start, size_t _maximumValues, SQByte * _buffer )
 {
-   size_t valuesRead = 0;
+    size_t valuesRead = 0;
 
-   while ( valuesRead < _maximumValues && *_buffer != '\n' && *_buffer != '\r' )
-   {
-      while ( *_buffer == ' ' )
-      {
-         _buffer ++;
-         if ( *_buffer == '\0' )
-         {
+    while ( valuesRead < _maximumValues && *_buffer != '\n' && *_buffer != '\r' )
+    {
+        while ( *_buffer == ' ' )
+        {
+            _buffer ++;
+            if ( *_buffer == '\0' )
+            {
+                return valuesRead;
+            }
+        }
+        if ( *_buffer == '"' )
+        {
+            _buffer = sq_parse_string ( _start + valuesRead, _buffer );
+            if ( _buffer == NULL )
+            {
+                return valuesRead;
+            }
+            valuesRead ++;
+            _buffer++;
+            if ( *_buffer == '\0' )
+            {
+                return valuesRead;
+            }
+        }
+        else if ( (*_buffer >= '0' && *_buffer <= '9') || *_buffer == '-' )
+        {
+            if ( *(_buffer + 1) == 'x' )
+            {
+                _buffer = sq_parse_byte_array ( _start + valuesRead, _buffer + 2 );
+                if ( _buffer == NULL )
+                {
+                    return valuesRead;
+                }
+                valuesRead ++;
+            }
+            else
+            {
+                _buffer = sq_parse_integer_or_float ( _start + valuesRead, _buffer );
+                if ( _buffer == NULL )
+                {
+                    return valuesRead;
+                }
+                valuesRead ++;
+            }
+        }
+        else if ( *_buffer >= 'a' && *_buffer <= 'z' )
+        {
+            _buffer = sq_parse_identifier ( _start + valuesRead, _buffer );
+            if ( _buffer == NULL )
+            {
+                return valuesRead;
+            }
+            valuesRead ++;
+        }
+        else
+        {
             return valuesRead;
-         }
-      }
-      if ( *_buffer == '"' )
-      {
-         _buffer = sq_parse_string ( _start + valuesRead, _buffer );
-         if ( _buffer == NULL )
-         {
-            return valuesRead;
-         }
-         valuesRead ++;
-         _buffer++;
-         if ( *_buffer == '\0' )
-         {
-            return valuesRead;
-         }
-      }
-      else if ( (*_buffer >= '0' && *_buffer <= '9') || *_buffer == '-' )
-      {
-          if ( *(_buffer + 1) == 'x' )
-          {
-              _buffer = sq_parse_byte_array ( _start + valuesRead, _buffer + 2 );
-              if ( _buffer == NULL )
-              {
-                  return valuesRead;
-              }
-              valuesRead ++;
-          }
-          else
-          {
-              _buffer = sq_parse_integer_or_float ( _start + valuesRead, _buffer );
-              if ( _buffer == NULL )
-              {
-                  return valuesRead;
-              }
-              valuesRead ++;
-          }
-      }
-      else if ( *_buffer >= 'a' && *_buffer <= 'z' )
-      {
-         _buffer = sq_parse_identifier ( _start + valuesRead, _buffer );
-         if ( _buffer == NULL )
-         {
-            return valuesRead;
-         }
-         valuesRead ++;
-      }
-      else
-      {
-         return valuesRead;
-      }
-   }
-   if ( *_buffer != '\n' && *_buffer != '\r' )
-   {
-      /* Return + 1 to indicate that we did not have enough space to parse all the parameters given. */
-       return valuesRead + 1;
-   }
-   else
-   {
-       return valuesRead;
-   }
+        }
+    }
+    if ( *_buffer != '\n' && *_buffer != '\r' )
+    {
+        /* Return + 1 to indicate that we did not have enough space to parse all the parameters given. */
+        return valuesRead + 1;
+    }
+    else
+    {
+        return valuesRead;
+    }
 }
 
 void sq_value_copy ( SQValue * _from, SQValue * _to )
 {
-   switch ( _from->m_type )
-   {
-   case VALUE_TYPE_NO_VALUE:
-      sq_value_init ( _to );
-      break;
-      
-   case VALUE_TYPE_INTEGER:
-      sq_value_integer ( _to, _from->Value.m_integerValue );
-      break;
-      
-   case VALUE_TYPE_FLOAT:
-      sq_value_float ( _to, _from->Value.m_floatValue );
-      break;
-      
-   case VALUE_TYPE_BOOLEAN:
-      sq_value_boolean ( _to, _from->Value.m_booleanValue );
-      break;
-      
-   case VALUE_TYPE_STRING:
-      sq_value_string_copy ( _to, _from->Value.m_stringValue );
-      break;
-      
-   case VALUE_TYPE_BYTE_ARRAY:
-      sq_value_byte_array ( _to, sq_byte_array_clone ( _from->Value.m_byteArrayValue ) );
-      break;
-      
-   case VALUE_TYPE_NULL:
-      sq_value_null ( _to );
-      break;
-      
-   case VALUE_TYPE_VOID:
-      _to->m_type = VALUE_TYPE_VOID;
-      break;
-      
-   case VALUE_TYPE_CONST_STRING:
-      sq_value_const_string ( _to, _from->Value.m_constStringValue );
-      break;
-      
-   case VALUE_TYPE_CONST_BYTE_ARRAY:
-      sq_value_const_byte_array ( _to, _from->Value.m_byteArrayValue->m_start,
-                                  _from->Value.m_byteArrayValue->m_length );
-      break;
-   }
+    switch ( _from->m_type )
+    {
+    case VALUE_TYPE_NO_VALUE:
+        sq_value_init ( _to );
+        break;
+
+    case VALUE_TYPE_INTEGER:
+        sq_value_integer ( _to, _from->Value.m_integerValue );
+        break;
+
+    case VALUE_TYPE_FLOAT:
+        sq_value_float ( _to, _from->Value.m_floatValue );
+        break;
+
+    case VALUE_TYPE_BOOLEAN:
+        sq_value_boolean ( _to, _from->Value.m_booleanValue );
+        break;
+
+    case VALUE_TYPE_STRING:
+        sq_value_string_copy ( _to, _from->Value.m_stringValue );
+        break;
+
+    case VALUE_TYPE_BYTE_ARRAY:
+        sq_value_byte_array ( _to, sq_byte_array_clone ( _from->Value.m_byteArrayValue ) );
+        break;
+
+    case VALUE_TYPE_NULL:
+        sq_value_null ( _to );
+        break;
+
+    case VALUE_TYPE_VOID:
+        _to->m_type = VALUE_TYPE_VOID;
+        break;
+
+    case VALUE_TYPE_CONST_STRING:
+        sq_value_const_string ( _to, _from->Value.m_constStringValue );
+        break;
+
+    case VALUE_TYPE_CONST_BYTE_ARRAY:
+        sq_value_const_byte_array ( _to, _from->Value.m_byteArrayValue->m_start,
+                                    _from->Value.m_byteArrayValue->m_length );
+        break;
+    }
 }
 
 #undef READ_OR_FAIL

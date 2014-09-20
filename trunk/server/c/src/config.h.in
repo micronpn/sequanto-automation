@@ -86,13 +86,13 @@
 #ifdef SQ_C_SUPPORTS_INLINE
 #define SQ_INLINE inline
 #else
-#define SQ_INLINE 
+#define SQ_INLINE
 #endif
 
 #ifdef SQ_USE_ASSERT
 #define SQ_ASSERT assert
 #else
-#define SQ_ASSERT while(0) 
+#define SQ_ASSERT while(0)
 #endif
 
 #endif /* _CONFIG_H_ */

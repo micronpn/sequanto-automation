@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -25,11 +25,11 @@ SQ_BEGIN_DECL
 
 /**
  * @defgroup value Variant struct for automation values.
- * 
+ *
  * The SQValue struct is used through-out the library, both for
  * holding values read by the parser, or when exchanging values with
  * user code.
- * 
+ *
  * @ingroup c
  * @{
  */
@@ -39,17 +39,17 @@ SQ_BEGIN_DECL
  */
 typedef enum
 {
-	VALUE_TYPE_NO_VALUE,
-	VALUE_TYPE_INTEGER,
-	VALUE_TYPE_FLOAT,
-	VALUE_TYPE_BOOLEAN,
-	VALUE_TYPE_STRING,
-	VALUE_TYPE_SQSTRINGOUT = VALUE_TYPE_STRING,
-	VALUE_TYPE_BYTE_ARRAY,
-	VALUE_TYPE_NULL,
-   VALUE_TYPE_VOID,
-	VALUE_TYPE_CONST_STRING,
-	VALUE_TYPE_CONST_BYTE_ARRAY
+    VALUE_TYPE_NO_VALUE,
+    VALUE_TYPE_INTEGER,
+    VALUE_TYPE_FLOAT,
+    VALUE_TYPE_BOOLEAN,
+    VALUE_TYPE_STRING,
+    VALUE_TYPE_SQSTRINGOUT = VALUE_TYPE_STRING,
+    VALUE_TYPE_BYTE_ARRAY,
+    VALUE_TYPE_NULL,
+    VALUE_TYPE_VOID,
+    VALUE_TYPE_CONST_STRING,
+    VALUE_TYPE_CONST_BYTE_ARRAY
 } SQValueType;
 
 /**
@@ -59,16 +59,16 @@ typedef enum
  */
 typedef struct
 {
-	SQValueType m_type;
-   union
-   {
-      int m_integerValue;
-      float m_floatValue;
-      SQBool m_booleanValue;
-      char * m_stringValue;
-      const char * m_constStringValue;
-      SQByteArray * m_byteArrayValue;
-   } Value;
+    SQValueType m_type;
+    union
+    {
+        int m_integerValue;
+        float m_floatValue;
+        SQBool m_booleanValue;
+        char * m_stringValue;
+        const char * m_constStringValue;
+        SQByteArray * m_byteArrayValue;
+    } Value;
 } SQValue;
 
 /**

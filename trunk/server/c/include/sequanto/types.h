@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -36,22 +36,22 @@ typedef struct _SQStringOut SQStringOut;
 
 struct _SQStringOut
 {
-  /* Callback to get the text char by char.*/
-  char (*GetNext)(SQStringOut * _string);  
-  /* Callback that returns true if there are more chars to get by the GetNext callback. */
-  SQBool (*HasMore)(SQStringOut * _string); 
-	union
-	{
-		void * m_data;
-		char * m_text;
-	} Data; 
+    /* Callback to get the text char by char.*/
+    char (*GetNext)(SQStringOut * _string);
+    /* Callback that returns true if there are more chars to get by the GetNext callback. */
+    SQBool (*HasMore)(SQStringOut * _string);
+    union
+    {
+        void * m_data;
+        char * m_text;
+    } Data;
     /* Can be used by creator and callbacks to keep track of how many chars that has been returned. */
-	int m_index;
-	union
-	{
-		int m_length;
-		void * m_extra;
-	} Extra;
+    int m_index;
+    union
+    {
+        int m_length;
+        void * m_extra;
+    } Extra;
 };
 
 extern char sq_external_get_next_fixed_length( SQStringOut *pString );
@@ -60,8 +60,8 @@ extern SQStringOut sq_external_fixed_length_string( char *pText, int length );
 
 typedef struct _SQByteArray
 {
-   SQByte * m_start;
-   size_t m_length;
+    SQByte * m_start;
+    size_t m_length;
 } SQByteArray;
 
 /**

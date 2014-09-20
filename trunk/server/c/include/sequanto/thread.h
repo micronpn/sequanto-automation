@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -24,9 +24,9 @@ SQ_BEGIN_DECL
 
 /**
  * @defgroup thread Threading and mutexes.
- * 
+ *
  * Wrapper around the platform specific threading primitives.
- * 
+ *
  * On platforms which do not support threads and mutexes (embedded
  * platforms) they will simply do nothing.
  *
@@ -52,7 +52,7 @@ SQ_DECL SQBool sq_thread_is_supported ( void );
 /**
  * Create a thread which will run the function _function in a new
  * thread when sq_thread_start is called.
- * 
+ *
  * The _data will be passed as a parameter to the _function when the
  * thread is started.
  */

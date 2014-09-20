@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Rasmus Toftdahl Olesen <rasmus@sequanto.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
@@ -100,67 +100,67 @@ const char * const SQ_UI_WINDOW_BACKGROUND_COLOR SQ_CONST_VARIABLE = "background
 
 const char * sq_widget_type_to_string ( SQWidgetType _type )
 {
-   switch ( _type )
-   {
-   case SQ_WIDGET_TYPE_UNKNOWN:
-      return SQ_WIDGET_TYPE_UNKNOWN_STRING;
+    switch ( _type )
+    {
+    case SQ_WIDGET_TYPE_UNKNOWN:
+        return SQ_WIDGET_TYPE_UNKNOWN_STRING;
 
-   case SQ_WIDGET_TYPE_WIDGET:
-      return SQ_WIDGET_TYPE_WIDGET_STRING;
+    case SQ_WIDGET_TYPE_WIDGET:
+        return SQ_WIDGET_TYPE_WIDGET_STRING;
 
-   case SQ_WIDGET_TYPE_CONTAINER:
-      return SQ_WIDGET_TYPE_CONTAINER_STRING;
+    case SQ_WIDGET_TYPE_CONTAINER:
+        return SQ_WIDGET_TYPE_CONTAINER_STRING;
 
-   case SQ_WIDGET_TYPE_BUTTON:
-      return SQ_WIDGET_TYPE_BUTTON_STRING;
+    case SQ_WIDGET_TYPE_BUTTON:
+        return SQ_WIDGET_TYPE_BUTTON_STRING;
 
-   case SQ_WIDGET_TYPE_LABEL:
-      return SQ_WIDGET_TYPE_LABEL_STRING;
+    case SQ_WIDGET_TYPE_LABEL:
+        return SQ_WIDGET_TYPE_LABEL_STRING;
 
-   case SQ_WIDGET_TYPE_CHECK_BOX:
-      return SQ_WIDGET_TYPE_CHECK_BOX_STRING;
+    case SQ_WIDGET_TYPE_CHECK_BOX:
+        return SQ_WIDGET_TYPE_CHECK_BOX_STRING;
 
-   case SQ_WIDGET_TYPE_RADIO_BUTTON:
-      return SQ_WIDGET_TYPE_RADIO_BUTTON_STRING;
+    case SQ_WIDGET_TYPE_RADIO_BUTTON:
+        return SQ_WIDGET_TYPE_RADIO_BUTTON_STRING;
 
-   case SQ_WIDGET_TYPE_TEXT_BOX:
-      return SQ_WIDGET_TYPE_TEXT_BOX_STRING;
+    case SQ_WIDGET_TYPE_TEXT_BOX:
+        return SQ_WIDGET_TYPE_TEXT_BOX_STRING;
 
-   case SQ_WIDGET_TYPE_MENU_BAR:
-      return SQ_WIDGET_TYPE_MENU_BAR_STRING;
+    case SQ_WIDGET_TYPE_MENU_BAR:
+        return SQ_WIDGET_TYPE_MENU_BAR_STRING;
 
-   case SQ_WIDGET_TYPE_MENU_ITEM:
-      return SQ_WIDGET_TYPE_MENU_ITEM_STRING;
+    case SQ_WIDGET_TYPE_MENU_ITEM:
+        return SQ_WIDGET_TYPE_MENU_ITEM_STRING;
 
-   case SQ_WIDGET_TYPE_STATUS_BAR:
-      return SQ_WIDGET_TYPE_STATUS_BAR_STRING;
+    case SQ_WIDGET_TYPE_STATUS_BAR:
+        return SQ_WIDGET_TYPE_STATUS_BAR_STRING;
 
-   case SQ_WIDGET_TYPE_SLIDER:
-      return SQ_WIDGET_TYPE_SLIDER_STRING;
+    case SQ_WIDGET_TYPE_SLIDER:
+        return SQ_WIDGET_TYPE_SLIDER_STRING;
 
-   case SQ_WIDGET_TYPE_SCROLL_AREA:
-      return SQ_WIDGET_TYPE_SCROLL_AREA_STRING;
+    case SQ_WIDGET_TYPE_SCROLL_AREA:
+        return SQ_WIDGET_TYPE_SCROLL_AREA_STRING;
 
-   case SQ_WIDGET_TYPE_TABLE:
-      return SQ_WIDGET_TYPE_TABLE_STRING;
+    case SQ_WIDGET_TYPE_TABLE:
+        return SQ_WIDGET_TYPE_TABLE_STRING;
 
-   case SQ_WIDGET_TYPE_TABS:
-      return SQ_WIDGET_TYPE_TABS_STRING;
+    case SQ_WIDGET_TYPE_TABS:
+        return SQ_WIDGET_TYPE_TABS_STRING;
 
-   case SQ_WIDGET_TYPE_TOOL_BAR:
-      return SQ_WIDGET_TYPE_TOOL_BAR_STRING;
+    case SQ_WIDGET_TYPE_TOOL_BAR:
+        return SQ_WIDGET_TYPE_TOOL_BAR_STRING;
 
-   case SQ_WIDGET_TYPE_PROGRESS_BAR:
-      return SQ_WIDGET_TYPE_PROGRESS_BAR_STRING;
+    case SQ_WIDGET_TYPE_PROGRESS_BAR:
+        return SQ_WIDGET_TYPE_PROGRESS_BAR_STRING;
 
-   case SQ_WIDGET_TYPE_LIST:
-      return SQ_WIDGET_TYPE_LIST_STRING;
+    case SQ_WIDGET_TYPE_LIST:
+        return SQ_WIDGET_TYPE_LIST_STRING;
 
-   case SQ_WIDGET_TYPE_COMBO_BOX:
-      return SQ_WIDGET_TYPE_COMBO_BOX_STRING;
+    case SQ_WIDGET_TYPE_COMBO_BOX:
+        return SQ_WIDGET_TYPE_COMBO_BOX_STRING;
 
 
-   default:
-      return SQ_WIDGET_TYPE_UNKNOWN_STRING;
-   }
+    default:
+        return SQ_WIDGET_TYPE_UNKNOWN_STRING;
+    }
 }

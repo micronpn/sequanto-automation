@@ -22,7 +22,7 @@
 #include "sequanto/system.h"
 #include "sequanto/stream.h"
 
-#include "arduino_serial.h"
+#include <HardwareSerial.h>
 
 typedef struct _SQStream
 {
@@ -55,13 +55,13 @@ void sq_stream_poll( SQStream * _stream )
 
 size_t sq_stream_data_available ( SQStream * _stream )
 {
-    return arduino_serial_available();
+    return Serial.available();
 }
 
 
 SQBool sq_stream_write_string ( SQStream * _stream, const char * const _string )
 {
-    arduino_serial_write ( _string );
+    Serial.write ( _string );
     return SQ_TRUE;
 }
 
@@ -69,20 +69,20 @@ SQBool sq_stream_write_SQStringOut ( SQStream * _stream, SQStringOut *pString )
 {
     while (pString->HasMore(pString))
     {
-        arduino_serial_write_byte( pString->GetNext(pString) );
+        Serial.write ( pString->GetNext(pString) );
     }
     return SQ_TRUE;
 }
 
 SQBool sq_stream_write_byte ( SQStream * _stream, SQByte _byte )
 {
-    arduino_serial_write_byte ( _byte );
+    Serial.write ( _byte );
     return SQ_TRUE;
 }
 
 SQBool sq_stream_read_byte ( SQStream * _stream, SQByte * _byte )
 {
-    int v = arduino_serial_read();
+    int v = Serial.read();
     *_byte = (SQByte) v;
     return SQ_TRUE;
 }

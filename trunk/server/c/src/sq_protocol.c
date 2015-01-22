@@ -26,7 +26,7 @@
 #include "sequanto/types.h"
 #include "sequanto/protocol.h"
 
-static char NEWLINE[] SQ_CONST_VARIABLE = "\r\n";
+static char SQ_PROTOCOL_NEWLINE[] SQ_CONST_VARIABLE = "\r\n";
 
 SQBool sq_protocol_write_type( SQStream * _stream, SQValueType _type )
 {
@@ -303,7 +303,7 @@ void sq_protocol_write_protocol_message ( SQStream * _stream )
     sq_stream_enter_write ( _stream );
     sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("+PROTOCOL ")) );
     sq_protocol_write_integer ( _stream, SQ_PROTOCOL_VERSION  );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -311,7 +311,7 @@ void sq_protocol_write_success_message ( SQStream * _stream )
 {
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -320,7 +320,7 @@ void sq_protocol_write_success_with_values_message ( SQStream * _stream, const S
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_values_write ( _value, _numberOfValues, _stream );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -328,7 +328,7 @@ void sq_protocol_write_failure_message ( SQStream * _stream )
 {
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '-' );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -337,7 +337,7 @@ void sq_protocol_write_failure_with_text_message ( SQStream * _stream, const cha
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '-' );
     sq_protocol_write_string ( _stream, _text );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -346,7 +346,7 @@ void sq_protocol_write_failure_with_values_message ( SQStream * _stream, const S
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '-' );
     sq_values_write ( _value, _numberOfValues, _stream );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -365,7 +365,7 @@ void sq_protocol_write_update_with_value_message( SQStream * _stream, const char
         sq_stream_write_byte ( _stream, ' ' );
         sq_value_write( _value, _stream );
     }
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -376,7 +376,7 @@ void sq_protocol_write_update_with_values_message( SQStream * _stream, const cha
     sq_stream_write_string ( _stream, _fullname );
     sq_stream_write_byte ( _stream, ' ' );
     sq_values_write ( _values, _numberOfValues, _stream );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -385,7 +385,7 @@ void sq_protocol_write_add_message( SQStream * _stream, const char * const _full
     sq_stream_enter_write ( _stream );
     sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!ADD ")) );
     sq_stream_write_string ( _stream, _fullname );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -394,7 +394,7 @@ void sq_protocol_write_remove_message( SQStream * _stream, const char * const _f
     sq_stream_enter_write ( _stream );
     sq_stream_write_string ( _stream, sq_get_constant_string(SQ_STRING_CONSTANT("!REMOVE ")) );
     sq_stream_write_string ( _stream, _fullname );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -403,7 +403,7 @@ void sq_protocol_write_success_with_integer_message ( SQStream * _stream, int _v
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_protocol_write_integer ( _stream, _value );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -412,7 +412,7 @@ void sq_protocol_write_success_with_string_message ( SQStream * _stream, const c
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_protocol_write_string ( _stream, _value );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -421,7 +421,7 @@ void sq_protocol_write_success_with_string_out_message ( SQStream * _stream, SQS
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_protocol_write_string_out ( _stream, _value );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -430,7 +430,7 @@ void sq_protocol_write_success_with_boolean_message ( SQStream * _stream, SQBool
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_protocol_write_boolean ( _stream, _value );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -439,7 +439,7 @@ void sq_protocol_write_success_with_float_message ( SQStream * _stream, float _v
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_protocol_write_float ( _stream, _value );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 
@@ -448,7 +448,7 @@ void sq_protocol_write_success_with_byte_array_message ( SQStream * _stream, SQB
     sq_stream_enter_write ( _stream );
     sq_stream_write_byte ( _stream, '+' );
     sq_protocol_write_byte_array ( _stream, _start, _end );
-    sq_stream_write_string ( _stream, sq_get_constant_string(NEWLINE) );
+    sq_stream_write_string ( _stream, sq_get_constant_string(SQ_PROTOCOL_NEWLINE) );
     sq_stream_exit_write ( _stream );
 }
 

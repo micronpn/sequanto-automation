@@ -246,7 +246,7 @@ SQByte * sq_parse_byte_array ( SQValue * _value, SQByte * _buffer )
 
     numBytes = numBytes / 2;
 
-    bytes = malloc ( numBytes );
+    bytes = (SQByte*) malloc ( numBytes );
     for ( ; start != _buffer; start += 2 )
     {
         bytes[i] = sq_parse_decode_two_hex_characters ( start );

@@ -9,8 +9,8 @@
 #include "config_alternative.h"
 #else
 
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef _SQ_CONFIG_H_
+#define _SQ_CONFIG_H_
 
 #define SQ_SVN_REVISION "${SQ_SVN_REVISION}"
 #define CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}"
@@ -33,9 +33,7 @@
 #cmakedefine HAVE_INT64_T
 #cmakedefine SQ_WIN32
 #cmakedefine SQ_UNIX
-#cmakedefine SQ_ARDUINO
-#cmakedefine SQ_ARDUINO_STREAM
-#define SQ_ARDUINO_STREAM_${SQ_ARDUINO_STREAM}
+//#cmakedefine SQ_ARDUINO
 #cmakedefine SQ_LOGGING_ENABLED
 #cmakedefine SQ_C_SUPPORTS_INLINE
 #cmakedefine SQ_USE_ASSERT
@@ -95,6 +93,14 @@
 #define SQ_ASSERT while(0)
 #endif
 
-#endif /* _CONFIG_H_ */
+/* Overrides for Arduino */
+#ifdef SQ_ARDUINO
+#undef SQ_USE_MUTEXES
+#undef SQ_USE_THREADS
+#undef HAVE_SNPRINTF
+#define HAVE_DTOSTRF
+#endif
+
+#endif /* _sq_CONFIG_H_ */
 
 #endif /* SQ_USE_ALTERNATIVE_CONFIG_H */

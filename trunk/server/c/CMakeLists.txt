@@ -20,7 +20,7 @@ IF(WIN32)
     SET(SQ_USE_WINSOCK ON)
     SET(SQ_USE_MUTEXES ON)
     SET(SQ_USE_THREADS ON)
-    CHECK_INCLUDE_FILE(winsock2.h HAVE_WINSOCK2_H) 
+    CHECK_INCLUDE_FILE(winsock2.h HAVE_WINSOCK2_H)
 
     SET(C_SRCS ${C_SRCS} src/sq_stream_tcp.c)
 ENDIF(WIN32)
@@ -30,19 +30,16 @@ IF(UNIX)
     SET(SQ_USE_BSD_SOCKETS 1)
     SET(SQ_USE_MUTEXES ON)
     SET(SQ_USE_THREADS ON)
-    
-    CHECK_INCLUDE_FILE(sys/socket.h HAVE_SYS_SOCKET_H) 
-    
+
+    CHECK_INCLUDE_FILE(sys/socket.h HAVE_SYS_SOCKET_H)
+
     SET(C_SRCS ${C_SRCS} src/sq_stream_tcp.c)
 ENDIF(UNIX)
 
 IF(SQ_ARDUINO)
-  SET(C_SRCS ${C_SRCS} src/sq_stream_${SQ_ARDUINO_STREAM}.c)
-  #SET(C_SRCS ${C_SRCS} src/sq_stream_arduino.c)
-
-  SET(SQ_USE_MUTEXES OFF)
-  SET(SQ_USE_THREADS OFF)
-  SET(HAVE_DTOSTRF ON)
+    SET(C_SRCS_ARDUINO ${C_SRCS} src/sq_stream_arduino.c)
+    FILE(COPY ${C_SRCS_ARDUINO} DESTINATION "${SQ_ARDUINO_OUTPUT}/libraries/SequantoAutomation/utility/src")
+    FILE(COPY ${C_HEADERS} DESTINATION "${SQ_ARDUINO_OUTPUT}/libraries/SequantoAutomation/sequanto")
 ENDIF(SQ_ARDUINO)
 
 STRING(REPLACE ";" ";c/" C_SRCS_ALL "${C_SRCS}")

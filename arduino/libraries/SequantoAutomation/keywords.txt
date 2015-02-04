@@ -1,0 +1,5 @@
+sq_init	KEYWORD2
+sq_shutdown	KEYWORD2
+sq_poll	KEYWORD2
+SequantoAutomation::init	KEYWORD2
+SequantoAutomation::poll	KEYWORD2

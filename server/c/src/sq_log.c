@@ -108,7 +108,7 @@ void sq_logf ( const char * _format, ... )
                     break;
 
                 case 's':
-                    stringValue = va_arg(lst, void*);
+                    stringValue = (const char*) va_arg(lst, void*);
                     sq_log_internal_write_string ( server->m_stream, stringValue );
                     break;
                 }

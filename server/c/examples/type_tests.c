@@ -1,6 +1,9 @@
+#ifndef SQ_ARDUINO
 #include <sequanto/types.h>
 #include <sequanto/log.h>
 #include "config.h"
+#include "test_server_automation.h"
+#endif
 
 typedef SQBool bool_t;
 typedef unsigned short UINT16;
@@ -25,8 +28,6 @@ static double doubleValue;
 static SQBool boolValue;
 static bool_t bool_tValue;
 static UINT16 UINT16Value;
-
-#include "test_server_automation.h"
 
 void type_test_reset ( void )
 {

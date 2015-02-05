@@ -16,5 +16,5 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(SQ_ARDUINO)
-    SQ_GENERATE_INO(test_server test_server.c test_server.automation)
+    SQ_GENERATE_INO(test_server test_server.automation test_server.c type_tests.c)
 ENDIF(SQ_ARDUINO)

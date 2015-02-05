@@ -1,8 +1,10 @@
+#ifndef SQ_ARDUINO
 #include <sequanto/automation.h>
 #include <sequanto/thread.h>
 #include <string.h>
 #include "test_server_automation.h"
 #include "config.h"
+#endif
 
 static int julemand;
 
@@ -109,13 +111,25 @@ const char * firmware_version ( void )
 #endif
 }
 
+#ifdef SQ_ARDUINO
+void setup ( void )
+{
+    SequantoAutomation::init();
+}
+
+void loop ( void )
+{
+    SequantoAutomation::poll();
+}
+
+#else
 int main ( int argc, char * argv[] )
 {
 #ifndef SQ_DISABLE_AUTOMATION_INTERFACE
    static SQServer server;
 
-   sq_init ();   
-    
+   sq_init ();
+
    sq_server_init ( &server, 4321 );
 
    while ( SQ_TRUE )
@@ -127,12 +141,13 @@ int main ( int argc, char * argv[] )
       sq_server_poll ( &server );
    }
 
-   sq_shutdown ();   
+   sq_shutdown ();
 #endif
 
    SQ_UNUSED_PARAMETER(argc);
    SQ_UNUSED_PARAMETER(argv);
 }
+#endif
 
 int function_with_many_parameters ( int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9,
                                     int b0, int b1, int b2, int b3, int b4, int b5, int b6, int b7, int b8, int b9 )

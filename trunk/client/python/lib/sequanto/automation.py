@@ -150,7 +150,7 @@ def parse_values_with_start ( _str, _start ):
             foundString, index = parse_string ( _str, index )
             ret.append ( foundString )
 
-        elif _str[index] in string.digits:
+        elif _str[index] in string.digits + '-':
             foundValue, index = parse_int_or_double_or_hex ( _str, index )
             ret.append ( foundValue )
 

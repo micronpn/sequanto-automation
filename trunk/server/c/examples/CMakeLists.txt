@@ -14,3 +14,7 @@ IF(UNIX)
   ADD_EXECUTABLE(liab_test liab_test.c ${SQ_GENERATE_liab_test})
   TARGET_LINK_LIBRARIES(liab_test SequantoAutomation)
 ENDIF(UNIX)
+
+IF(SQ_ARDUINO)
+    SQ_GENERATE_INO(test_server test_server.c test_server.automation)
+ENDIF(SQ_ARDUINO)

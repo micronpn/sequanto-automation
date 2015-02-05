@@ -7,9 +7,22 @@
  * BEGIN AUTOMATION
  *
  * function /hello hello_world
+ * property /led led_get led_set
  *
  * END AUTOMATION
  */
+
+static SQBool s_led = SQ_FALSE;
+
+SQBool led_get ()
+{
+  return s_led;
+}
+
+void led_get ( SQBool v )
+{
+  s_led = v;
+}
 
 char * hello_world ( const char * _name )
 {

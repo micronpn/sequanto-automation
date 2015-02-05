@@ -28,4 +28,13 @@ IF(SQ_ARDUINO)
 
     FILE(COPY ${_jarFile} DESTINATION "${SQ_ARDUINO_OUTPUT}/tools/SequantoAutomationTool/tool")
     FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/libraries DESTINATION "${SQ_ARDUINO_OUTPUT}")
+
+    MACRO(SQ_GENERATE_INO name source automation)
+        FILE(WRITE "${SQ_ARDUINO_OUTPUT}/libraries/SequantoAutomation/examples/${name}/${name}.ino" " /* BEGIN AUTOMATION\n\n")
+        FILE(READ ${automation} CONT)
+        FILE(APPEND "${SQ_ARDUINO_OUTPUT}/libraries/SequantoAutomation/examples/${name}/${name}.ino" "${CONT}")
+        FILE(APPEND "${SQ_ARDUINO_OUTPUT}/libraries/SequantoAutomation/examples/${name}/${name}.ino" "\n\nEND AUTOMATION */")
+        FILE(READ ${source} CONT)
+        FILE(APPEND "${SQ_ARDUINO_OUTPUT}/libraries/SequantoAutomation/examples/${name}/${name}.ino" "${CONT}")
+    ENDMACRO()
 ENDIF(SQ_ARDUINO)

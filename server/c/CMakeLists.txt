@@ -1,13 +1,13 @@
 SET(C_SRCS src/sq_automation.c src/sq_protocol.c src/sq_server.c
            src/sq_value.c src/sq_system.c src/sq_types.c src/sq_thread.c
-           src/sq_mutex.c src/sq_parser.c src/sq_log.c src/sq_ui.c
+           src/sq_mutex.c src/sq_parser.c src/sq_log.c
            src/sq_circularbuffer.c
            ${EXTRA_SRCS})
 
 SET(C_HEADERS include/sequanto/automation.h include/sequanto/stream.h
               include/sequanto/protocol.h include/sequanto/server.h
               include/sequanto/value.h include/sequanto/system.h
-              include/sequanto/log.h include/sequanto/ui.h
+              include/sequanto/log.h
               include/sequanto/circularbuffer.h include/sequanto/types.h
               include/sequanto/thread.h include/sequanto/parser.h
               include/sequanto/macros.h)

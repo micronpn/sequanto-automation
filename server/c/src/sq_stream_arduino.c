@@ -32,6 +32,7 @@ typedef struct _SQStream
 
 SQStream * sq_stream_open ( int _portNumber )
 {
+    Serial.begin(57600);
     SQStream * ret = (SQStream*) malloc ( sizeof(SQStream) );
     ret->m_handler = NULL;
     ret->m_handlerData = NULL;

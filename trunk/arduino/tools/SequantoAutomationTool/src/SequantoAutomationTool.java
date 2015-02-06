@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.*;
 import java.io.*;
+import java.util.Scanner;
 
 import processing.app.*;
 import processing.core.*;
@@ -38,10 +39,10 @@ public class SequantoAutomationTool implements Tool
                 Base.showMessage ( "ERROR", String.format("Could not find generator python script at %s", m_generatorPy) );
             }
             Sketch sketch = m_editor.getSketch();
-            //if ( sketch.isModified() )
-            //{
-            //    sketch.save();
-            //}
+            if ( sketch.isModified() )
+            {
+                sketch.save();
+            }
             //String sketchName = sketch.getName();
             //SketchCode codeObject = sketch.getCurrentCode();
             //String code = codeObject.getProgram();
@@ -63,9 +64,12 @@ public class SequantoAutomationTool implements Tool
                     writer.close();
                     try
                     {
-                        ProcessBuilder process = new ProcessBuilder(m_generatorPy,automationFileName.getAbsolutePath() );
-                        process.directory ( sketch.prepareCodeFolder() );
-                        process.start().waitFor();
+                        ProcessBuilder processBuilder = new ProcessBuilder(m_generatorPy, "-s", automationFileName.getAbsolutePath() );
+                        processBuilder.directory ( sketch.prepareCodeFolder() );
+                        processBuilder.redirectErrorStream ( true );
+                        Process process =processBuilder.start();
+                        inheritIO(process.getInputStream(), System.out);
+                        int result = process.waitFor();
 
                         String includeLibLine = "#include \"SequantoAutomation.h\"\n";
                         if ( !code.contains(includeLibLine) )
@@ -84,11 +88,20 @@ public class SequantoAutomationTool implements Tool
                         }
                         if ( m_editor.getText() != code )
                         {
-                            System.out.println ( "Setting code to" );
-                            System.out.println ( code );
-                            System.out.println ( "Current text was" );
-                            System.out.println ( m_editor.getText() );
-                            m_editor.setText ( code);
+                            //System.out.println ( "Setting code to" );
+                            //System.out.println ( code );
+                            //System.out.println ( "Current text was" );
+                            //System.out.println ( m_editor.getText() );
+                            m_editor.setText ( code );
+                        }
+
+                        if ( result == 0 )
+                        {
+                            System.out.println ( "Sequanto automation code generated successfully!" );
+                        }
+                        else
+                        {
+                            System.out.println ( "ERROR!!!" );
                         }
                     }
                     catch ( Exception ex )
@@ -110,5 +123,16 @@ public class SequantoAutomationTool implements Tool
         {
             Base.showMessage("ERROR", "Could not save sketch before trying to generate." );
         }
+    }
+
+    private static void inheritIO(final InputStream src, final PrintStream dest) {
+        new Thread(new Runnable() {
+                public void run() {
+                    Scanner sc = new Scanner(src);
+                    while (sc.hasNextLine()) {
+                        dest.println(sc.nextLine());
+                    }
+                }
+            }).start();
     }
 }

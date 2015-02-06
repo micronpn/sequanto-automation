@@ -16,7 +16,7 @@ IF(SQ_ARDUINO)
         ERROR("Could not find pde.jar at ${SQ_ARDUINO_IDE_PATH}/lib/pde.jar")
     ENDIF()
 
-    SET(CMAKE_JAVA_COMPILE_FLAGS "-target" "1.7")
+    SET(CMAKE_JAVA_COMPILE_FLAGS "-target" "1.5" "-source" "1.5")
 
     ADD_JAR(SequantoAutomationTool tools/SequantoAutomationTool/src/SequantoAutomationTool.java INCLUDE_JARS "${SQ_ARDUINO_IDE_PATH}/lib/core.jar" "${SQ_ARDUINO_IDE_PATH}/lib/pde.jar")
 

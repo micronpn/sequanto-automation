@@ -315,7 +315,8 @@ class AutomationFile ( object ):
     def setErrorReportingFilename ( self, _filename ):
         self.m_errorReportingFilename = _filename
 
-    def __init__ ( self ):
+    def __init__ ( self, _silent = False ):
+        self.m_silent = _silent
         self.m_parser = get_code_parser('C')
         self.m_imports = []
         self.m_properties = []
@@ -339,6 +340,9 @@ class AutomationFile ( object ):
         self.m_seenUpdateFunctions = set()
 
     def parse ( self, _input, _searchDirectory ):
+        if not self.m_silent:
+            print 'Parsing %s' % self.m_errorReportingFilename
+
         lineNumber = 1
         for line in _input.readlines():
             line = line.strip()
@@ -655,7 +659,8 @@ class AutomationFile ( object ):
                 fp.write ( '   free ( %s );\n' % value )
 
     def generate ( self ):
-        print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
+        if not self.m_silent:
+            print 'Writing interface to %s_automation.c (in %s)' % (self.m_name, path.abspath(path.curdir))
 
         fp = open ( '%s_automation.c' % self.m_name, 'w' )
         fp.write ( '/*\n' )
@@ -1116,10 +1121,13 @@ class AutomationFile ( object ):
         fp.write ( '#endif\n' )
         fp.close()
 
-automationFile = AutomationFile()
-for arg in sys.argv[1:]:
-    print 'Parsing %s' % arg
+silent = False
+if '-s' in sys.argv:
+    silent = True
+    sys.argv.remove ( '-s' )
+automationFile = AutomationFile(silent)
 
+for arg in sys.argv[1:]:
     fp = None
     try:
         fp = open (arg, 'r')

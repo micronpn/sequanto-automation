@@ -26,7 +26,9 @@ IF(SQ_ARDUINO)
     MESSAGE(STATUS "Jar file ${_jarFile}")
     MESSAGE(STATUS "Class compiled to ${_classDir}")
 
-    FILE(COPY ${_jarFile} DESTINATION "${SQ_ARDUINO_OUTPUT}/tools/SequantoAutomationTool/tool")
+    ADD_CUSTOM_COMMAND(TARGET SequantoAutomationTool POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${_jarFile}" "${SQ_ARDUINO_OUTPUT}/tools/SequantoAutomationTool/tool/SequantoAutomationTool.jar")
+
     FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/libraries DESTINATION "${SQ_ARDUINO_OUTPUT}")
 
     MACRO(SQ_GENERATE_INO name automation)

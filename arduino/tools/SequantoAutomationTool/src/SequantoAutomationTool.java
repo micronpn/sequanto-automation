@@ -16,6 +16,8 @@ public class SequantoAutomationTool implements Tool
 {
     private Editor m_editor;
     private String m_generatorPy;
+    private boolean m_isWindows;
+    private File m_pythonPath;
 
     public void init(Editor _editor)
     {
@@ -23,6 +25,32 @@ public class SequantoAutomationTool implements Tool
 
         File toolRoot = new File ( SequantoAutomationTool.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getParentFile().getParentFile();
         m_generatorPy = new File ( new File ( toolRoot, "generator"), "generate_automation_defines.py" ).getAbsolutePath();
+        m_isWindows = System.getProperty("os.name").toLowerCase().contains("win");
+        if ( m_isWindows )
+        {
+            for ( File root : File.listRoots() )
+            {
+                File[] files = root.listFiles(new FileFilter()
+                {
+                    public boolean accept(File f)
+                    {
+                        return f.getName().toLowerCase().startsWith("python");
+                    }
+                } );
+                if ( files != null )
+                {
+                    for ( File directory : files )
+                    {
+                        m_pythonPath = new File(directory, "python.exe");
+                        break;
+                    }
+                }
+            }
+            if ( m_pythonPath == null )
+            {
+                Base.showMessage ( "ERROR", String.format("Could not python interpreter - Generate Automation tool will not work.") );
+            }
+        }
     }
 
     public String getMenuTitle()
@@ -64,7 +92,15 @@ public class SequantoAutomationTool implements Tool
                     writer.close();
                     try
                     {
-                        ProcessBuilder processBuilder = new ProcessBuilder(m_generatorPy, "-s", automationFileName.getAbsolutePath() );
+                        ProcessBuilder processBuilder = null;
+                        if ( m_isWindows )
+                        {
+                            processBuilder = new ProcessBuilder(m_pythonPath.getAbsolutePath(), m_generatorPy, "-s", automationFileName.getAbsolutePath() );
+                        }
+                        else
+                        {
+                            processBuilder = new ProcessBuilder(m_generatorPy, "-s", automationFileName.getAbsolutePath() );
+                        }
                         processBuilder.directory ( sketch.prepareCodeFolder() );
                         processBuilder.redirectErrorStream ( true );
                         Process process =processBuilder.start();

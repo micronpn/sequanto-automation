@@ -9,3 +9,5 @@ Simulating mouse events.
 = Callables =
 
 || click_at || void ( int int int ) || Simulate a mouse click at positon (x, y) with the button number as the third argument (0 is left-click, 1 is right-click, 2 is middle-click) ||
+|| hold_at (optional) || void ( integer integer integer ) || Press and hold the mouse button at position x, y - the last parameter is the button to press and hold. ||
+|| release_at (optional) || void ( integer integer integer ) || Release the previously held mouse button at position x, y - the last parameter is the button to release. ||

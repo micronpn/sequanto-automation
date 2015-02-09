@@ -68,7 +68,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
       }
       else
       {
-         QWidget * widget = event->widget();  
+         QWidget * widget = event->widget();
          if ( widget != NULL )
          {
             switch ( event->command() )
@@ -248,7 +248,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                }
                else if ( qobject_cast<QCalendarWidget*>(widget) != NULL )
                {
-                  event->done ( qobject_cast<QCalendarWidget*>(widget)->selectedDate().toString() );  
+                  event->done ( qobject_cast<QCalendarWidget*>(widget)->selectedDate().toString() );
                }
                else if ( qobject_cast<QDialog*>(widget) != NULL )
                {
@@ -435,7 +435,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                               event->done(visibleColumns);
                            }
                            break;
-                           
+
                         default:
                            event->done(0);
                            break;
@@ -500,7 +500,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                               }
                            }
                            break;
-                           
+
                         default:
                            event->done(QVariant());
                            break;
@@ -603,9 +603,22 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
           if ( activeModalWidget == NULL || activeModalWidget->isAncestorOf(receiver) )
           {
               QPoint widgetPos = receiver->mapFromGlobal ( event->position() );
-              
-              QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
-              QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+
+              switch ( event->command() )
+              {
+              case QtMachineAutomationMouseEvent::HOLD_AT:
+                  QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+                  break;
+
+              case QtMachineAutomationMouseEvent::RELEASE_AT:
+                  QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+                  break;
+
+              default:
+                  QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonPress, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+                  QApplication::postEvent ( receiver, new QMouseEvent( QEvent::MouseButtonRelease, widgetPos, event->position(), event->button(), event->button(), Qt::NoModifier ) );
+                  break;
+              }
           }
           else
           {
@@ -622,7 +635,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
        //int button = event->button();
 
        //sq_mouse_capture_click_updated(x, y, button);
-       
+
        if ( _object->isWidgetType() )
        {
            QString path;

@@ -15,3 +15,23 @@ void mouse_click_at ( int _x, int _y, int _button )
     XFlush(display);
     XCloseDisplay(display);
 }
+
+void mouse_hold_at ( int _x, int _y, int _button )
+{
+    Display *display = XOpenDisplay(NULL);
+    XTestFakeMotionEvent(display, 0, _x, _y, 0);
+    XFlush(display);
+    XTestFakeButtonEvent(display, _button + 1, True, 0);
+    XFlush(display);
+    XCloseDisplay(display);
+}
+
+void mouse_release_at ( int _x, int _y, int _button )
+{
+    Display *display = XOpenDisplay(NULL);
+    XTestFakeMotionEvent(display, 0, _x, _y, 0);
+    XFlush(display);
+    XTestFakeButtonEvent(display, _button + 1, False, 0);
+    XFlush(display);
+    XCloseDisplay(display);
+}

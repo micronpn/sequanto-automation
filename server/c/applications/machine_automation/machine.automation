@@ -63,4 +63,7 @@ monitor /windows/capture_click const char *
 function /windows/capture_screen windows_capture_screen
 
 function /mouse/click_at mouse_click_at
+function /mouse/hold_at mouse_hold_at
+function /mouse/release_at mouse_release_at
+
 #monitor /mouse/capture_click int int int

@@ -53,10 +53,10 @@ QByteArray QtMachineAutomationEvent::extra() const
 void QtMachineAutomationEvent::received()
 {
    int deliveryTime = sq_system_tickcount() - m_sentAt;
-   
+
    s_totalDeliveryTime += deliveryTime;
    s_eventsPosted ++;
-   
+
    if ( deliveryTime > 20 )
    {
       //QtWrapper::Log ( QString("Delivery of a GetPropertyEvent for %1 took more than 20 ms.").arg(m_propertyName ) );
@@ -80,8 +80,9 @@ QtMachineAutomationEvent::~QtMachineAutomationEvent()
 
 const int QtMachineAutomationMouseEvent::ID = QEvent::registerEventType();
 
-QtMachineAutomationMouseEvent::QtMachineAutomationMouseEvent ( int _x, int _y, int _button )
+QtMachineAutomationMouseEvent::QtMachineAutomationMouseEvent ( QtMachineAutomationMouseEvent::Command _command, int _x, int _y, int _button )
    : QEvent ( (QEvent::Type) ID),
+     m_command(_command),
      m_position(_x, _y)
 {
    switch ( _button )

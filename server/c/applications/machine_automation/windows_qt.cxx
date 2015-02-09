@@ -53,7 +53,7 @@ extern "C"
    SQByteArray * windows_desktop ( int _desktop )
    {
       SQ_UNUSED_PARAMETER(_desktop);
-       
+
       QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::DESKTOP0, NULL, -1);
       QVariant value = event->wait(QApplication::instance());
 
@@ -88,7 +88,7 @@ extern "C"
    int windows_process_id ( SQByteArray * _pointer )
    {
       SQ_UNUSED_PARAMETER(_pointer);
-      
+
       return QApplication::applicationPid();
    }
 
@@ -168,7 +168,7 @@ extern "C"
    }
 
    char * windows_text ( SQByteArray * _pointer )
-   {  
+   {
       QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::TEXT, _pointer, -1);
       QVariant value = event->wait(QApplication::instance());
 
@@ -247,10 +247,22 @@ extern "C"
          return ToByteArray ( value.toByteArray() );
       }
    }
-   
+
    void mouse_click_at ( int _x, int _y, int _button )
    {
-      QtMachineAutomationMouseEvent * event = new QtMachineAutomationMouseEvent(_x, _y, _button);   
+      QtMachineAutomationMouseEvent * event = new QtMachineAutomationMouseEvent(QtMachineAutomationMouseEvent::CLICK_AT, _x, _y, _button);
+      QApplication::postEvent ( QApplication::instance(), event );
+   }
+
+   void mouse_hold_at ( int _x, int _y, int _button )
+   {
+      QtMachineAutomationMouseEvent * event = new QtMachineAutomationMouseEvent(QtMachineAutomationMouseEvent::HOLD_AT, _x, _y, _button);
+      QApplication::postEvent ( QApplication::instance(), event );
+   }
+
+   void mouse_release_at ( int _x, int _y, int _button )
+   {
+      QtMachineAutomationMouseEvent * event = new QtMachineAutomationMouseEvent(QtMachineAutomationMouseEvent::RELEASE_AT, _x, _y, _button);
       QApplication::postEvent ( QApplication::instance(), event );
    }
 
@@ -258,7 +270,7 @@ extern "C"
    {
       QtMachineAutomationEvent * event = new QtMachineAutomationEvent(QtMachineAutomationEvent::CAPTURE_SCREEN, NULL, _desktop);
       QVariant value = event->wait(QApplication::instance());
-      
+
       if ( value.isNull() )
       {
          return sq_byte_array_create_prealloc(0);

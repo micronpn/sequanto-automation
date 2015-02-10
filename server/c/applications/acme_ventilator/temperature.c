@@ -8,6 +8,8 @@ static float s_setpoint_critical = 20.0f;
 void temperature_setup ( void )
 {
    pinMode ( OUTSIDE_PIN, INPUT );
+   s_setpoint = 10.0f;
+   s_setpoint_critical = 20.0f;
 }
 
 int temperature_outside_raw_get ( void )

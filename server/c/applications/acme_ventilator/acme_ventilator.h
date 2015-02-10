@@ -12,7 +12,7 @@ void ventilator_setup ( void );
 void ventilator_second_tick ( void );
 
 void display_setup ( void );
-void display_update ( void );
+void display_update ( SQBool _sendUpdate );
 
 void clock_setup( void );
 SQBool clock_update( void );

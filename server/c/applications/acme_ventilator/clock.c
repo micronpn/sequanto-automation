@@ -5,16 +5,20 @@ static byte clockMinute = 0;
 static byte clockHour = 0;
 static byte clockDayOfWeek = 0;  // Monday = 0.
 static unsigned long lastMilli = 0;
-static unsigned long millisOnSecond = 1000;	// How many milliseconds in one second; normally 1000.
+static unsigned long millisOnSecond = 1000;  // How many milliseconds in one second; normally 1000.
 
-void clock_setup( void ) 
+void clock_setup( void )
 {
+   clockSecond = 0;
+   clockMinute = 0;
+   clockHour = 0;
+   clockDayOfWeek = 0;
    lastMilli = millis();
 }
 
 unsigned long clock_now( void )
 {
-	return clockHour * 10000L + clockMinute * 100L + clockSecond;
+   return clockHour * 10000L + clockMinute * 100L + clockSecond;
 }
 
 SQBool clock_update( void )
@@ -41,13 +45,13 @@ SQBool clock_update( void )
                {
                   clockDayOfWeek = 0;
                }
-					//sq_clock_weekday_updated( clockDayOfWeek );
+               //sq_clock_weekday_updated( clockDayOfWeek );
             }
-				//sq_clock_hour_updated( clockHour );
+            //sq_clock_hour_updated( clockHour );
          }
-			//sq_clock_minute_updated( clockMinute );
+         //sq_clock_minute_updated( clockMinute );
       }
-		if ((clockSecond % 10) == 0)
+      if ((clockSecond % 10) == 0)
       {
          //sq_clock_second_updated( clockSecond);
       }
@@ -110,7 +114,7 @@ int clock_get_second ( void )
 
 void clock_set_second ( int _second )
 {
-   lastMilli = millis();	// To set exact time of second. This also ensures the second is not changing within the next 1000ms.
+   lastMilli = millis();   // To set exact time of second. This also ensures the second is not changing within the next 1000ms.
    if (_second != clockSecond)
    {
       clockSecond = _second;

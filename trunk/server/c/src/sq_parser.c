@@ -38,9 +38,9 @@ size_t sq_parser_internal_read_object_path ( SQParser * _parser, size_t _startIn
 {
     SQ_ASSERT ( _parser != NULL );
 
-    while ( _parser->m_inputBuffer[_startIndex] != '\0'
+    while ( _startIndex < SQ_MAX_OBJECT_LENGTH
             &&
-            _startIndex < SQ_MAX_OBJECT_LENGTH
+            _parser->m_inputBuffer[_startIndex] != '\0'
             &&
             ( (_parser->m_inputBuffer[_startIndex] >= 'a' && _parser->m_inputBuffer[_startIndex] <= 'z') ||
               (_parser->m_inputBuffer[_startIndex] >= '0' && _parser->m_inputBuffer[_startIndex] <= '9') ||

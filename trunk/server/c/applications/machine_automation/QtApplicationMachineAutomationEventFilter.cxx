@@ -513,7 +513,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                      if ( widget == QApplication::desktop() )
                      {
                         QWidgetList topLevel ( QApplication::topLevelWidgets() );
-                        for ( QWidgetList::const_iterator it = topLevel.constBegin(); it != topLevel.constEnd(); it++ )
+                        for ( QWidgetList::const_iterator it = topLevel.constBegin(); it != topLevel.constEnd(); ++it )
                         {
                            if ( (*it)->isVisible() )
                            {
@@ -523,7 +523,7 @@ bool QtApplicationMachineAutomationEventFilter::eventFilter ( QObject * _object,
                      }
                      else
                      {
-                        for ( QObjectList::const_iterator it = widget->children().constBegin(); it != widget->children().constEnd(); it++ )
+                        for ( QObjectList::const_iterator it = widget->children().constBegin(); it != widget->children().constEnd(); ++it )
                         {
                            if ( (*it)->isWidgetType() )
                            {

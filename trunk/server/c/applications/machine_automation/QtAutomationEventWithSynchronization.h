@@ -46,7 +46,8 @@ namespace sequanto
          
       public:
          QtAutomationEventWithSynchronization ( QEvent::Type _eventId )
-            : QEvent ( _eventId )
+            : QEvent ( _eventId ),
+              m_sentAt(-1)
          {
          }
          

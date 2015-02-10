@@ -22,7 +22,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
       *_numberOfFiles = 0;
       if ( _directoryIndex == 0 )
       {
-         return strdup("C:");
+         return _strdup("C:");
       }
       else
       {
@@ -94,6 +94,7 @@ size_t files_size ( const char * _path )
    }
    else
    {
+      CloseHandle ( fileHandle );
       return 0;
    }
 }

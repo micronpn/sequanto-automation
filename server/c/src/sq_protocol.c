@@ -208,7 +208,7 @@ SQBool sq_protocol_write_float( SQStream * _stream, float _value )
 #  ifdef HAVE_DTOSTRF
     int i;
     dtostrf ( _value, 3, 2, buffer );
-    for ( i = 0; buffer[i] != 0 && i < SQ_MAX_VALUE_LENGTH; i++ )
+    for ( i = 0; i < SQ_MAX_VALUE_LENGTH && buffer[i] != 0; i++ )
     {
         WRITE_BYTE_OR_FAIL ( buffer[i] );
     }

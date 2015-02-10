@@ -7,14 +7,6 @@
 
 static SQStream * test_stream;
 
-static void input_string ( SQParser * _parser, const char * _bytes )
-{
-    for ( ; *_bytes != '\0'; _bytes++ )
-    {
-        sq_parser_input_byte ( _parser, test_stream, *_bytes );
-    }
-}
-
 START_TEST(test_protocol_send_add)
 {
     test_stream = sq_stream_open ( -1 );

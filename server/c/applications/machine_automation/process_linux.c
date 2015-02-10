@@ -92,6 +92,7 @@ int process_exec ( const char * _commandLine )
     char * commandLine = malloc ( lengthOfCommandLine + 6 );
     memcpy ( commandLine, "sh -c ", 5 );
     memcpy ( commandLine + 5, _commandLine, lengthOfCommandLine + 1 );
-
+    //system(commandLine);
+    free(commandLine);
     return -1;
 }

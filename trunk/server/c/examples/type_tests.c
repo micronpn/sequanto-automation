@@ -134,7 +134,7 @@ void type_test_signed_integer_set ( signed int _value )
    sq_logf ( "Setting value of signed int value to %i (was %i)", _value, signedIntegerValue );
 #endif
    signedIntegerValue = _value;
-   //sq_type_tests_properties_integer_updated ( NULL, _value );
+   /* sq_type_tests_properties_integer_updated ( NULL, _value ); */
    sq_type_tests_properties_signed_integer_updated ( signedIntegerValue );
 }
 
@@ -286,7 +286,7 @@ void type_test_int64_t_set ( int64_t _value )
 {
    sq_logf ( "Setting value of int64_t value to %i (was %i)", _value, int64_tValue );
    int64_tValue = _value;
-   //sq_type_tests_properties_int64_t_updated ( int64_tValue );
+   /* sq_type_tests_properties_int64_t_updated ( int64_tValue ); */
 }
 #endif
 

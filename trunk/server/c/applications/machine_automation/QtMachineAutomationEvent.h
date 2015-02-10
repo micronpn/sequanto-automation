@@ -45,7 +45,7 @@ namespace sequanto
             ACTION_DO,
             CHILDREN,
             CHILD,
-            CAPTURE_SCREEN,
+            CAPTURE_SCREEN
          };
 
       protected:
@@ -84,7 +84,7 @@ namespace sequanto
          {
              CLICK_AT,
              HOLD_AT,
-             RELEASE_AT,
+             RELEASE_AT
          };
 
       private:
@@ -94,7 +94,7 @@ namespace sequanto
 
       public:
          static const int ID;
-         inline const Command command() const { return m_command; }
+         inline Command command() const { return m_command; }
          inline const QPoint position () const { return m_position; }
          inline Qt::MouseButton button () const { return m_button; }
 

@@ -9,18 +9,18 @@ int main ( int argc, char * argv[] )
 {
    static SQServer server;
    int portNumber = 4321;
-   
-   sq_init ();   
-   
+
+   sq_init ();
+
    if ( argc > 1 )
    {
       portNumber = atoi ( argv[argc - 1] );
    }
-   
+
    windows_init_subsystem ();
-   
+
    sq_server_init ( &server, portNumber );
-   
+
    sq_server_poll ( &server );
 
    sq_server_join ( &server );
@@ -28,4 +28,6 @@ int main ( int argc, char * argv[] )
    windows_deinit_subsystem ();
 
    sq_shutdown ();
+
+   return 0;
 }

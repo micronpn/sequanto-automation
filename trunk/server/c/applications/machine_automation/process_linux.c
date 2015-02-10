@@ -12,7 +12,7 @@
 static int process_is_int ( const struct dirent * _entry )
 {
     const char * c;
-    
+
     if ( _entry->d_type == DT_DIR )
     {
         for ( c = _entry->d_name; *c != '\0'; c++ )
@@ -39,7 +39,10 @@ void process_refresh_internal ()
     size_t cmdLineLength;
     size_t j;
     FILE * fp;
-    
+    ssize_t len;
+    struct stat statBuf;
+    struct Process * process;
+
     if ( num == -1 )
     {
         process_resize_internal_buffer ( 0 );
@@ -49,18 +52,17 @@ void process_refresh_internal ()
         process_resize_internal_buffer ( num );
         for ( i = 0; i < ((size_t) num); i++ )
         {
-            struct Process * process = process_get_process_internal ( i );
+            process = process_get_process_internal ( i );
             process->m_id = atoi(names[i]->d_name);
             sprintf ( exeLink, "/proc/%i/exe", process->m_id );
-            ssize_t len = readlink ( exeLink, exe,1024 );
+            len = readlink ( exeLink, exe,1024 );
             if ( len != -1 )
             {
                 exe[len] = '\0';
                 process->m_filename = strdup(exe);
             }
-            
+
             sprintf ( exeLink, "/proc/%i", process->m_id );
-            struct stat statBuf;
             stat ( exeLink, &statBuf );
             process->m_owner = statBuf.st_uid;
 
@@ -68,7 +70,7 @@ void process_refresh_internal ()
             fp = fopen ( cmdLineFile, "rb" );
             cmdLineLength = fread ( &cmdLine, 1, 1024, fp );
             fclose ( fp );
-            
+
             for ( j = 0; j < cmdLineLength; j++ )
             {
                if ( cmdLine[j] == '\0' )
@@ -86,10 +88,10 @@ void process_refresh_internal ()
 int process_exec ( const char * _commandLine )
 {
     size_t lengthOfCommandLine = strlen(_commandLine);
-    // "sh -c " +_commandLine
+     /* "sh -c " +_commandLine */
     char * commandLine = malloc ( lengthOfCommandLine + 6 );
     memcpy ( commandLine, "sh -c ", 5 );
     memcpy ( commandLine + 5, _commandLine, lengthOfCommandLine + 1 );
-    
+
     return -1;
 }

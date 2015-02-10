@@ -12,12 +12,13 @@ const char * automation_server_version ()
 }
 
 #define MAX_FILE_SIZE 1024
-//static const size_t MAX_FILE_SIZE = 1024;
+/*static const size_t MAX_FILE_SIZE = 1024; */
 static char file_contents_buffer[MAX_FILE_SIZE];
 
 const char * get_file_contents ( const char * _filename )
 {
-    FILE * fp = fopen(_filename, "r");
+    FILE * fp = NULL;
+    fp = fopen(_filename, "r");
     fscanf ( fp, "%s", file_contents_buffer );
     fclose ( fp );
     return file_contents_buffer;
@@ -53,12 +54,12 @@ SQBool get_button_2 ()
 
 void update_buttons ( SQServer * _server )
 {
-   SQ_UNUSED_PARAMETER(_server);
-   
-    FILE * fp;
-    int ret;
-    SQBool newButton1, newButton2;
-    
+    FILE * fp = NULL;
+    int ret = 0;
+    SQBool newButton1 = SQ_FALSE, newButton2 = SQ_FALSE;
+
+    SQ_UNUSED_PARAMETER(_server);
+
     fp = fopen ( DEV_NANOMOD, "r" );
     if ( fp != NULL )
     {
@@ -73,7 +74,7 @@ void update_buttons ( SQServer * _server )
         fprintf ( stderr, "Could not open nanomod device (%s) for reading.\n", DEV_NANOMOD );
         return;
     }
-    
+
     if ( newButton1 != button1 )
     {
         button1 = newButton1;
@@ -92,19 +93,19 @@ int main ()
    static SQServer server;
    button1 = SQ_FALSE;
    button2 = SQ_FALSE;
-   
-   sq_init ();   
-   
+
+   sq_init ();
+
    sq_server_init ( &server, 4321 );
-   
+
    while ( SQ_TRUE )
    {
        update_buttons( &server );
-       
-      //printf ( "Button1: %i, Button2: %i.\n", button1, button2 );
-      
+
+       /*printf ( "Button1: %i, Button2: %i.\n", button1, button2 );*/
+
       sq_server_poll ( &server );
    }
-   
+
    sq_shutdown ();
 }

@@ -16,9 +16,9 @@ AtspiAccessible * windows_to_accessible ( const SQByteArray * _pointer )
 {
    AtspiAccessible * accessibleObject = NULL;
    memcpy ( &accessibleObject, _pointer->m_start, sizeof(AtspiAccessible*) );
-   
+
    g_assert ( ATSPI_IS_ACCESSIBLE(accessibleObject) );
-   
+
    return accessibleObject;
 }
 
@@ -57,12 +57,14 @@ SQByteArray * windows_desktop ( int _desktop )
 
 void windows_ref ( SQByteArray * _pointer )
 {
-   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+    /* AtspiAccessible * accessibleObject = windows_to_accessible(_pointer); */
+    SQ_UNUSED_PARAMETER(_pointer);
 }
 
 void windows_unref ( SQByteArray * _pointer )
 {
-   AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
+    /* AtspiAccessible * accessibleObject = windows_to_accessible(_pointer); */
+    SQ_UNUSED_PARAMETER(_pointer);
 }
 
 char * windows_name ( SQByteArray * _pointer )
@@ -165,7 +167,7 @@ int windows_width ( SQByteArray * _pointer )
 }
 
 int windows_height ( SQByteArray * _pointer )
-{  
+{
    GError * error = NULL;
    int height = -1;
    AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
@@ -187,7 +189,7 @@ int windows_height ( SQByteArray * _pointer )
 }
 
 char * windows_role ( SQByteArray * _pointer )
-{  
+{
    GError * error = NULL;
    char * role = NULL;
    AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
@@ -207,7 +209,7 @@ char * windows_role ( SQByteArray * _pointer )
 }
 
 char * windows_text ( SQByteArray * _pointer )
-{  
+{
    GError * error = NULL;
    char * text = NULL;
    AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
@@ -233,9 +235,9 @@ char * windows_text ( SQByteArray * _pointer )
    else if ( ATSPI_IS_VALUE(accessibleObject) )
    {
        AtspiValue * valueObj = ATSPI_VALUE(accessibleObject);
-       
+
        gdouble current = atspi_value_get_current_value ( valueObj, &error );
-       
+
        if ( error != NULL )
        {
            return windows_report_error(error);
@@ -303,7 +305,7 @@ long windows_children ( SQByteArray * _pointer )
    GError * error = NULL;
    gint childCount;
    AtspiAccessible * accessibleObject = windows_to_accessible(_pointer);
-   
+
    childCount = atspi_accessible_get_child_count ( accessibleObject, &error );
    if ( error != NULL )
    {
@@ -321,9 +323,9 @@ SQByteArray * windows_child ( SQByteArray * _parent, long _index )
    GError * error = NULL;
    AtspiAccessible * child;
    AtspiAccessible * accessibleObject = windows_to_accessible(_parent);
-   
+
    child = atspi_accessible_get_child_at_index ( accessibleObject, _index, &error );
-   
+
    if ( error != NULL )
    {
        g_error_free(error);

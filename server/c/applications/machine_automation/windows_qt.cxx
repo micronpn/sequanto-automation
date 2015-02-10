@@ -18,7 +18,7 @@ char * ToString ( const QString & _string )
 
 SQByteArray * ToByteArray ( const QByteArray & _byteArray )
 {
-   //assert ( _byteArray.length() == sizeof(QWidget*) );
+   // assert ( _byteArray.length() == sizeof(QWidget*) );
 
    SQByteArray * ret = sq_byte_array_create_prealloc ( _byteArray.length() );
    memcpy ( ret->m_start, _byteArray.constData(), _byteArray.length() );

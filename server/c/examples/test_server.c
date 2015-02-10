@@ -99,7 +99,7 @@ int multiply ( int _parameterOne, int _parameterTwo )
 
 void close ( void )
 {
-    //   sq_server_stop ( server );
+    /*   sq_server_stop ( server ); */
 }
 
 const char * firmware_version ( void )

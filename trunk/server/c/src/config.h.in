@@ -87,6 +87,7 @@
 #  define SQ_STRDUP_FUNCTION _strdup
 #else
 #  ifdef HAVE_STRDUP
+#    include <string.h>
 #    define SQ_STRDUP_FUNCTION strdup
 #  else
 #    define SQ_STRDUP_FUNCTION sq_internal_strdup

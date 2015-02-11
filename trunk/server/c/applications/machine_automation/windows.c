@@ -1,5 +1,5 @@
 #include <sequanto/automation.h>
-#include <string.h>
+#include "config.h"
 
 void windows_init_subsystem ()
 {

@@ -52,7 +52,7 @@ void windows_unref ( SQByteArray * _pointer )
 
 char * windows_string ( char * _str )
 {
-    char * ret = strdup(_str);
+    char * ret = SQ_STRDUP_FUNCTION(_str);
     SPI_freeString ( _str );
     return ret;
 }
@@ -126,13 +126,13 @@ int windows_height ( SQByteArray * _pointer )
 }
 
 char * windows_role ( SQByteArray * _pointer )
-{  
+{
    Accessible * accessibleObject = windows_to_accessible(_pointer);
    return windows_string ( Accessible_getRoleName (accessibleObject) );
 }
 
 char * windows_text ( SQByteArray * _pointer )
-{  
+{
    char * text = NULL;
    Accessible * accessibleObject = windows_to_accessible(_pointer);
    if ( Accessible_isText(accessibleObject) == SPI_TRUE )
@@ -146,13 +146,13 @@ char * windows_text ( SQByteArray * _pointer )
    else if ( Accessible_isValue(accessibleObject) == SPI_TRUE )
    {
        AccessibleValue * valueObj = Accessible_getValue(accessibleObject);
-       
+
        double current = AccessibleValue_getCurrentValue ( valueObj );
        text = malloc(SQ_MAX_VALUE_LENGTH);
        SNPRINTF_FUNCTION ( text, SQ_MAX_VALUE_LENGTH, "%f", current );
        return text;
    }
-   return strdup("");
+   return SQ_STRDUP_FUNCTION("");
 }
 
 long windows_children ( SQByteArray * _pointer )
@@ -188,7 +188,7 @@ char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
        char * name = AccessibleAction_getName ( actionObj, _actionIndex );
        return windows_string ( name );
    }
-   return strdup("UNKNOWN");
+   return SQ_STRDUP_FUNCTION("UNKNOWN");
 }
 
 void windows_action_do ( SQByteArray * _pointer, int _actionIndex )

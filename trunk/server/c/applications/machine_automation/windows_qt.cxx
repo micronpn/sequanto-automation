@@ -3,6 +3,7 @@
 #include <QtGui>
 #include "QtApplicationMachineAutomationEventFilter.h"
 #include "QtMachineAutomationEvent.h"
+#include "config.h"
 
 using namespace sequanto::automation;
 
@@ -13,7 +14,7 @@ QDesktopWidget * desktop = NULL;
 char * ToString ( const QString & _string )
 {
    QByteArray value ( _string.toUtf8() );
-   return strdup(value.data());
+   return SQ_STRDUP_FUNCTION(value.data());
 }
 
 SQByteArray * ToByteArray ( const QByteArray & _byteArray )
@@ -77,7 +78,7 @@ extern "C"
 
       if ( value.isNull() )
       {
-         return strdup("");
+         return SQ_STRDUP_FUNCTION("");
       }
       else
       {
@@ -159,7 +160,7 @@ extern "C"
 
       if ( value.isNull() )
       {
-         return strdup("");
+         return SQ_STRDUP_FUNCTION("");
       }
       else
       {
@@ -174,7 +175,7 @@ extern "C"
 
       if ( value.isNull() )
       {
-         return strdup("");
+         return SQ_STRDUP_FUNCTION("");
       }
       else
       {
@@ -204,7 +205,7 @@ extern "C"
 
       if ( value.isNull() )
       {
-         return strdup("");;
+         return SQ_STRDUP_FUNCTION("");;
       }
       else
       {

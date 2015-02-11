@@ -22,6 +22,15 @@
 #include <string.h>
 #include <stdlib.h>
 
+char * sq_internal_strdup ( const char * _value )
+{
+    char * ret;
+    size_t length = strlen(_value);
+    ret = (char*) malloc(length + 1);
+    memcpy ( ret, _value, length + 1 );
+    return ret;
+}
+
 void sq_value_init ( SQValue * _value )
 {
     _value->m_type = VALUE_TYPE_NO_VALUE;
@@ -65,25 +74,10 @@ void sq_value_const_string ( SQValue * _value, const char * _initialValue)
     _value->Value.m_constStringValue = _initialValue;
 }
 
-#ifdef SQ_ARDUINO
-char * strdup ( const char * _value )
-{
-    char * ret;
-    size_t length = strlen(_value);
-    ret = (char*) malloc(length + 1);
-    memcpy ( ret, _value, length + 1 );
-    return ret;
-}
-#endif
-
 void sq_value_string_copy ( SQValue * _value, const char * const _initialValue)
 {
     _value->m_type = VALUE_TYPE_STRING;
-#ifdef SQ_WIN32
-    _value->Value.m_stringValue = _strdup(_initialValue);
-#else
-    _value->Value.m_stringValue = strdup(_initialValue);
-#endif
+    _value->Value.m_stringValue = SQ_STRDUP_FUNCTION(_initialValue);
 }
 
 void sq_value_byte_array ( SQValue * _value, SQByteArray * _initialValue )

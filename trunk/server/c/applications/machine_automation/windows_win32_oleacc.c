@@ -24,13 +24,13 @@ char * windows_bstr_to_utf8 ( BSTR _buffer )
 {
    int length;
    char * ret;
-   
+
    length = WideCharToMultiByte ( CP_UTF8, 0, _buffer, -1, NULL, 0, NULL, NULL );
-   
+
    ret = (char*) malloc ( length );
-   
+
    WideCharToMultiByte ( CP_UTF8, 0, _buffer, -1, ret, length, NULL, NULL );
-   
+
    SysFreeString( _buffer );
 
    return ret;
@@ -59,7 +59,7 @@ SQByteArray * windows_desktop ( int _desktop )
 {
    HWND desktopHandle;
    void * accessible;
-   
+
    desktopHandle = GetDesktopWindow();
    AccessibleObjectFromWindow ( desktopHandle, OBJID_CLIENT, &IID_IAccessible, &accessible );
    return windows_from_accessible ( (IAccessible*) accessible );
@@ -81,11 +81,11 @@ char * windows_name ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
    BSTR buffer;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    IAccessible_get_accName ( accessible, s_childIdSelf, &buffer );
-   
+
    return windows_bstr_to_utf8 ( buffer );
 }
 
@@ -94,20 +94,20 @@ char * windows_role ( const SQByteArray * _pointer )
    IAccessible * accessible;
    VARIANT roleVar;
    char * buffer = (char*) malloc(100);
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    if ( SUCCEEDED(IAccessible_get_accRole ( accessible, s_childIdSelf, &roleVar ) ) )
    {
        GetRoleText ( roleVar.lVal, buffer, 100 );
-   }   
+   }
    return buffer;
 }
 
 int windows_process_id ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    return 0;
@@ -118,11 +118,11 @@ int windows_x ( const SQByteArray * _pointer )
    IAccessible * accessible;
    //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
-   
+
    return x;
 }
 
@@ -131,11 +131,11 @@ int windows_y ( const SQByteArray * _pointer )
    IAccessible * accessible;
    //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
-   
+
    return y;
 }
 
@@ -144,11 +144,11 @@ int windows_width ( const SQByteArray * _pointer )
    IAccessible * accessible;
    //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
-   
+
    return width;
 }
 
@@ -157,11 +157,11 @@ int windows_height ( const SQByteArray * _pointer )
    IAccessible * accessible;
    //VARIANT roleVar;
    long x = -1, y = -1, width = 0, height = 0;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    IAccessible_accLocation ( accessible, &x, &y, &width, &height, s_childIdSelf );
-   
+
    return height;
 }
 
@@ -169,7 +169,7 @@ char * windows_text ( const SQByteArray * _pointer )
 {
    IAccessible * accessible;
    BSTR buffer;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    if ( SUCCEEDED(IAccessible_get_accValue ( accessible, s_childIdSelf, &buffer ) ) )
@@ -178,7 +178,7 @@ char * windows_text ( const SQByteArray * _pointer )
    }
    else
    {
-      return strdup("");
+      return SQ_STRDUP_FUNCTION("");
    }
 }
 
@@ -187,7 +187,7 @@ static IAccessible * windows_get_child ( IAccessible * _accessible, long _childI
    VARIANT childNum;
    IDispatch * dispChild;
    IAccessible * accessibleChild;
-   
+
    childNum.vt = VT_I4;
    childNum.lVal = _childId;
 
@@ -210,7 +210,7 @@ long windows_children ( const SQByteArray * _pointer )
    long ret;
    long i;
    //VARIANT * childrenArray;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    if ( SUCCEEDED(IAccessible_get_accChildCount ( accessible, &childCount )) )
@@ -225,7 +225,7 @@ long windows_children ( const SQByteArray * _pointer )
             ret++;
          }
       }
-      
+
       /*
       childrenArray = malloc ( sizeof(VARIANT) * childCount );
       if ( SUCCEEDED(AccessibleChildren ( accessible, 0, childCount, childrenArray, &childrenObtained )) )
@@ -257,11 +257,11 @@ SQByteArray * windows_child ( const SQByteArray * _pointer, long _child )
 {
    IAccessible * accessible;
    IAccessible * accessibleChild;
-   
+
    accessible = windows_to_accessible ( _pointer );
-   
+
    accessibleChild = windows_get_child ( accessible, _child );
-   
+
    if ( accessibleChild != NULL )
    {
       return windows_from_accessible ( accessibleChild );
@@ -279,13 +279,13 @@ int windows_actions ( SQByteArray * _pointer )
 
 char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
 {
-    return strdup("invoke");
+    return SQ_STRDUP_FUNCTION("invoke");
 }
 
 void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
 {
    IAccessible * accessible;
-   
+
    accessible = windows_to_accessible ( _pointer );
 
    IAccessible_accDoDefaultAction( accessible, s_childIdSelf );

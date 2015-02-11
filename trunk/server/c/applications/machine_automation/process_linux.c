@@ -8,6 +8,7 @@
 #include <ctype.h>
 
 #include "common.h"
+#include "config.h"
 
 static int process_is_int ( const struct dirent * _entry )
 {
@@ -59,7 +60,7 @@ void process_refresh_internal ()
             if ( len != -1 )
             {
                 exe[len] = '\0';
-                process->m_filename = strdup(exe);
+                process->m_filename = SQ_STRDUP_FUNCTION(exe);
             }
 
             sprintf ( exeLink, "/proc/%i", process->m_id );
@@ -79,7 +80,7 @@ void process_refresh_internal ()
                }
             }
             cmdLine[cmdLineLength] = '\0';
-            process->m_cmdline = strdup ( cmdLine );
+            process->m_cmdline = SQ_STRDUP_FUNCTION ( cmdLine );
         }
     }
     free ( names );
@@ -92,7 +93,7 @@ int process_exec ( const char * _commandLine )
     char * commandLine = malloc ( lengthOfCommandLine + 6 );
     memcpy ( commandLine, "sh -c ", 5 );
     memcpy ( commandLine + 5, _commandLine, lengthOfCommandLine + 1 );
-    //system(commandLine);
+    /* system(commandLine); */
     free(commandLine);
     return -1;
 }

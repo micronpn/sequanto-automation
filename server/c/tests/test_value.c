@@ -1,4 +1,5 @@
 #include "sequanto_test.h"
+#include "config.h"
 
 #include <sequanto/value.h>
 

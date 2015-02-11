@@ -2,6 +2,8 @@
 #include <atspi/atspi.h>
 #include <memory.h>
 
+#include "config.h"
+
 void windows_init_subsystem ()
 {
     atspi_init();
@@ -34,11 +36,11 @@ char * windows_report_error ( GError * _error )
     char * ret;
     if ( _error->message != NULL )
     {
-        ret = strdup(_error->message);
+        ret = SQ_STRDUP_FUNCTION(_error->message);
     }
     else
     {
-        ret = strdup("ERROR");
+        ret = SQ_STRDUP_FUNCTION("ERROR");
     }
     g_error_free(_error);
     return ret;
@@ -204,7 +206,7 @@ char * windows_role ( SQByteArray * _pointer )
    }
    else
    {
-       return strdup("");
+       return SQ_STRDUP_FUNCTION("");
    }
 }
 
@@ -247,7 +249,7 @@ char * windows_text ( SQByteArray * _pointer )
            return g_strdup_printf("%f", current);
        }
    }
-   return strdup("");
+   return SQ_STRDUP_FUNCTION("");
 }
 
 
@@ -282,7 +284,7 @@ char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
        }
        return name;
    }
-   return strdup("UNKNOWN");
+   return SQ_STRDUP_FUNCTION("UNKNOWN");
 }
 
 void windows_action_do ( SQByteArray * _pointer, int _actionIndex )

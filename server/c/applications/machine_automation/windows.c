@@ -53,17 +53,17 @@ int windows_height ( SQByteArray * _pointer )
 
 char * windows_name ( SQByteArray * _pointer )
 {
-    return strdup("");
+    return SQ_STRDUP_FUNCTION("");
 }
 
 char * windows_role ( SQByteArray * _pointer )
 {
-    return strdup("");
+    return SQ_STRDUP_FUNCTION("");
 }
 
 char * windows_text ( SQByteArray * _pointer )
 {
-    return strdup("");
+    return SQ_STRDUP_FUNCTION("");
 }
 
 int windows_actions ( SQByteArray * _pointer )
@@ -73,7 +73,7 @@ int windows_actions ( SQByteArray * _pointer )
 
 char * windows_action_name ( SQByteArray * _pointer, int _actionIndex )
 {
-    return strdup("");
+    return SQ_STRDUP_FUNCTION("");
 }
 
 void windows_action_do ( SQByteArray * _pointer, int _actionIndex )
@@ -89,4 +89,3 @@ SQByteArray * windows_child ( SQByteArray * _pointer, long _childNum )
 {
    return NULL;
 }
-

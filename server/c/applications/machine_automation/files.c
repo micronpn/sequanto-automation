@@ -22,7 +22,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
       *_numberOfFiles = 0;
       if ( _directoryIndex == 0 )
       {
-         return _strdup("C:");
+         return SQ_STRDUP_FUNCTION("C:");
       }
       else
       {
@@ -50,7 +50,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
             {
                if ( *_numberOfDirectories == _directoryIndex )
                {
-                  found_filename = _strdup ( item.cFileName );
+                  found_filename = SQ_STRDUP_FUNCTION ( item.cFileName );
                   FindClose ( findHandle );
                   return found_filename;
                }
@@ -60,7 +60,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
             {
                if ( *_numberOfFiles == _fileIndex )
                {
-                  found_filename = _strdup ( item.cFileName );
+                  found_filename = SQ_STRDUP_FUNCTION ( item.cFileName );
                   FindClose ( findHandle );
                   return found_filename;
                }
@@ -139,7 +139,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
    memcpy ( actual_dir + 1, _path, pathLen + 1 );
    *_numberOfDirectories = 0;
    *_numberOfFiles = 0;
-   
+
    dir = opendir ( actual_dir );
    if ( dir != NULL )
    {
@@ -151,7 +151,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
                {
                    if ( *_numberOfDirectories == _directoryIndex )
                    {
-                       found_filename = strdup ( entry->d_name );
+                       found_filename = SQ_STRDUP_FUNCTION ( entry->d_name );
                        break;
                    }
                    *_numberOfDirectories = *_numberOfDirectories + 1;
@@ -160,7 +160,7 @@ char * files_info ( const char * _path, int * _numberOfDirectories, int * _numbe
                {
                    if ( *_numberOfFiles == _fileIndex )
                    {
-                       found_filename = strdup ( entry->d_name );
+                       found_filename = SQ_STRDUP_FUNCTION ( entry->d_name );
                        break;
                    }
                    *_numberOfFiles = *_numberOfFiles + 1;
@@ -206,7 +206,7 @@ void files_remove_file ( const char * _path )
 int files_number_of_directories ( const char * _path )
 {
    int numberOfDirectories, numberOfFiles;
-   
+
    files_info ( _path, &numberOfDirectories, &numberOfFiles, -1, -1 );
 
    return numberOfDirectories;
@@ -215,7 +215,7 @@ int files_number_of_directories ( const char * _path )
 int files_number_of_files ( const char * _path )
 {
    int numberOfDirectories, numberOfFiles;
-   
+
    files_info ( _path, &numberOfDirectories, &numberOfFiles, -1, -1 );
 
    return numberOfFiles;
@@ -224,18 +224,18 @@ int files_number_of_files ( const char * _path )
 char * files_filename ( const char * _path, int _index )
 {
    int numberOfDirectories, numberOfFiles;
-   
+
    char * found_filename = files_info ( _path, &numberOfDirectories, &numberOfFiles, -1, _index );
-   
+
    return found_filename;
 }
 
 char * files_directoryname ( const char * _path, int _index )
 {
    int numberOfDirectories, numberOfFiles;
-   
+
    char * found_filename = files_info ( _path, &numberOfDirectories, &numberOfFiles, _index, -1 );
-   
+
    return found_filename;
 }
 

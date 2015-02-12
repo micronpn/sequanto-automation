@@ -3,6 +3,7 @@
 #include <psapi.h>
 
 #include "common.h"
+#include "config.h"
 
 #define MAX_PROCESSES (1024 * 10)
 

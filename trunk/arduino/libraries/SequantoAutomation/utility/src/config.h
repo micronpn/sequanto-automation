@@ -28,6 +28,8 @@
 /* #undef HAVE_SNPRINTF_S */
 /* #undef HAVE_UNDERSCORE_SNPRINTF_S */
 /* #undef HAVE_DTOSTRF */
+#define HAVE_STRDUP
+/* #undef HAVE_UNDERSCORE_STRDUP */
 /* #undef HAVE_WINSOCK2_H */
 #define HAVE_SYS_SOCKET_H
 /* #undef HAVE_INT64_T */
@@ -79,6 +81,21 @@
 #define SNPRINTF_S_FUNCTION _snprintf_s
 #define HAVE_SNPRINTF_S
 #endif
+#endif
+
+#ifdef HAVE_UNDERSCORE_STRDUP
+#  define SQ_STRDUP_FUNCTION _strdup
+#else
+#  ifdef HAVE_STRDUP
+#    include <string.h>
+#    define SQ_STRDUP_FUNCTION strdup
+#  else
+#    define SQ_STRDUP_FUNCTION sq_internal_strdup
+#    ifdef __cplusplus
+extern "C"
+#    endif
+char * sq_internal_strdup ( const char * _value );
+#  endif
 #endif
 
 #ifdef SQ_C_SUPPORTS_INLINE

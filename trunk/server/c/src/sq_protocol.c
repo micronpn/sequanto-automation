@@ -26,7 +26,7 @@
 #include "sequanto/types.h"
 #include "sequanto/protocol.h"
 
-static char SQ_PROTOCOL_NEWLINE[] SQ_CONST_VARIABLE = "\r\n";
+static const char SQ_PROTOCOL_NEWLINE[] SQ_CONST_VARIABLE = "\r\n";
 
 SQBool sq_protocol_write_type( SQStream * _stream, SQValueType _type )
 {

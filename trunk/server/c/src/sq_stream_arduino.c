@@ -22,7 +22,7 @@
 #include "sequanto/system.h"
 #include "sequanto/stream.h"
 
-#include <HardwareSerial.h>
+#include <Arduino.h>
 
 typedef struct _SQStream
 {

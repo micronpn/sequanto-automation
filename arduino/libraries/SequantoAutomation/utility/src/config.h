@@ -112,10 +112,15 @@ char * sq_internal_strdup ( const char * _value );
 
 /* Overrides for Arduino */
 #ifdef SQ_ARDUINO
+#   if defined(__SAM3X8E__)
+#      define SQ_ARDUINO_SAM
+#   endif
 #undef SQ_USE_MUTEXES
 #undef SQ_USE_THREADS
 #undef HAVE_SNPRINTF
-#define HAVE_DTOSTRF
+#ifndef SQ_ARDUINO_SAM
+#   define HAVE_DTOSTRF
+#endif
 #endif
 
 #endif /* _sq_CONFIG_H_ */

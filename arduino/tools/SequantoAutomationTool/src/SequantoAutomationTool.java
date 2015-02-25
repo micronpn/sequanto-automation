@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.Scanner;
 
 import processing.app.*;
-import processing.core.*;
 import processing.app.tools.Tool;
 
 public class SequantoAutomationTool implements Tool

@@ -95,9 +95,14 @@ SQ_DECL void sq_byte_array_free ( SQByteArray * _array, SQBool _alsoFreeData );
 #   define SQ_STRING_CONSTANT_FROM_ARRAY(constStr) ((PGM_P) pgm_read_word((constStr)))
 #   define SQ_CHARACTER_CONSTANT(str) ((char) pgm_read_byte(str))
 #   define SQ_CONST_VARIABLE PROGMEM
-#   define SQ_CONSTANT_STRNCMP(str, constStr, len) strncmp_P((str), (constStr), (len))
 #   define SQ_CONSTANT_STRCMP(str, constStr) strcmp_P((PGM_P)(str), (constStr))
-#   define SQ_CONSTANT_STRCHR(constStr, c) strchr_P((PGM_P)(constStr),(c))
+#   ifdef SQ_ARDUINO_SAM
+#      define SQ_CONSTANT_STRNCMP(str, constStr, len) strncmp((str), (constStr), (len))
+#      define SQ_CONSTANT_STRCHR(constStr, c) strchr((constStr),(c))
+#   else
+#      define SQ_CONSTANT_STRNCMP(str, constStr, len) strncmp_P((str), (constStr), (len))
+#      define SQ_CONSTANT_STRCHR(constStr, c) strchr_P((PGM_P)(constStr),(c))
+#   endif
 #else
 #   define SQ_STRING_CONSTANT(str) str
 #   define SQ_STRING_CONSTANT_FROM_ARRAY(constStr) *constStr

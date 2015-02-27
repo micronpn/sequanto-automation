@@ -117,8 +117,9 @@ char * sq_internal_strdup ( const char * _value );
 #   endif
 #undef SQ_USE_MUTEXES
 #undef SQ_USE_THREADS
-#undef HAVE_SNPRINTF
+#define HAVE_SNPRINTF
 #ifndef SQ_ARDUINO_SAM
+#   undef HAVE_SNPRINTF
 #   define HAVE_DTOSTRF
 #endif
 #endif

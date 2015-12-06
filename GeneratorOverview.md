@@ -1,0 +1,1 @@
+![http://sequanto-automation.googlecode.com/svn/wiki/images/generator-process.png](http://sequanto-automation.googlecode.com/svn/wiki/images/generator-process.png)

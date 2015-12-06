@@ -1,0 +1,6 @@
+  * [Root Root](BranchTypesMachineAutomationRoot.md)
+    * [Server class](BranchTypesMachineAutomationServer.md)
+    * [Process class](BranchTypesMachineAutomationProcess.md)
+    * [Files class](BranchTypesMachineAutomationFiles.md)
+    * [Memory class](BranchTypesMachineAutomationMemory.md)
+    * [Windows class](BranchTypesMachineAutomationWindows.md)
